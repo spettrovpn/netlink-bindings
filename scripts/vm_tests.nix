@@ -10,7 +10,6 @@
 {
   pkgs ? import <nixpkgs> { },
   lib ? pkgs.lib,
-  bins,
   bin_dir,
 }:
 let
@@ -56,7 +55,7 @@ pkgs.testers.runNixOSTest {
 
       t.assertTrue(os.path.exists("${dir}"))
 
-      targets = "${bins}".split()
+      targets = [ f"/bin_dir/{f}" for f in sorted(os.listdir("${dir}")) ]
       t.assertTrue(len(targets) != 0)
 
       for m in machines:
@@ -72,7 +71,7 @@ pkgs.testers.runNixOSTest {
           m.succeed("modprobe mac80211_hwsim radios=1")
 
           for target in targets:
-              print(m.succeed(f"/bin_dir/{target}", timeout=30))
+              print(m.succeed(target, timeout=30))
 
           m.shutdown()
     '';
