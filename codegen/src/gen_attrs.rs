@@ -158,7 +158,7 @@ pub fn gen_attr(
             shorthands.extend(quote! {
                 pub fn #get_name(&self) -> Result<ArrayIterable<#rust_type, #item_type>, ErrorContext> {
                     for attr in self.clone() {
-                        if let #type_name::#variant_name(val) = attr? {
+                        if let Ok(#type_name::#variant_name(val)) = attr {
                             return Ok(ArrayIterable::new(val));
                         }
                     }
@@ -176,7 +176,7 @@ pub fn gen_attr(
                 let mut iter = self.clone();
                 iter.pos = 0;
                 for attr in iter {
-                    if let #type_name::#variant_name(val) = attr? {
+                    if let Ok(#type_name::#variant_name(val)) = attr {
                         return Ok(val);
                     }
                 }
