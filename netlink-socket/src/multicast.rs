@@ -84,7 +84,7 @@ impl MulticastSocketRaw {
 
         loop {
             if self.reply.buf_offset == self.reply.buf_read {
-                let read = Self::read_buf(&mut self.sock, buf, &mut self.last_group).await?;
+                let read = Self::read_buf(&self.sock, buf, &mut self.last_group).await?;
                 self.reply.buf_read = read;
                 self.reply.buf_offset = 0;
             }
@@ -93,10 +93,11 @@ impl MulticastSocketRaw {
                 Err(io_err) => {
                     return Err(io_err.into());
                 }
-                Ok((seq, message_type, res)) => {
-                    if seq != 0 {
-                        continue;
-                    }
+                Ok((_seq, message_type, res)) => {
+                    // Seq number is mostly, but not always, 0. For example, removing a network
+                    // interface on linux 6.1 creates a multicast notification with the same seq
+                    // number as in the request. We don't allow sending requests on the multicast
+                    // socket, so the only incoming messages here are notifications.
 
                     let Some(multicast_group) = self.last_group else {
                         continue;

@@ -46,6 +46,12 @@ impl From<io::Error> for ReplyError {
     }
 }
 
+impl From<ReplyError> for io::Error {
+    fn from(value: ReplyError) -> Self {
+        value.code
+    }
+}
+
 impl ReplyError {
     pub fn as_io_error(&self) -> &io::Error {
         &self.code
@@ -76,12 +82,6 @@ impl ReplyError {
         res |= l != r;
 
         res
-    }
-}
-
-impl From<ReplyError> for io::Error {
-    fn from(value: ReplyError) -> Self {
-        value.code
     }
 }
 
