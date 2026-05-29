@@ -7,6 +7,7 @@ features="
   conntrack,
   rt-link,
   rt-addr,
+  rt-route,
   wireguard,
   nftables,
   nl80211,
@@ -18,6 +19,7 @@ examples="
   conntrack
   wireguard
   wireguard-setup
+  ip-route-show
   nftables
   nftables-api
   nl80211

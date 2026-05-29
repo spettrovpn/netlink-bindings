@@ -17,6 +17,10 @@ name = "conntrack"
 required-features = [ "netlink-bindings/conntrack" ]
 
 [[example]]
+name = "ip-route-show"
+required-features = [ "netlink-bindings/rt-route" ]
+
+[[example]]
 name = "extack"
 required-features = [ "netlink-bindings/rt-link" ]
 
