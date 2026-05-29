@@ -3,36 +3,46 @@
 Type-safe Rust bindings for encoding/decoding Netlink messages generated from
 YAML [specifications].
 
+[netlink]: https://docs.kernel.org/userspace-api/netlink/index.html
 [specifications]: https://docs.kernel.org/userspace-api/netlink/specs.html
+[list-of-specs]: https://www.kernel.org/doc/html/latest/netlink/specs/
 
 ## Overview
 
-Netlink is a collection of APIs exposed by the kernel, unified by a similar
-style of encoding data. The general list of Netlink families can be found in
-[the kernel
-documentation](https://docs.kernel.org/networking/netlink_spec/index.html), or
-at least those families, that were possible to condense to a machine readable
-description. This list very likely includes all the families that you would
-want to interact with.
+[Netlink][netlink] is a structured way for various kernel subsystems to expose
+their userspace API using hierarchical format with binary-encoded messages
+exchanged over a socket. Many kernel [subsystems][list-of-specs] already have a
+machine-readable API descriptions, which we use to generate Rust bindings.
 
-The goal of this project is to provide an easy-to-use type-safe interface,
-while also being reasonably fast and supporting all properties of all
-_sensible_ Netlink families.
+This project provides easy-to-use type-safe interface, while being reasonably
+fast and supporting all properties of all sensible Netlink families.
 
 ## Features
 
-- Streamlined type-safe interface.
-- All the properties described in yaml specifications are available in Rust.
-- Decoded Netlink messages can be Debug-printed, with enum values and flags
-annotated.
-- There is [a tool](#working-off-of-existing-tools) to simplify working off of
-existing tools by decoding Netlink messages of other programs.
-- Unified interface for both generic and classic flavors of netlink. Family
-resolution is automatic.
-- Many quirks of netlink-legacy and netlink-raw protocols are supported,
-including: binary structures, nested types, multi-attribute arrays, indexed
-arrays, sub messages.
-- Zero unsafe code in encoder/decoder logic.
+- Simple type-safe interface, see below [Making requests](#making-requests) and [Examples](#other-examples).
+- Support for all documented netlink subsystems, see [Support status](#support-status).
+- Netlink messages can be Debug-printed, with enum variants and flags annotated.
+- Examine netlink messages of existing programs using [reverse-lookup](#working-off-of-existing-tools).
+
+## Support status
+
+All [upstream specifications][list-of-specs] are supported as of Linux 7.1.
+
+- ✅ supported, has tests:
+[conntrack](./netlink-socket/examples/conntrack.rs),
+[inet-diag](./netlink-socket/examples/tcp-rtt.rs),
+[nftables](./netlink-socket/examples/nftables.rs),
+[nl80211](./netlink-socket/examples/nl80211.rs),
+[nlctrl](./netlink-bindings/src/nlctrl/nlctrl.md),
+[rt-addr](./netlink-socket/examples/wireguard-setup.rs),
+[rt-route](./netlink-socket/examples/ip-route-show.rs),
+[rt-link](./netlink-socket/examples/wireguard-setup.rs),
+[tc](./netlink-socket/examples/tc-prio.rs),
+[wireguard](./netlink-socket/examples/wireguard-setup.rs).
+- ✔️ compiles, testing needed: binder, dev-energymodel, devlink, dpll, drm-ras,
+ethtool, fou, handshake, lockd, mptcp_pm, netdev, net-shaper, nfsd, ovpn,
+ovs_datapath, ovs_flow, ovs_packet, ovs_vport, psp, rt-neigh, rt-rule
+tcp_metrics, team, unix-diag.
 
 ## Installation
 
@@ -44,11 +54,10 @@ netlink-socket2 = { version = "0.3", features = [ ] }
 
 ## Making requests
 
-A typical Netlink family, say wireguard, support multiple operations, for
-example, "get-device" and "set-device". Each operation may also be of "do" or
-"dump" kind.
+A typical Netlink family, say wireguard, supports multiple operations:
+"get-device", "set-device", etc. Each operation may be of kind "do" or "dump".
 
-For example, to get info about a device you would use a "dump" kind of
+As an example, to gather info about a device you would use a "dump" kind of
 "get-device" request. That's usually what it means, although different
 subsystems may imply different things. A typical request looks like this:
 
@@ -92,11 +101,11 @@ and decoding as you type.
 
 ## More complicated requests
 
-Let's say you have a network interface and want to assign an ip address to it.
-This is the domain of "rt-addr" family. It was one of the first ones created,
-inheriting some now-discouraged quirks, like a fixed-header - a struct that
-always present and may also carry some relevant data in some cases or may be
-just ignored (zeroed-out) for other requests.
+Let's say you have a network interface and you want to assign it an ip address.
+This is domain of "rt-addr" family. It was one of the first subsystems created,
+inheriting some now-discouraged quirks like a fixed-header - a struct that's
+always present in a message. It's use depends on the request type, with unused
+fields usually zeroed-out.
 
 The relevant operation is "newaddr" with "do" kind. You may also notice
 ".set_change()". This specifies an additional request flags. Similar to
@@ -167,6 +176,8 @@ while let Some(res) = iter.recv().await {
 
 - [wireguard-setup](./netlink-socket/examples/wireguard-setup.rs) - Create and
 configure wireguard interface.
+- [ip-route-show](./netlink-socket/examples/ip-route-show.rs) - Dump routing
+entries.
 - [conntrack](./netlink-socket/examples/conntrack.rs) - Dump tracked network
 connections, similar to `conntrack -L`.
 - [extack](./netlink-socket/examples/extack.rs) - Showcase handing of extended
@@ -305,25 +316,6 @@ enums, while this project works with the binary representation directly, with a
 separate interfaces for encoding and decoding: a builder pattern-like interface
 for encoding, and an iterator interface for decoding (internally).
 
-## Support status
-
-All [upstream specifications](https://www.kernel.org/doc/html/latest/netlink/specs/) are supported as of Linux 6.19.
-
-- ✅ supported, has tests:
-[conntrack](./netlink-socket/examples/conntrack.rs),
-[inet-diag](./netlink-socket/examples/tcp-rtt.rs),
-[nftables](./netlink-socket/examples/nftables.rs),
-[nl80211](./netlink-socket/examples/nl80211.rs),
-[nlctrl](./netlink-bindings/src/nlctrl/nlctrl.md),
-[rt-addr](./netlink-socket/examples/wireguard-setup.rs),
-[rt-link](./netlink-socket/examples/wireguard-setup.rs),
-[tc](./netlink-socket/examples/tc-prio.rs),
-[wireguard](./netlink-socket/examples/wireguard-setup.rs).
-- ✔️ compiles, testing needed: binder, dev-energymodel, devlink, dpll, ethtool,
-fou, handshake, lockd, mptcp_pm, netdev, net-shaper, nfsd, ovpn, ovs_datapath,
-ovs_flow, ovs_vport, psp, rt-neigh, rt-route, rt-rule tcp_metrics, team,
-unix-diag.
-
 ## Working off of existing tools
 
 If there's an existing tool using Netlink, you can use `reverse-lookup` binary
@@ -359,7 +351,7 @@ $ ~/.cargo/bin/reverse-lookup --help
 
 ## Contribute
 
-See [./CONTRIBUTING.md](./CONTRIBUTING.md) for information on how to work with
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for information on how to work with
 this repo, its structure, codegen stuff, etc.
 
 If your want to contribute, you can, for example:
