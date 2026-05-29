@@ -7,7 +7,7 @@ use std::net::IpAddr;
 
 use netlink_bindings::conntrack;
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 #[cfg_attr(feature = "tokio", tokio::main(flavor = "current_thread"))]
 #[cfg_attr(feature = "smol", macro_rules_attribute::apply(smol_macros::main))]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

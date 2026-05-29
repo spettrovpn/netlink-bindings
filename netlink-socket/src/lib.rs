@@ -119,7 +119,7 @@ impl NetlinkSocket {
         seq
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     pub async fn request<'sock, Request>(
         &'sock mut self,
         request: &Request,
@@ -138,7 +138,7 @@ impl NetlinkSocket {
         self.request_raw(request, protonum, request_type).await
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     async fn resolve(&mut self, family_name: &'static [u8]) -> io::Result<u16> {
         if let Some(id) = self.cache.get(family_name) {
             return Ok(*id);
@@ -169,7 +169,7 @@ impl NetlinkSocket {
         Err(ErrorKind::UnexpectedEof.into())
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     async fn request_raw<'sock, Request>(
         &'sock mut self,
         request: &Request,
@@ -212,7 +212,7 @@ impl NetlinkSocket {
         })
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     async fn write_buf(sock: &mut Socket, payload: &[IoSlice<'_>]) -> io::Result<()> {
         loop {
             #[cfg(not(feature = "tokio"))]
@@ -249,7 +249,7 @@ struct NetlinkReplyInner {
 }
 
 impl NetlinkReplyInner {
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     async fn read_buf(sock: &mut Socket, buf: &mut [u8]) -> io::Result<usize> {
         loop {
             #[cfg(not(feature = "tokio"))]
@@ -277,7 +277,7 @@ impl NetlinkReplyInner {
     }
 
     #[allow(clippy::type_complexity)]
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     pub async fn recv(
         &mut self,
         sock: &mut Socket,
@@ -291,7 +291,7 @@ impl NetlinkReplyInner {
     }
 
     #[allow(clippy::type_complexity)]
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     async fn parse_next(
         &mut self,
         buf: &[u8; RECV_BUF_SIZE],
@@ -379,7 +379,7 @@ pub struct NetlinkReply<'sock, Request: NetlinkRequest> {
 }
 
 impl<Request: NetlinkRequest> NetlinkReply<'_, Request> {
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     pub async fn recv_one(&mut self) -> Result<Request::ReplyType<'_>, ReplyError> {
         if let Some(res) = self.recv().await {
             return res;
@@ -387,7 +387,7 @@ impl<Request: NetlinkRequest> NetlinkReply<'_, Request> {
         Err(io::Error::other("Reply didn't contain data").into())
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     pub async fn recv_ack(&mut self) -> Result<(), ReplyError> {
         if let Some(res) = self.recv().await {
             res?;
@@ -396,7 +396,7 @@ impl<Request: NetlinkRequest> NetlinkReply<'_, Request> {
         Ok(())
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     pub async fn recv(&mut self) -> Option<Result<Request::ReplyType<'_>, ReplyError>> {
         if self.done {
             return None;

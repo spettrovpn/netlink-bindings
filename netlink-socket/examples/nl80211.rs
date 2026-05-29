@@ -14,7 +14,7 @@ use netlink_bindings::{
 };
 use netlink_socket2::NetlinkSocket;
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 #[cfg_attr(feature = "tokio", tokio::main(flavor = "current_thread"))]
 #[cfg_attr(feature = "smol", macro_rules_attribute::apply(smol_macros::main))]
 async fn main() {
@@ -44,7 +44,7 @@ async fn main() {
     wiphy_del_interface(&mut sock, ifindex).await;
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn dump_wiphy(sock: &mut NetlinkSocket) -> Vec<(String, u32)> {
     let mut request = nl80211::Request::new().op_dump(Commands::GetWiphy as u8);
     request
@@ -71,7 +71,7 @@ async fn dump_wiphy(sock: &mut NetlinkSocket) -> Vec<(String, u32)> {
     devices.into_iter().collect()
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn wiphy_add_interface(sock: &mut NetlinkSocket, phy_id: u32, new_ifname: &str) -> u32 {
     let mut request = nl80211::Request::new().op_do(Commands::NewInterface as u8);
     request.encode()
@@ -87,7 +87,7 @@ async fn wiphy_add_interface(sock: &mut NetlinkSocket, phy_id: u32, new_ifname: 
     attrs.get_ifindex().unwrap()
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn wiphy_del_interface(sock: &mut NetlinkSocket, ifindex: u32) {
     let mut request = nl80211::Request::new().op_do(Commands::DelInterface as u8);
     request.encode().push_ifindex(ifindex);
@@ -96,7 +96,7 @@ async fn wiphy_del_interface(sock: &mut NetlinkSocket, ifindex: u32) {
     iter.recv_ack().await.unwrap();
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn get_interface_index(sock: &mut NetlinkSocket, ifname: &str) -> Option<u32> {
     let request = rt_link::Request::new().op_getlink_dump(&Default::default());
 

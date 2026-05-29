@@ -19,7 +19,7 @@ use netlink_bindings::{
 };
 use netlink_socket2::NetlinkSocket;
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 #[cfg_attr(feature = "tokio", tokio::main(flavor = "current_thread"))]
 #[cfg_attr(feature = "smol", macro_rules_attribute::apply(smol_macros::main))]
 async fn main() {
@@ -51,7 +51,7 @@ async fn main() {
     link_del(&mut sock, ifname).await;
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn wg_dump(sock: &mut NetlinkSocket) {
     // Additional socket for handling wireguard requests
     let mut sock_wg = NetlinkSocket::new();
@@ -86,7 +86,7 @@ async fn wg_dump(sock: &mut NetlinkSocket) {
     }
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn wg_set(
     sock: &mut NetlinkSocket,
     ifname: &str,
@@ -118,7 +118,7 @@ async fn wg_set(
     iter.recv_ack().await.unwrap();
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn addr_add(sock: &mut NetlinkSocket, ifindex: u32, addr: IpAddr, addr_prefix: u8) {
     let header = Ifaddrmsg {
         ifa_family: libc_addr_family(&addr) as u8,
@@ -138,7 +138,7 @@ async fn addr_add(sock: &mut NetlinkSocket, ifindex: u32, addr: IpAddr, addr_pre
 }
 
 /// Equivalent to `ip link add dev {ifname} type wireguard`
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn link_add(sock: &mut NetlinkSocket, ifname: &str) {
     let mut request = rt_link::Request::new()
         .set_create()
@@ -155,7 +155,7 @@ async fn link_add(sock: &mut NetlinkSocket, ifname: &str) {
     iter.recv_ack().await.unwrap();
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn link_get_ifindex(sock: &mut NetlinkSocket, ifname: &str) -> u32 {
     let mut request = rt_link::Request::new().op_getlink_do(&rt_link::Ifinfomsg::new());
 
@@ -168,7 +168,7 @@ async fn link_get_ifindex(sock: &mut NetlinkSocket, ifname: &str) -> u32 {
 }
 
 /// Equivalent to `ip link del dev {ifname}`
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn link_del(sock: &mut NetlinkSocket, ifname: &str) {
     let mut request = rt_link::Request::new().op_dellink_do(&Default::default());
 

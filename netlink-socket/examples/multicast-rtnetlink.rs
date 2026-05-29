@@ -11,7 +11,7 @@
 use netlink_bindings::{rt_link, traits::NetlinkRequest};
 use netlink_socket2::{MulticastSocketRaw, NetlinkSocket};
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 #[cfg_attr(feature = "tokio", tokio::main(flavor = "current_thread"))]
 #[cfg_attr(feature = "smol", macro_rules_attribute::apply(smol_macros::main))]
 async fn main() {
@@ -252,7 +252,7 @@ to_from_enum! {
 }
 
 /// Equivalent to `ip link add dev {ifname} type dummy`
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn link_add(sock: &mut NetlinkSocket, ifname: &str) {
     let mut request = rt_link::Request::new()
         .set_create()
@@ -270,7 +270,7 @@ async fn link_add(sock: &mut NetlinkSocket, ifname: &str) {
 }
 
 /// Equivalent to `ip link del dev {ifname}`
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn link_del(sock: &mut NetlinkSocket, ifname: &str) {
     let mut request = rt_link::Request::new().op_dellink_do(&Default::default());
 

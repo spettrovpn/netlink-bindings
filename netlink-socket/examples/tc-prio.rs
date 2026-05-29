@@ -19,7 +19,7 @@ use netlink_socket2::NetlinkSocket;
 
 const TC_H_ROOT: u32 = 0xffffffff;
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 #[cfg_attr(feature = "tokio", tokio::main(flavor = "current_thread"))]
 #[cfg_attr(feature = "smol", macro_rules_attribute::apply(smol_macros::main))]
 async fn main() {
@@ -37,7 +37,7 @@ async fn main() {
     tc_prio_del(&mut sock, ifi, qdisc_handle).await;
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn tc_prio_add(sock: &mut NetlinkSocket, ifi: i32, handle: u32) {
     let header = Tcmsg {
         family: 0,
@@ -67,7 +67,7 @@ async fn tc_prio_add(sock: &mut NetlinkSocket, ifi: i32, handle: u32) {
     println!("tc prio add on ifi {} OK", ifi);
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn tc_prio_show(sock: &mut NetlinkSocket, ifi: i32, qdisc_handle: u32) {
     let header = Tcmsg {
         family: 0,
@@ -94,7 +94,7 @@ async fn tc_prio_show(sock: &mut NetlinkSocket, ifi: i32, qdisc_handle: u32) {
     panic!("No qdisc found");
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn tc_prio_del(sock: &mut NetlinkSocket, ifi: i32, qdisc_handle: u32) {
     let req = Request::new().op_delqdisc_do(&Tcmsg {
         family: 0,
@@ -111,7 +111,7 @@ async fn tc_prio_del(sock: &mut NetlinkSocket, ifi: i32, qdisc_handle: u32) {
     println!("tc prio del on ifi {} OK", ifi);
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 pub async fn link_get_ifindex(sock: &mut NetlinkSocket, ifname: &str) -> i32 {
     let mut request = rt_link::Request::new().op_getlink_do(&Default::default());
     request.encode().push_ifname_bytes(ifname.as_bytes());

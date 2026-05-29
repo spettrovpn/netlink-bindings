@@ -78,7 +78,7 @@ impl MulticastSocketRaw {
         Ok(())
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     pub async fn recv(&mut self) -> Result<(MulticastRecv, &[u8]), ReplyError> {
         let buf = Arc::make_mut(&mut self.buf);
 
@@ -130,7 +130,7 @@ impl MulticastSocketRaw {
         }
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     async fn read_buf(
         sock: &Socket,
         buf: &mut [u8],

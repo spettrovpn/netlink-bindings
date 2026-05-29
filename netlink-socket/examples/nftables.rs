@@ -8,7 +8,7 @@ use std::{ffi::CStr, net::Ipv4Addr};
 use netlink_bindings::nftables::{self, CmpOps, Nfgenmsg, PayloadBase, Registers, VerdictCode};
 use netlink_socket2::NetlinkSocket;
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 #[cfg_attr(feature = "tokio", tokio::main(flavor = "current_thread"))]
 #[cfg_attr(feature = "smol", macro_rules_attribute::apply(smol_macros::main))]
 async fn main() {
@@ -30,7 +30,7 @@ async fn main() {
     del_chain(&mut sock, table, chain).await;
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn append_rule(sock: &mut NetlinkSocket, table: &CStr, chain: &CStr) {
     let id = get_latest_genid(sock).await;
 
@@ -111,7 +111,7 @@ async fn append_rule(sock: &mut NetlinkSocket, table: &CStr, chain: &CStr) {
         .unwrap();
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn get_latest_genid(sock: &mut NetlinkSocket) -> u32 {
     let request = nftables::Request::new().op_getgen_do(&Nfgenmsg::new());
     let mut iter = sock.request(&request).await.unwrap();
@@ -120,7 +120,7 @@ async fn get_latest_genid(sock: &mut NetlinkSocket) -> u32 {
     attrs.get_id().unwrap()
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn dump_rules(sock: &mut NetlinkSocket, table: &CStr, chain: &CStr) {
     let mut request = nftables::Request::new().op_getrule_dump(&msg_header());
     request.encode().push_table(table).push_chain(chain);
@@ -130,7 +130,7 @@ async fn dump_rules(sock: &mut NetlinkSocket, table: &CStr, chain: &CStr) {
     }
 }
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 async fn del_chain(sock: &mut NetlinkSocket, table: &CStr, chain: &CStr) {
     let genid = get_latest_genid(sock).await;
 

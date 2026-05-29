@@ -14,7 +14,7 @@ use netlink_bindings::{
 };
 use netlink_socket2::{NetlinkSocket, ReplyError};
 
-#[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+#[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
 #[cfg_attr(feature = "tokio", tokio::main(flavor = "current_thread"))]
 #[cfg_attr(feature = "smol", macro_rules_attribute::apply(smol_macros::main))]
 async fn main() {
@@ -76,7 +76,7 @@ fn print_chain(chain: &str) {
 struct GenerationId(u32);
 
 impl GenerationId {
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     async fn new_latest(sock: &mut NetlinkSocket) -> Result<Self, ReplyError> {
         let request = nftables::Request::new().op_getgen_do(&Nfgenmsg::new());
         let mut iter = sock.request(&request).await?;
@@ -93,7 +93,7 @@ struct Transaction {
 }
 
 impl Transaction {
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     async fn new(sock: &mut NetlinkSocket) -> Result<Self, ReplyError> {
         let seq = sock.reserve_seq(256);
         let genid = GenerationId::new_latest(sock).await?;
@@ -164,7 +164,7 @@ impl Transaction {
         NewRuleExprs { inner }
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::maybe_async)]
+    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
     async fn send(mut self, sock: &mut NetlinkSocket) -> Result<(), ReplyError> {
         let mut h = nftables::Nfgenmsg::new();
         h.set_res_id(10);
