@@ -178,16 +178,21 @@ pub fn gen_iterable_attrs(
             type Item = Result<#item, ErrorContext>;
 
             fn next(&mut self) -> Option<Self::Item> {
-                let pos = self.pos;
+                let mut pos;
                 let mut r#type;
 
                 loop {
+                    pos = self.pos;
                     r#type = None;
+
                     if self.buf.len() == self.pos {
                         return None;
                     }
 
-                    let Some((header, next)) = chop_header(self.buf, &mut self.pos) else { break; };
+                    let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                        self.pos = self.buf.len();
+                        break;
+                    };
                     r#type = Some(header.r#type);
 
                     // TODO: check nested flag
@@ -390,11 +395,14 @@ pub fn gen_iterable_array(
                     #parse
                 }
 
+                let pos = self.pos;
+                self.pos = self.buf.len();
+
                 Some(Err(ErrorContext::new(
                     #name_str,
                     None,
                     self.orig_loc,
-                    self.buf.as_ptr().wrapping_add(self.pos) as usize,
+                    self.buf.as_ptr().wrapping_add(pos) as usize,
                 )))
             }
         }
