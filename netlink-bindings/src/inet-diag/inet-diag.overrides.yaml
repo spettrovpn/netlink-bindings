@@ -198,7 +198,7 @@ definitions:
       termination.
 
       If you reading this, for your own sanity, I advice you to first try
-      reverse-lookup on the `ss` command with filters you need, and copy
+      reverse-lookup on the ``ss`` command with filters you need, and copy
       bytecode from there.
     members:
       -
@@ -238,7 +238,7 @@ definitions:
         name: port-auto
         doc: |
           check if sock is NOT bound to a port by user,
-          i.e. !(sk->userlocks & SOCK_BINDPORT_LOCK)
+          i.e. ``!(sk->userlocks & SOCK_BINDPORT_LOCK)``
       -
         name: saddr-cond
         doc: |
@@ -246,16 +246,19 @@ definitions:
           followed by big-endian ipv4 or ipv6 address (yes, it's that cursed).
 
           The check equivalent to the following (in order):
-            no if hc.port != -1 && hc.port != sock.sport
-            yes if hc.family == AF_INET && sock.family == AF_INET6
+
+          .. code-block:: raw
+
+              no if hc.port != -1 && hc.port != sock.sport
+              yes if hc.family == AF_INET && sock.family == AF_INET6
                   && &sock.saddr_u32[0..3] == &[0, 0, 0xffff.to_be()]
                   && bits_eq(&sock.saddr_u8[12..], &hc.addr[..], hc.prefix_len)
-            no if hc.family != AF_UNSPEC && hc.family != family
-            yes if hc.prefix_len == 0
-            yes if bits_eq(&sock.addr[..], &hc.addr[..], hc.prefix_len)
-            no
+              no if hc.family != AF_UNSPEC && hc.family != family
+              yes if hc.prefix_len == 0
+              yes if bits_eq(&sock.addr[..], &hc.addr[..], hc.prefix_len)
+              no
 
-            See inet_diag_bc_run() in net/ipv4/inet_diag.c
+          See ``inet_diag_bc_run()`` in net/ipv4/inet_diag.c
       -
         name: daddr-cond
         doc: |
