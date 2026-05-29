@@ -1,4 +1,4 @@
-#![doc = "Network team device driver\\.\n"]
+#![doc = "Network team device driver.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -29,7 +29,7 @@ impl<'a> IterableTeam<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Team::TeamIfindex(val) = attr? {
+            if let Ok(Team::TeamIfindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -44,7 +44,7 @@ impl<'a> IterableTeam<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Team::ListOption(val) = attr? {
+            if let Ok(Team::ListOption(val)) = attr {
                 return Ok(val);
             }
         }
@@ -59,7 +59,7 @@ impl<'a> IterableTeam<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Team::ListPort(val) = attr? {
+            if let Ok(Team::ListPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -107,14 +107,16 @@ impl<'a> IterableTeam<'a> {
 impl<'a> Iterator for IterableTeam<'a> {
     type Item = Result<Team<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -227,7 +229,7 @@ impl<'a> IterableItemOption<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ItemOption::Option(val) = attr? {
+            if let Ok(ItemOption::Option(val)) = attr {
                 return Ok(val);
             }
         }
@@ -273,14 +275,16 @@ impl<'a> IterableItemOption<'a> {
 impl<'a> Iterator for IterableItemOption<'a> {
     type Item = Result<ItemOption<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -370,9 +374,9 @@ pub enum AttrOption<'a> {
     Type(u8),
     Data(&'a [u8]),
     Removed(()),
-    #[doc = "for per\\-port options"]
+    #[doc = "for per-port options\n"]
     PortIfindex(u32),
-    #[doc = "for array options"]
+    #[doc = "for array options\n"]
     ArrayIndex(u32),
 }
 impl<'a> IterableAttrOption<'a> {
@@ -380,7 +384,7 @@ impl<'a> IterableAttrOption<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrOption::Name(val) = attr? {
+            if let Ok(AttrOption::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -395,7 +399,7 @@ impl<'a> IterableAttrOption<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrOption::Changed(val) = attr? {
+            if let Ok(AttrOption::Changed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -410,7 +414,7 @@ impl<'a> IterableAttrOption<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrOption::Type(val) = attr? {
+            if let Ok(AttrOption::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -425,7 +429,7 @@ impl<'a> IterableAttrOption<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrOption::Data(val) = attr? {
+            if let Ok(AttrOption::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -440,7 +444,7 @@ impl<'a> IterableAttrOption<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrOption::Removed(val) = attr? {
+            if let Ok(AttrOption::Removed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -451,12 +455,12 @@ impl<'a> IterableAttrOption<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "for per\\-port options"]
+    #[doc = "for per-port options\n"]
     pub fn get_port_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrOption::PortIfindex(val) = attr? {
+            if let Ok(AttrOption::PortIfindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -467,12 +471,12 @@ impl<'a> IterableAttrOption<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "for array options"]
+    #[doc = "for array options\n"]
     pub fn get_array_index(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrOption::ArrayIndex(val) = attr? {
+            if let Ok(AttrOption::ArrayIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -524,14 +528,16 @@ impl<'a> IterableAttrOption<'a> {
 impl<'a> Iterator for IterableAttrOption<'a> {
     type Item = Result<AttrOption<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -686,7 +692,7 @@ impl<'a> IterableItemPort<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ItemPort::Port(val) = attr? {
+            if let Ok(ItemPort::Port(val)) = attr {
                 return Ok(val);
             }
         }
@@ -732,14 +738,16 @@ impl<'a> IterableItemPort<'a> {
 impl<'a> Iterator for IterableItemPort<'a> {
     type Item = Result<ItemPort<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -836,7 +844,7 @@ impl<'a> IterableAttrPort<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrPort::Ifindex(val) = attr? {
+            if let Ok(AttrPort::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -851,7 +859,7 @@ impl<'a> IterableAttrPort<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrPort::Changed(val) = attr? {
+            if let Ok(AttrPort::Changed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -866,7 +874,7 @@ impl<'a> IterableAttrPort<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrPort::Linkup(val) = attr? {
+            if let Ok(AttrPort::Linkup(val)) = attr {
                 return Ok(val);
             }
         }
@@ -881,7 +889,7 @@ impl<'a> IterableAttrPort<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrPort::Speed(val) = attr? {
+            if let Ok(AttrPort::Speed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -896,7 +904,7 @@ impl<'a> IterableAttrPort<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrPort::Duplex(val) = attr? {
+            if let Ok(AttrPort::Duplex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -911,7 +919,7 @@ impl<'a> IterableAttrPort<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AttrPort::Removed(val) = attr? {
+            if let Ok(AttrPort::Removed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -962,14 +970,16 @@ impl<'a> IterableAttrPort<'a> {
 impl<'a> Iterator for IterableAttrPort<'a> {
     type Item = Result<AttrPort, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1256,13 +1266,13 @@ impl<Prev: Rec> PushAttrOption<Prev> {
         push_header(self.as_rec_mut(), 5u16, 0 as u16);
         self
     }
-    #[doc = "for per\\-port options"]
+    #[doc = "for per-port options\n"]
     pub fn push_port_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "for array options"]
+    #[doc = "for array options\n"]
     pub fn push_array_index(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1384,7 +1394,7 @@ impl<Prev: Rec> Drop for PushAttrPort<Prev> {
         }
     }
 }
-#[doc = "No operation\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n"]
+#[doc = "No operation\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n\n"]
 #[derive(Debug)]
 pub struct OpNoopDo<'r> {
     request: Request<'r>,
@@ -1437,7 +1447,7 @@ impl NetlinkRequest for OpNoopDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set team options\nFlags: admin-perm\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n- [.nested_list_option()](PushTeam::nested_list_option)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_option()](IterableTeam::get_list_option)\n"]
+#[doc = "Set team options\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n- [.nested_list_option()](PushTeam::nested_list_option)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_option()](IterableTeam::get_list_option)\n\n"]
 #[derive(Debug)]
 pub struct OpOptionsSetDo<'r> {
     request: Request<'r>,
@@ -1490,7 +1500,7 @@ impl NetlinkRequest for OpOptionsSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get team options info\nFlags: admin-perm\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_option()](IterableTeam::get_list_option)\n"]
+#[doc = "Get team options info\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_option()](IterableTeam::get_list_option)\n\n"]
 #[derive(Debug)]
 pub struct OpOptionsGetDo<'r> {
     request: Request<'r>,
@@ -1543,7 +1553,7 @@ impl NetlinkRequest for OpOptionsGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get team ports info\nFlags: admin-perm\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_port()](IterableTeam::get_list_port)\n"]
+#[doc = "Get team ports info\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_port()](IterableTeam::get_list_port)\n\n"]
 #[derive(Debug)]
 pub struct OpPortListGetDo<'r> {
     request: Request<'r>,
@@ -1693,28 +1703,28 @@ impl<'buf> Request<'buf> {
         self.flags ^= self.flags & flags;
         self
     }
-    #[doc = "No operation\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n"]
+    #[doc = "No operation\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n\n"]
     pub fn op_noop_do(self) -> OpNoopDo<'buf> {
         let mut res = OpNoopDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-noop-do", OpNoopDo::lookup);
         res
     }
-    #[doc = "Set team options\nFlags: admin-perm\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n- [.nested_list_option()](PushTeam::nested_list_option)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_option()](IterableTeam::get_list_option)\n"]
+    #[doc = "Set team options\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n- [.nested_list_option()](PushTeam::nested_list_option)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_option()](IterableTeam::get_list_option)\n\n"]
     pub fn op_options_set_do(self) -> OpOptionsSetDo<'buf> {
         let mut res = OpOptionsSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-options-set-do", OpOptionsSetDo::lookup);
         res
     }
-    #[doc = "Get team options info\nFlags: admin-perm\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_option()](IterableTeam::get_list_option)\n"]
+    #[doc = "Get team options info\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_option()](IterableTeam::get_list_option)\n\n"]
     pub fn op_options_get_do(self) -> OpOptionsGetDo<'buf> {
         let mut res = OpOptionsGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-options-get-do", OpOptionsGetDo::lookup);
         res
     }
-    #[doc = "Get team ports info\nFlags: admin-perm\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_port()](IterableTeam::get_list_port)\n"]
+    #[doc = "Get team ports info\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_team_ifindex()](PushTeam::push_team_ifindex)\n\nReply attributes:\n- [.get_team_ifindex()](IterableTeam::get_team_ifindex)\n- [.get_list_port()](IterableTeam::get_list_port)\n\n"]
     pub fn op_port_list_get_do(self) -> OpPortListGetDo<'buf> {
         let mut res = OpPortListGetDo::new(self);
         res.request.do_writeback(

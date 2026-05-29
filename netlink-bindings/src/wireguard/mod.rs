@@ -1,4 +1,4 @@
-#![doc = "\\*\\*Netlink protocol to control WireGuard network devices\\.\\*\\*\n\nThe below enums and macros are for interfacing with WireGuard, using generic\nnetlink, with family \\`\\`WG\\_GENL\\_NAME\\`\\` and version \\`\\`WG\\_GENL\\_VERSION\\`\\`\\. It\ndefines two commands: get and set\\. Note that while they share many common\nattributes, these two commands actually accept a slightly different set of\ninputs and outputs\\. These differences are noted under the individual\nattributes\\.\n"]
+#![doc = "**Netlink protocol to control WireGuard network devices.**\n\nThe below enums and macros are for interfacing with WireGuard, using\ngeneric netlink, with family `WG_GENL_NAME` and version\n`WG_GENL_VERSION`. It defines two commands: get and set. Note that while\nthey share many common attributes, these two commands actually accept a\nslightly different set of inputs and outputs. These differences are\nnoted under the individual attributes.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -63,9 +63,9 @@ impl WgallowedipFlags {
 }
 #[repr(C, packed(4))]
 pub struct KernelTimespec {
-    #[doc = "Number of seconds, since UNIX epoch\\."]
+    #[doc = "Number of seconds, since UNIX epoch.\n"]
     pub sec: u64,
-    #[doc = "Number of nanoseconds, after the second began\\."]
+    #[doc = "Number of nanoseconds, after the second began.\n"]
     pub nsec: u64,
 }
 impl Clone for KernelTimespec {
@@ -141,16 +141,16 @@ impl std::fmt::Debug for KernelTimespec {
 pub enum Wgdevice<'a> {
     Ifindex(u32),
     Ifname(&'a CStr),
-    #[doc = "Set to all zeros to remove\\."]
+    #[doc = "Set to all zeros to remove.\n"]
     PrivateKey(&'a [u8]),
     PublicKey(&'a [u8]),
-    #[doc = "\\`\\`0\\`\\` or \\`\\`WGDEVICE\\_F\\_REPLACE\\_PEERS\\`\\` if all current peers should be\nremoved prior to adding the list below\\.\n\nAssociated type: [`WgdeviceFlags`] (enum)"]
+    #[doc = "`0` or `WGDEVICE_F_REPLACE_PEERS` if all current peers should be removed\nprior to adding the list below.\n\nAssociated type: [`WgdeviceFlags`] (enum)"]
     Flags(u32),
-    #[doc = "Set as \\`\\`0\\`\\` to choose randomly\\."]
+    #[doc = "Set as `0` to choose randomly.\n"]
     ListenPort(u16),
-    #[doc = "Set as \\`\\`0\\`\\` to disable\\."]
+    #[doc = "Set as `0` to disable.\n"]
     Fwmark(u32),
-    #[doc = "The index/type parameter is unused on \\`\\`SET\\_DEVICE\\`\\` operations and is\nzero on \\`\\`GET\\_DEVICE\\`\\` operations\\.\n"]
+    #[doc = "The index/type parameter is unused on `SET_DEVICE` operations and is\nzero on `GET_DEVICE` operations.\n"]
     Peers(IterableArrayWgpeer<'a>),
 }
 impl<'a> IterableWgdevice<'a> {
@@ -158,7 +158,7 @@ impl<'a> IterableWgdevice<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgdevice::Ifindex(val) = attr? {
+            if let Ok(Wgdevice::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -173,7 +173,7 @@ impl<'a> IterableWgdevice<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgdevice::Ifname(val) = attr? {
+            if let Ok(Wgdevice::Ifname(val)) = attr {
                 return Ok(val);
             }
         }
@@ -184,12 +184,12 @@ impl<'a> IterableWgdevice<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Set to all zeros to remove\\."]
+    #[doc = "Set to all zeros to remove.\n"]
     pub fn get_private_key(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgdevice::PrivateKey(val) = attr? {
+            if let Ok(Wgdevice::PrivateKey(val)) = attr {
                 return Ok(val);
             }
         }
@@ -204,7 +204,7 @@ impl<'a> IterableWgdevice<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgdevice::PublicKey(val) = attr? {
+            if let Ok(Wgdevice::PublicKey(val)) = attr {
                 return Ok(val);
             }
         }
@@ -215,12 +215,12 @@ impl<'a> IterableWgdevice<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "\\`\\`0\\`\\` or \\`\\`WGDEVICE\\_F\\_REPLACE\\_PEERS\\`\\` if all current peers should be\nremoved prior to adding the list below\\.\n\nAssociated type: [`WgdeviceFlags`] (enum)"]
+    #[doc = "`0` or `WGDEVICE_F_REPLACE_PEERS` if all current peers should be removed\nprior to adding the list below.\n\nAssociated type: [`WgdeviceFlags`] (enum)"]
     pub fn get_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgdevice::Flags(val) = attr? {
+            if let Ok(Wgdevice::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -231,12 +231,12 @@ impl<'a> IterableWgdevice<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Set as \\`\\`0\\`\\` to choose randomly\\."]
+    #[doc = "Set as `0` to choose randomly.\n"]
     pub fn get_listen_port(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgdevice::ListenPort(val) = attr? {
+            if let Ok(Wgdevice::ListenPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -247,12 +247,12 @@ impl<'a> IterableWgdevice<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Set as \\`\\`0\\`\\` to disable\\."]
+    #[doc = "Set as `0` to disable.\n"]
     pub fn get_fwmark(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgdevice::Fwmark(val) = attr? {
+            if let Ok(Wgdevice::Fwmark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -263,12 +263,12 @@ impl<'a> IterableWgdevice<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The index/type parameter is unused on \\`\\`SET\\_DEVICE\\`\\` operations and is\nzero on \\`\\`GET\\_DEVICE\\`\\` operations\\.\n"]
+    #[doc = "The index/type parameter is unused on `SET_DEVICE` operations and is\nzero on `GET_DEVICE` operations.\n"]
     pub fn get_peers(
         &self,
     ) -> Result<ArrayIterable<IterableArrayWgpeer<'a>, IterableWgpeer<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let Wgdevice::Peers(val) = attr? {
+            if let Ok(Wgdevice::Peers(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -314,11 +314,13 @@ impl<'a> Iterator for IterableArrayWgpeer<'a> {
                 return Some(Ok(IterableWgpeer::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "Wgpeer",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -363,14 +365,16 @@ impl<'a> IterableWgdevice<'a> {
 impl<'a> Iterator for IterableWgdevice<'a> {
     type Item = Result<Wgdevice<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -556,20 +560,20 @@ impl IterableWgdevice<'_> {
 #[derive(Clone)]
 pub enum Wgpeer<'a> {
     PublicKey(&'a [u8]),
-    #[doc = "Set as all zeros to remove\\."]
+    #[doc = "Set as all zeros to remove.\n"]
     PresharedKey(&'a [u8]),
-    #[doc = "\\`\\`0\\`\\` and/or \\`\\`WGPEER\\_F\\_REMOVE\\_ME\\`\\` if the specified peer should not\nexist at the end of the operation, rather than added/updated and/or\n\\`\\`WGPEER\\_F\\_REPLACE\\_ALLOWEDIPS\\`\\` if all current allowed IPs of this\npeer should be removed prior to adding the list below and/or\n\\`\\`WGPEER\\_F\\_UPDATE\\_ONLY\\`\\` if the peer should only be set if it already\nexists\\.\n\nAssociated type: [`WgpeerFlags`] (enum)"]
+    #[doc = "`0` and/or `WGPEER_F_REMOVE_ME` if the specified peer should not exist\nat the end of the operation, rather than added/updated and/or\n`WGPEER_F_REPLACE_ALLOWEDIPS` if all current allowed IPs of this peer\nshould be removed prior to adding the list below and/or\n`WGPEER_F_UPDATE_ONLY` if the peer should only be set if it already\nexists.\n\nAssociated type: [`WgpeerFlags`] (enum)"]
     Flags(u32),
-    #[doc = "struct sockaddr\\_in or struct sockaddr\\_in6"]
+    #[doc = "struct sockaddr_in or struct sockaddr_in6\n"]
     Endpoint(std::net::SocketAddr),
-    #[doc = "Set as \\`\\`0\\`\\` to disable\\."]
+    #[doc = "Set as `0` to disable.\n"]
     PersistentKeepaliveInterval(u16),
     LastHandshakeTime(KernelTimespec),
     RxBytes(u64),
     TxBytes(u64),
-    #[doc = "The index/type parameter is unused on \\`\\`SET\\_DEVICE\\`\\` operations and is\nzero on \\`\\`GET\\_DEVICE\\`\\` operations\\.\n"]
+    #[doc = "The index/type parameter is unused on `SET_DEVICE` operations and is\nzero on `GET_DEVICE` operations.\n"]
     Allowedips(IterableArrayWgallowedip<'a>),
-    #[doc = "Should not be set or used at all by most users of this API, as the\nmost recent protocol will be used when this is unset\\. Otherwise,\nmust be set to \\`\\`1\\`\\`\\.\n"]
+    #[doc = "Should not be set or used at all by most users of this API, as the most\nrecent protocol will be used when this is unset. Otherwise, must be set\nto `1`.\n"]
     ProtocolVersion(u32),
 }
 impl<'a> IterableWgpeer<'a> {
@@ -577,7 +581,7 @@ impl<'a> IterableWgpeer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgpeer::PublicKey(val) = attr? {
+            if let Ok(Wgpeer::PublicKey(val)) = attr {
                 return Ok(val);
             }
         }
@@ -588,12 +592,12 @@ impl<'a> IterableWgpeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Set as all zeros to remove\\."]
+    #[doc = "Set as all zeros to remove.\n"]
     pub fn get_preshared_key(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgpeer::PresharedKey(val) = attr? {
+            if let Ok(Wgpeer::PresharedKey(val)) = attr {
                 return Ok(val);
             }
         }
@@ -604,12 +608,12 @@ impl<'a> IterableWgpeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "\\`\\`0\\`\\` and/or \\`\\`WGPEER\\_F\\_REMOVE\\_ME\\`\\` if the specified peer should not\nexist at the end of the operation, rather than added/updated and/or\n\\`\\`WGPEER\\_F\\_REPLACE\\_ALLOWEDIPS\\`\\` if all current allowed IPs of this\npeer should be removed prior to adding the list below and/or\n\\`\\`WGPEER\\_F\\_UPDATE\\_ONLY\\`\\` if the peer should only be set if it already\nexists\\.\n\nAssociated type: [`WgpeerFlags`] (enum)"]
+    #[doc = "`0` and/or `WGPEER_F_REMOVE_ME` if the specified peer should not exist\nat the end of the operation, rather than added/updated and/or\n`WGPEER_F_REPLACE_ALLOWEDIPS` if all current allowed IPs of this peer\nshould be removed prior to adding the list below and/or\n`WGPEER_F_UPDATE_ONLY` if the peer should only be set if it already\nexists.\n\nAssociated type: [`WgpeerFlags`] (enum)"]
     pub fn get_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgpeer::Flags(val) = attr? {
+            if let Ok(Wgpeer::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -620,12 +624,12 @@ impl<'a> IterableWgpeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct sockaddr\\_in or struct sockaddr\\_in6"]
+    #[doc = "struct sockaddr_in or struct sockaddr_in6\n"]
     pub fn get_endpoint(&self) -> Result<std::net::SocketAddr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgpeer::Endpoint(val) = attr? {
+            if let Ok(Wgpeer::Endpoint(val)) = attr {
                 return Ok(val);
             }
         }
@@ -636,12 +640,12 @@ impl<'a> IterableWgpeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Set as \\`\\`0\\`\\` to disable\\."]
+    #[doc = "Set as `0` to disable.\n"]
     pub fn get_persistent_keepalive_interval(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgpeer::PersistentKeepaliveInterval(val) = attr? {
+            if let Ok(Wgpeer::PersistentKeepaliveInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -656,7 +660,7 @@ impl<'a> IterableWgpeer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgpeer::LastHandshakeTime(val) = attr? {
+            if let Ok(Wgpeer::LastHandshakeTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -671,7 +675,7 @@ impl<'a> IterableWgpeer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgpeer::RxBytes(val) = attr? {
+            if let Ok(Wgpeer::RxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -686,7 +690,7 @@ impl<'a> IterableWgpeer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgpeer::TxBytes(val) = attr? {
+            if let Ok(Wgpeer::TxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -697,13 +701,13 @@ impl<'a> IterableWgpeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The index/type parameter is unused on \\`\\`SET\\_DEVICE\\`\\` operations and is\nzero on \\`\\`GET\\_DEVICE\\`\\` operations\\.\n"]
+    #[doc = "The index/type parameter is unused on `SET_DEVICE` operations and is\nzero on `GET_DEVICE` operations.\n"]
     pub fn get_allowedips(
         &self,
     ) -> Result<ArrayIterable<IterableArrayWgallowedip<'a>, IterableWgallowedip<'a>>, ErrorContext>
     {
         for attr in self.clone() {
-            if let Wgpeer::Allowedips(val) = attr? {
+            if let Ok(Wgpeer::Allowedips(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -714,12 +718,12 @@ impl<'a> IterableWgpeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Should not be set or used at all by most users of this API, as the\nmost recent protocol will be used when this is unset\\. Otherwise,\nmust be set to \\`\\`1\\`\\`\\.\n"]
+    #[doc = "Should not be set or used at all by most users of this API, as the most\nrecent protocol will be used when this is unset. Otherwise, must be set\nto `1`.\n"]
     pub fn get_protocol_version(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgpeer::ProtocolVersion(val) = attr? {
+            if let Ok(Wgpeer::ProtocolVersion(val)) = attr {
                 return Ok(val);
             }
         }
@@ -765,11 +769,13 @@ impl<'a> Iterator for IterableArrayWgallowedip<'a> {
                 return Some(Ok(IterableWgallowedip::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "Wgallowedip",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -816,14 +822,16 @@ impl<'a> IterableWgpeer<'a> {
 impl<'a> Iterator for IterableWgpeer<'a> {
     type Item = Result<Wgpeer<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1031,21 +1039,21 @@ impl IterableWgpeer<'_> {
 }
 #[derive(Clone)]
 pub enum Wgallowedip {
-    #[doc = "IP family, either \\`\\`AF\\_INET\\`\\` or \\`\\`AF\\_INET6\\`\\`\\."]
+    #[doc = "IP family, either `AF_INET` or `AF_INET6`.\n"]
     Family(u16),
-    #[doc = "Either \\`\\`struct in\\_addr\\`\\` or \\`\\`struct in6\\_addr\\`\\`\\."]
+    #[doc = "Either `struct in_addr` or `struct in6_addr`.\n"]
     Ipaddr(std::net::IpAddr),
     CidrMask(u8),
-    #[doc = "\\`\\`WGALLOWEDIP\\_F\\_REMOVE\\_ME\\`\\` if the specified IP should be removed;\notherwise, this IP will be added if it is not already present\\.\n\nAssociated type: [`WgallowedipFlags`] (enum)"]
+    #[doc = "`WGALLOWEDIP_F_REMOVE_ME` if the specified IP should be removed;\notherwise, this IP will be added if it is not already present.\n\nAssociated type: [`WgallowedipFlags`] (enum)"]
     Flags(u32),
 }
 impl<'a> IterableWgallowedip<'a> {
-    #[doc = "IP family, either \\`\\`AF\\_INET\\`\\` or \\`\\`AF\\_INET6\\`\\`\\."]
+    #[doc = "IP family, either `AF_INET` or `AF_INET6`.\n"]
     pub fn get_family(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgallowedip::Family(val) = attr? {
+            if let Ok(Wgallowedip::Family(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1056,12 +1064,12 @@ impl<'a> IterableWgallowedip<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Either \\`\\`struct in\\_addr\\`\\` or \\`\\`struct in6\\_addr\\`\\`\\."]
+    #[doc = "Either `struct in_addr` or `struct in6_addr`.\n"]
     pub fn get_ipaddr(&self) -> Result<std::net::IpAddr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgallowedip::Ipaddr(val) = attr? {
+            if let Ok(Wgallowedip::Ipaddr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1076,7 +1084,7 @@ impl<'a> IterableWgallowedip<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgallowedip::CidrMask(val) = attr? {
+            if let Ok(Wgallowedip::CidrMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1087,12 +1095,12 @@ impl<'a> IterableWgallowedip<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "\\`\\`WGALLOWEDIP\\_F\\_REMOVE\\_ME\\`\\` if the specified IP should be removed;\notherwise, this IP will be added if it is not already present\\.\n\nAssociated type: [`WgallowedipFlags`] (enum)"]
+    #[doc = "`WGALLOWEDIP_F_REMOVE_ME` if the specified IP should be removed;\notherwise, this IP will be added if it is not already present.\n\nAssociated type: [`WgallowedipFlags`] (enum)"]
     pub fn get_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wgallowedip::Flags(val) = attr? {
+            if let Ok(Wgallowedip::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1141,14 +1149,16 @@ impl<'a> IterableWgallowedip<'a> {
 impl<'a> Iterator for IterableWgallowedip<'a> {
     type Item = Result<Wgallowedip, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1362,7 +1372,7 @@ impl<Prev: Rec> PushWgdevice<Prev> {
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "Set to all zeros to remove\\."]
+    #[doc = "Set to all zeros to remove.\n"]
     pub fn push_private_key(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 3u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -1373,25 +1383,25 @@ impl<Prev: Rec> PushWgdevice<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "\\`\\`0\\`\\` or \\`\\`WGDEVICE\\_F\\_REPLACE\\_PEERS\\`\\` if all current peers should be\nremoved prior to adding the list below\\.\n\nAssociated type: [`WgdeviceFlags`] (enum)"]
+    #[doc = "`0` or `WGDEVICE_F_REPLACE_PEERS` if all current peers should be removed\nprior to adding the list below.\n\nAssociated type: [`WgdeviceFlags`] (enum)"]
     pub fn push_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Set as \\`\\`0\\`\\` to choose randomly\\."]
+    #[doc = "Set as `0` to choose randomly.\n"]
     pub fn push_listen_port(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 6u16, 2 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Set as \\`\\`0\\`\\` to disable\\."]
+    #[doc = "Set as `0` to disable.\n"]
     pub fn push_fwmark(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The index/type parameter is unused on \\`\\`SET\\_DEVICE\\`\\` operations and is\nzero on \\`\\`GET\\_DEVICE\\`\\` operations\\.\n"]
+    #[doc = "The index/type parameter is unused on `SET_DEVICE` operations and is\nzero on `GET_DEVICE` operations.\n"]
     pub fn array_peers(mut self) -> PushArrayWgpeer<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 8u16);
         PushArrayWgpeer {
@@ -1488,19 +1498,19 @@ impl<Prev: Rec> PushWgpeer<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "Set as all zeros to remove\\."]
+    #[doc = "Set as all zeros to remove.\n"]
     pub fn push_preshared_key(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 2u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "\\`\\`0\\`\\` and/or \\`\\`WGPEER\\_F\\_REMOVE\\_ME\\`\\` if the specified peer should not\nexist at the end of the operation, rather than added/updated and/or\n\\`\\`WGPEER\\_F\\_REPLACE\\_ALLOWEDIPS\\`\\` if all current allowed IPs of this\npeer should be removed prior to adding the list below and/or\n\\`\\`WGPEER\\_F\\_UPDATE\\_ONLY\\`\\` if the peer should only be set if it already\nexists\\.\n\nAssociated type: [`WgpeerFlags`] (enum)"]
+    #[doc = "`0` and/or `WGPEER_F_REMOVE_ME` if the specified peer should not exist\nat the end of the operation, rather than added/updated and/or\n`WGPEER_F_REPLACE_ALLOWEDIPS` if all current allowed IPs of this peer\nshould be removed prior to adding the list below and/or\n`WGPEER_F_UPDATE_ONLY` if the peer should only be set if it already\nexists.\n\nAssociated type: [`WgpeerFlags`] (enum)"]
     pub fn push_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "struct sockaddr\\_in or struct sockaddr\\_in6"]
+    #[doc = "struct sockaddr_in or struct sockaddr_in6\n"]
     pub fn push_endpoint(mut self, value: std::net::SocketAddr) -> Self {
         push_header(self.as_rec_mut(), 4u16, {
             match &value {
@@ -1511,7 +1521,7 @@ impl<Prev: Rec> PushWgpeer<Prev> {
         encode_sockaddr(self.as_rec_mut(), value);
         self
     }
-    #[doc = "Set as \\`\\`0\\`\\` to disable\\."]
+    #[doc = "Set as `0` to disable.\n"]
     pub fn push_persistent_keepalive_interval(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 5u16, 2 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1532,7 +1542,7 @@ impl<Prev: Rec> PushWgpeer<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The index/type parameter is unused on \\`\\`SET\\_DEVICE\\`\\` operations and is\nzero on \\`\\`GET\\_DEVICE\\`\\` operations\\.\n"]
+    #[doc = "The index/type parameter is unused on `SET_DEVICE` operations and is\nzero on `GET_DEVICE` operations.\n"]
     pub fn array_allowedips(mut self) -> PushArrayWgallowedip<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 9u16);
         PushArrayWgallowedip {
@@ -1541,7 +1551,7 @@ impl<Prev: Rec> PushWgpeer<Prev> {
             counter: 0,
         }
     }
-    #[doc = "Should not be set or used at all by most users of this API, as the\nmost recent protocol will be used when this is unset\\. Otherwise,\nmust be set to \\`\\`1\\`\\`\\.\n"]
+    #[doc = "Should not be set or used at all by most users of this API, as the most\nrecent protocol will be used when this is unset. Otherwise, must be set\nto `1`.\n"]
     pub fn push_protocol_version(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1583,13 +1593,13 @@ impl<Prev: Rec> PushWgallowedip<Prev> {
         }
         prev
     }
-    #[doc = "IP family, either \\`\\`AF\\_INET\\`\\` or \\`\\`AF\\_INET6\\`\\`\\."]
+    #[doc = "IP family, either `AF_INET` or `AF_INET6`.\n"]
     pub fn push_family(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 1u16, 2 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Either \\`\\`struct in\\_addr\\`\\` or \\`\\`struct in6\\_addr\\`\\`\\."]
+    #[doc = "Either `struct in_addr` or `struct in6_addr`.\n"]
     pub fn push_ipaddr(mut self, value: std::net::IpAddr) -> Self {
         push_header(self.as_rec_mut(), 2u16, {
             match &value {
@@ -1605,7 +1615,7 @@ impl<Prev: Rec> PushWgallowedip<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "\\`\\`WGALLOWEDIP\\_F\\_REMOVE\\_ME\\`\\` if the specified IP should be removed;\notherwise, this IP will be added if it is not already present\\.\n\nAssociated type: [`WgallowedipFlags`] (enum)"]
+    #[doc = "`WGALLOWEDIP_F_REMOVE_ME` if the specified IP should be removed;\notherwise, this IP will be added if it is not already present.\n\nAssociated type: [`WgallowedipFlags`] (enum)"]
     pub fn push_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1621,7 +1631,7 @@ impl<Prev: Rec> Drop for PushWgallowedip<Prev> {
         }
     }
 }
-#[doc = "Retrieve WireGuard device\n\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\n\nThe command should be called with one but not both of:\n\n\\- \\`\\`WGDEVICE\\_A\\_IFINDEX\\`\\`\n\\- \\`\\`WGDEVICE\\_A\\_IFNAME\\`\\`\n\nThe kernel will then return several messages (\\`\\`NLM\\_F\\_MULTI\\`\\`)\\. It is\npossible that all of the allowed IPs of a single peer will not fit\nwithin a single netlink message\\. In that case, the same peer will be\nwritten in the following message, except it will only contain\n\\`\\`WGPEER\\_A\\_PUBLIC\\_KEY\\`\\` and \\`\\`WGPEER\\_A\\_ALLOWEDIPS\\`\\`\\. This may occur\nseveral times in a row for the same peer\\. It is then up to the receiver\nto coalesce adjacent peers\\. Likewise, it is possible that all peers will\nnot fit within a single message\\. So, subsequent peers will be sent in\nfollowing messages, except those will only contain \\`\\`WGDEVICE\\_A\\_IFNAME\\`\\`\nand \\`\\`WGDEVICE\\_A\\_PEERS\\`\\`\\. It is then up to the receiver to coalesce\nthese messages to form the complete list of peers\\.\n\nSince this is an \\`\\`NLA\\_F\\_DUMP\\`\\` command, the final message will always\nbe \\`\\`NLMSG\\_DONE\\`\\`, even if an error occurs\\. However, this \\`\\`NLMSG\\_DONE\\`\\`\nmessage contains an integer error code\\. It is either zero or a negative\nerror code corresponding to the errno\\.\n\nFlags: uns-admin-perm\nRequest attributes:\n- [.push_ifindex()](PushWgdevice::push_ifindex)\n- [.push_ifname()](PushWgdevice::push_ifname)\n\nReply attributes:\n- [.get_ifindex()](IterableWgdevice::get_ifindex)\n- [.get_ifname()](IterableWgdevice::get_ifname)\n- [.get_private_key()](IterableWgdevice::get_private_key)\n- [.get_public_key()](IterableWgdevice::get_public_key)\n- [.get_flags()](IterableWgdevice::get_flags)\n- [.get_listen_port()](IterableWgdevice::get_listen_port)\n- [.get_fwmark()](IterableWgdevice::get_fwmark)\n- [.get_peers()](IterableWgdevice::get_peers)\n"]
+#[doc = "# Retrieve WireGuard device\n\nThe command should be called with one but not both of:\n\n- `WGDEVICE_A_IFINDEX`\n- `WGDEVICE_A_IFNAME`\n\nThe kernel will then return several messages (`NLM_F_MULTI`). It is\npossible that all of the allowed IPs of a single peer will not fit\nwithin a single netlink message. In that case, the same peer will be\nwritten in the following message, except it will only contain\n`WGPEER_A_PUBLIC_KEY` and `WGPEER_A_ALLOWEDIPS`. This may occur several\ntimes in a row for the same peer. It is then up to the receiver to\ncoalesce adjacent peers. Likewise, it is possible that all peers will\nnot fit within a single message. So, subsequent peers will be sent in\nfollowing messages, except those will only contain `WGDEVICE_A_IFNAME`\nand `WGDEVICE_A_PEERS`. It is then up to the receiver to coalesce these\nmessages to form the complete list of peers.\n\nSince this is an `NLA_F_DUMP` command, the final message will always be\n`NLMSG_DONE`, even if an error occurs. However, this `NLMSG_DONE`\nmessage contains an integer error code. It is either zero or a negative\nerror code corresponding to the errno.\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushWgdevice::push_ifindex)\n- [.push_ifname()](PushWgdevice::push_ifname)\n\nReply attributes:\n- [.get_ifindex()](IterableWgdevice::get_ifindex)\n- [.get_ifname()](IterableWgdevice::get_ifname)\n- [.get_private_key()](IterableWgdevice::get_private_key)\n- [.get_public_key()](IterableWgdevice::get_public_key)\n- [.get_flags()](IterableWgdevice::get_flags)\n- [.get_listen_port()](IterableWgdevice::get_listen_port)\n- [.get_fwmark()](IterableWgdevice::get_fwmark)\n- [.get_peers()](IterableWgdevice::get_peers)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDeviceDump<'r> {
     request: Request<'r>,
@@ -1676,7 +1686,7 @@ impl NetlinkRequest for OpGetDeviceDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set WireGuard device\n\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\n\nThis command should be called with a wgdevice set, containing one but\nnot both of \\`\\`WGDEVICE\\_A\\_IFINDEX\\`\\` and \\`\\`WGDEVICE\\_A\\_IFNAME\\`\\`\\.\n\nIt is possible that the amount of configuration data exceeds that of the\nmaximum message length accepted by the kernel\\. In that case, several\nmessages should be sent one after another, with each successive one\nfilling in information not contained in the prior\\. Note that if\n\\`\\`WGDEVICE\\_F\\_REPLACE\\_PEERS\\`\\` is specified in the first message, it\nprobably should not be specified in fragments that come after, so that\nthe list of peers is only cleared the first time but appended after\\.\nLikewise for peers, if \\`\\`WGPEER\\_F\\_REPLACE\\_ALLOWEDIPS\\`\\` is specified in\nthe first message of a peer, it likely should not be specified in\nsubsequent fragments\\.\n\nIf an error occurs, \\`\\`NLMSG\\_ERROR\\`\\` will reply containing an errno\\.\n\nFlags: uns-admin-perm\nRequest attributes:\n- [.push_ifindex()](PushWgdevice::push_ifindex)\n- [.push_ifname()](PushWgdevice::push_ifname)\n- [.push_private_key()](PushWgdevice::push_private_key)\n- [.push_public_key()](PushWgdevice::push_public_key)\n- [.push_flags()](PushWgdevice::push_flags)\n- [.push_listen_port()](PushWgdevice::push_listen_port)\n- [.push_fwmark()](PushWgdevice::push_fwmark)\n- [.array_peers()](PushWgdevice::array_peers)\n"]
+#[doc = "# Set WireGuard device\n\nThis command should be called with a wgdevice set, containing one but\nnot both of `WGDEVICE_A_IFINDEX` and `WGDEVICE_A_IFNAME`.\n\nIt is possible that the amount of configuration data exceeds that of the\nmaximum message length accepted by the kernel. In that case, several\nmessages should be sent one after another, with each successive one\nfilling in information not contained in the prior. Note that if\n`WGDEVICE_F_REPLACE_PEERS` is specified in the first message, it\nprobably should not be specified in fragments that come after, so that\nthe list of peers is only cleared the first time but appended after.\nLikewise for peers, if `WGPEER_F_REPLACE_ALLOWEDIPS` is specified in the\nfirst message of a peer, it likely should not be specified in subsequent\nfragments.\n\nIf an error occurs, `NLMSG_ERROR` will reply containing an errno.\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushWgdevice::push_ifindex)\n- [.push_ifname()](PushWgdevice::push_ifname)\n- [.push_private_key()](PushWgdevice::push_private_key)\n- [.push_public_key()](PushWgdevice::push_public_key)\n- [.push_flags()](PushWgdevice::push_flags)\n- [.push_listen_port()](PushWgdevice::push_listen_port)\n- [.push_fwmark()](PushWgdevice::push_fwmark)\n- [.array_peers()](PushWgdevice::array_peers)\n\n"]
 #[derive(Debug)]
 pub struct OpSetDeviceDo<'r> {
     request: Request<'r>,
@@ -1831,7 +1841,7 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Retrieve WireGuard device\n\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\n\nThe command should be called with one but not both of:\n\n\\- \\`\\`WGDEVICE\\_A\\_IFINDEX\\`\\`\n\\- \\`\\`WGDEVICE\\_A\\_IFNAME\\`\\`\n\nThe kernel will then return several messages (\\`\\`NLM\\_F\\_MULTI\\`\\`)\\. It is\npossible that all of the allowed IPs of a single peer will not fit\nwithin a single netlink message\\. In that case, the same peer will be\nwritten in the following message, except it will only contain\n\\`\\`WGPEER\\_A\\_PUBLIC\\_KEY\\`\\` and \\`\\`WGPEER\\_A\\_ALLOWEDIPS\\`\\`\\. This may occur\nseveral times in a row for the same peer\\. It is then up to the receiver\nto coalesce adjacent peers\\. Likewise, it is possible that all peers will\nnot fit within a single message\\. So, subsequent peers will be sent in\nfollowing messages, except those will only contain \\`\\`WGDEVICE\\_A\\_IFNAME\\`\\`\nand \\`\\`WGDEVICE\\_A\\_PEERS\\`\\`\\. It is then up to the receiver to coalesce\nthese messages to form the complete list of peers\\.\n\nSince this is an \\`\\`NLA\\_F\\_DUMP\\`\\` command, the final message will always\nbe \\`\\`NLMSG\\_DONE\\`\\`, even if an error occurs\\. However, this \\`\\`NLMSG\\_DONE\\`\\`\nmessage contains an integer error code\\. It is either zero or a negative\nerror code corresponding to the errno\\.\n\nFlags: uns-admin-perm\nRequest attributes:\n- [.push_ifindex()](PushWgdevice::push_ifindex)\n- [.push_ifname()](PushWgdevice::push_ifname)\n\nReply attributes:\n- [.get_ifindex()](IterableWgdevice::get_ifindex)\n- [.get_ifname()](IterableWgdevice::get_ifname)\n- [.get_private_key()](IterableWgdevice::get_private_key)\n- [.get_public_key()](IterableWgdevice::get_public_key)\n- [.get_flags()](IterableWgdevice::get_flags)\n- [.get_listen_port()](IterableWgdevice::get_listen_port)\n- [.get_fwmark()](IterableWgdevice::get_fwmark)\n- [.get_peers()](IterableWgdevice::get_peers)\n"]
+    #[doc = "# Retrieve WireGuard device\n\nThe command should be called with one but not both of:\n\n- `WGDEVICE_A_IFINDEX`\n- `WGDEVICE_A_IFNAME`\n\nThe kernel will then return several messages (`NLM_F_MULTI`). It is\npossible that all of the allowed IPs of a single peer will not fit\nwithin a single netlink message. In that case, the same peer will be\nwritten in the following message, except it will only contain\n`WGPEER_A_PUBLIC_KEY` and `WGPEER_A_ALLOWEDIPS`. This may occur several\ntimes in a row for the same peer. It is then up to the receiver to\ncoalesce adjacent peers. Likewise, it is possible that all peers will\nnot fit within a single message. So, subsequent peers will be sent in\nfollowing messages, except those will only contain `WGDEVICE_A_IFNAME`\nand `WGDEVICE_A_PEERS`. It is then up to the receiver to coalesce these\nmessages to form the complete list of peers.\n\nSince this is an `NLA_F_DUMP` command, the final message will always be\n`NLMSG_DONE`, even if an error occurs. However, this `NLMSG_DONE`\nmessage contains an integer error code. It is either zero or a negative\nerror code corresponding to the errno.\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushWgdevice::push_ifindex)\n- [.push_ifname()](PushWgdevice::push_ifname)\n\nReply attributes:\n- [.get_ifindex()](IterableWgdevice::get_ifindex)\n- [.get_ifname()](IterableWgdevice::get_ifname)\n- [.get_private_key()](IterableWgdevice::get_private_key)\n- [.get_public_key()](IterableWgdevice::get_public_key)\n- [.get_flags()](IterableWgdevice::get_flags)\n- [.get_listen_port()](IterableWgdevice::get_listen_port)\n- [.get_fwmark()](IterableWgdevice::get_fwmark)\n- [.get_peers()](IterableWgdevice::get_peers)\n\n"]
     pub fn op_get_device_dump(self) -> OpGetDeviceDump<'buf> {
         let mut res = OpGetDeviceDump::new(self);
         res.request.do_writeback(
@@ -1841,7 +1851,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set WireGuard device\n\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\n\nThis command should be called with a wgdevice set, containing one but\nnot both of \\`\\`WGDEVICE\\_A\\_IFINDEX\\`\\` and \\`\\`WGDEVICE\\_A\\_IFNAME\\`\\`\\.\n\nIt is possible that the amount of configuration data exceeds that of the\nmaximum message length accepted by the kernel\\. In that case, several\nmessages should be sent one after another, with each successive one\nfilling in information not contained in the prior\\. Note that if\n\\`\\`WGDEVICE\\_F\\_REPLACE\\_PEERS\\`\\` is specified in the first message, it\nprobably should not be specified in fragments that come after, so that\nthe list of peers is only cleared the first time but appended after\\.\nLikewise for peers, if \\`\\`WGPEER\\_F\\_REPLACE\\_ALLOWEDIPS\\`\\` is specified in\nthe first message of a peer, it likely should not be specified in\nsubsequent fragments\\.\n\nIf an error occurs, \\`\\`NLMSG\\_ERROR\\`\\` will reply containing an errno\\.\n\nFlags: uns-admin-perm\nRequest attributes:\n- [.push_ifindex()](PushWgdevice::push_ifindex)\n- [.push_ifname()](PushWgdevice::push_ifname)\n- [.push_private_key()](PushWgdevice::push_private_key)\n- [.push_public_key()](PushWgdevice::push_public_key)\n- [.push_flags()](PushWgdevice::push_flags)\n- [.push_listen_port()](PushWgdevice::push_listen_port)\n- [.push_fwmark()](PushWgdevice::push_fwmark)\n- [.array_peers()](PushWgdevice::array_peers)\n"]
+    #[doc = "# Set WireGuard device\n\nThis command should be called with a wgdevice set, containing one but\nnot both of `WGDEVICE_A_IFINDEX` and `WGDEVICE_A_IFNAME`.\n\nIt is possible that the amount of configuration data exceeds that of the\nmaximum message length accepted by the kernel. In that case, several\nmessages should be sent one after another, with each successive one\nfilling in information not contained in the prior. Note that if\n`WGDEVICE_F_REPLACE_PEERS` is specified in the first message, it\nprobably should not be specified in fragments that come after, so that\nthe list of peers is only cleared the first time but appended after.\nLikewise for peers, if `WGPEER_F_REPLACE_ALLOWEDIPS` is specified in the\nfirst message of a peer, it likely should not be specified in subsequent\nfragments.\n\nIf an error occurs, `NLMSG_ERROR` will reply containing an errno.\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushWgdevice::push_ifindex)\n- [.push_ifname()](PushWgdevice::push_ifname)\n- [.push_private_key()](PushWgdevice::push_private_key)\n- [.push_public_key()](PushWgdevice::push_public_key)\n- [.push_flags()](PushWgdevice::push_flags)\n- [.push_listen_port()](PushWgdevice::push_listen_port)\n- [.push_fwmark()](PushWgdevice::push_fwmark)\n- [.array_peers()](PushWgdevice::array_peers)\n\n"]
     pub fn op_set_device_do(self) -> OpSetDeviceDo<'buf> {
         let mut res = OpSetDeviceDo::new(self);
         res.request

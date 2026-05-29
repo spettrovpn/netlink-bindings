@@ -1,4 +1,4 @@
-#![doc = "Management interface for TCP metrics\\.\n"]
+#![doc = "Management interface for TCP metrics.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -21,9 +21,9 @@ pub enum TcpMetrics<'a> {
     AddrIpv4(std::net::Ipv4Addr),
     AddrIpv6(std::net::Ipv6Addr),
     Age(u64),
-    #[doc = "unused"]
+    #[doc = "unused\n"]
     TwTsval(u32),
-    #[doc = "unused"]
+    #[doc = "unused\n"]
     TwTsStamp(i32),
     Vals(IterableMetrics<'a>),
     FopenMss(u16),
@@ -39,7 +39,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::AddrIpv4(val) = attr? {
+            if let Ok(TcpMetrics::AddrIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -54,7 +54,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::AddrIpv6(val) = attr? {
+            if let Ok(TcpMetrics::AddrIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -69,7 +69,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::Age(val) = attr? {
+            if let Ok(TcpMetrics::Age(val)) = attr {
                 return Ok(val);
             }
         }
@@ -80,12 +80,12 @@ impl<'a> IterableTcpMetrics<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "unused"]
+    #[doc = "unused\n"]
     pub fn get_tw_tsval(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::TwTsval(val) = attr? {
+            if let Ok(TcpMetrics::TwTsval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -96,12 +96,12 @@ impl<'a> IterableTcpMetrics<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "unused"]
+    #[doc = "unused\n"]
     pub fn get_tw_ts_stamp(&self) -> Result<i32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::TwTsStamp(val) = attr? {
+            if let Ok(TcpMetrics::TwTsStamp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -116,7 +116,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::Vals(val) = attr? {
+            if let Ok(TcpMetrics::Vals(val)) = attr {
                 return Ok(val);
             }
         }
@@ -131,7 +131,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::FopenMss(val) = attr? {
+            if let Ok(TcpMetrics::FopenMss(val)) = attr {
                 return Ok(val);
             }
         }
@@ -146,7 +146,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::FopenSynDrops(val) = attr? {
+            if let Ok(TcpMetrics::FopenSynDrops(val)) = attr {
                 return Ok(val);
             }
         }
@@ -161,7 +161,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::FopenSynDropTs(val) = attr? {
+            if let Ok(TcpMetrics::FopenSynDropTs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -176,7 +176,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::FopenCookie(val) = attr? {
+            if let Ok(TcpMetrics::FopenCookie(val)) = attr {
                 return Ok(val);
             }
         }
@@ -191,7 +191,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::SaddrIpv4(val) = attr? {
+            if let Ok(TcpMetrics::SaddrIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -206,7 +206,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::SaddrIpv6(val) = attr? {
+            if let Ok(TcpMetrics::SaddrIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -221,7 +221,7 @@ impl<'a> IterableTcpMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcpMetrics::Pad(val) = attr? {
+            if let Ok(TcpMetrics::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -278,14 +278,16 @@ impl<'a> IterableTcpMetrics<'a> {
 impl<'a> Iterator for IterableTcpMetrics<'a> {
     type Item = Result<TcpMetrics<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -514,28 +516,28 @@ impl IterableTcpMetrics<'_> {
 }
 #[derive(Clone)]
 pub enum Metrics {
-    #[doc = "Round Trip Time (RTT), in msecs with 3 bits fractional\n(left\\-shift by 3 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time (RTT), in msecs with 3 bits fractional (left-shift by 3\nto get the msec value).\n"]
     Rtt(u32),
-    #[doc = "Round Trip Time VARiance (RTT), in msecs with 2 bits fractional\n(left\\-shift by 2 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time VARiance (RTT), in msecs with 2 bits fractional\n(left-shift by 2 to get the msec value).\n"]
     Rttvar(u32),
-    #[doc = "Slow Start THRESHold\\."]
+    #[doc = "Slow Start THRESHold.\n"]
     Ssthresh(u32),
-    #[doc = "Congestion Window\\."]
+    #[doc = "Congestion Window.\n"]
     Cwnd(u32),
-    #[doc = "Reodering metric\\."]
+    #[doc = "Reodering metric.\n"]
     Reodering(u32),
-    #[doc = "Round Trip Time (RTT), in usecs, with 3 bits fractional\n(left\\-shift by 3 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time (RTT), in usecs, with 3 bits fractional (left-shift by 3\nto get the msec value).\n"]
     RttUs(u32),
-    #[doc = "Round Trip Time (RTT), in usecs, with 2 bits fractional\n(left\\-shift by 3 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time (RTT), in usecs, with 2 bits fractional (left-shift by 3\nto get the msec value).\n"]
     RttvarUs(u32),
 }
 impl<'a> IterableMetrics<'a> {
-    #[doc = "Round Trip Time (RTT), in msecs with 3 bits fractional\n(left\\-shift by 3 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time (RTT), in msecs with 3 bits fractional (left-shift by 3\nto get the msec value).\n"]
     pub fn get_rtt(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Rtt(val) = attr? {
+            if let Ok(Metrics::Rtt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -546,12 +548,12 @@ impl<'a> IterableMetrics<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Round Trip Time VARiance (RTT), in msecs with 2 bits fractional\n(left\\-shift by 2 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time VARiance (RTT), in msecs with 2 bits fractional\n(left-shift by 2 to get the msec value).\n"]
     pub fn get_rttvar(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Rttvar(val) = attr? {
+            if let Ok(Metrics::Rttvar(val)) = attr {
                 return Ok(val);
             }
         }
@@ -562,12 +564,12 @@ impl<'a> IterableMetrics<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Slow Start THRESHold\\."]
+    #[doc = "Slow Start THRESHold.\n"]
     pub fn get_ssthresh(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Ssthresh(val) = attr? {
+            if let Ok(Metrics::Ssthresh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -578,12 +580,12 @@ impl<'a> IterableMetrics<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Congestion Window\\."]
+    #[doc = "Congestion Window.\n"]
     pub fn get_cwnd(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Cwnd(val) = attr? {
+            if let Ok(Metrics::Cwnd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -594,12 +596,12 @@ impl<'a> IterableMetrics<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Reodering metric\\."]
+    #[doc = "Reodering metric.\n"]
     pub fn get_reodering(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Reodering(val) = attr? {
+            if let Ok(Metrics::Reodering(val)) = attr {
                 return Ok(val);
             }
         }
@@ -610,12 +612,12 @@ impl<'a> IterableMetrics<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Round Trip Time (RTT), in usecs, with 3 bits fractional\n(left\\-shift by 3 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time (RTT), in usecs, with 3 bits fractional (left-shift by 3\nto get the msec value).\n"]
     pub fn get_rtt_us(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::RttUs(val) = attr? {
+            if let Ok(Metrics::RttUs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -626,12 +628,12 @@ impl<'a> IterableMetrics<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Round Trip Time (RTT), in usecs, with 2 bits fractional\n(left\\-shift by 3 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time (RTT), in usecs, with 2 bits fractional (left-shift by 3\nto get the msec value).\n"]
     pub fn get_rttvar_us(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::RttvarUs(val) = attr? {
+            if let Ok(Metrics::RttvarUs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -682,14 +684,16 @@ impl<'a> IterableMetrics<'a> {
 impl<'a> Iterator for IterableMetrics<'a> {
     type Item = Result<Metrics, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -881,13 +885,13 @@ impl<Prev: Rec> PushTcpMetrics<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "unused"]
+    #[doc = "unused\n"]
     pub fn push_tw_tsval(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "unused"]
+    #[doc = "unused\n"]
     pub fn push_tw_ts_stamp(mut self, value: i32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -971,43 +975,43 @@ impl<Prev: Rec> PushMetrics<Prev> {
         }
         prev
     }
-    #[doc = "Round Trip Time (RTT), in msecs with 3 bits fractional\n(left\\-shift by 3 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time (RTT), in msecs with 3 bits fractional (left-shift by 3\nto get the msec value).\n"]
     pub fn push_rtt(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Round Trip Time VARiance (RTT), in msecs with 2 bits fractional\n(left\\-shift by 2 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time VARiance (RTT), in msecs with 2 bits fractional\n(left-shift by 2 to get the msec value).\n"]
     pub fn push_rttvar(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Slow Start THRESHold\\."]
+    #[doc = "Slow Start THRESHold.\n"]
     pub fn push_ssthresh(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Congestion Window\\."]
+    #[doc = "Congestion Window.\n"]
     pub fn push_cwnd(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Reodering metric\\."]
+    #[doc = "Reodering metric.\n"]
     pub fn push_reodering(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Round Trip Time (RTT), in usecs, with 3 bits fractional\n(left\\-shift by 3 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time (RTT), in usecs, with 3 bits fractional (left-shift by 3\nto get the msec value).\n"]
     pub fn push_rtt_us(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Round Trip Time (RTT), in usecs, with 2 bits fractional\n(left\\-shift by 3 to get the msec value)\\.\n"]
+    #[doc = "Round Trip Time (RTT), in usecs, with 2 bits fractional (left-shift by 3\nto get the msec value).\n"]
     pub fn push_rttvar_us(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1023,7 +1027,7 @@ impl<Prev: Rec> Drop for PushMetrics<Prev> {
         }
     }
 }
-#[doc = "Retrieve metrics\\.\n\nReply attributes:\n- [.get_addr_ipv4()](IterableTcpMetrics::get_addr_ipv4)\n- [.get_addr_ipv6()](IterableTcpMetrics::get_addr_ipv6)\n- [.get_age()](IterableTcpMetrics::get_age)\n- [.get_vals()](IterableTcpMetrics::get_vals)\n- [.get_fopen_mss()](IterableTcpMetrics::get_fopen_mss)\n- [.get_fopen_syn_drops()](IterableTcpMetrics::get_fopen_syn_drops)\n- [.get_fopen_syn_drop_ts()](IterableTcpMetrics::get_fopen_syn_drop_ts)\n- [.get_fopen_cookie()](IterableTcpMetrics::get_fopen_cookie)\n- [.get_saddr_ipv4()](IterableTcpMetrics::get_saddr_ipv4)\n- [.get_saddr_ipv6()](IterableTcpMetrics::get_saddr_ipv6)\n"]
+#[doc = "Retrieve metrics.\n\nReply attributes:\n- [.get_addr_ipv4()](IterableTcpMetrics::get_addr_ipv4)\n- [.get_addr_ipv6()](IterableTcpMetrics::get_addr_ipv6)\n- [.get_age()](IterableTcpMetrics::get_age)\n- [.get_vals()](IterableTcpMetrics::get_vals)\n- [.get_fopen_mss()](IterableTcpMetrics::get_fopen_mss)\n- [.get_fopen_syn_drops()](IterableTcpMetrics::get_fopen_syn_drops)\n- [.get_fopen_syn_drop_ts()](IterableTcpMetrics::get_fopen_syn_drop_ts)\n- [.get_fopen_cookie()](IterableTcpMetrics::get_fopen_cookie)\n- [.get_saddr_ipv4()](IterableTcpMetrics::get_saddr_ipv4)\n- [.get_saddr_ipv6()](IterableTcpMetrics::get_saddr_ipv6)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDump<'r> {
     request: Request<'r>,
@@ -1078,7 +1082,7 @@ impl NetlinkRequest for OpGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Retrieve metrics\\.\nRequest attributes:\n- [.push_addr_ipv4()](PushTcpMetrics::push_addr_ipv4)\n- [.push_addr_ipv6()](PushTcpMetrics::push_addr_ipv6)\n- [.push_saddr_ipv4()](PushTcpMetrics::push_saddr_ipv4)\n- [.push_saddr_ipv6()](PushTcpMetrics::push_saddr_ipv6)\n\nReply attributes:\n- [.get_addr_ipv4()](IterableTcpMetrics::get_addr_ipv4)\n- [.get_addr_ipv6()](IterableTcpMetrics::get_addr_ipv6)\n- [.get_age()](IterableTcpMetrics::get_age)\n- [.get_vals()](IterableTcpMetrics::get_vals)\n- [.get_fopen_mss()](IterableTcpMetrics::get_fopen_mss)\n- [.get_fopen_syn_drops()](IterableTcpMetrics::get_fopen_syn_drops)\n- [.get_fopen_syn_drop_ts()](IterableTcpMetrics::get_fopen_syn_drop_ts)\n- [.get_fopen_cookie()](IterableTcpMetrics::get_fopen_cookie)\n- [.get_saddr_ipv4()](IterableTcpMetrics::get_saddr_ipv4)\n- [.get_saddr_ipv6()](IterableTcpMetrics::get_saddr_ipv6)\n"]
+#[doc = "Retrieve metrics.\n\nRequest attributes:\n- [.push_addr_ipv4()](PushTcpMetrics::push_addr_ipv4)\n- [.push_addr_ipv6()](PushTcpMetrics::push_addr_ipv6)\n- [.push_saddr_ipv4()](PushTcpMetrics::push_saddr_ipv4)\n- [.push_saddr_ipv6()](PushTcpMetrics::push_saddr_ipv6)\n\nReply attributes:\n- [.get_addr_ipv4()](IterableTcpMetrics::get_addr_ipv4)\n- [.get_addr_ipv6()](IterableTcpMetrics::get_addr_ipv6)\n- [.get_age()](IterableTcpMetrics::get_age)\n- [.get_vals()](IterableTcpMetrics::get_vals)\n- [.get_fopen_mss()](IterableTcpMetrics::get_fopen_mss)\n- [.get_fopen_syn_drops()](IterableTcpMetrics::get_fopen_syn_drops)\n- [.get_fopen_syn_drop_ts()](IterableTcpMetrics::get_fopen_syn_drop_ts)\n- [.get_fopen_cookie()](IterableTcpMetrics::get_fopen_cookie)\n- [.get_saddr_ipv4()](IterableTcpMetrics::get_saddr_ipv4)\n- [.get_saddr_ipv6()](IterableTcpMetrics::get_saddr_ipv6)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDo<'r> {
     request: Request<'r>,
@@ -1131,7 +1135,7 @@ impl NetlinkRequest for OpGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete metrics\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_addr_ipv4()](PushTcpMetrics::push_addr_ipv4)\n- [.push_addr_ipv6()](PushTcpMetrics::push_addr_ipv6)\n- [.push_saddr_ipv4()](PushTcpMetrics::push_saddr_ipv4)\n- [.push_saddr_ipv6()](PushTcpMetrics::push_saddr_ipv6)\n"]
+#[doc = "Delete metrics.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_addr_ipv4()](PushTcpMetrics::push_addr_ipv4)\n- [.push_addr_ipv6()](PushTcpMetrics::push_addr_ipv6)\n- [.push_saddr_ipv4()](PushTcpMetrics::push_saddr_ipv4)\n- [.push_saddr_ipv6()](PushTcpMetrics::push_saddr_ipv6)\n\n"]
 #[derive(Debug)]
 pub struct OpDelDo<'r> {
     request: Request<'r>,
@@ -1286,21 +1290,21 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Retrieve metrics\\.\n\nReply attributes:\n- [.get_addr_ipv4()](IterableTcpMetrics::get_addr_ipv4)\n- [.get_addr_ipv6()](IterableTcpMetrics::get_addr_ipv6)\n- [.get_age()](IterableTcpMetrics::get_age)\n- [.get_vals()](IterableTcpMetrics::get_vals)\n- [.get_fopen_mss()](IterableTcpMetrics::get_fopen_mss)\n- [.get_fopen_syn_drops()](IterableTcpMetrics::get_fopen_syn_drops)\n- [.get_fopen_syn_drop_ts()](IterableTcpMetrics::get_fopen_syn_drop_ts)\n- [.get_fopen_cookie()](IterableTcpMetrics::get_fopen_cookie)\n- [.get_saddr_ipv4()](IterableTcpMetrics::get_saddr_ipv4)\n- [.get_saddr_ipv6()](IterableTcpMetrics::get_saddr_ipv6)\n"]
+    #[doc = "Retrieve metrics.\n\nReply attributes:\n- [.get_addr_ipv4()](IterableTcpMetrics::get_addr_ipv4)\n- [.get_addr_ipv6()](IterableTcpMetrics::get_addr_ipv6)\n- [.get_age()](IterableTcpMetrics::get_age)\n- [.get_vals()](IterableTcpMetrics::get_vals)\n- [.get_fopen_mss()](IterableTcpMetrics::get_fopen_mss)\n- [.get_fopen_syn_drops()](IterableTcpMetrics::get_fopen_syn_drops)\n- [.get_fopen_syn_drop_ts()](IterableTcpMetrics::get_fopen_syn_drop_ts)\n- [.get_fopen_cookie()](IterableTcpMetrics::get_fopen_cookie)\n- [.get_saddr_ipv4()](IterableTcpMetrics::get_saddr_ipv4)\n- [.get_saddr_ipv6()](IterableTcpMetrics::get_saddr_ipv6)\n\n"]
     pub fn op_get_dump(self) -> OpGetDump<'buf> {
         let mut res = OpGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-dump", OpGetDump::lookup);
         res
     }
-    #[doc = "Retrieve metrics\\.\nRequest attributes:\n- [.push_addr_ipv4()](PushTcpMetrics::push_addr_ipv4)\n- [.push_addr_ipv6()](PushTcpMetrics::push_addr_ipv6)\n- [.push_saddr_ipv4()](PushTcpMetrics::push_saddr_ipv4)\n- [.push_saddr_ipv6()](PushTcpMetrics::push_saddr_ipv6)\n\nReply attributes:\n- [.get_addr_ipv4()](IterableTcpMetrics::get_addr_ipv4)\n- [.get_addr_ipv6()](IterableTcpMetrics::get_addr_ipv6)\n- [.get_age()](IterableTcpMetrics::get_age)\n- [.get_vals()](IterableTcpMetrics::get_vals)\n- [.get_fopen_mss()](IterableTcpMetrics::get_fopen_mss)\n- [.get_fopen_syn_drops()](IterableTcpMetrics::get_fopen_syn_drops)\n- [.get_fopen_syn_drop_ts()](IterableTcpMetrics::get_fopen_syn_drop_ts)\n- [.get_fopen_cookie()](IterableTcpMetrics::get_fopen_cookie)\n- [.get_saddr_ipv4()](IterableTcpMetrics::get_saddr_ipv4)\n- [.get_saddr_ipv6()](IterableTcpMetrics::get_saddr_ipv6)\n"]
+    #[doc = "Retrieve metrics.\n\nRequest attributes:\n- [.push_addr_ipv4()](PushTcpMetrics::push_addr_ipv4)\n- [.push_addr_ipv6()](PushTcpMetrics::push_addr_ipv6)\n- [.push_saddr_ipv4()](PushTcpMetrics::push_saddr_ipv4)\n- [.push_saddr_ipv6()](PushTcpMetrics::push_saddr_ipv6)\n\nReply attributes:\n- [.get_addr_ipv4()](IterableTcpMetrics::get_addr_ipv4)\n- [.get_addr_ipv6()](IterableTcpMetrics::get_addr_ipv6)\n- [.get_age()](IterableTcpMetrics::get_age)\n- [.get_vals()](IterableTcpMetrics::get_vals)\n- [.get_fopen_mss()](IterableTcpMetrics::get_fopen_mss)\n- [.get_fopen_syn_drops()](IterableTcpMetrics::get_fopen_syn_drops)\n- [.get_fopen_syn_drop_ts()](IterableTcpMetrics::get_fopen_syn_drop_ts)\n- [.get_fopen_cookie()](IterableTcpMetrics::get_fopen_cookie)\n- [.get_saddr_ipv4()](IterableTcpMetrics::get_saddr_ipv4)\n- [.get_saddr_ipv6()](IterableTcpMetrics::get_saddr_ipv6)\n\n"]
     pub fn op_get_do(self) -> OpGetDo<'buf> {
         let mut res = OpGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-do", OpGetDo::lookup);
         res
     }
-    #[doc = "Delete metrics\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_addr_ipv4()](PushTcpMetrics::push_addr_ipv4)\n- [.push_addr_ipv6()](PushTcpMetrics::push_addr_ipv6)\n- [.push_saddr_ipv4()](PushTcpMetrics::push_saddr_ipv4)\n- [.push_saddr_ipv6()](PushTcpMetrics::push_saddr_ipv6)\n"]
+    #[doc = "Delete metrics.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_addr_ipv4()](PushTcpMetrics::push_addr_ipv4)\n- [.push_addr_ipv6()](PushTcpMetrics::push_addr_ipv6)\n- [.push_saddr_ipv4()](PushTcpMetrics::push_saddr_ipv4)\n- [.push_saddr_ipv6()](PushTcpMetrics::push_saddr_ipv6)\n\n"]
     pub fn op_del_do(self) -> OpDelDo<'buf> {
         let mut res = OpDelDo::new(self);
         res.request

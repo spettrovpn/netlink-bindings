@@ -3,6 +3,7 @@ conntrack
 dev-energymodel
 devlink
 dpll
+drm-ras
 ethtool
 fou
 handshake
@@ -18,6 +19,7 @@ nlctrl
 ovpn
 ovs_datapath
 ovs_flow
+ovs_packet
 ovs_vport
 psp
 rt-addr

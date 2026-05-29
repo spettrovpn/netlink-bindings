@@ -1,4 +1,4 @@
-#![doc = "netdev configuration over generic netlink\\."]
+#![doc = "netdev configuration over generic netlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -18,19 +18,19 @@ pub const PROTONAME_CSTR: &CStr = c"netdev";
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum XdpAct {
-    #[doc = "XDP features set supported by all drivers (XDP\\_ABORTED, XDP\\_DROP, XDP\\_PASS, XDP\\_TX)"]
+    #[doc = "XDP features set supported by all drivers (XDP_ABORTED, XDP_DROP,\nXDP_PASS, XDP_TX)\n"]
     Basic = 1 << 0,
-    #[doc = "The netdev supports XDP\\_REDIRECT"]
+    #[doc = "The netdev supports XDP_REDIRECT\n"]
     Redirect = 1 << 1,
-    #[doc = "This feature informs if netdev implements ndo\\_xdp\\_xmit callback\\."]
+    #[doc = "This feature informs if netdev implements ndo_xdp_xmit callback.\n"]
     NdoXmit = 1 << 2,
-    #[doc = "This feature informs if netdev supports AF\\_XDP in zero copy mode\\."]
+    #[doc = "This feature informs if netdev supports AF_XDP in zero copy mode.\n"]
     XskZerocopy = 1 << 3,
-    #[doc = "This feature informs if netdev supports XDP hw offloading\\."]
+    #[doc = "This feature informs if netdev supports XDP hw offloading.\n"]
     HwOffload = 1 << 4,
-    #[doc = "This feature informs if netdev implements non\\-linear XDP buffer support in the driver napi callback\\."]
+    #[doc = "This feature informs if netdev implements non-linear XDP buffer support\nin the driver napi callback.\n"]
     RxSg = 1 << 5,
-    #[doc = "This feature informs if netdev implements non\\-linear XDP buffer support in ndo\\_xdp\\_xmit callback\\."]
+    #[doc = "This feature informs if netdev implements non-linear XDP buffer support\nin ndo_xdp_xmit callback.\n"]
     NdoXmitSg = 1 << 6,
 }
 impl XdpAct {
@@ -50,11 +50,11 @@ impl XdpAct {
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum XdpRxMetadata {
-    #[doc = "Device is capable of exposing receive HW timestamp via\nbpf\\_xdp\\_metadata\\_rx\\_timestamp()\\.\n"]
+    #[doc = "Device is capable of exposing receive HW timestamp via\nbpf_xdp_metadata_rx_timestamp().\n"]
     Timestamp = 1 << 0,
-    #[doc = "Device is capable of exposing receive packet hash via\nbpf\\_xdp\\_metadata\\_rx\\_hash()\\.\n"]
+    #[doc = "Device is capable of exposing receive packet hash via\nbpf_xdp_metadata_rx_hash().\n"]
     Hash = 1 << 1,
-    #[doc = "Device is capable of exposing receive packet VLAN tag via\nbpf\\_xdp\\_metadata\\_rx\\_vlan\\_tag()\\.\n"]
+    #[doc = "Device is capable of exposing receive packet VLAN tag via\nbpf_xdp_metadata_rx_vlan_tag().\n"]
     VlanTag = 1 << 2,
 }
 impl XdpRxMetadata {
@@ -70,11 +70,11 @@ impl XdpRxMetadata {
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum XskFlags {
-    #[doc = "HW timestamping egress packets is supported by the driver\\."]
+    #[doc = "HW timestamping egress packets is supported by the driver.\n"]
     TxTimestamp = 1 << 0,
-    #[doc = "L3 checksum HW offload is supported by the driver\\."]
+    #[doc = "L3 checksum HW offload is supported by the driver.\n"]
     TxChecksum = 1 << 1,
-    #[doc = "Launch time HW offload is supported by the driver\\."]
+    #[doc = "Launch time HW offload is supported by the driver.\n"]
     TxLaunchTimeFifo = 1 << 2,
 }
 impl XskFlags {
@@ -134,25 +134,25 @@ impl NapiThreaded {
 }
 #[derive(Clone)]
 pub enum Dev<'a> {
-    #[doc = "netdev ifindex"]
+    #[doc = "netdev ifindex\n"]
     Ifindex(u32),
     Pad(&'a [u8]),
-    #[doc = "Bitmask of enabled xdp\\-features\\.\nAssociated type: [`XdpAct`] (enum)"]
+    #[doc = "Bitmask of enabled xdp-features.\n\nAssociated type: [`XdpAct`] (enum)"]
     XdpFeatures(u64),
-    #[doc = "max fragment count supported by ZC driver"]
+    #[doc = "max fragment count supported by ZC driver\n"]
     XdpZcMaxSegs(u32),
-    #[doc = "Bitmask of supported XDP receive metadata features\\. See Documentation/networking/xdp\\-rx\\-metadata\\.rst for more details\\.\nAssociated type: [`XdpRxMetadata`] (enum)"]
+    #[doc = "Bitmask of supported XDP receive metadata features. See\nDocumentation/networking/xdp-rx-metadata.rst for more details.\n\nAssociated type: [`XdpRxMetadata`] (enum)"]
     XdpRxMetadataFeatures(u64),
-    #[doc = "Bitmask of enabled AF\\_XDP features\\.\nAssociated type: [`XskFlags`] (enum)"]
+    #[doc = "Bitmask of enabled AF_XDP features.\n\nAssociated type: [`XskFlags`] (enum)"]
     XskFeatures(u64),
 }
 impl<'a> IterableDev<'a> {
-    #[doc = "netdev ifindex"]
+    #[doc = "netdev ifindex\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dev::Ifindex(val) = attr? {
+            if let Ok(Dev::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -167,7 +167,7 @@ impl<'a> IterableDev<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dev::Pad(val) = attr? {
+            if let Ok(Dev::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -178,12 +178,12 @@ impl<'a> IterableDev<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Bitmask of enabled xdp\\-features\\.\nAssociated type: [`XdpAct`] (enum)"]
+    #[doc = "Bitmask of enabled xdp-features.\n\nAssociated type: [`XdpAct`] (enum)"]
     pub fn get_xdp_features(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dev::XdpFeatures(val) = attr? {
+            if let Ok(Dev::XdpFeatures(val)) = attr {
                 return Ok(val);
             }
         }
@@ -194,12 +194,12 @@ impl<'a> IterableDev<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "max fragment count supported by ZC driver"]
+    #[doc = "max fragment count supported by ZC driver\n"]
     pub fn get_xdp_zc_max_segs(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dev::XdpZcMaxSegs(val) = attr? {
+            if let Ok(Dev::XdpZcMaxSegs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -210,12 +210,12 @@ impl<'a> IterableDev<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Bitmask of supported XDP receive metadata features\\. See Documentation/networking/xdp\\-rx\\-metadata\\.rst for more details\\.\nAssociated type: [`XdpRxMetadata`] (enum)"]
+    #[doc = "Bitmask of supported XDP receive metadata features. See\nDocumentation/networking/xdp-rx-metadata.rst for more details.\n\nAssociated type: [`XdpRxMetadata`] (enum)"]
     pub fn get_xdp_rx_metadata_features(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dev::XdpRxMetadataFeatures(val) = attr? {
+            if let Ok(Dev::XdpRxMetadataFeatures(val)) = attr {
                 return Ok(val);
             }
         }
@@ -226,12 +226,12 @@ impl<'a> IterableDev<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Bitmask of enabled AF\\_XDP features\\.\nAssociated type: [`XskFlags`] (enum)"]
+    #[doc = "Bitmask of enabled AF_XDP features.\n\nAssociated type: [`XskFlags`] (enum)"]
     pub fn get_xsk_features(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dev::XskFeatures(val) = attr? {
+            if let Ok(Dev::XskFeatures(val)) = attr {
                 return Ok(val);
             }
         }
@@ -281,14 +281,16 @@ impl<'a> IterableDev<'a> {
 impl<'a> Iterator for IterableDev<'a> {
     type Item = Result<Dev<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -467,14 +469,16 @@ impl<'a> IterableIoUringProviderInfo<'a> {
 impl<'a> Iterator for IterableIoUringProviderInfo<'a> {
     type Item = Result<IoUringProviderInfo, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -530,30 +534,30 @@ impl IterableIoUringProviderInfo<'_> {
 }
 #[derive(Clone)]
 pub enum PagePool<'a> {
-    #[doc = "Unique ID of a Page Pool instance\\."]
+    #[doc = "Unique ID of a Page Pool instance.\n"]
     Id(u32),
-    #[doc = "ifindex of the netdev to which the pool belongs\\.\nMay not be reported if the page pool was allocated for a netdev\nwhich got destroyed already (page pools may outlast their netdevs\nbecause they wait for all memory to be returned)\\.\n"]
+    #[doc = "ifindex of the netdev to which the pool belongs. May not be reported if\nthe page pool was allocated for a netdev which got destroyed already\n(page pools may outlast their netdevs because they wait for all memory\nto be returned).\n"]
     Ifindex(u32),
-    #[doc = "Id of NAPI using this Page Pool instance\\."]
+    #[doc = "Id of NAPI using this Page Pool instance.\n"]
     NapiId(u32),
-    #[doc = "Number of outstanding references to this page pool (allocated\nbut yet to be freed pages)\\. Allocated pages may be held in\nsocket receive queues, driver receive ring, page pool recycling\nring, the page pool cache, etc\\.\n"]
+    #[doc = "Number of outstanding references to this page pool (allocated but yet to\nbe freed pages). Allocated pages may be held in socket receive queues,\ndriver receive ring, page pool recycling ring, the page pool cache, etc.\n"]
     Inflight(u32),
-    #[doc = "Amount of memory held by inflight pages\\.\n"]
+    #[doc = "Amount of memory held by inflight pages.\n"]
     InflightMem(u32),
-    #[doc = "Seconds in CLOCK\\_BOOTTIME of when Page Pool was detached by\nthe driver\\. Once detached Page Pool can no longer be used to\nallocate memory\\.\nPage Pools wait for all the memory allocated from them to be freed\nbefore truly disappearing\\. \"Detached\" Page Pools cannot be\n\"re\\-attached\", they are just waiting to disappear\\.\nAttribute is absent if Page Pool has not been detached, and\ncan still be used to allocate new memory\\.\n"]
+    #[doc = "Seconds in CLOCK_BOOTTIME of when Page Pool was detached by the driver.\nOnce detached Page Pool can no longer be used to allocate memory. Page\nPools wait for all the memory allocated from them to be freed before\ntruly disappearing. \\\"Detached\\\" Page Pools cannot be \\\"re-attached\\\",\nthey are just waiting to disappear. Attribute is absent if Page Pool has\nnot been detached, and can still be used to allocate new memory.\n"]
     DetachTime(u32),
-    #[doc = "ID of the dmabuf this page\\-pool is attached to\\."]
+    #[doc = "ID of the dmabuf this page-pool is attached to.\n"]
     Dmabuf(u32),
-    #[doc = "io\\-uring memory provider information\\."]
+    #[doc = "io-uring memory provider information.\n"]
     IoUring(IterableIoUringProviderInfo<'a>),
 }
 impl<'a> IterablePagePool<'a> {
-    #[doc = "Unique ID of a Page Pool instance\\."]
+    #[doc = "Unique ID of a Page Pool instance.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePool::Id(val) = attr? {
+            if let Ok(PagePool::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -564,12 +568,12 @@ impl<'a> IterablePagePool<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ifindex of the netdev to which the pool belongs\\.\nMay not be reported if the page pool was allocated for a netdev\nwhich got destroyed already (page pools may outlast their netdevs\nbecause they wait for all memory to be returned)\\.\n"]
+    #[doc = "ifindex of the netdev to which the pool belongs. May not be reported if\nthe page pool was allocated for a netdev which got destroyed already\n(page pools may outlast their netdevs because they wait for all memory\nto be returned).\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePool::Ifindex(val) = attr? {
+            if let Ok(PagePool::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -580,12 +584,12 @@ impl<'a> IterablePagePool<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Id of NAPI using this Page Pool instance\\."]
+    #[doc = "Id of NAPI using this Page Pool instance.\n"]
     pub fn get_napi_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePool::NapiId(val) = attr? {
+            if let Ok(PagePool::NapiId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -596,12 +600,12 @@ impl<'a> IterablePagePool<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of outstanding references to this page pool (allocated\nbut yet to be freed pages)\\. Allocated pages may be held in\nsocket receive queues, driver receive ring, page pool recycling\nring, the page pool cache, etc\\.\n"]
+    #[doc = "Number of outstanding references to this page pool (allocated but yet to\nbe freed pages). Allocated pages may be held in socket receive queues,\ndriver receive ring, page pool recycling ring, the page pool cache, etc.\n"]
     pub fn get_inflight(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePool::Inflight(val) = attr? {
+            if let Ok(PagePool::Inflight(val)) = attr {
                 return Ok(val);
             }
         }
@@ -612,12 +616,12 @@ impl<'a> IterablePagePool<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Amount of memory held by inflight pages\\.\n"]
+    #[doc = "Amount of memory held by inflight pages.\n"]
     pub fn get_inflight_mem(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePool::InflightMem(val) = attr? {
+            if let Ok(PagePool::InflightMem(val)) = attr {
                 return Ok(val);
             }
         }
@@ -628,12 +632,12 @@ impl<'a> IterablePagePool<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Seconds in CLOCK\\_BOOTTIME of when Page Pool was detached by\nthe driver\\. Once detached Page Pool can no longer be used to\nallocate memory\\.\nPage Pools wait for all the memory allocated from them to be freed\nbefore truly disappearing\\. \"Detached\" Page Pools cannot be\n\"re\\-attached\", they are just waiting to disappear\\.\nAttribute is absent if Page Pool has not been detached, and\ncan still be used to allocate new memory\\.\n"]
+    #[doc = "Seconds in CLOCK_BOOTTIME of when Page Pool was detached by the driver.\nOnce detached Page Pool can no longer be used to allocate memory. Page\nPools wait for all the memory allocated from them to be freed before\ntruly disappearing. \\\"Detached\\\" Page Pools cannot be \\\"re-attached\\\",\nthey are just waiting to disappear. Attribute is absent if Page Pool has\nnot been detached, and can still be used to allocate new memory.\n"]
     pub fn get_detach_time(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePool::DetachTime(val) = attr? {
+            if let Ok(PagePool::DetachTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -644,12 +648,12 @@ impl<'a> IterablePagePool<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ID of the dmabuf this page\\-pool is attached to\\."]
+    #[doc = "ID of the dmabuf this page-pool is attached to.\n"]
     pub fn get_dmabuf(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePool::Dmabuf(val) = attr? {
+            if let Ok(PagePool::Dmabuf(val)) = attr {
                 return Ok(val);
             }
         }
@@ -660,12 +664,12 @@ impl<'a> IterablePagePool<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "io\\-uring memory provider information\\."]
+    #[doc = "io-uring memory provider information.\n"]
     pub fn get_io_uring(&self) -> Result<IterableIoUringProviderInfo<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePool::IoUring(val) = attr? {
+            if let Ok(PagePool::IoUring(val)) = attr {
                 return Ok(val);
             }
         }
@@ -717,14 +721,16 @@ impl<'a> IterablePagePool<'a> {
 impl<'a> Iterator for IterablePagePool<'a> {
     type Item = Result<PagePool<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -893,18 +899,18 @@ impl IterablePagePool<'_> {
 }
 #[derive(Clone)]
 pub enum PagePoolInfo {
-    #[doc = "Unique ID of a Page Pool instance\\."]
+    #[doc = "Unique ID of a Page Pool instance.\n"]
     Id(u32),
-    #[doc = "ifindex of the netdev to which the pool belongs\\.\nMay not be reported if the page pool was allocated for a netdev\nwhich got destroyed already (page pools may outlast their netdevs\nbecause they wait for all memory to be returned)\\.\n"]
+    #[doc = "ifindex of the netdev to which the pool belongs. May not be reported if\nthe page pool was allocated for a netdev which got destroyed already\n(page pools may outlast their netdevs because they wait for all memory\nto be returned).\n"]
     Ifindex(u32),
 }
 impl<'a> IterablePagePoolInfo<'a> {
-    #[doc = "Unique ID of a Page Pool instance\\."]
+    #[doc = "Unique ID of a Page Pool instance.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolInfo::Id(val) = attr? {
+            if let Ok(PagePoolInfo::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -915,12 +921,12 @@ impl<'a> IterablePagePoolInfo<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ifindex of the netdev to which the pool belongs\\.\nMay not be reported if the page pool was allocated for a netdev\nwhich got destroyed already (page pools may outlast their netdevs\nbecause they wait for all memory to be returned)\\.\n"]
+    #[doc = "ifindex of the netdev to which the pool belongs. May not be reported if\nthe page pool was allocated for a netdev which got destroyed already\n(page pools may outlast their netdevs because they wait for all memory\nto be returned).\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolInfo::Ifindex(val) = attr? {
+            if let Ok(PagePoolInfo::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -961,14 +967,16 @@ impl<'a> IterablePagePoolInfo<'a> {
 impl<'a> Iterator for IterablePagePoolInfo<'a> {
     type Item = Result<PagePoolInfo, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1064,7 +1072,7 @@ impl IterablePagePoolInfo<'_> {
 }
 #[derive(Clone)]
 pub enum PagePoolStats<'a> {
-    #[doc = "Page pool identifying information\\."]
+    #[doc = "Page pool identifying information.\n"]
     Info(IterablePagePoolInfo<'a>),
     AllocFast(u32),
     AllocSlow(u32),
@@ -1079,12 +1087,12 @@ pub enum PagePoolStats<'a> {
     RecycleReleasedRefcnt(u32),
 }
 impl<'a> IterablePagePoolStats<'a> {
-    #[doc = "Page pool identifying information\\."]
+    #[doc = "Page pool identifying information.\n"]
     pub fn get_info(&self) -> Result<IterablePagePoolInfo<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::Info(val) = attr? {
+            if let Ok(PagePoolStats::Info(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1099,7 +1107,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::AllocFast(val) = attr? {
+            if let Ok(PagePoolStats::AllocFast(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1114,7 +1122,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::AllocSlow(val) = attr? {
+            if let Ok(PagePoolStats::AllocSlow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1129,7 +1137,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::AllocSlowHighOrder(val) = attr? {
+            if let Ok(PagePoolStats::AllocSlowHighOrder(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1144,7 +1152,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::AllocEmpty(val) = attr? {
+            if let Ok(PagePoolStats::AllocEmpty(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1159,7 +1167,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::AllocRefill(val) = attr? {
+            if let Ok(PagePoolStats::AllocRefill(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1174,7 +1182,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::AllocWaive(val) = attr? {
+            if let Ok(PagePoolStats::AllocWaive(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1189,7 +1197,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::RecycleCached(val) = attr? {
+            if let Ok(PagePoolStats::RecycleCached(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1204,7 +1212,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::RecycleCacheFull(val) = attr? {
+            if let Ok(PagePoolStats::RecycleCacheFull(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1219,7 +1227,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::RecycleRing(val) = attr? {
+            if let Ok(PagePoolStats::RecycleRing(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1234,7 +1242,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::RecycleRingFull(val) = attr? {
+            if let Ok(PagePoolStats::RecycleRingFull(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1249,7 +1257,7 @@ impl<'a> IterablePagePoolStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PagePoolStats::RecycleReleasedRefcnt(val) = attr? {
+            if let Ok(PagePoolStats::RecycleReleasedRefcnt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1305,14 +1313,16 @@ impl<'a> IterablePagePoolStats<'a> {
 impl<'a> Iterator for IterablePagePoolStats<'a> {
     type Item = Result<PagePoolStats<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1531,30 +1541,30 @@ impl IterablePagePoolStats<'_> {
 }
 #[derive(Clone)]
 pub enum Napi {
-    #[doc = "ifindex of the netdevice to which NAPI instance belongs\\."]
+    #[doc = "ifindex of the netdevice to which NAPI instance belongs.\n"]
     Ifindex(u32),
-    #[doc = "ID of the NAPI instance\\."]
+    #[doc = "ID of the NAPI instance.\n"]
     Id(u32),
-    #[doc = "The associated interrupt vector number for the napi"]
+    #[doc = "The associated interrupt vector number for the napi\n"]
     Irq(u32),
-    #[doc = "PID of the napi thread, if NAPI is configured to operate in threaded mode\\. If NAPI is not in threaded mode (i\\.e\\. uses normal softirq context), the attribute will be absent\\."]
+    #[doc = "PID of the napi thread, if NAPI is configured to operate in threaded\nmode. If NAPI is not in threaded mode (i.e. uses normal softirq\ncontext), the attribute will be absent.\n"]
     Pid(u32),
-    #[doc = "The number of consecutive empty polls before IRQ deferral ends and hardware IRQs are re\\-enabled\\."]
+    #[doc = "The number of consecutive empty polls before IRQ deferral ends and\nhardware IRQs are re-enabled.\n"]
     DeferHardIrqs(u32),
-    #[doc = "The timeout, in nanoseconds, of when to trigger the NAPI watchdog timer which schedules NAPI processing\\. Additionally, a non\\-zero value will also prevent GRO from flushing recent super\\-frames at the end of a NAPI cycle\\. This may add receive latency in exchange for reducing the number of frames processed by the network stack\\."]
+    #[doc = "The timeout, in nanoseconds, of when to trigger the NAPI watchdog timer\nwhich schedules NAPI processing. Additionally, a non-zero value will\nalso prevent GRO from flushing recent super-frames at the end of a NAPI\ncycle. This may add receive latency in exchange for reducing the number\nof frames processed by the network stack.\n"]
     GroFlushTimeout(u32),
-    #[doc = "The timeout, in nanoseconds, of how long to suspend irq processing, if event polling finds events"]
+    #[doc = "The timeout, in nanoseconds, of how long to suspend irq processing, if\nevent polling finds events\n"]
     IrqSuspendTimeout(u32),
-    #[doc = "Whether the NAPI is configured to operate in threaded polling mode\\. If this is set to enabled then the NAPI context operates in threaded polling mode\\. If this is set to busy\\-poll, then the threaded polling mode also busy polls\\.\nAssociated type: [`NapiThreaded`] (enum)"]
+    #[doc = "Whether the NAPI is configured to operate in threaded polling mode. If\nthis is set to enabled then the NAPI context operates in threaded\npolling mode. If this is set to busy-poll, then the threaded polling\nmode also busy polls.\n\nAssociated type: [`NapiThreaded`] (enum)"]
     Threaded(u32),
 }
 impl<'a> IterableNapi<'a> {
-    #[doc = "ifindex of the netdevice to which NAPI instance belongs\\."]
+    #[doc = "ifindex of the netdevice to which NAPI instance belongs.\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Napi::Ifindex(val) = attr? {
+            if let Ok(Napi::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1565,12 +1575,12 @@ impl<'a> IterableNapi<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ID of the NAPI instance\\."]
+    #[doc = "ID of the NAPI instance.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Napi::Id(val) = attr? {
+            if let Ok(Napi::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1581,12 +1591,12 @@ impl<'a> IterableNapi<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The associated interrupt vector number for the napi"]
+    #[doc = "The associated interrupt vector number for the napi\n"]
     pub fn get_irq(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Napi::Irq(val) = attr? {
+            if let Ok(Napi::Irq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1597,12 +1607,12 @@ impl<'a> IterableNapi<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "PID of the napi thread, if NAPI is configured to operate in threaded mode\\. If NAPI is not in threaded mode (i\\.e\\. uses normal softirq context), the attribute will be absent\\."]
+    #[doc = "PID of the napi thread, if NAPI is configured to operate in threaded\nmode. If NAPI is not in threaded mode (i.e. uses normal softirq\ncontext), the attribute will be absent.\n"]
     pub fn get_pid(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Napi::Pid(val) = attr? {
+            if let Ok(Napi::Pid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1613,12 +1623,12 @@ impl<'a> IterableNapi<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The number of consecutive empty polls before IRQ deferral ends and hardware IRQs are re\\-enabled\\."]
+    #[doc = "The number of consecutive empty polls before IRQ deferral ends and\nhardware IRQs are re-enabled.\n"]
     pub fn get_defer_hard_irqs(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Napi::DeferHardIrqs(val) = attr? {
+            if let Ok(Napi::DeferHardIrqs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1629,12 +1639,12 @@ impl<'a> IterableNapi<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The timeout, in nanoseconds, of when to trigger the NAPI watchdog timer which schedules NAPI processing\\. Additionally, a non\\-zero value will also prevent GRO from flushing recent super\\-frames at the end of a NAPI cycle\\. This may add receive latency in exchange for reducing the number of frames processed by the network stack\\."]
+    #[doc = "The timeout, in nanoseconds, of when to trigger the NAPI watchdog timer\nwhich schedules NAPI processing. Additionally, a non-zero value will\nalso prevent GRO from flushing recent super-frames at the end of a NAPI\ncycle. This may add receive latency in exchange for reducing the number\nof frames processed by the network stack.\n"]
     pub fn get_gro_flush_timeout(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Napi::GroFlushTimeout(val) = attr? {
+            if let Ok(Napi::GroFlushTimeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1645,12 +1655,12 @@ impl<'a> IterableNapi<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The timeout, in nanoseconds, of how long to suspend irq processing, if event polling finds events"]
+    #[doc = "The timeout, in nanoseconds, of how long to suspend irq processing, if\nevent polling finds events\n"]
     pub fn get_irq_suspend_timeout(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Napi::IrqSuspendTimeout(val) = attr? {
+            if let Ok(Napi::IrqSuspendTimeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1661,12 +1671,12 @@ impl<'a> IterableNapi<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Whether the NAPI is configured to operate in threaded polling mode\\. If this is set to enabled then the NAPI context operates in threaded polling mode\\. If this is set to busy\\-poll, then the threaded polling mode also busy polls\\.\nAssociated type: [`NapiThreaded`] (enum)"]
+    #[doc = "Whether the NAPI is configured to operate in threaded polling mode. If\nthis is set to enabled then the NAPI context operates in threaded\npolling mode. If this is set to busy-poll, then the threaded polling\nmode also busy polls.\n\nAssociated type: [`NapiThreaded`] (enum)"]
     pub fn get_threaded(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Napi::Threaded(val) = attr? {
+            if let Ok(Napi::Threaded(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1718,14 +1728,16 @@ impl<'a> IterableNapi<'a> {
 impl<'a> Iterator for IterableNapi<'a> {
     type Item = Result<Napi, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1923,14 +1935,16 @@ impl<'a> IterableXskInfo<'a> {
 impl<'a> Iterator for IterableXskInfo<'a> {
     type Item = Result<XskInfo, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1983,28 +1997,30 @@ impl IterableXskInfo<'_> {
 }
 #[derive(Clone)]
 pub enum Queue<'a> {
-    #[doc = "Queue index; most queue types are indexed like a C array, with indexes starting at 0 and ending at queue count \\- 1\\. Queue indexes are scoped to an interface and queue type\\."]
+    #[doc = "Queue index; most queue types are indexed like a C array, with indexes\nstarting at 0 and ending at queue count - 1. Queue indexes are scoped to\nan interface and queue type.\n"]
     Id(u32),
-    #[doc = "ifindex of the netdevice to which the queue belongs\\."]
+    #[doc = "ifindex of the netdevice to which the queue belongs.\n"]
     Ifindex(u32),
-    #[doc = "Queue type as rx, tx\\. Each queue type defines a separate ID space\\. XDP TX queues allocated in the kernel are not linked to NAPIs and thus not listed\\. AF\\_XDP queues will have more information set in the xsk attribute\\.\nAssociated type: [`QueueType`] (enum)"]
+    #[doc = "Queue type as rx, tx. Each queue type defines a separate ID space. XDP\nTX queues allocated in the kernel are not linked to NAPIs and thus not\nlisted. AF_XDP queues will have more information set in the xsk\nattribute.\n\nAssociated type: [`QueueType`] (enum)"]
     Type(u32),
-    #[doc = "ID of the NAPI instance which services this queue\\."]
+    #[doc = "ID of the NAPI instance which services this queue.\n"]
     NapiId(u32),
-    #[doc = "ID of the dmabuf attached to this queue, if any\\."]
+    #[doc = "ID of the dmabuf attached to this queue, if any.\n"]
     Dmabuf(u32),
-    #[doc = "io\\_uring memory provider information\\."]
+    #[doc = "io_uring memory provider information.\n"]
     IoUring(IterableIoUringProviderInfo<'a>),
-    #[doc = "XSK information for this queue, if any\\."]
+    #[doc = "XSK information for this queue, if any.\n"]
     Xsk(IterableXskInfo<'a>),
+    #[doc = "A queue from a virtual device can have a lease which refers to another\nqueue from a physical device. This is useful for memory providers and\nAF_XDP operations which take an ifindex and queue id to allow\napplications to bind against virtual devices in containers.\n"]
+    Lease(IterableLease<'a>),
 }
 impl<'a> IterableQueue<'a> {
-    #[doc = "Queue index; most queue types are indexed like a C array, with indexes starting at 0 and ending at queue count \\- 1\\. Queue indexes are scoped to an interface and queue type\\."]
+    #[doc = "Queue index; most queue types are indexed like a C array, with indexes\nstarting at 0 and ending at queue count - 1. Queue indexes are scoped to\nan interface and queue type.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Queue::Id(val) = attr? {
+            if let Ok(Queue::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2015,12 +2031,12 @@ impl<'a> IterableQueue<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ifindex of the netdevice to which the queue belongs\\."]
+    #[doc = "ifindex of the netdevice to which the queue belongs.\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Queue::Ifindex(val) = attr? {
+            if let Ok(Queue::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2031,12 +2047,12 @@ impl<'a> IterableQueue<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Queue type as rx, tx\\. Each queue type defines a separate ID space\\. XDP TX queues allocated in the kernel are not linked to NAPIs and thus not listed\\. AF\\_XDP queues will have more information set in the xsk attribute\\.\nAssociated type: [`QueueType`] (enum)"]
+    #[doc = "Queue type as rx, tx. Each queue type defines a separate ID space. XDP\nTX queues allocated in the kernel are not linked to NAPIs and thus not\nlisted. AF_XDP queues will have more information set in the xsk\nattribute.\n\nAssociated type: [`QueueType`] (enum)"]
     pub fn get_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Queue::Type(val) = attr? {
+            if let Ok(Queue::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2047,12 +2063,12 @@ impl<'a> IterableQueue<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ID of the NAPI instance which services this queue\\."]
+    #[doc = "ID of the NAPI instance which services this queue.\n"]
     pub fn get_napi_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Queue::NapiId(val) = attr? {
+            if let Ok(Queue::NapiId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2063,12 +2079,12 @@ impl<'a> IterableQueue<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ID of the dmabuf attached to this queue, if any\\."]
+    #[doc = "ID of the dmabuf attached to this queue, if any.\n"]
     pub fn get_dmabuf(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Queue::Dmabuf(val) = attr? {
+            if let Ok(Queue::Dmabuf(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2079,12 +2095,12 @@ impl<'a> IterableQueue<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "io\\_uring memory provider information\\."]
+    #[doc = "io_uring memory provider information.\n"]
     pub fn get_io_uring(&self) -> Result<IterableIoUringProviderInfo<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Queue::IoUring(val) = attr? {
+            if let Ok(Queue::IoUring(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2095,18 +2111,34 @@ impl<'a> IterableQueue<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "XSK information for this queue, if any\\."]
+    #[doc = "XSK information for this queue, if any.\n"]
     pub fn get_xsk(&self) -> Result<IterableXskInfo<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Queue::Xsk(val) = attr? {
+            if let Ok(Queue::Xsk(val)) = attr {
                 return Ok(val);
             }
         }
         Err(ErrorContext::new_missing(
             "Queue",
             "Xsk",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "A queue from a virtual device can have a lease which refers to another\nqueue from a physical device. This is useful for memory providers and\nAF_XDP operations which take an ifindex and queue id to allow\napplications to bind against virtual devices in containers.\n"]
+    pub fn get_lease(&self) -> Result<IterableLease<'a>, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Queue::Lease(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Queue",
+            "Lease",
             self.orig_loc,
             self.buf.as_ptr() as usize,
         ))
@@ -2125,6 +2157,7 @@ impl Queue<'_> {
             5u16 => "Dmabuf",
             6u16 => "IoUring",
             7u16 => "Xsk",
+            8u16 => "Lease",
             _ => return None,
         };
         Some(res)
@@ -2151,14 +2184,16 @@ impl<'a> IterableQueue<'a> {
 impl<'a> Iterator for IterableQueue<'a> {
     type Item = Result<Queue<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2198,6 +2233,11 @@ impl<'a> Iterator for IterableQueue<'a> {
                     let Some(val) = res else { break };
                     val
                 }),
+                8u16 => Queue::Lease({
+                    let res = Some(IterableLease::with_loc(next, self.orig_loc));
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -2234,6 +2274,7 @@ impl<'a> std::fmt::Debug for IterableQueue<'_> {
                 Queue::Dmabuf(val) => fmt.field("Dmabuf", &val),
                 Queue::IoUring(val) => fmt.field("IoUring", &val),
                 Queue::Xsk(val) => fmt.field("Xsk", &val),
+                Queue::Lease(val) => fmt.field("Lease", &val),
             };
         }
         fmt.finish()
@@ -2302,6 +2343,12 @@ impl IterableQueue<'_> {
                         break;
                     }
                 }
+                Queue::Lease(val) => {
+                    (stack, missing) = val.lookup_attr(offset, missing_type);
+                    if !stack.is_empty() {
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -2314,76 +2361,76 @@ impl IterableQueue<'_> {
 }
 #[derive(Clone)]
 pub enum Qstats {
-    #[doc = "ifindex of the netdevice to which stats belong\\."]
+    #[doc = "ifindex of the netdevice to which stats belong.\n"]
     Ifindex(u32),
-    #[doc = "Queue type as rx, tx, for queue\\-id\\.\nAssociated type: [`QueueType`] (enum)"]
+    #[doc = "Queue type as rx, tx, for queue-id.\n\nAssociated type: [`QueueType`] (enum)"]
     QueueType(u32),
-    #[doc = "Queue ID, if stats are scoped to a single queue instance\\."]
+    #[doc = "Queue ID, if stats are scoped to a single queue instance.\n"]
     QueueId(u32),
-    #[doc = "What object type should be used to iterate over the stats\\.\n\nAssociated type: [`QstatsScope`] (enum)"]
+    #[doc = "What object type should be used to iterate over the stats.\n\nAssociated type: [`QstatsScope`] (enum)"]
     Scope(u32),
-    #[doc = "Number of wire packets successfully received and passed to the stack\\.\nFor drivers supporting XDP, XDP is considered the first layer\nof the stack, so packets consumed by XDP are still counted here\\.\n"]
+    #[doc = "Number of wire packets successfully received and passed to the stack.\nFor drivers supporting XDP, XDP is considered the first layer of the\nstack, so packets consumed by XDP are still counted here.\n"]
     RxPackets(u32),
-    #[doc = "Successfully received bytes, see \\`rx\\-packets\\`\\."]
+    #[doc = "Successfully received bytes, see [rx-packets]{.title-ref}.\n"]
     RxBytes(u32),
-    #[doc = "Number of wire packets successfully sent\\. Packet is considered to be\nsuccessfully sent once it is in device memory (usually this means\nthe device has issued a DMA completion for the packet)\\.\n"]
+    #[doc = "Number of wire packets successfully sent. Packet is considered to be\nsuccessfully sent once it is in device memory (usually this means the\ndevice has issued a DMA completion for the packet).\n"]
     TxPackets(u32),
-    #[doc = "Successfully sent bytes, see \\`tx\\-packets\\`\\."]
+    #[doc = "Successfully sent bytes, see [tx-packets]{.title-ref}.\n"]
     TxBytes(u32),
-    #[doc = "Number of times skb or buffer allocation failed on the Rx datapath\\.\nAllocation failure may, or may not result in a packet drop, depending\non driver implementation and whether system recovers quickly\\.\n"]
+    #[doc = "Number of times skb or buffer allocation failed on the Rx datapath.\nAllocation failure may, or may not result in a packet drop, depending on\ndriver implementation and whether system recovers quickly.\n"]
     RxAllocFail(u32),
-    #[doc = "Number of all packets which entered the device, but never left it,\nincluding but not limited to: packets dropped due to lack of buffer\nspace, processing errors, explicit or implicit policies and packet\nfilters\\.\n"]
+    #[doc = "Number of all packets which entered the device, but never left it,\nincluding but not limited to: packets dropped due to lack of buffer\nspace, processing errors, explicit or implicit policies and packet\nfilters.\n"]
     RxHwDrops(u32),
-    #[doc = "Number of packets dropped due to transient lack of resources, such as\nbuffer space, host descriptors etc\\.\n"]
+    #[doc = "Number of packets dropped due to transient lack of resources, such as\nbuffer space, host descriptors etc.\n"]
     RxHwDropOverruns(u32),
-    #[doc = "Number of packets that were marked as CHECKSUM\\_COMPLETE\\."]
+    #[doc = "Number of packets that were marked as CHECKSUM_COMPLETE.\n"]
     RxCsumComplete(u32),
-    #[doc = "Number of packets that were marked as CHECKSUM\\_UNNECESSARY\\."]
+    #[doc = "Number of packets that were marked as CHECKSUM_UNNECESSARY.\n"]
     RxCsumUnnecessary(u32),
-    #[doc = "Number of packets that were not checksummed by device\\."]
+    #[doc = "Number of packets that were not checksummed by device.\n"]
     RxCsumNone(u32),
-    #[doc = "Number of packets with bad checksum\\. The packets are not discarded,\nbut still delivered to the stack\\.\n"]
+    #[doc = "Number of packets with bad checksum. The packets are not discarded, but\nstill delivered to the stack.\n"]
     RxCsumBad(u32),
-    #[doc = "Number of packets that were coalesced from smaller packets by the\ndevice\\. Counts only packets coalesced with the HW\\-GRO netdevice\nfeature, LRO\\-coalesced packets are not counted\\.\n"]
+    #[doc = "Number of packets that were coalesced from smaller packets by the\ndevice. Counts only packets coalesced with the HW-GRO netdevice feature,\nLRO-coalesced packets are not counted.\n"]
     RxHwGroPackets(u32),
-    #[doc = "See \\`rx\\-hw\\-gro\\-packets\\`\\."]
+    #[doc = "See [rx-hw-gro-packets]{.title-ref}.\n"]
     RxHwGroBytes(u32),
-    #[doc = "Number of packets that were coalesced to bigger packetss with the\nHW\\-GRO netdevice feature\\. LRO\\-coalesced packets are not counted\\.\n"]
+    #[doc = "Number of packets that were coalesced to bigger packetss with the HW-GRO\nnetdevice feature. LRO-coalesced packets are not counted.\n"]
     RxHwGroWirePackets(u32),
-    #[doc = "See \\`rx\\-hw\\-gro\\-wire\\-packets\\`\\."]
+    #[doc = "See [rx-hw-gro-wire-packets]{.title-ref}.\n"]
     RxHwGroWireBytes(u32),
-    #[doc = "Number of the packets dropped by the device due to the received\npackets bitrate exceeding the device rate limit\\.\n"]
+    #[doc = "Number of the packets dropped by the device due to the received packets\nbitrate exceeding the device rate limit.\n"]
     RxHwDropRatelimits(u32),
-    #[doc = "Number of packets that arrived at the device but never left it,\nencompassing packets dropped for reasons such as processing errors, as\nwell as those affected by explicitly defined policies and packet\nfiltering criteria\\.\n"]
+    #[doc = "Number of packets that arrived at the device but never left it,\nencompassing packets dropped for reasons such as processing errors, as\nwell as those affected by explicitly defined policies and packet\nfiltering criteria.\n"]
     TxHwDrops(u32),
-    #[doc = "Number of packets dropped because they were invalid or malformed\\."]
+    #[doc = "Number of packets dropped because they were invalid or malformed.\n"]
     TxHwDropErrors(u32),
-    #[doc = "Number of packets that did not require the device to calculate the\nchecksum\\.\n"]
+    #[doc = "Number of packets that did not require the device to calculate the\nchecksum.\n"]
     TxCsumNone(u32),
-    #[doc = "Number of packets that required the device to calculate the checksum\\.\nThis counter includes the number of GSO wire packets for which device\ncalculated the L4 checksum\\.\n"]
+    #[doc = "Number of packets that required the device to calculate the checksum.\nThis counter includes the number of GSO wire packets for which device\ncalculated the L4 checksum.\n"]
     TxNeedsCsum(u32),
-    #[doc = "Number of packets that necessitated segmentation into smaller packets\nby the device\\.\n"]
+    #[doc = "Number of packets that necessitated segmentation into smaller packets by\nthe device.\n"]
     TxHwGsoPackets(u32),
-    #[doc = "See \\`tx\\-hw\\-gso\\-packets\\`\\."]
+    #[doc = "See [tx-hw-gso-packets]{.title-ref}.\n"]
     TxHwGsoBytes(u32),
-    #[doc = "Number of wire\\-sized packets generated by processing\n\\`tx\\-hw\\-gso\\-packets\\`\n"]
+    #[doc = "Number of wire-sized packets generated by processing\n[tx-hw-gso-packets]{.title-ref}\n"]
     TxHwGsoWirePackets(u32),
-    #[doc = "See \\`tx\\-hw\\-gso\\-wire\\-packets\\`\\."]
+    #[doc = "See [tx-hw-gso-wire-packets]{.title-ref}.\n"]
     TxHwGsoWireBytes(u32),
-    #[doc = "Number of the packets dropped by the device due to the transmit\npackets bitrate exceeding the device rate limit\\.\n"]
+    #[doc = "Number of the packets dropped by the device due to the transmit packets\nbitrate exceeding the device rate limit.\n"]
     TxHwDropRatelimits(u32),
-    #[doc = "Number of times driver paused accepting new tx packets\nfrom the stack to this queue, because the queue was full\\.\nNote that if BQL is supported and enabled on the device\nthe networking stack will avoid queuing a lot of data at once\\.\n"]
+    #[doc = "Number of times driver paused accepting new tx packets from the stack to\nthis queue, because the queue was full. Note that if BQL is supported\nand enabled on the device the networking stack will avoid queuing a lot\nof data at once.\n"]
     TxStop(u32),
-    #[doc = "Number of times driver re\\-started accepting send\nrequests to this queue from the stack\\.\n"]
+    #[doc = "Number of times driver re-started accepting send requests to this queue\nfrom the stack.\n"]
     TxWake(u32),
 }
 impl<'a> IterableQstats<'a> {
-    #[doc = "ifindex of the netdevice to which stats belong\\."]
+    #[doc = "ifindex of the netdevice to which stats belong.\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::Ifindex(val) = attr? {
+            if let Ok(Qstats::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2394,12 +2441,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Queue type as rx, tx, for queue\\-id\\.\nAssociated type: [`QueueType`] (enum)"]
+    #[doc = "Queue type as rx, tx, for queue-id.\n\nAssociated type: [`QueueType`] (enum)"]
     pub fn get_queue_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::QueueType(val) = attr? {
+            if let Ok(Qstats::QueueType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2410,12 +2457,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Queue ID, if stats are scoped to a single queue instance\\."]
+    #[doc = "Queue ID, if stats are scoped to a single queue instance.\n"]
     pub fn get_queue_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::QueueId(val) = attr? {
+            if let Ok(Qstats::QueueId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2426,12 +2473,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "What object type should be used to iterate over the stats\\.\n\nAssociated type: [`QstatsScope`] (enum)"]
+    #[doc = "What object type should be used to iterate over the stats.\n\nAssociated type: [`QstatsScope`] (enum)"]
     pub fn get_scope(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::Scope(val) = attr? {
+            if let Ok(Qstats::Scope(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2442,12 +2489,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of wire packets successfully received and passed to the stack\\.\nFor drivers supporting XDP, XDP is considered the first layer\nof the stack, so packets consumed by XDP are still counted here\\.\n"]
+    #[doc = "Number of wire packets successfully received and passed to the stack.\nFor drivers supporting XDP, XDP is considered the first layer of the\nstack, so packets consumed by XDP are still counted here.\n"]
     pub fn get_rx_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxPackets(val) = attr? {
+            if let Ok(Qstats::RxPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2458,12 +2505,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Successfully received bytes, see \\`rx\\-packets\\`\\."]
+    #[doc = "Successfully received bytes, see [rx-packets]{.title-ref}.\n"]
     pub fn get_rx_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxBytes(val) = attr? {
+            if let Ok(Qstats::RxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2474,12 +2521,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of wire packets successfully sent\\. Packet is considered to be\nsuccessfully sent once it is in device memory (usually this means\nthe device has issued a DMA completion for the packet)\\.\n"]
+    #[doc = "Number of wire packets successfully sent. Packet is considered to be\nsuccessfully sent once it is in device memory (usually this means the\ndevice has issued a DMA completion for the packet).\n"]
     pub fn get_tx_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxPackets(val) = attr? {
+            if let Ok(Qstats::TxPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2490,12 +2537,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Successfully sent bytes, see \\`tx\\-packets\\`\\."]
+    #[doc = "Successfully sent bytes, see [tx-packets]{.title-ref}.\n"]
     pub fn get_tx_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxBytes(val) = attr? {
+            if let Ok(Qstats::TxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2506,12 +2553,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of times skb or buffer allocation failed on the Rx datapath\\.\nAllocation failure may, or may not result in a packet drop, depending\non driver implementation and whether system recovers quickly\\.\n"]
+    #[doc = "Number of times skb or buffer allocation failed on the Rx datapath.\nAllocation failure may, or may not result in a packet drop, depending on\ndriver implementation and whether system recovers quickly.\n"]
     pub fn get_rx_alloc_fail(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxAllocFail(val) = attr? {
+            if let Ok(Qstats::RxAllocFail(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2522,12 +2569,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of all packets which entered the device, but never left it,\nincluding but not limited to: packets dropped due to lack of buffer\nspace, processing errors, explicit or implicit policies and packet\nfilters\\.\n"]
+    #[doc = "Number of all packets which entered the device, but never left it,\nincluding but not limited to: packets dropped due to lack of buffer\nspace, processing errors, explicit or implicit policies and packet\nfilters.\n"]
     pub fn get_rx_hw_drops(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxHwDrops(val) = attr? {
+            if let Ok(Qstats::RxHwDrops(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2538,12 +2585,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets dropped due to transient lack of resources, such as\nbuffer space, host descriptors etc\\.\n"]
+    #[doc = "Number of packets dropped due to transient lack of resources, such as\nbuffer space, host descriptors etc.\n"]
     pub fn get_rx_hw_drop_overruns(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxHwDropOverruns(val) = attr? {
+            if let Ok(Qstats::RxHwDropOverruns(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2554,12 +2601,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets that were marked as CHECKSUM\\_COMPLETE\\."]
+    #[doc = "Number of packets that were marked as CHECKSUM_COMPLETE.\n"]
     pub fn get_rx_csum_complete(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxCsumComplete(val) = attr? {
+            if let Ok(Qstats::RxCsumComplete(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2570,12 +2617,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets that were marked as CHECKSUM\\_UNNECESSARY\\."]
+    #[doc = "Number of packets that were marked as CHECKSUM_UNNECESSARY.\n"]
     pub fn get_rx_csum_unnecessary(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxCsumUnnecessary(val) = attr? {
+            if let Ok(Qstats::RxCsumUnnecessary(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2586,12 +2633,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets that were not checksummed by device\\."]
+    #[doc = "Number of packets that were not checksummed by device.\n"]
     pub fn get_rx_csum_none(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxCsumNone(val) = attr? {
+            if let Ok(Qstats::RxCsumNone(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2602,12 +2649,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets with bad checksum\\. The packets are not discarded,\nbut still delivered to the stack\\.\n"]
+    #[doc = "Number of packets with bad checksum. The packets are not discarded, but\nstill delivered to the stack.\n"]
     pub fn get_rx_csum_bad(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxCsumBad(val) = attr? {
+            if let Ok(Qstats::RxCsumBad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2618,12 +2665,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets that were coalesced from smaller packets by the\ndevice\\. Counts only packets coalesced with the HW\\-GRO netdevice\nfeature, LRO\\-coalesced packets are not counted\\.\n"]
+    #[doc = "Number of packets that were coalesced from smaller packets by the\ndevice. Counts only packets coalesced with the HW-GRO netdevice feature,\nLRO-coalesced packets are not counted.\n"]
     pub fn get_rx_hw_gro_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxHwGroPackets(val) = attr? {
+            if let Ok(Qstats::RxHwGroPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2634,12 +2681,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "See \\`rx\\-hw\\-gro\\-packets\\`\\."]
+    #[doc = "See [rx-hw-gro-packets]{.title-ref}.\n"]
     pub fn get_rx_hw_gro_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxHwGroBytes(val) = attr? {
+            if let Ok(Qstats::RxHwGroBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2650,12 +2697,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets that were coalesced to bigger packetss with the\nHW\\-GRO netdevice feature\\. LRO\\-coalesced packets are not counted\\.\n"]
+    #[doc = "Number of packets that were coalesced to bigger packetss with the HW-GRO\nnetdevice feature. LRO-coalesced packets are not counted.\n"]
     pub fn get_rx_hw_gro_wire_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxHwGroWirePackets(val) = attr? {
+            if let Ok(Qstats::RxHwGroWirePackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2666,12 +2713,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "See \\`rx\\-hw\\-gro\\-wire\\-packets\\`\\."]
+    #[doc = "See [rx-hw-gro-wire-packets]{.title-ref}.\n"]
     pub fn get_rx_hw_gro_wire_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxHwGroWireBytes(val) = attr? {
+            if let Ok(Qstats::RxHwGroWireBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2682,12 +2729,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of the packets dropped by the device due to the received\npackets bitrate exceeding the device rate limit\\.\n"]
+    #[doc = "Number of the packets dropped by the device due to the received packets\nbitrate exceeding the device rate limit.\n"]
     pub fn get_rx_hw_drop_ratelimits(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::RxHwDropRatelimits(val) = attr? {
+            if let Ok(Qstats::RxHwDropRatelimits(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2698,12 +2745,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets that arrived at the device but never left it,\nencompassing packets dropped for reasons such as processing errors, as\nwell as those affected by explicitly defined policies and packet\nfiltering criteria\\.\n"]
+    #[doc = "Number of packets that arrived at the device but never left it,\nencompassing packets dropped for reasons such as processing errors, as\nwell as those affected by explicitly defined policies and packet\nfiltering criteria.\n"]
     pub fn get_tx_hw_drops(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxHwDrops(val) = attr? {
+            if let Ok(Qstats::TxHwDrops(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2714,12 +2761,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets dropped because they were invalid or malformed\\."]
+    #[doc = "Number of packets dropped because they were invalid or malformed.\n"]
     pub fn get_tx_hw_drop_errors(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxHwDropErrors(val) = attr? {
+            if let Ok(Qstats::TxHwDropErrors(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2730,12 +2777,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets that did not require the device to calculate the\nchecksum\\.\n"]
+    #[doc = "Number of packets that did not require the device to calculate the\nchecksum.\n"]
     pub fn get_tx_csum_none(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxCsumNone(val) = attr? {
+            if let Ok(Qstats::TxCsumNone(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2746,12 +2793,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets that required the device to calculate the checksum\\.\nThis counter includes the number of GSO wire packets for which device\ncalculated the L4 checksum\\.\n"]
+    #[doc = "Number of packets that required the device to calculate the checksum.\nThis counter includes the number of GSO wire packets for which device\ncalculated the L4 checksum.\n"]
     pub fn get_tx_needs_csum(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxNeedsCsum(val) = attr? {
+            if let Ok(Qstats::TxNeedsCsum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2762,12 +2809,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets that necessitated segmentation into smaller packets\nby the device\\.\n"]
+    #[doc = "Number of packets that necessitated segmentation into smaller packets by\nthe device.\n"]
     pub fn get_tx_hw_gso_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxHwGsoPackets(val) = attr? {
+            if let Ok(Qstats::TxHwGsoPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2778,12 +2825,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "See \\`tx\\-hw\\-gso\\-packets\\`\\."]
+    #[doc = "See [tx-hw-gso-packets]{.title-ref}.\n"]
     pub fn get_tx_hw_gso_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxHwGsoBytes(val) = attr? {
+            if let Ok(Qstats::TxHwGsoBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2794,12 +2841,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of wire\\-sized packets generated by processing\n\\`tx\\-hw\\-gso\\-packets\\`\n"]
+    #[doc = "Number of wire-sized packets generated by processing\n[tx-hw-gso-packets]{.title-ref}\n"]
     pub fn get_tx_hw_gso_wire_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxHwGsoWirePackets(val) = attr? {
+            if let Ok(Qstats::TxHwGsoWirePackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2810,12 +2857,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "See \\`tx\\-hw\\-gso\\-wire\\-packets\\`\\."]
+    #[doc = "See [tx-hw-gso-wire-packets]{.title-ref}.\n"]
     pub fn get_tx_hw_gso_wire_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxHwGsoWireBytes(val) = attr? {
+            if let Ok(Qstats::TxHwGsoWireBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2826,12 +2873,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of the packets dropped by the device due to the transmit\npackets bitrate exceeding the device rate limit\\.\n"]
+    #[doc = "Number of the packets dropped by the device due to the transmit packets\nbitrate exceeding the device rate limit.\n"]
     pub fn get_tx_hw_drop_ratelimits(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxHwDropRatelimits(val) = attr? {
+            if let Ok(Qstats::TxHwDropRatelimits(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2842,12 +2889,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of times driver paused accepting new tx packets\nfrom the stack to this queue, because the queue was full\\.\nNote that if BQL is supported and enabled on the device\nthe networking stack will avoid queuing a lot of data at once\\.\n"]
+    #[doc = "Number of times driver paused accepting new tx packets from the stack to\nthis queue, because the queue was full. Note that if BQL is supported\nand enabled on the device the networking stack will avoid queuing a lot\nof data at once.\n"]
     pub fn get_tx_stop(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxStop(val) = attr? {
+            if let Ok(Qstats::TxStop(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2858,12 +2905,12 @@ impl<'a> IterableQstats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of times driver re\\-started accepting send\nrequests to this queue from the stack\\.\n"]
+    #[doc = "Number of times driver re-started accepting send requests to this queue\nfrom the stack.\n"]
     pub fn get_tx_wake(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Qstats::TxWake(val) = attr? {
+            if let Ok(Qstats::TxWake(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2938,14 +2985,16 @@ impl<'a> IterableQstats<'a> {
 impl<'a> Iterator for IterableQstats<'a> {
     type Item = Result<Qstats, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3390,18 +3439,18 @@ impl IterableQstats<'_> {
 }
 #[derive(Clone)]
 pub enum QueueId {
-    #[doc = "Queue index; most queue types are indexed like a C array, with indexes starting at 0 and ending at queue count \\- 1\\. Queue indexes are scoped to an interface and queue type\\."]
+    #[doc = "Queue index; most queue types are indexed like a C array, with indexes\nstarting at 0 and ending at queue count - 1. Queue indexes are scoped to\nan interface and queue type.\n"]
     Id(u32),
-    #[doc = "Queue type as rx, tx\\. Each queue type defines a separate ID space\\. XDP TX queues allocated in the kernel are not linked to NAPIs and thus not listed\\. AF\\_XDP queues will have more information set in the xsk attribute\\.\nAssociated type: [`QueueType`] (enum)"]
+    #[doc = "Queue type as rx, tx. Each queue type defines a separate ID space. XDP\nTX queues allocated in the kernel are not linked to NAPIs and thus not\nlisted. AF_XDP queues will have more information set in the xsk\nattribute.\n\nAssociated type: [`QueueType`] (enum)"]
     Type(u32),
 }
 impl<'a> IterableQueueId<'a> {
-    #[doc = "Queue index; most queue types are indexed like a C array, with indexes starting at 0 and ending at queue count \\- 1\\. Queue indexes are scoped to an interface and queue type\\."]
+    #[doc = "Queue index; most queue types are indexed like a C array, with indexes\nstarting at 0 and ending at queue count - 1. Queue indexes are scoped to\nan interface and queue type.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let QueueId::Id(val) = attr? {
+            if let Ok(QueueId::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3412,12 +3461,12 @@ impl<'a> IterableQueueId<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Queue type as rx, tx\\. Each queue type defines a separate ID space\\. XDP TX queues allocated in the kernel are not linked to NAPIs and thus not listed\\. AF\\_XDP queues will have more information set in the xsk attribute\\.\nAssociated type: [`QueueType`] (enum)"]
+    #[doc = "Queue type as rx, tx. Each queue type defines a separate ID space. XDP\nTX queues allocated in the kernel are not linked to NAPIs and thus not\nlisted. AF_XDP queues will have more information set in the xsk\nattribute.\n\nAssociated type: [`QueueType`] (enum)"]
     pub fn get_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let QueueId::Type(val) = attr? {
+            if let Ok(QueueId::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3458,14 +3507,16 @@ impl<'a> IterableQueueId<'a> {
 impl<'a> Iterator for IterableQueueId<'a> {
     type Item = Result<QueueId, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3559,23 +3610,230 @@ impl IterableQueueId<'_> {
     }
 }
 #[derive(Clone)]
-pub enum Dmabuf<'a> {
-    #[doc = "netdev ifindex to bind the dmabuf to\\."]
+pub enum Lease<'a> {
+    #[doc = "The netdev ifindex to lease the queue from.\n"]
     Ifindex(u32),
-    #[doc = "receive queues to bind the dmabuf to\\.\nAttribute may repeat multiple times (treat it as array)"]
-    Queues(IterableQueueId<'a>),
-    #[doc = "dmabuf file descriptor to bind\\."]
-    Fd(u32),
-    #[doc = "id of the dmabuf binding"]
-    Id(u32),
+    #[doc = "The netdev queue to lease from.\n"]
+    Queue(IterableQueueId<'a>),
+    #[doc = "The network namespace id of the netdev.\n"]
+    NetnsId(i32),
 }
-impl<'a> IterableDmabuf<'a> {
-    #[doc = "netdev ifindex to bind the dmabuf to\\."]
+impl<'a> IterableLease<'a> {
+    #[doc = "The netdev ifindex to lease the queue from.\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dmabuf::Ifindex(val) = attr? {
+            if let Ok(Lease::Ifindex(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Lease",
+            "Ifindex",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "The netdev queue to lease from.\n"]
+    pub fn get_queue(&self) -> Result<IterableQueueId<'a>, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Lease::Queue(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Lease",
+            "Queue",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "The network namespace id of the netdev.\n"]
+    pub fn get_netns_id(&self) -> Result<i32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Lease::NetnsId(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Lease",
+            "NetnsId",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+}
+impl Lease<'_> {
+    pub fn new<'a>(buf: &'a [u8]) -> IterableLease<'a> {
+        IterableLease::with_loc(buf, buf.as_ptr() as usize)
+    }
+    fn attr_from_type(r#type: u16) -> Option<&'static str> {
+        let res = match r#type {
+            1u16 => "Ifindex",
+            2u16 => "Queue",
+            3u16 => "NetnsId",
+            _ => return None,
+        };
+        Some(res)
+    }
+}
+#[derive(Clone, Copy, Default)]
+pub struct IterableLease<'a> {
+    buf: &'a [u8],
+    pos: usize,
+    orig_loc: usize,
+}
+impl<'a> IterableLease<'a> {
+    fn with_loc(buf: &'a [u8], orig_loc: usize) -> Self {
+        Self {
+            buf,
+            pos: 0,
+            orig_loc,
+        }
+    }
+    pub fn get_buf(&self) -> &'a [u8] {
+        self.buf
+    }
+}
+impl<'a> Iterator for IterableLease<'a> {
+    type Item = Result<Lease<'a>, ErrorContext>;
+    fn next(&mut self) -> Option<Self::Item> {
+        let mut pos;
+        let mut r#type;
+        loop {
+            pos = self.pos;
+            r#type = None;
+            if self.buf.len() == self.pos {
+                return None;
+            }
+            let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
+                break;
+            };
+            r#type = Some(header.r#type);
+            let res = match header.r#type {
+                1u16 => Lease::Ifindex({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                2u16 => Lease::Queue({
+                    let res = Some(IterableQueueId::with_loc(next, self.orig_loc));
+                    let Some(val) = res else { break };
+                    val
+                }),
+                3u16 => Lease::NetnsId({
+                    let res = parse_i32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
+                n => continue,
+            };
+            return Some(Ok(res));
+        }
+        Some(Err(ErrorContext::new(
+            "Lease",
+            r#type.and_then(|t| Lease::attr_from_type(t)),
+            self.orig_loc,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
+        )))
+    }
+}
+impl<'a> std::fmt::Debug for IterableLease<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut fmt = f.debug_struct("Lease");
+        for attr in self.clone() {
+            let attr = match attr {
+                Ok(a) => a,
+                Err(err) => {
+                    fmt.finish()?;
+                    f.write_str("Err(")?;
+                    err.fmt(f)?;
+                    return f.write_str(")");
+                }
+            };
+            match attr {
+                Lease::Ifindex(val) => fmt.field("Ifindex", &val),
+                Lease::Queue(val) => fmt.field("Queue", &val),
+                Lease::NetnsId(val) => fmt.field("NetnsId", &val),
+            };
+        }
+        fmt.finish()
+    }
+}
+impl IterableLease<'_> {
+    pub fn lookup_attr(
+        &self,
+        offset: usize,
+        missing_type: Option<u16>,
+    ) -> (Vec<(&'static str, usize)>, Option<&'static str>) {
+        let mut stack = Vec::new();
+        let cur = ErrorContext::calc_offset(self.orig_loc, self.buf.as_ptr() as usize);
+        if missing_type.is_some() && cur == offset {
+            stack.push(("Lease", offset));
+            return (stack, missing_type.and_then(|t| Lease::attr_from_type(t)));
+        }
+        if cur > offset || cur + self.buf.len() < offset {
+            return (stack, None);
+        }
+        let mut attrs = self.clone();
+        let mut last_off = cur + attrs.pos;
+        let mut missing = None;
+        while let Some(attr) = attrs.next() {
+            let Ok(attr) = attr else { break };
+            match attr {
+                Lease::Ifindex(val) => {
+                    if last_off == offset {
+                        stack.push(("Ifindex", last_off));
+                        break;
+                    }
+                }
+                Lease::Queue(val) => {
+                    (stack, missing) = val.lookup_attr(offset, missing_type);
+                    if !stack.is_empty() {
+                        break;
+                    }
+                }
+                Lease::NetnsId(val) => {
+                    if last_off == offset {
+                        stack.push(("NetnsId", last_off));
+                        break;
+                    }
+                }
+                _ => {}
+            };
+            last_off = cur + attrs.pos;
+        }
+        if !stack.is_empty() {
+            stack.push(("Lease", cur));
+        }
+        (stack, missing)
+    }
+}
+#[derive(Clone)]
+pub enum Dmabuf<'a> {
+    #[doc = "netdev ifindex to bind the dmabuf to.\n"]
+    Ifindex(u32),
+    #[doc = "receive queues to bind the dmabuf to.\n\nAttribute may repeat multiple times (treat it as array)"]
+    Queues(IterableQueueId<'a>),
+    #[doc = "dmabuf file descriptor to bind.\n"]
+    Fd(u32),
+    #[doc = "id of the dmabuf binding\n"]
+    Id(u32),
+}
+impl<'a> IterableDmabuf<'a> {
+    #[doc = "netdev ifindex to bind the dmabuf to.\n"]
+    pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Dmabuf::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3586,7 +3844,7 @@ impl<'a> IterableDmabuf<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "receive queues to bind the dmabuf to\\.\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "receive queues to bind the dmabuf to.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn get_queues(&self) -> MultiAttrIterable<Self, Dmabuf<'a>, IterableQueueId<'a>> {
         MultiAttrIterable::new(self.clone(), |variant| {
             if let Dmabuf::Queues(val) = variant {
@@ -3596,12 +3854,12 @@ impl<'a> IterableDmabuf<'a> {
             }
         })
     }
-    #[doc = "dmabuf file descriptor to bind\\."]
+    #[doc = "dmabuf file descriptor to bind.\n"]
     pub fn get_fd(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dmabuf::Fd(val) = attr? {
+            if let Ok(Dmabuf::Fd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3612,12 +3870,12 @@ impl<'a> IterableDmabuf<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "id of the dmabuf binding"]
+    #[doc = "id of the dmabuf binding\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dmabuf::Id(val) = attr? {
+            if let Ok(Dmabuf::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3665,14 +3923,16 @@ impl<'a> IterableDmabuf<'a> {
 impl<'a> Iterator for IterableDmabuf<'a> {
     type Item = Result<Dmabuf<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3814,7 +4074,7 @@ impl<Prev: Rec> PushDev<Prev> {
         }
         prev
     }
-    #[doc = "netdev ifindex"]
+    #[doc = "netdev ifindex\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -3825,25 +4085,25 @@ impl<Prev: Rec> PushDev<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "Bitmask of enabled xdp\\-features\\.\nAssociated type: [`XdpAct`] (enum)"]
+    #[doc = "Bitmask of enabled xdp-features.\n\nAssociated type: [`XdpAct`] (enum)"]
     pub fn push_xdp_features(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 3u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "max fragment count supported by ZC driver"]
+    #[doc = "max fragment count supported by ZC driver\n"]
     pub fn push_xdp_zc_max_segs(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Bitmask of supported XDP receive metadata features\\. See Documentation/networking/xdp\\-rx\\-metadata\\.rst for more details\\.\nAssociated type: [`XdpRxMetadata`] (enum)"]
+    #[doc = "Bitmask of supported XDP receive metadata features. See\nDocumentation/networking/xdp-rx-metadata.rst for more details.\n\nAssociated type: [`XdpRxMetadata`] (enum)"]
     pub fn push_xdp_rx_metadata_features(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 5u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Bitmask of enabled AF\\_XDP features\\.\nAssociated type: [`XskFlags`] (enum)"]
+    #[doc = "Bitmask of enabled AF_XDP features.\n\nAssociated type: [`XskFlags`] (enum)"]
     pub fn push_xsk_features(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 6u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -3921,49 +4181,49 @@ impl<Prev: Rec> PushPagePool<Prev> {
         }
         prev
     }
-    #[doc = "Unique ID of a Page Pool instance\\."]
+    #[doc = "Unique ID of a Page Pool instance.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ifindex of the netdev to which the pool belongs\\.\nMay not be reported if the page pool was allocated for a netdev\nwhich got destroyed already (page pools may outlast their netdevs\nbecause they wait for all memory to be returned)\\.\n"]
+    #[doc = "ifindex of the netdev to which the pool belongs. May not be reported if\nthe page pool was allocated for a netdev which got destroyed already\n(page pools may outlast their netdevs because they wait for all memory\nto be returned).\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Id of NAPI using this Page Pool instance\\."]
+    #[doc = "Id of NAPI using this Page Pool instance.\n"]
     pub fn push_napi_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of outstanding references to this page pool (allocated\nbut yet to be freed pages)\\. Allocated pages may be held in\nsocket receive queues, driver receive ring, page pool recycling\nring, the page pool cache, etc\\.\n"]
+    #[doc = "Number of outstanding references to this page pool (allocated but yet to\nbe freed pages). Allocated pages may be held in socket receive queues,\ndriver receive ring, page pool recycling ring, the page pool cache, etc.\n"]
     pub fn push_inflight(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Amount of memory held by inflight pages\\.\n"]
+    #[doc = "Amount of memory held by inflight pages.\n"]
     pub fn push_inflight_mem(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Seconds in CLOCK\\_BOOTTIME of when Page Pool was detached by\nthe driver\\. Once detached Page Pool can no longer be used to\nallocate memory\\.\nPage Pools wait for all the memory allocated from them to be freed\nbefore truly disappearing\\. \"Detached\" Page Pools cannot be\n\"re\\-attached\", they are just waiting to disappear\\.\nAttribute is absent if Page Pool has not been detached, and\ncan still be used to allocate new memory\\.\n"]
+    #[doc = "Seconds in CLOCK_BOOTTIME of when Page Pool was detached by the driver.\nOnce detached Page Pool can no longer be used to allocate memory. Page\nPools wait for all the memory allocated from them to be freed before\ntruly disappearing. \\\"Detached\\\" Page Pools cannot be \\\"re-attached\\\",\nthey are just waiting to disappear. Attribute is absent if Page Pool has\nnot been detached, and can still be used to allocate new memory.\n"]
     pub fn push_detach_time(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ID of the dmabuf this page\\-pool is attached to\\."]
+    #[doc = "ID of the dmabuf this page-pool is attached to.\n"]
     pub fn push_dmabuf(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "io\\-uring memory provider information\\."]
+    #[doc = "io-uring memory provider information.\n"]
     pub fn nested_io_uring(mut self) -> PushIoUringProviderInfo<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 8u16);
         PushIoUringProviderInfo {
@@ -4007,13 +4267,13 @@ impl<Prev: Rec> PushPagePoolInfo<Prev> {
         }
         prev
     }
-    #[doc = "Unique ID of a Page Pool instance\\."]
+    #[doc = "Unique ID of a Page Pool instance.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ifindex of the netdev to which the pool belongs\\.\nMay not be reported if the page pool was allocated for a netdev\nwhich got destroyed already (page pools may outlast their netdevs\nbecause they wait for all memory to be returned)\\.\n"]
+    #[doc = "ifindex of the netdev to which the pool belongs. May not be reported if\nthe page pool was allocated for a netdev which got destroyed already\n(page pools may outlast their netdevs because they wait for all memory\nto be returned).\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -4055,7 +4315,7 @@ impl<Prev: Rec> PushPagePoolStats<Prev> {
         }
         prev
     }
-    #[doc = "Page pool identifying information\\."]
+    #[doc = "Page pool identifying information.\n"]
     pub fn nested_info(mut self) -> PushPagePoolInfo<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 1u16);
         PushPagePoolInfo {
@@ -4154,49 +4414,49 @@ impl<Prev: Rec> PushNapi<Prev> {
         }
         prev
     }
-    #[doc = "ifindex of the netdevice to which NAPI instance belongs\\."]
+    #[doc = "ifindex of the netdevice to which NAPI instance belongs.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ID of the NAPI instance\\."]
+    #[doc = "ID of the NAPI instance.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The associated interrupt vector number for the napi"]
+    #[doc = "The associated interrupt vector number for the napi\n"]
     pub fn push_irq(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "PID of the napi thread, if NAPI is configured to operate in threaded mode\\. If NAPI is not in threaded mode (i\\.e\\. uses normal softirq context), the attribute will be absent\\."]
+    #[doc = "PID of the napi thread, if NAPI is configured to operate in threaded\nmode. If NAPI is not in threaded mode (i.e. uses normal softirq\ncontext), the attribute will be absent.\n"]
     pub fn push_pid(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The number of consecutive empty polls before IRQ deferral ends and hardware IRQs are re\\-enabled\\."]
+    #[doc = "The number of consecutive empty polls before IRQ deferral ends and\nhardware IRQs are re-enabled.\n"]
     pub fn push_defer_hard_irqs(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The timeout, in nanoseconds, of when to trigger the NAPI watchdog timer which schedules NAPI processing\\. Additionally, a non\\-zero value will also prevent GRO from flushing recent super\\-frames at the end of a NAPI cycle\\. This may add receive latency in exchange for reducing the number of frames processed by the network stack\\."]
+    #[doc = "The timeout, in nanoseconds, of when to trigger the NAPI watchdog timer\nwhich schedules NAPI processing. Additionally, a non-zero value will\nalso prevent GRO from flushing recent super-frames at the end of a NAPI\ncycle. This may add receive latency in exchange for reducing the number\nof frames processed by the network stack.\n"]
     pub fn push_gro_flush_timeout(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The timeout, in nanoseconds, of how long to suspend irq processing, if event polling finds events"]
+    #[doc = "The timeout, in nanoseconds, of how long to suspend irq processing, if\nevent polling finds events\n"]
     pub fn push_irq_suspend_timeout(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Whether the NAPI is configured to operate in threaded polling mode\\. If this is set to enabled then the NAPI context operates in threaded polling mode\\. If this is set to busy\\-poll, then the threaded polling mode also busy polls\\.\nAssociated type: [`NapiThreaded`] (enum)"]
+    #[doc = "Whether the NAPI is configured to operate in threaded polling mode. If\nthis is set to enabled then the NAPI context operates in threaded\npolling mode. If this is set to busy-poll, then the threaded polling\nmode also busy polls.\n\nAssociated type: [`NapiThreaded`] (enum)"]
     pub fn push_threaded(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -4274,37 +4534,37 @@ impl<Prev: Rec> PushQueue<Prev> {
         }
         prev
     }
-    #[doc = "Queue index; most queue types are indexed like a C array, with indexes starting at 0 and ending at queue count \\- 1\\. Queue indexes are scoped to an interface and queue type\\."]
+    #[doc = "Queue index; most queue types are indexed like a C array, with indexes\nstarting at 0 and ending at queue count - 1. Queue indexes are scoped to\nan interface and queue type.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ifindex of the netdevice to which the queue belongs\\."]
+    #[doc = "ifindex of the netdevice to which the queue belongs.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Queue type as rx, tx\\. Each queue type defines a separate ID space\\. XDP TX queues allocated in the kernel are not linked to NAPIs and thus not listed\\. AF\\_XDP queues will have more information set in the xsk attribute\\.\nAssociated type: [`QueueType`] (enum)"]
+    #[doc = "Queue type as rx, tx. Each queue type defines a separate ID space. XDP\nTX queues allocated in the kernel are not linked to NAPIs and thus not\nlisted. AF_XDP queues will have more information set in the xsk\nattribute.\n\nAssociated type: [`QueueType`] (enum)"]
     pub fn push_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ID of the NAPI instance which services this queue\\."]
+    #[doc = "ID of the NAPI instance which services this queue.\n"]
     pub fn push_napi_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ID of the dmabuf attached to this queue, if any\\."]
+    #[doc = "ID of the dmabuf attached to this queue, if any.\n"]
     pub fn push_dmabuf(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "io\\_uring memory provider information\\."]
+    #[doc = "io_uring memory provider information.\n"]
     pub fn nested_io_uring(mut self) -> PushIoUringProviderInfo<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 6u16);
         PushIoUringProviderInfo {
@@ -4312,10 +4572,18 @@ impl<Prev: Rec> PushQueue<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "XSK information for this queue, if any\\."]
+    #[doc = "XSK information for this queue, if any.\n"]
     pub fn nested_xsk(mut self) -> PushXskInfo<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 7u16);
         PushXskInfo {
+            prev: Some(self),
+            header_offset: Some(header_offset),
+        }
+    }
+    #[doc = "A queue from a virtual device can have a lease which refers to another\nqueue from a physical device. This is useful for memory providers and\nAF_XDP operations which take an ifindex and queue id to allow\napplications to bind against virtual devices in containers.\n"]
+    pub fn nested_lease(mut self) -> PushLease<Self> {
+        let header_offset = push_nested_header(self.as_rec_mut(), 8u16);
+        PushLease {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
@@ -4356,187 +4624,187 @@ impl<Prev: Rec> PushQstats<Prev> {
         }
         prev
     }
-    #[doc = "ifindex of the netdevice to which stats belong\\."]
+    #[doc = "ifindex of the netdevice to which stats belong.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Queue type as rx, tx, for queue\\-id\\.\nAssociated type: [`QueueType`] (enum)"]
+    #[doc = "Queue type as rx, tx, for queue-id.\n\nAssociated type: [`QueueType`] (enum)"]
     pub fn push_queue_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Queue ID, if stats are scoped to a single queue instance\\."]
+    #[doc = "Queue ID, if stats are scoped to a single queue instance.\n"]
     pub fn push_queue_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "What object type should be used to iterate over the stats\\.\n\nAssociated type: [`QstatsScope`] (enum)"]
+    #[doc = "What object type should be used to iterate over the stats.\n\nAssociated type: [`QstatsScope`] (enum)"]
     pub fn push_scope(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of wire packets successfully received and passed to the stack\\.\nFor drivers supporting XDP, XDP is considered the first layer\nof the stack, so packets consumed by XDP are still counted here\\.\n"]
+    #[doc = "Number of wire packets successfully received and passed to the stack.\nFor drivers supporting XDP, XDP is considered the first layer of the\nstack, so packets consumed by XDP are still counted here.\n"]
     pub fn push_rx_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Successfully received bytes, see \\`rx\\-packets\\`\\."]
+    #[doc = "Successfully received bytes, see [rx-packets]{.title-ref}.\n"]
     pub fn push_rx_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 9u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of wire packets successfully sent\\. Packet is considered to be\nsuccessfully sent once it is in device memory (usually this means\nthe device has issued a DMA completion for the packet)\\.\n"]
+    #[doc = "Number of wire packets successfully sent. Packet is considered to be\nsuccessfully sent once it is in device memory (usually this means the\ndevice has issued a DMA completion for the packet).\n"]
     pub fn push_tx_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Successfully sent bytes, see \\`tx\\-packets\\`\\."]
+    #[doc = "Successfully sent bytes, see [tx-packets]{.title-ref}.\n"]
     pub fn push_tx_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 11u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of times skb or buffer allocation failed on the Rx datapath\\.\nAllocation failure may, or may not result in a packet drop, depending\non driver implementation and whether system recovers quickly\\.\n"]
+    #[doc = "Number of times skb or buffer allocation failed on the Rx datapath.\nAllocation failure may, or may not result in a packet drop, depending on\ndriver implementation and whether system recovers quickly.\n"]
     pub fn push_rx_alloc_fail(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 12u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of all packets which entered the device, but never left it,\nincluding but not limited to: packets dropped due to lack of buffer\nspace, processing errors, explicit or implicit policies and packet\nfilters\\.\n"]
+    #[doc = "Number of all packets which entered the device, but never left it,\nincluding but not limited to: packets dropped due to lack of buffer\nspace, processing errors, explicit or implicit policies and packet\nfilters.\n"]
     pub fn push_rx_hw_drops(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 13u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets dropped due to transient lack of resources, such as\nbuffer space, host descriptors etc\\.\n"]
+    #[doc = "Number of packets dropped due to transient lack of resources, such as\nbuffer space, host descriptors etc.\n"]
     pub fn push_rx_hw_drop_overruns(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 14u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets that were marked as CHECKSUM\\_COMPLETE\\."]
+    #[doc = "Number of packets that were marked as CHECKSUM_COMPLETE.\n"]
     pub fn push_rx_csum_complete(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 15u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets that were marked as CHECKSUM\\_UNNECESSARY\\."]
+    #[doc = "Number of packets that were marked as CHECKSUM_UNNECESSARY.\n"]
     pub fn push_rx_csum_unnecessary(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 16u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets that were not checksummed by device\\."]
+    #[doc = "Number of packets that were not checksummed by device.\n"]
     pub fn push_rx_csum_none(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 17u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets with bad checksum\\. The packets are not discarded,\nbut still delivered to the stack\\.\n"]
+    #[doc = "Number of packets with bad checksum. The packets are not discarded, but\nstill delivered to the stack.\n"]
     pub fn push_rx_csum_bad(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 18u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets that were coalesced from smaller packets by the\ndevice\\. Counts only packets coalesced with the HW\\-GRO netdevice\nfeature, LRO\\-coalesced packets are not counted\\.\n"]
+    #[doc = "Number of packets that were coalesced from smaller packets by the\ndevice. Counts only packets coalesced with the HW-GRO netdevice feature,\nLRO-coalesced packets are not counted.\n"]
     pub fn push_rx_hw_gro_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 19u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "See \\`rx\\-hw\\-gro\\-packets\\`\\."]
+    #[doc = "See [rx-hw-gro-packets]{.title-ref}.\n"]
     pub fn push_rx_hw_gro_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 20u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets that were coalesced to bigger packetss with the\nHW\\-GRO netdevice feature\\. LRO\\-coalesced packets are not counted\\.\n"]
+    #[doc = "Number of packets that were coalesced to bigger packetss with the HW-GRO\nnetdevice feature. LRO-coalesced packets are not counted.\n"]
     pub fn push_rx_hw_gro_wire_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 21u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "See \\`rx\\-hw\\-gro\\-wire\\-packets\\`\\."]
+    #[doc = "See [rx-hw-gro-wire-packets]{.title-ref}.\n"]
     pub fn push_rx_hw_gro_wire_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 22u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of the packets dropped by the device due to the received\npackets bitrate exceeding the device rate limit\\.\n"]
+    #[doc = "Number of the packets dropped by the device due to the received packets\nbitrate exceeding the device rate limit.\n"]
     pub fn push_rx_hw_drop_ratelimits(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 23u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets that arrived at the device but never left it,\nencompassing packets dropped for reasons such as processing errors, as\nwell as those affected by explicitly defined policies and packet\nfiltering criteria\\.\n"]
+    #[doc = "Number of packets that arrived at the device but never left it,\nencompassing packets dropped for reasons such as processing errors, as\nwell as those affected by explicitly defined policies and packet\nfiltering criteria.\n"]
     pub fn push_tx_hw_drops(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 24u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets dropped because they were invalid or malformed\\."]
+    #[doc = "Number of packets dropped because they were invalid or malformed.\n"]
     pub fn push_tx_hw_drop_errors(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 25u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets that did not require the device to calculate the\nchecksum\\.\n"]
+    #[doc = "Number of packets that did not require the device to calculate the\nchecksum.\n"]
     pub fn push_tx_csum_none(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 26u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets that required the device to calculate the checksum\\.\nThis counter includes the number of GSO wire packets for which device\ncalculated the L4 checksum\\.\n"]
+    #[doc = "Number of packets that required the device to calculate the checksum.\nThis counter includes the number of GSO wire packets for which device\ncalculated the L4 checksum.\n"]
     pub fn push_tx_needs_csum(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 27u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets that necessitated segmentation into smaller packets\nby the device\\.\n"]
+    #[doc = "Number of packets that necessitated segmentation into smaller packets by\nthe device.\n"]
     pub fn push_tx_hw_gso_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 28u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "See \\`tx\\-hw\\-gso\\-packets\\`\\."]
+    #[doc = "See [tx-hw-gso-packets]{.title-ref}.\n"]
     pub fn push_tx_hw_gso_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 29u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of wire\\-sized packets generated by processing\n\\`tx\\-hw\\-gso\\-packets\\`\n"]
+    #[doc = "Number of wire-sized packets generated by processing\n[tx-hw-gso-packets]{.title-ref}\n"]
     pub fn push_tx_hw_gso_wire_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 30u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "See \\`tx\\-hw\\-gso\\-wire\\-packets\\`\\."]
+    #[doc = "See [tx-hw-gso-wire-packets]{.title-ref}.\n"]
     pub fn push_tx_hw_gso_wire_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 31u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of the packets dropped by the device due to the transmit\npackets bitrate exceeding the device rate limit\\.\n"]
+    #[doc = "Number of the packets dropped by the device due to the transmit packets\nbitrate exceeding the device rate limit.\n"]
     pub fn push_tx_hw_drop_ratelimits(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 32u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of times driver paused accepting new tx packets\nfrom the stack to this queue, because the queue was full\\.\nNote that if BQL is supported and enabled on the device\nthe networking stack will avoid queuing a lot of data at once\\.\n"]
+    #[doc = "Number of times driver paused accepting new tx packets from the stack to\nthis queue, because the queue was full. Note that if BQL is supported\nand enabled on the device the networking stack will avoid queuing a lot\nof data at once.\n"]
     pub fn push_tx_stop(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 33u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of times driver re\\-started accepting send\nrequests to this queue from the stack\\.\n"]
+    #[doc = "Number of times driver re-started accepting send requests to this queue\nfrom the stack.\n"]
     pub fn push_tx_wake(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 34u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -4578,13 +4846,13 @@ impl<Prev: Rec> PushQueueId<Prev> {
         }
         prev
     }
-    #[doc = "Queue index; most queue types are indexed like a C array, with indexes starting at 0 and ending at queue count \\- 1\\. Queue indexes are scoped to an interface and queue type\\."]
+    #[doc = "Queue index; most queue types are indexed like a C array, with indexes\nstarting at 0 and ending at queue count - 1. Queue indexes are scoped to\nan interface and queue type.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Queue type as rx, tx\\. Each queue type defines a separate ID space\\. XDP TX queues allocated in the kernel are not linked to NAPIs and thus not listed\\. AF\\_XDP queues will have more information set in the xsk attribute\\.\nAssociated type: [`QueueType`] (enum)"]
+    #[doc = "Queue type as rx, tx. Each queue type defines a separate ID space. XDP\nTX queues allocated in the kernel are not linked to NAPIs and thus not\nlisted. AF_XDP queues will have more information set in the xsk\nattribute.\n\nAssociated type: [`QueueType`] (enum)"]
     pub fn push_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -4592,6 +4860,62 @@ impl<Prev: Rec> PushQueueId<Prev> {
     }
 }
 impl<Prev: Rec> Drop for PushQueueId<Prev> {
+    fn drop(&mut self) {
+        if let Some(prev) = &mut self.prev {
+            if let Some(header_offset) = &self.header_offset {
+                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            }
+        }
+    }
+}
+pub struct PushLease<Prev: Rec> {
+    pub(crate) prev: Option<Prev>,
+    pub(crate) header_offset: Option<usize>,
+}
+impl<Prev: Rec> Rec for PushLease<Prev> {
+    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_rec_mut()
+    }
+    fn as_rec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_rec()
+    }
+}
+impl<Prev: Rec> PushLease<Prev> {
+    pub fn new(prev: Prev) -> Self {
+        Self {
+            prev: Some(prev),
+            header_offset: None,
+        }
+    }
+    pub fn end_nested(mut self) -> Prev {
+        let mut prev = self.prev.take().unwrap();
+        if let Some(header_offset) = &self.header_offset {
+            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+        }
+        prev
+    }
+    #[doc = "The netdev ifindex to lease the queue from.\n"]
+    pub fn push_ifindex(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 1u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "The netdev queue to lease from.\n"]
+    pub fn nested_queue(mut self) -> PushQueueId<Self> {
+        let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        PushQueueId {
+            prev: Some(self),
+            header_offset: Some(header_offset),
+        }
+    }
+    #[doc = "The network namespace id of the netdev.\n"]
+    pub fn push_netns_id(mut self, value: i32) -> Self {
+        push_header(self.as_rec_mut(), 3u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+}
+impl<Prev: Rec> Drop for PushLease<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
@@ -4626,13 +4950,13 @@ impl<Prev: Rec> PushDmabuf<Prev> {
         }
         prev
     }
-    #[doc = "netdev ifindex to bind the dmabuf to\\."]
+    #[doc = "netdev ifindex to bind the dmabuf to.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "receive queues to bind the dmabuf to\\.\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "receive queues to bind the dmabuf to.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn nested_queues(mut self) -> PushQueueId<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
         PushQueueId {
@@ -4640,13 +4964,13 @@ impl<Prev: Rec> PushDmabuf<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "dmabuf file descriptor to bind\\."]
+    #[doc = "dmabuf file descriptor to bind.\n"]
     pub fn push_fd(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "id of the dmabuf binding"]
+    #[doc = "id of the dmabuf binding\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -4733,7 +5057,7 @@ impl NotifGroup {
     #[doc = "Notifications:\n- [`OpPagePoolAddNotif`]\n- [`OpPagePoolDelNotif`]\n- [`OpPagePoolChangeNotif`]\n"]
     pub const PAGE_POOL_CSTR: &CStr = c"page-pool";
 }
-#[doc = "Get / dump information about a netdev\\.\n\nReply attributes:\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_xdp_features()](IterableDev::get_xdp_features)\n- [.get_xdp_zc_max_segs()](IterableDev::get_xdp_zc_max_segs)\n- [.get_xdp_rx_metadata_features()](IterableDev::get_xdp_rx_metadata_features)\n- [.get_xsk_features()](IterableDev::get_xsk_features)\n"]
+#[doc = "Get / dump information about a netdev.\n\nReply attributes:\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_xdp_features()](IterableDev::get_xdp_features)\n- [.get_xdp_zc_max_segs()](IterableDev::get_xdp_zc_max_segs)\n- [.get_xdp_rx_metadata_features()](IterableDev::get_xdp_rx_metadata_features)\n- [.get_xsk_features()](IterableDev::get_xsk_features)\n\n"]
 #[derive(Debug)]
 pub struct OpDevGetDump<'r> {
     request: Request<'r>,
@@ -4788,7 +5112,7 @@ impl NetlinkRequest for OpDevGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump information about a netdev\\.\nRequest attributes:\n- [.push_ifindex()](PushDev::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_xdp_features()](IterableDev::get_xdp_features)\n- [.get_xdp_zc_max_segs()](IterableDev::get_xdp_zc_max_segs)\n- [.get_xdp_rx_metadata_features()](IterableDev::get_xdp_rx_metadata_features)\n- [.get_xsk_features()](IterableDev::get_xsk_features)\n"]
+#[doc = "Get / dump information about a netdev.\n\nRequest attributes:\n- [.push_ifindex()](PushDev::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_xdp_features()](IterableDev::get_xdp_features)\n- [.get_xdp_zc_max_segs()](IterableDev::get_xdp_zc_max_segs)\n- [.get_xdp_rx_metadata_features()](IterableDev::get_xdp_rx_metadata_features)\n- [.get_xsk_features()](IterableDev::get_xsk_features)\n\n"]
 #[derive(Debug)]
 pub struct OpDevGetDo<'r> {
     request: Request<'r>,
@@ -4841,7 +5165,7 @@ impl NetlinkRequest for OpDevGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump information about Page Pools\\.\nOnly Page Pools associated by the driver with a net\\_device\ncan be listed\\. ifindex will not be reported if the net\\_device\nno longer exists\\.\n\n\nReply attributes:\n- [.get_id()](IterablePagePool::get_id)\n- [.get_ifindex()](IterablePagePool::get_ifindex)\n- [.get_napi_id()](IterablePagePool::get_napi_id)\n- [.get_inflight()](IterablePagePool::get_inflight)\n- [.get_inflight_mem()](IterablePagePool::get_inflight_mem)\n- [.get_detach_time()](IterablePagePool::get_detach_time)\n- [.get_dmabuf()](IterablePagePool::get_dmabuf)\n- [.get_io_uring()](IterablePagePool::get_io_uring)\n"]
+#[doc = "Get / dump information about Page Pools. Only Page Pools associated by\nthe driver with a net_device can be listed. ifindex will not be reported\nif the net_device no longer exists.\n\nRequest attributes:\n- [.push_ifindex()](PushPagePool::push_ifindex)\n\nReply attributes:\n- [.get_id()](IterablePagePool::get_id)\n- [.get_ifindex()](IterablePagePool::get_ifindex)\n- [.get_napi_id()](IterablePagePool::get_napi_id)\n- [.get_inflight()](IterablePagePool::get_inflight)\n- [.get_inflight_mem()](IterablePagePool::get_inflight_mem)\n- [.get_detach_time()](IterablePagePool::get_detach_time)\n- [.get_dmabuf()](IterablePagePool::get_dmabuf)\n- [.get_io_uring()](IterablePagePool::get_io_uring)\n\n"]
 #[derive(Debug)]
 pub struct OpPagePoolGetDump<'r> {
     request: Request<'r>,
@@ -4896,7 +5220,7 @@ impl NetlinkRequest for OpPagePoolGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump information about Page Pools\\.\nOnly Page Pools associated by the driver with a net\\_device\ncan be listed\\. ifindex will not be reported if the net\\_device\nno longer exists\\.\n\nRequest attributes:\n- [.push_id()](PushPagePool::push_id)\n\nReply attributes:\n- [.get_id()](IterablePagePool::get_id)\n- [.get_ifindex()](IterablePagePool::get_ifindex)\n- [.get_napi_id()](IterablePagePool::get_napi_id)\n- [.get_inflight()](IterablePagePool::get_inflight)\n- [.get_inflight_mem()](IterablePagePool::get_inflight_mem)\n- [.get_detach_time()](IterablePagePool::get_detach_time)\n- [.get_dmabuf()](IterablePagePool::get_dmabuf)\n- [.get_io_uring()](IterablePagePool::get_io_uring)\n"]
+#[doc = "Get / dump information about Page Pools. Only Page Pools associated by\nthe driver with a net_device can be listed. ifindex will not be reported\nif the net_device no longer exists.\n\nRequest attributes:\n- [.push_id()](PushPagePool::push_id)\n\nReply attributes:\n- [.get_id()](IterablePagePool::get_id)\n- [.get_ifindex()](IterablePagePool::get_ifindex)\n- [.get_napi_id()](IterablePagePool::get_napi_id)\n- [.get_inflight()](IterablePagePool::get_inflight)\n- [.get_inflight_mem()](IterablePagePool::get_inflight_mem)\n- [.get_detach_time()](IterablePagePool::get_detach_time)\n- [.get_dmabuf()](IterablePagePool::get_dmabuf)\n- [.get_io_uring()](IterablePagePool::get_io_uring)\n\n"]
 #[derive(Debug)]
 pub struct OpPagePoolGetDo<'r> {
     request: Request<'r>,
@@ -4949,7 +5273,7 @@ impl NetlinkRequest for OpPagePoolGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get page pool statistics\\.\n\nReply attributes:\n- [.get_info()](IterablePagePoolStats::get_info)\n- [.get_alloc_fast()](IterablePagePoolStats::get_alloc_fast)\n- [.get_alloc_slow()](IterablePagePoolStats::get_alloc_slow)\n- [.get_alloc_slow_high_order()](IterablePagePoolStats::get_alloc_slow_high_order)\n- [.get_alloc_empty()](IterablePagePoolStats::get_alloc_empty)\n- [.get_alloc_refill()](IterablePagePoolStats::get_alloc_refill)\n- [.get_alloc_waive()](IterablePagePoolStats::get_alloc_waive)\n- [.get_recycle_cached()](IterablePagePoolStats::get_recycle_cached)\n- [.get_recycle_cache_full()](IterablePagePoolStats::get_recycle_cache_full)\n- [.get_recycle_ring()](IterablePagePoolStats::get_recycle_ring)\n- [.get_recycle_ring_full()](IterablePagePoolStats::get_recycle_ring_full)\n- [.get_recycle_released_refcnt()](IterablePagePoolStats::get_recycle_released_refcnt)\n"]
+#[doc = "Get page pool statistics.\n\nRequest attributes:\n- [.nested_info()](PushPagePoolStats::nested_info)\n\nReply attributes:\n- [.get_info()](IterablePagePoolStats::get_info)\n- [.get_alloc_fast()](IterablePagePoolStats::get_alloc_fast)\n- [.get_alloc_slow()](IterablePagePoolStats::get_alloc_slow)\n- [.get_alloc_slow_high_order()](IterablePagePoolStats::get_alloc_slow_high_order)\n- [.get_alloc_empty()](IterablePagePoolStats::get_alloc_empty)\n- [.get_alloc_refill()](IterablePagePoolStats::get_alloc_refill)\n- [.get_alloc_waive()](IterablePagePoolStats::get_alloc_waive)\n- [.get_recycle_cached()](IterablePagePoolStats::get_recycle_cached)\n- [.get_recycle_cache_full()](IterablePagePoolStats::get_recycle_cache_full)\n- [.get_recycle_ring()](IterablePagePoolStats::get_recycle_ring)\n- [.get_recycle_ring_full()](IterablePagePoolStats::get_recycle_ring_full)\n- [.get_recycle_released_refcnt()](IterablePagePoolStats::get_recycle_released_refcnt)\n\n"]
 #[derive(Debug)]
 pub struct OpPagePoolStatsGetDump<'r> {
     request: Request<'r>,
@@ -5004,7 +5328,7 @@ impl NetlinkRequest for OpPagePoolStatsGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get page pool statistics\\.\nRequest attributes:\n- [.nested_info()](PushPagePoolStats::nested_info)\n\nReply attributes:\n- [.get_info()](IterablePagePoolStats::get_info)\n- [.get_alloc_fast()](IterablePagePoolStats::get_alloc_fast)\n- [.get_alloc_slow()](IterablePagePoolStats::get_alloc_slow)\n- [.get_alloc_slow_high_order()](IterablePagePoolStats::get_alloc_slow_high_order)\n- [.get_alloc_empty()](IterablePagePoolStats::get_alloc_empty)\n- [.get_alloc_refill()](IterablePagePoolStats::get_alloc_refill)\n- [.get_alloc_waive()](IterablePagePoolStats::get_alloc_waive)\n- [.get_recycle_cached()](IterablePagePoolStats::get_recycle_cached)\n- [.get_recycle_cache_full()](IterablePagePoolStats::get_recycle_cache_full)\n- [.get_recycle_ring()](IterablePagePoolStats::get_recycle_ring)\n- [.get_recycle_ring_full()](IterablePagePoolStats::get_recycle_ring_full)\n- [.get_recycle_released_refcnt()](IterablePagePoolStats::get_recycle_released_refcnt)\n"]
+#[doc = "Get page pool statistics.\n\nRequest attributes:\n- [.nested_info()](PushPagePoolStats::nested_info)\n\nReply attributes:\n- [.get_info()](IterablePagePoolStats::get_info)\n- [.get_alloc_fast()](IterablePagePoolStats::get_alloc_fast)\n- [.get_alloc_slow()](IterablePagePoolStats::get_alloc_slow)\n- [.get_alloc_slow_high_order()](IterablePagePoolStats::get_alloc_slow_high_order)\n- [.get_alloc_empty()](IterablePagePoolStats::get_alloc_empty)\n- [.get_alloc_refill()](IterablePagePoolStats::get_alloc_refill)\n- [.get_alloc_waive()](IterablePagePoolStats::get_alloc_waive)\n- [.get_recycle_cached()](IterablePagePoolStats::get_recycle_cached)\n- [.get_recycle_cache_full()](IterablePagePoolStats::get_recycle_cache_full)\n- [.get_recycle_ring()](IterablePagePoolStats::get_recycle_ring)\n- [.get_recycle_ring_full()](IterablePagePoolStats::get_recycle_ring_full)\n- [.get_recycle_released_refcnt()](IterablePagePoolStats::get_recycle_released_refcnt)\n\n"]
 #[derive(Debug)]
 pub struct OpPagePoolStatsGetDo<'r> {
     request: Request<'r>,
@@ -5057,7 +5381,7 @@ impl NetlinkRequest for OpPagePoolStatsGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get queue information from the kernel\\. Only configured queues will be reported (as opposed to all available hardware queues)\\.\nRequest attributes:\n- [.push_ifindex()](PushQueue::push_ifindex)\n\nReply attributes:\n- [.get_id()](IterableQueue::get_id)\n- [.get_ifindex()](IterableQueue::get_ifindex)\n- [.get_type()](IterableQueue::get_type)\n- [.get_napi_id()](IterableQueue::get_napi_id)\n- [.get_dmabuf()](IterableQueue::get_dmabuf)\n- [.get_io_uring()](IterableQueue::get_io_uring)\n- [.get_xsk()](IterableQueue::get_xsk)\n"]
+#[doc = "Get queue information from the kernel. Only configured queues will be\nreported (as opposed to all available hardware queues).\n\nRequest attributes:\n- [.push_ifindex()](PushQueue::push_ifindex)\n\nReply attributes:\n- [.get_id()](IterableQueue::get_id)\n- [.get_ifindex()](IterableQueue::get_ifindex)\n- [.get_type()](IterableQueue::get_type)\n- [.get_napi_id()](IterableQueue::get_napi_id)\n- [.get_dmabuf()](IterableQueue::get_dmabuf)\n- [.get_io_uring()](IterableQueue::get_io_uring)\n- [.get_xsk()](IterableQueue::get_xsk)\n- [.get_lease()](IterableQueue::get_lease)\n\n"]
 #[derive(Debug)]
 pub struct OpQueueGetDump<'r> {
     request: Request<'r>,
@@ -5112,7 +5436,7 @@ impl NetlinkRequest for OpQueueGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get queue information from the kernel\\. Only configured queues will be reported (as opposed to all available hardware queues)\\.\nRequest attributes:\n- [.push_id()](PushQueue::push_id)\n- [.push_ifindex()](PushQueue::push_ifindex)\n- [.push_type()](PushQueue::push_type)\n\nReply attributes:\n- [.get_id()](IterableQueue::get_id)\n- [.get_ifindex()](IterableQueue::get_ifindex)\n- [.get_type()](IterableQueue::get_type)\n- [.get_napi_id()](IterableQueue::get_napi_id)\n- [.get_dmabuf()](IterableQueue::get_dmabuf)\n- [.get_io_uring()](IterableQueue::get_io_uring)\n- [.get_xsk()](IterableQueue::get_xsk)\n"]
+#[doc = "Get queue information from the kernel. Only configured queues will be\nreported (as opposed to all available hardware queues).\n\nRequest attributes:\n- [.push_id()](PushQueue::push_id)\n- [.push_ifindex()](PushQueue::push_ifindex)\n- [.push_type()](PushQueue::push_type)\n\nReply attributes:\n- [.get_id()](IterableQueue::get_id)\n- [.get_ifindex()](IterableQueue::get_ifindex)\n- [.get_type()](IterableQueue::get_type)\n- [.get_napi_id()](IterableQueue::get_napi_id)\n- [.get_dmabuf()](IterableQueue::get_dmabuf)\n- [.get_io_uring()](IterableQueue::get_io_uring)\n- [.get_xsk()](IterableQueue::get_xsk)\n- [.get_lease()](IterableQueue::get_lease)\n\n"]
 #[derive(Debug)]
 pub struct OpQueueGetDo<'r> {
     request: Request<'r>,
@@ -5165,7 +5489,7 @@ impl NetlinkRequest for OpQueueGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get information about NAPI instances configured on the system\\.\nRequest attributes:\n- [.push_ifindex()](PushNapi::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableNapi::get_ifindex)\n- [.get_id()](IterableNapi::get_id)\n- [.get_irq()](IterableNapi::get_irq)\n- [.get_pid()](IterableNapi::get_pid)\n- [.get_defer_hard_irqs()](IterableNapi::get_defer_hard_irqs)\n- [.get_gro_flush_timeout()](IterableNapi::get_gro_flush_timeout)\n- [.get_irq_suspend_timeout()](IterableNapi::get_irq_suspend_timeout)\n- [.get_threaded()](IterableNapi::get_threaded)\n"]
+#[doc = "Get information about NAPI instances configured on the system.\n\nRequest attributes:\n- [.push_ifindex()](PushNapi::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableNapi::get_ifindex)\n- [.get_id()](IterableNapi::get_id)\n- [.get_irq()](IterableNapi::get_irq)\n- [.get_pid()](IterableNapi::get_pid)\n- [.get_defer_hard_irqs()](IterableNapi::get_defer_hard_irqs)\n- [.get_gro_flush_timeout()](IterableNapi::get_gro_flush_timeout)\n- [.get_irq_suspend_timeout()](IterableNapi::get_irq_suspend_timeout)\n- [.get_threaded()](IterableNapi::get_threaded)\n\n"]
 #[derive(Debug)]
 pub struct OpNapiGetDump<'r> {
     request: Request<'r>,
@@ -5220,7 +5544,7 @@ impl NetlinkRequest for OpNapiGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get information about NAPI instances configured on the system\\.\nRequest attributes:\n- [.push_id()](PushNapi::push_id)\n\nReply attributes:\n- [.get_ifindex()](IterableNapi::get_ifindex)\n- [.get_id()](IterableNapi::get_id)\n- [.get_irq()](IterableNapi::get_irq)\n- [.get_pid()](IterableNapi::get_pid)\n- [.get_defer_hard_irqs()](IterableNapi::get_defer_hard_irqs)\n- [.get_gro_flush_timeout()](IterableNapi::get_gro_flush_timeout)\n- [.get_irq_suspend_timeout()](IterableNapi::get_irq_suspend_timeout)\n- [.get_threaded()](IterableNapi::get_threaded)\n"]
+#[doc = "Get information about NAPI instances configured on the system.\n\nRequest attributes:\n- [.push_id()](PushNapi::push_id)\n\nReply attributes:\n- [.get_ifindex()](IterableNapi::get_ifindex)\n- [.get_id()](IterableNapi::get_id)\n- [.get_irq()](IterableNapi::get_irq)\n- [.get_pid()](IterableNapi::get_pid)\n- [.get_defer_hard_irqs()](IterableNapi::get_defer_hard_irqs)\n- [.get_gro_flush_timeout()](IterableNapi::get_gro_flush_timeout)\n- [.get_irq_suspend_timeout()](IterableNapi::get_irq_suspend_timeout)\n- [.get_threaded()](IterableNapi::get_threaded)\n\n"]
 #[derive(Debug)]
 pub struct OpNapiGetDo<'r> {
     request: Request<'r>,
@@ -5273,7 +5597,7 @@ impl NetlinkRequest for OpNapiGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump fine grained statistics\\. Which statistics are reported\ndepends on the device and the driver, and whether the driver stores\nsoftware counters per\\-queue\\.\n\nRequest attributes:\n- [.push_ifindex()](PushQstats::push_ifindex)\n- [.push_scope()](PushQstats::push_scope)\n\nReply attributes:\n- [.get_ifindex()](IterableQstats::get_ifindex)\n- [.get_queue_type()](IterableQstats::get_queue_type)\n- [.get_queue_id()](IterableQstats::get_queue_id)\n- [.get_rx_packets()](IterableQstats::get_rx_packets)\n- [.get_rx_bytes()](IterableQstats::get_rx_bytes)\n- [.get_tx_packets()](IterableQstats::get_tx_packets)\n- [.get_tx_bytes()](IterableQstats::get_tx_bytes)\n- [.get_rx_alloc_fail()](IterableQstats::get_rx_alloc_fail)\n- [.get_rx_hw_drops()](IterableQstats::get_rx_hw_drops)\n- [.get_rx_hw_drop_overruns()](IterableQstats::get_rx_hw_drop_overruns)\n- [.get_rx_csum_complete()](IterableQstats::get_rx_csum_complete)\n- [.get_rx_csum_unnecessary()](IterableQstats::get_rx_csum_unnecessary)\n- [.get_rx_csum_none()](IterableQstats::get_rx_csum_none)\n- [.get_rx_csum_bad()](IterableQstats::get_rx_csum_bad)\n- [.get_rx_hw_gro_packets()](IterableQstats::get_rx_hw_gro_packets)\n- [.get_rx_hw_gro_bytes()](IterableQstats::get_rx_hw_gro_bytes)\n- [.get_rx_hw_gro_wire_packets()](IterableQstats::get_rx_hw_gro_wire_packets)\n- [.get_rx_hw_gro_wire_bytes()](IterableQstats::get_rx_hw_gro_wire_bytes)\n- [.get_rx_hw_drop_ratelimits()](IterableQstats::get_rx_hw_drop_ratelimits)\n- [.get_tx_hw_drops()](IterableQstats::get_tx_hw_drops)\n- [.get_tx_hw_drop_errors()](IterableQstats::get_tx_hw_drop_errors)\n- [.get_tx_csum_none()](IterableQstats::get_tx_csum_none)\n- [.get_tx_needs_csum()](IterableQstats::get_tx_needs_csum)\n- [.get_tx_hw_gso_packets()](IterableQstats::get_tx_hw_gso_packets)\n- [.get_tx_hw_gso_bytes()](IterableQstats::get_tx_hw_gso_bytes)\n- [.get_tx_hw_gso_wire_packets()](IterableQstats::get_tx_hw_gso_wire_packets)\n- [.get_tx_hw_gso_wire_bytes()](IterableQstats::get_tx_hw_gso_wire_bytes)\n- [.get_tx_hw_drop_ratelimits()](IterableQstats::get_tx_hw_drop_ratelimits)\n- [.get_tx_stop()](IterableQstats::get_tx_stop)\n- [.get_tx_wake()](IterableQstats::get_tx_wake)\n"]
+#[doc = "Get / dump fine grained statistics. Which statistics are reported\ndepends on the device and the driver, and whether the driver stores\nsoftware counters per-queue.\n\nRequest attributes:\n- [.push_ifindex()](PushQstats::push_ifindex)\n- [.push_scope()](PushQstats::push_scope)\n\nReply attributes:\n- [.get_ifindex()](IterableQstats::get_ifindex)\n- [.get_queue_type()](IterableQstats::get_queue_type)\n- [.get_queue_id()](IterableQstats::get_queue_id)\n- [.get_rx_packets()](IterableQstats::get_rx_packets)\n- [.get_rx_bytes()](IterableQstats::get_rx_bytes)\n- [.get_tx_packets()](IterableQstats::get_tx_packets)\n- [.get_tx_bytes()](IterableQstats::get_tx_bytes)\n- [.get_rx_alloc_fail()](IterableQstats::get_rx_alloc_fail)\n- [.get_rx_hw_drops()](IterableQstats::get_rx_hw_drops)\n- [.get_rx_hw_drop_overruns()](IterableQstats::get_rx_hw_drop_overruns)\n- [.get_rx_csum_complete()](IterableQstats::get_rx_csum_complete)\n- [.get_rx_csum_unnecessary()](IterableQstats::get_rx_csum_unnecessary)\n- [.get_rx_csum_none()](IterableQstats::get_rx_csum_none)\n- [.get_rx_csum_bad()](IterableQstats::get_rx_csum_bad)\n- [.get_rx_hw_gro_packets()](IterableQstats::get_rx_hw_gro_packets)\n- [.get_rx_hw_gro_bytes()](IterableQstats::get_rx_hw_gro_bytes)\n- [.get_rx_hw_gro_wire_packets()](IterableQstats::get_rx_hw_gro_wire_packets)\n- [.get_rx_hw_gro_wire_bytes()](IterableQstats::get_rx_hw_gro_wire_bytes)\n- [.get_rx_hw_drop_ratelimits()](IterableQstats::get_rx_hw_drop_ratelimits)\n- [.get_tx_hw_drops()](IterableQstats::get_tx_hw_drops)\n- [.get_tx_hw_drop_errors()](IterableQstats::get_tx_hw_drop_errors)\n- [.get_tx_csum_none()](IterableQstats::get_tx_csum_none)\n- [.get_tx_needs_csum()](IterableQstats::get_tx_needs_csum)\n- [.get_tx_hw_gso_packets()](IterableQstats::get_tx_hw_gso_packets)\n- [.get_tx_hw_gso_bytes()](IterableQstats::get_tx_hw_gso_bytes)\n- [.get_tx_hw_gso_wire_packets()](IterableQstats::get_tx_hw_gso_wire_packets)\n- [.get_tx_hw_gso_wire_bytes()](IterableQstats::get_tx_hw_gso_wire_bytes)\n- [.get_tx_hw_drop_ratelimits()](IterableQstats::get_tx_hw_drop_ratelimits)\n- [.get_tx_stop()](IterableQstats::get_tx_stop)\n- [.get_tx_wake()](IterableQstats::get_tx_wake)\n\n"]
 #[derive(Debug)]
 pub struct OpQstatsGetDump<'r> {
     request: Request<'r>,
@@ -5328,7 +5652,7 @@ impl NetlinkRequest for OpQstatsGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Bind dmabuf to netdev\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.nested_queues()](PushDmabuf::nested_queues)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n"]
+#[doc = "Bind dmabuf to netdev\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.nested_queues()](PushDmabuf::nested_queues)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n\n"]
 #[derive(Debug)]
 pub struct OpBindRxDo<'r> {
     request: Request<'r>,
@@ -5381,7 +5705,7 @@ impl NetlinkRequest for OpBindRxDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set configurable NAPI instance settings\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushNapi::push_id)\n- [.push_defer_hard_irqs()](PushNapi::push_defer_hard_irqs)\n- [.push_gro_flush_timeout()](PushNapi::push_gro_flush_timeout)\n- [.push_irq_suspend_timeout()](PushNapi::push_irq_suspend_timeout)\n- [.push_threaded()](PushNapi::push_threaded)\n"]
+#[doc = "Set configurable NAPI instance settings.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushNapi::push_id)\n- [.push_defer_hard_irqs()](PushNapi::push_defer_hard_irqs)\n- [.push_gro_flush_timeout()](PushNapi::push_gro_flush_timeout)\n- [.push_irq_suspend_timeout()](PushNapi::push_irq_suspend_timeout)\n- [.push_threaded()](PushNapi::push_threaded)\n\n"]
 #[derive(Debug)]
 pub struct OpNapiSetDo<'r> {
     request: Request<'r>,
@@ -5434,7 +5758,7 @@ impl NetlinkRequest for OpNapiSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Bind dmabuf to netdev for TX\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n"]
+#[doc = "Bind dmabuf to netdev for TX\n\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n\n"]
 #[derive(Debug)]
 pub struct OpBindTxDo<'r> {
     request: Request<'r>,
@@ -5476,6 +5800,59 @@ impl NetlinkRequest for OpBindTxDo<'_> {
         self.request.buf()
     }
     type ReplyType<'buf> = IterableDmabuf<'buf>;
+    fn decode_reply<'buf>(buf: &'buf [u8]) -> Self::ReplyType<'buf> {
+        Self::decode_request(buf)
+    }
+    fn lookup(
+        buf: &[u8],
+        offset: usize,
+        missing_type: Option<u16>,
+    ) -> (Vec<(&'static str, usize)>, Option<&'static str>) {
+        Self::decode_request(buf).lookup_attr(offset, missing_type)
+    }
+}
+#[doc = "Create a new queue for the given netdevice. Whether this operation is\nsupported depends on the device and the driver.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushQueue::push_ifindex)\n- [.push_type()](PushQueue::push_type)\n- [.nested_lease()](PushQueue::nested_lease)\n\nReply attributes:\n- [.get_id()](IterableQueue::get_id)\n\n"]
+#[derive(Debug)]
+pub struct OpQueueCreateDo<'r> {
+    request: Request<'r>,
+}
+impl<'r> OpQueueCreateDo<'r> {
+    pub fn new(mut request: Request<'r>) -> Self {
+        Self::write_header(request.buf_mut());
+        Self { request: request }
+    }
+    pub fn encode_request<'buf>(buf: &'buf mut Vec<u8>) -> PushQueue<&'buf mut Vec<u8>> {
+        Self::write_header(buf);
+        PushQueue::new(buf)
+    }
+    pub fn encode(&mut self) -> PushQueue<&mut Vec<u8>> {
+        PushQueue::new(self.request.buf_mut())
+    }
+    pub fn into_encoder(self) -> PushQueue<RequestBuf<'r>> {
+        PushQueue::new(self.request.buf)
+    }
+    pub fn decode_request<'a>(buf: &'a [u8]) -> IterableQueue<'a> {
+        let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
+        IterableQueue::with_loc(attrs, buf.as_ptr() as usize)
+    }
+    fn write_header<Prev: Rec>(prev: &mut Prev) {
+        let mut header = BuiltinNfgenmsg::new();
+        header.cmd = 16u8;
+        header.version = 1u8;
+        prev.as_rec_mut().extend(header.as_slice());
+    }
+}
+impl NetlinkRequest for OpQueueCreateDo<'_> {
+    fn protocol(&self) -> Protocol {
+        Protocol::Generic("netdev".as_bytes())
+    }
+    fn flags(&self) -> u16 {
+        self.request.flags
+    }
+    fn payload(&self) -> &[u8] {
+        self.request.buf()
+    }
+    type ReplyType<'buf> = IterableQueue<'buf>;
     fn decode_reply<'buf>(buf: &'buf [u8]) -> Self::ReplyType<'buf> {
         Self::decode_request(buf)
     }
@@ -5589,21 +5966,21 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get / dump information about a netdev\\.\n\nReply attributes:\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_xdp_features()](IterableDev::get_xdp_features)\n- [.get_xdp_zc_max_segs()](IterableDev::get_xdp_zc_max_segs)\n- [.get_xdp_rx_metadata_features()](IterableDev::get_xdp_rx_metadata_features)\n- [.get_xsk_features()](IterableDev::get_xsk_features)\n"]
+    #[doc = "Get / dump information about a netdev.\n\nReply attributes:\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_xdp_features()](IterableDev::get_xdp_features)\n- [.get_xdp_zc_max_segs()](IterableDev::get_xdp_zc_max_segs)\n- [.get_xdp_rx_metadata_features()](IterableDev::get_xdp_rx_metadata_features)\n- [.get_xsk_features()](IterableDev::get_xsk_features)\n\n"]
     pub fn op_dev_get_dump(self) -> OpDevGetDump<'buf> {
         let mut res = OpDevGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-dev-get-dump", OpDevGetDump::lookup);
         res
     }
-    #[doc = "Get / dump information about a netdev\\.\nRequest attributes:\n- [.push_ifindex()](PushDev::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_xdp_features()](IterableDev::get_xdp_features)\n- [.get_xdp_zc_max_segs()](IterableDev::get_xdp_zc_max_segs)\n- [.get_xdp_rx_metadata_features()](IterableDev::get_xdp_rx_metadata_features)\n- [.get_xsk_features()](IterableDev::get_xsk_features)\n"]
+    #[doc = "Get / dump information about a netdev.\n\nRequest attributes:\n- [.push_ifindex()](PushDev::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_xdp_features()](IterableDev::get_xdp_features)\n- [.get_xdp_zc_max_segs()](IterableDev::get_xdp_zc_max_segs)\n- [.get_xdp_rx_metadata_features()](IterableDev::get_xdp_rx_metadata_features)\n- [.get_xsk_features()](IterableDev::get_xsk_features)\n\n"]
     pub fn op_dev_get_do(self) -> OpDevGetDo<'buf> {
         let mut res = OpDevGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-dev-get-do", OpDevGetDo::lookup);
         res
     }
-    #[doc = "Get / dump information about Page Pools\\.\nOnly Page Pools associated by the driver with a net\\_device\ncan be listed\\. ifindex will not be reported if the net\\_device\nno longer exists\\.\n\n\nReply attributes:\n- [.get_id()](IterablePagePool::get_id)\n- [.get_ifindex()](IterablePagePool::get_ifindex)\n- [.get_napi_id()](IterablePagePool::get_napi_id)\n- [.get_inflight()](IterablePagePool::get_inflight)\n- [.get_inflight_mem()](IterablePagePool::get_inflight_mem)\n- [.get_detach_time()](IterablePagePool::get_detach_time)\n- [.get_dmabuf()](IterablePagePool::get_dmabuf)\n- [.get_io_uring()](IterablePagePool::get_io_uring)\n"]
+    #[doc = "Get / dump information about Page Pools. Only Page Pools associated by\nthe driver with a net_device can be listed. ifindex will not be reported\nif the net_device no longer exists.\n\nRequest attributes:\n- [.push_ifindex()](PushPagePool::push_ifindex)\n\nReply attributes:\n- [.get_id()](IterablePagePool::get_id)\n- [.get_ifindex()](IterablePagePool::get_ifindex)\n- [.get_napi_id()](IterablePagePool::get_napi_id)\n- [.get_inflight()](IterablePagePool::get_inflight)\n- [.get_inflight_mem()](IterablePagePool::get_inflight_mem)\n- [.get_detach_time()](IterablePagePool::get_detach_time)\n- [.get_dmabuf()](IterablePagePool::get_dmabuf)\n- [.get_io_uring()](IterablePagePool::get_io_uring)\n\n"]
     pub fn op_page_pool_get_dump(self) -> OpPagePoolGetDump<'buf> {
         let mut res = OpPagePoolGetDump::new(self);
         res.request.do_writeback(
@@ -5613,7 +5990,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get / dump information about Page Pools\\.\nOnly Page Pools associated by the driver with a net\\_device\ncan be listed\\. ifindex will not be reported if the net\\_device\nno longer exists\\.\n\nRequest attributes:\n- [.push_id()](PushPagePool::push_id)\n\nReply attributes:\n- [.get_id()](IterablePagePool::get_id)\n- [.get_ifindex()](IterablePagePool::get_ifindex)\n- [.get_napi_id()](IterablePagePool::get_napi_id)\n- [.get_inflight()](IterablePagePool::get_inflight)\n- [.get_inflight_mem()](IterablePagePool::get_inflight_mem)\n- [.get_detach_time()](IterablePagePool::get_detach_time)\n- [.get_dmabuf()](IterablePagePool::get_dmabuf)\n- [.get_io_uring()](IterablePagePool::get_io_uring)\n"]
+    #[doc = "Get / dump information about Page Pools. Only Page Pools associated by\nthe driver with a net_device can be listed. ifindex will not be reported\nif the net_device no longer exists.\n\nRequest attributes:\n- [.push_id()](PushPagePool::push_id)\n\nReply attributes:\n- [.get_id()](IterablePagePool::get_id)\n- [.get_ifindex()](IterablePagePool::get_ifindex)\n- [.get_napi_id()](IterablePagePool::get_napi_id)\n- [.get_inflight()](IterablePagePool::get_inflight)\n- [.get_inflight_mem()](IterablePagePool::get_inflight_mem)\n- [.get_detach_time()](IterablePagePool::get_detach_time)\n- [.get_dmabuf()](IterablePagePool::get_dmabuf)\n- [.get_io_uring()](IterablePagePool::get_io_uring)\n\n"]
     pub fn op_page_pool_get_do(self) -> OpPagePoolGetDo<'buf> {
         let mut res = OpPagePoolGetDo::new(self);
         res.request.do_writeback(
@@ -5623,7 +6000,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get page pool statistics\\.\n\nReply attributes:\n- [.get_info()](IterablePagePoolStats::get_info)\n- [.get_alloc_fast()](IterablePagePoolStats::get_alloc_fast)\n- [.get_alloc_slow()](IterablePagePoolStats::get_alloc_slow)\n- [.get_alloc_slow_high_order()](IterablePagePoolStats::get_alloc_slow_high_order)\n- [.get_alloc_empty()](IterablePagePoolStats::get_alloc_empty)\n- [.get_alloc_refill()](IterablePagePoolStats::get_alloc_refill)\n- [.get_alloc_waive()](IterablePagePoolStats::get_alloc_waive)\n- [.get_recycle_cached()](IterablePagePoolStats::get_recycle_cached)\n- [.get_recycle_cache_full()](IterablePagePoolStats::get_recycle_cache_full)\n- [.get_recycle_ring()](IterablePagePoolStats::get_recycle_ring)\n- [.get_recycle_ring_full()](IterablePagePoolStats::get_recycle_ring_full)\n- [.get_recycle_released_refcnt()](IterablePagePoolStats::get_recycle_released_refcnt)\n"]
+    #[doc = "Get page pool statistics.\n\nRequest attributes:\n- [.nested_info()](PushPagePoolStats::nested_info)\n\nReply attributes:\n- [.get_info()](IterablePagePoolStats::get_info)\n- [.get_alloc_fast()](IterablePagePoolStats::get_alloc_fast)\n- [.get_alloc_slow()](IterablePagePoolStats::get_alloc_slow)\n- [.get_alloc_slow_high_order()](IterablePagePoolStats::get_alloc_slow_high_order)\n- [.get_alloc_empty()](IterablePagePoolStats::get_alloc_empty)\n- [.get_alloc_refill()](IterablePagePoolStats::get_alloc_refill)\n- [.get_alloc_waive()](IterablePagePoolStats::get_alloc_waive)\n- [.get_recycle_cached()](IterablePagePoolStats::get_recycle_cached)\n- [.get_recycle_cache_full()](IterablePagePoolStats::get_recycle_cache_full)\n- [.get_recycle_ring()](IterablePagePoolStats::get_recycle_ring)\n- [.get_recycle_ring_full()](IterablePagePoolStats::get_recycle_ring_full)\n- [.get_recycle_released_refcnt()](IterablePagePoolStats::get_recycle_released_refcnt)\n\n"]
     pub fn op_page_pool_stats_get_dump(self) -> OpPagePoolStatsGetDump<'buf> {
         let mut res = OpPagePoolStatsGetDump::new(self);
         res.request.do_writeback(
@@ -5633,7 +6010,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get page pool statistics\\.\nRequest attributes:\n- [.nested_info()](PushPagePoolStats::nested_info)\n\nReply attributes:\n- [.get_info()](IterablePagePoolStats::get_info)\n- [.get_alloc_fast()](IterablePagePoolStats::get_alloc_fast)\n- [.get_alloc_slow()](IterablePagePoolStats::get_alloc_slow)\n- [.get_alloc_slow_high_order()](IterablePagePoolStats::get_alloc_slow_high_order)\n- [.get_alloc_empty()](IterablePagePoolStats::get_alloc_empty)\n- [.get_alloc_refill()](IterablePagePoolStats::get_alloc_refill)\n- [.get_alloc_waive()](IterablePagePoolStats::get_alloc_waive)\n- [.get_recycle_cached()](IterablePagePoolStats::get_recycle_cached)\n- [.get_recycle_cache_full()](IterablePagePoolStats::get_recycle_cache_full)\n- [.get_recycle_ring()](IterablePagePoolStats::get_recycle_ring)\n- [.get_recycle_ring_full()](IterablePagePoolStats::get_recycle_ring_full)\n- [.get_recycle_released_refcnt()](IterablePagePoolStats::get_recycle_released_refcnt)\n"]
+    #[doc = "Get page pool statistics.\n\nRequest attributes:\n- [.nested_info()](PushPagePoolStats::nested_info)\n\nReply attributes:\n- [.get_info()](IterablePagePoolStats::get_info)\n- [.get_alloc_fast()](IterablePagePoolStats::get_alloc_fast)\n- [.get_alloc_slow()](IterablePagePoolStats::get_alloc_slow)\n- [.get_alloc_slow_high_order()](IterablePagePoolStats::get_alloc_slow_high_order)\n- [.get_alloc_empty()](IterablePagePoolStats::get_alloc_empty)\n- [.get_alloc_refill()](IterablePagePoolStats::get_alloc_refill)\n- [.get_alloc_waive()](IterablePagePoolStats::get_alloc_waive)\n- [.get_recycle_cached()](IterablePagePoolStats::get_recycle_cached)\n- [.get_recycle_cache_full()](IterablePagePoolStats::get_recycle_cache_full)\n- [.get_recycle_ring()](IterablePagePoolStats::get_recycle_ring)\n- [.get_recycle_ring_full()](IterablePagePoolStats::get_recycle_ring_full)\n- [.get_recycle_released_refcnt()](IterablePagePoolStats::get_recycle_released_refcnt)\n\n"]
     pub fn op_page_pool_stats_get_do(self) -> OpPagePoolStatsGetDo<'buf> {
         let mut res = OpPagePoolStatsGetDo::new(self);
         res.request.do_writeback(
@@ -5643,35 +6020,35 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get queue information from the kernel\\. Only configured queues will be reported (as opposed to all available hardware queues)\\.\nRequest attributes:\n- [.push_ifindex()](PushQueue::push_ifindex)\n\nReply attributes:\n- [.get_id()](IterableQueue::get_id)\n- [.get_ifindex()](IterableQueue::get_ifindex)\n- [.get_type()](IterableQueue::get_type)\n- [.get_napi_id()](IterableQueue::get_napi_id)\n- [.get_dmabuf()](IterableQueue::get_dmabuf)\n- [.get_io_uring()](IterableQueue::get_io_uring)\n- [.get_xsk()](IterableQueue::get_xsk)\n"]
+    #[doc = "Get queue information from the kernel. Only configured queues will be\nreported (as opposed to all available hardware queues).\n\nRequest attributes:\n- [.push_ifindex()](PushQueue::push_ifindex)\n\nReply attributes:\n- [.get_id()](IterableQueue::get_id)\n- [.get_ifindex()](IterableQueue::get_ifindex)\n- [.get_type()](IterableQueue::get_type)\n- [.get_napi_id()](IterableQueue::get_napi_id)\n- [.get_dmabuf()](IterableQueue::get_dmabuf)\n- [.get_io_uring()](IterableQueue::get_io_uring)\n- [.get_xsk()](IterableQueue::get_xsk)\n- [.get_lease()](IterableQueue::get_lease)\n\n"]
     pub fn op_queue_get_dump(self) -> OpQueueGetDump<'buf> {
         let mut res = OpQueueGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-queue-get-dump", OpQueueGetDump::lookup);
         res
     }
-    #[doc = "Get queue information from the kernel\\. Only configured queues will be reported (as opposed to all available hardware queues)\\.\nRequest attributes:\n- [.push_id()](PushQueue::push_id)\n- [.push_ifindex()](PushQueue::push_ifindex)\n- [.push_type()](PushQueue::push_type)\n\nReply attributes:\n- [.get_id()](IterableQueue::get_id)\n- [.get_ifindex()](IterableQueue::get_ifindex)\n- [.get_type()](IterableQueue::get_type)\n- [.get_napi_id()](IterableQueue::get_napi_id)\n- [.get_dmabuf()](IterableQueue::get_dmabuf)\n- [.get_io_uring()](IterableQueue::get_io_uring)\n- [.get_xsk()](IterableQueue::get_xsk)\n"]
+    #[doc = "Get queue information from the kernel. Only configured queues will be\nreported (as opposed to all available hardware queues).\n\nRequest attributes:\n- [.push_id()](PushQueue::push_id)\n- [.push_ifindex()](PushQueue::push_ifindex)\n- [.push_type()](PushQueue::push_type)\n\nReply attributes:\n- [.get_id()](IterableQueue::get_id)\n- [.get_ifindex()](IterableQueue::get_ifindex)\n- [.get_type()](IterableQueue::get_type)\n- [.get_napi_id()](IterableQueue::get_napi_id)\n- [.get_dmabuf()](IterableQueue::get_dmabuf)\n- [.get_io_uring()](IterableQueue::get_io_uring)\n- [.get_xsk()](IterableQueue::get_xsk)\n- [.get_lease()](IterableQueue::get_lease)\n\n"]
     pub fn op_queue_get_do(self) -> OpQueueGetDo<'buf> {
         let mut res = OpQueueGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-queue-get-do", OpQueueGetDo::lookup);
         res
     }
-    #[doc = "Get information about NAPI instances configured on the system\\.\nRequest attributes:\n- [.push_ifindex()](PushNapi::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableNapi::get_ifindex)\n- [.get_id()](IterableNapi::get_id)\n- [.get_irq()](IterableNapi::get_irq)\n- [.get_pid()](IterableNapi::get_pid)\n- [.get_defer_hard_irqs()](IterableNapi::get_defer_hard_irqs)\n- [.get_gro_flush_timeout()](IterableNapi::get_gro_flush_timeout)\n- [.get_irq_suspend_timeout()](IterableNapi::get_irq_suspend_timeout)\n- [.get_threaded()](IterableNapi::get_threaded)\n"]
+    #[doc = "Get information about NAPI instances configured on the system.\n\nRequest attributes:\n- [.push_ifindex()](PushNapi::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableNapi::get_ifindex)\n- [.get_id()](IterableNapi::get_id)\n- [.get_irq()](IterableNapi::get_irq)\n- [.get_pid()](IterableNapi::get_pid)\n- [.get_defer_hard_irqs()](IterableNapi::get_defer_hard_irqs)\n- [.get_gro_flush_timeout()](IterableNapi::get_gro_flush_timeout)\n- [.get_irq_suspend_timeout()](IterableNapi::get_irq_suspend_timeout)\n- [.get_threaded()](IterableNapi::get_threaded)\n\n"]
     pub fn op_napi_get_dump(self) -> OpNapiGetDump<'buf> {
         let mut res = OpNapiGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-napi-get-dump", OpNapiGetDump::lookup);
         res
     }
-    #[doc = "Get information about NAPI instances configured on the system\\.\nRequest attributes:\n- [.push_id()](PushNapi::push_id)\n\nReply attributes:\n- [.get_ifindex()](IterableNapi::get_ifindex)\n- [.get_id()](IterableNapi::get_id)\n- [.get_irq()](IterableNapi::get_irq)\n- [.get_pid()](IterableNapi::get_pid)\n- [.get_defer_hard_irqs()](IterableNapi::get_defer_hard_irqs)\n- [.get_gro_flush_timeout()](IterableNapi::get_gro_flush_timeout)\n- [.get_irq_suspend_timeout()](IterableNapi::get_irq_suspend_timeout)\n- [.get_threaded()](IterableNapi::get_threaded)\n"]
+    #[doc = "Get information about NAPI instances configured on the system.\n\nRequest attributes:\n- [.push_id()](PushNapi::push_id)\n\nReply attributes:\n- [.get_ifindex()](IterableNapi::get_ifindex)\n- [.get_id()](IterableNapi::get_id)\n- [.get_irq()](IterableNapi::get_irq)\n- [.get_pid()](IterableNapi::get_pid)\n- [.get_defer_hard_irqs()](IterableNapi::get_defer_hard_irqs)\n- [.get_gro_flush_timeout()](IterableNapi::get_gro_flush_timeout)\n- [.get_irq_suspend_timeout()](IterableNapi::get_irq_suspend_timeout)\n- [.get_threaded()](IterableNapi::get_threaded)\n\n"]
     pub fn op_napi_get_do(self) -> OpNapiGetDo<'buf> {
         let mut res = OpNapiGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-napi-get-do", OpNapiGetDo::lookup);
         res
     }
-    #[doc = "Get / dump fine grained statistics\\. Which statistics are reported\ndepends on the device and the driver, and whether the driver stores\nsoftware counters per\\-queue\\.\n\nRequest attributes:\n- [.push_ifindex()](PushQstats::push_ifindex)\n- [.push_scope()](PushQstats::push_scope)\n\nReply attributes:\n- [.get_ifindex()](IterableQstats::get_ifindex)\n- [.get_queue_type()](IterableQstats::get_queue_type)\n- [.get_queue_id()](IterableQstats::get_queue_id)\n- [.get_rx_packets()](IterableQstats::get_rx_packets)\n- [.get_rx_bytes()](IterableQstats::get_rx_bytes)\n- [.get_tx_packets()](IterableQstats::get_tx_packets)\n- [.get_tx_bytes()](IterableQstats::get_tx_bytes)\n- [.get_rx_alloc_fail()](IterableQstats::get_rx_alloc_fail)\n- [.get_rx_hw_drops()](IterableQstats::get_rx_hw_drops)\n- [.get_rx_hw_drop_overruns()](IterableQstats::get_rx_hw_drop_overruns)\n- [.get_rx_csum_complete()](IterableQstats::get_rx_csum_complete)\n- [.get_rx_csum_unnecessary()](IterableQstats::get_rx_csum_unnecessary)\n- [.get_rx_csum_none()](IterableQstats::get_rx_csum_none)\n- [.get_rx_csum_bad()](IterableQstats::get_rx_csum_bad)\n- [.get_rx_hw_gro_packets()](IterableQstats::get_rx_hw_gro_packets)\n- [.get_rx_hw_gro_bytes()](IterableQstats::get_rx_hw_gro_bytes)\n- [.get_rx_hw_gro_wire_packets()](IterableQstats::get_rx_hw_gro_wire_packets)\n- [.get_rx_hw_gro_wire_bytes()](IterableQstats::get_rx_hw_gro_wire_bytes)\n- [.get_rx_hw_drop_ratelimits()](IterableQstats::get_rx_hw_drop_ratelimits)\n- [.get_tx_hw_drops()](IterableQstats::get_tx_hw_drops)\n- [.get_tx_hw_drop_errors()](IterableQstats::get_tx_hw_drop_errors)\n- [.get_tx_csum_none()](IterableQstats::get_tx_csum_none)\n- [.get_tx_needs_csum()](IterableQstats::get_tx_needs_csum)\n- [.get_tx_hw_gso_packets()](IterableQstats::get_tx_hw_gso_packets)\n- [.get_tx_hw_gso_bytes()](IterableQstats::get_tx_hw_gso_bytes)\n- [.get_tx_hw_gso_wire_packets()](IterableQstats::get_tx_hw_gso_wire_packets)\n- [.get_tx_hw_gso_wire_bytes()](IterableQstats::get_tx_hw_gso_wire_bytes)\n- [.get_tx_hw_drop_ratelimits()](IterableQstats::get_tx_hw_drop_ratelimits)\n- [.get_tx_stop()](IterableQstats::get_tx_stop)\n- [.get_tx_wake()](IterableQstats::get_tx_wake)\n"]
+    #[doc = "Get / dump fine grained statistics. Which statistics are reported\ndepends on the device and the driver, and whether the driver stores\nsoftware counters per-queue.\n\nRequest attributes:\n- [.push_ifindex()](PushQstats::push_ifindex)\n- [.push_scope()](PushQstats::push_scope)\n\nReply attributes:\n- [.get_ifindex()](IterableQstats::get_ifindex)\n- [.get_queue_type()](IterableQstats::get_queue_type)\n- [.get_queue_id()](IterableQstats::get_queue_id)\n- [.get_rx_packets()](IterableQstats::get_rx_packets)\n- [.get_rx_bytes()](IterableQstats::get_rx_bytes)\n- [.get_tx_packets()](IterableQstats::get_tx_packets)\n- [.get_tx_bytes()](IterableQstats::get_tx_bytes)\n- [.get_rx_alloc_fail()](IterableQstats::get_rx_alloc_fail)\n- [.get_rx_hw_drops()](IterableQstats::get_rx_hw_drops)\n- [.get_rx_hw_drop_overruns()](IterableQstats::get_rx_hw_drop_overruns)\n- [.get_rx_csum_complete()](IterableQstats::get_rx_csum_complete)\n- [.get_rx_csum_unnecessary()](IterableQstats::get_rx_csum_unnecessary)\n- [.get_rx_csum_none()](IterableQstats::get_rx_csum_none)\n- [.get_rx_csum_bad()](IterableQstats::get_rx_csum_bad)\n- [.get_rx_hw_gro_packets()](IterableQstats::get_rx_hw_gro_packets)\n- [.get_rx_hw_gro_bytes()](IterableQstats::get_rx_hw_gro_bytes)\n- [.get_rx_hw_gro_wire_packets()](IterableQstats::get_rx_hw_gro_wire_packets)\n- [.get_rx_hw_gro_wire_bytes()](IterableQstats::get_rx_hw_gro_wire_bytes)\n- [.get_rx_hw_drop_ratelimits()](IterableQstats::get_rx_hw_drop_ratelimits)\n- [.get_tx_hw_drops()](IterableQstats::get_tx_hw_drops)\n- [.get_tx_hw_drop_errors()](IterableQstats::get_tx_hw_drop_errors)\n- [.get_tx_csum_none()](IterableQstats::get_tx_csum_none)\n- [.get_tx_needs_csum()](IterableQstats::get_tx_needs_csum)\n- [.get_tx_hw_gso_packets()](IterableQstats::get_tx_hw_gso_packets)\n- [.get_tx_hw_gso_bytes()](IterableQstats::get_tx_hw_gso_bytes)\n- [.get_tx_hw_gso_wire_packets()](IterableQstats::get_tx_hw_gso_wire_packets)\n- [.get_tx_hw_gso_wire_bytes()](IterableQstats::get_tx_hw_gso_wire_bytes)\n- [.get_tx_hw_drop_ratelimits()](IterableQstats::get_tx_hw_drop_ratelimits)\n- [.get_tx_stop()](IterableQstats::get_tx_stop)\n- [.get_tx_wake()](IterableQstats::get_tx_wake)\n\n"]
     pub fn op_qstats_get_dump(self) -> OpQstatsGetDump<'buf> {
         let mut res = OpQstatsGetDump::new(self);
         res.request.do_writeback(
@@ -5681,25 +6058,35 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Bind dmabuf to netdev\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.nested_queues()](PushDmabuf::nested_queues)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n"]
+    #[doc = "Bind dmabuf to netdev\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.nested_queues()](PushDmabuf::nested_queues)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n\n"]
     pub fn op_bind_rx_do(self) -> OpBindRxDo<'buf> {
         let mut res = OpBindRxDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-bind-rx-do", OpBindRxDo::lookup);
         res
     }
-    #[doc = "Set configurable NAPI instance settings\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushNapi::push_id)\n- [.push_defer_hard_irqs()](PushNapi::push_defer_hard_irqs)\n- [.push_gro_flush_timeout()](PushNapi::push_gro_flush_timeout)\n- [.push_irq_suspend_timeout()](PushNapi::push_irq_suspend_timeout)\n- [.push_threaded()](PushNapi::push_threaded)\n"]
+    #[doc = "Set configurable NAPI instance settings.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushNapi::push_id)\n- [.push_defer_hard_irqs()](PushNapi::push_defer_hard_irqs)\n- [.push_gro_flush_timeout()](PushNapi::push_gro_flush_timeout)\n- [.push_irq_suspend_timeout()](PushNapi::push_irq_suspend_timeout)\n- [.push_threaded()](PushNapi::push_threaded)\n\n"]
     pub fn op_napi_set_do(self) -> OpNapiSetDo<'buf> {
         let mut res = OpNapiSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-napi-set-do", OpNapiSetDo::lookup);
         res
     }
-    #[doc = "Bind dmabuf to netdev for TX\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n"]
+    #[doc = "Bind dmabuf to netdev for TX\n\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n\n"]
     pub fn op_bind_tx_do(self) -> OpBindTxDo<'buf> {
         let mut res = OpBindTxDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-bind-tx-do", OpBindTxDo::lookup);
+        res
+    }
+    #[doc = "Create a new queue for the given netdevice. Whether this operation is\nsupported depends on the device and the driver.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushQueue::push_ifindex)\n- [.push_type()](PushQueue::push_type)\n- [.nested_lease()](PushQueue::nested_lease)\n\nReply attributes:\n- [.get_id()](IterableQueue::get_id)\n\n"]
+    pub fn op_queue_create_do(self) -> OpQueueCreateDo<'buf> {
+        let mut res = OpQueueCreateDo::new(self);
+        res.request.do_writeback(
+            res.protocol(),
+            "op-queue-create-do",
+            OpQueueCreateDo::lookup,
+        );
         res
     }
 }
@@ -5776,6 +6163,7 @@ mod generated_tests {
         let _ = IterableQueue::get_id;
         let _ = IterableQueue::get_ifindex;
         let _ = IterableQueue::get_io_uring;
+        let _ = IterableQueue::get_lease;
         let _ = IterableQueue::get_napi_id;
         let _ = IterableQueue::get_type;
         let _ = IterableQueue::get_xsk;
@@ -5796,9 +6184,11 @@ mod generated_tests {
         let _ = PushNapi::<&mut Vec<u8>>::push_irq_suspend_timeout;
         let _ = PushNapi::<&mut Vec<u8>>::push_threaded;
         let _ = PushPagePool::<&mut Vec<u8>>::push_id;
+        let _ = PushPagePool::<&mut Vec<u8>>::push_ifindex;
         let _ = PushPagePoolStats::<&mut Vec<u8>>::nested_info;
         let _ = PushQstats::<&mut Vec<u8>>::push_ifindex;
         let _ = PushQstats::<&mut Vec<u8>>::push_scope;
+        let _ = PushQueue::<&mut Vec<u8>>::nested_lease;
         let _ = PushQueue::<&mut Vec<u8>>::push_id;
         let _ = PushQueue::<&mut Vec<u8>>::push_ifindex;
         let _ = PushQueue::<&mut Vec<u8>>::push_type;

@@ -1,4 +1,4 @@
-#![doc = "OVS vport configuration over generic netlink\\."]
+#![doc = "OVS vport configuration over generic netlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -200,7 +200,7 @@ impl<'a> IterableVportOptions<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let VportOptions::DstPort(val) = attr? {
+            if let Ok(VportOptions::DstPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -215,7 +215,7 @@ impl<'a> IterableVportOptions<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let VportOptions::Extension(val) = attr? {
+            if let Ok(VportOptions::Extension(val)) = attr {
                 return Ok(val);
             }
         }
@@ -261,14 +261,16 @@ impl<'a> IterableVportOptions<'a> {
 impl<'a> Iterator for IterableVportOptions<'a> {
     type Item = Result<VportOptions, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -372,7 +374,7 @@ impl<'a> IterableUpcallStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UpcallStats::Success(val) = attr? {
+            if let Ok(UpcallStats::Success(val)) = attr {
                 return Ok(val);
             }
         }
@@ -387,7 +389,7 @@ impl<'a> IterableUpcallStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UpcallStats::Fail(val) = attr? {
+            if let Ok(UpcallStats::Fail(val)) = attr {
                 return Ok(val);
             }
         }
@@ -433,14 +435,16 @@ impl<'a> IterableUpcallStats<'a> {
 impl<'a> Iterator for IterableUpcallStats<'a> {
     type Item = Result<UpcallStats, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -552,7 +556,7 @@ impl<'a> IterableVport<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Vport::PortNo(val) = attr? {
+            if let Ok(Vport::PortNo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -568,7 +572,7 @@ impl<'a> IterableVport<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Vport::Type(val) = attr? {
+            if let Ok(Vport::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -583,7 +587,7 @@ impl<'a> IterableVport<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Vport::Name(val) = attr? {
+            if let Ok(Vport::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -598,7 +602,7 @@ impl<'a> IterableVport<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Vport::Options(val) = attr? {
+            if let Ok(Vport::Options(val)) = attr {
                 return Ok(val);
             }
         }
@@ -613,7 +617,7 @@ impl<'a> IterableVport<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Vport::UpcallPid(val) = attr? {
+            if let Ok(Vport::UpcallPid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -628,7 +632,7 @@ impl<'a> IterableVport<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Vport::Stats(val) = attr? {
+            if let Ok(Vport::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -643,7 +647,7 @@ impl<'a> IterableVport<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Vport::Ifindex(val) = attr? {
+            if let Ok(Vport::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -658,7 +662,7 @@ impl<'a> IterableVport<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Vport::Netnsid(val) = attr? {
+            if let Ok(Vport::Netnsid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -673,7 +677,7 @@ impl<'a> IterableVport<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Vport::UpcallStats(val) = attr? {
+            if let Ok(Vport::UpcallStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -728,14 +732,16 @@ impl<'a> IterableVport<'a> {
 impl<'a> Iterator for IterableVport<'a> {
     type Item = Result<Vport<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1106,7 +1112,7 @@ impl NotifGroup {
     pub const OVS_VPORT: &str = "ovs_vport";
     pub const OVS_VPORT_CSTR: &CStr = c"ovs_vport";
 }
-#[doc = "Create a new OVS vport\nRequest attributes:\n- [.push_type()](PushVport::push_type)\n- [.push_name()](PushVport::push_name)\n- [.nested_options()](PushVport::nested_options)\n- [.push_upcall_pid()](PushVport::push_upcall_pid)\n- [.push_ifindex()](PushVport::push_ifindex)\n"]
+#[doc = "Create a new OVS vport\n\nRequest attributes:\n- [.push_type()](PushVport::push_type)\n- [.push_name()](PushVport::push_name)\n- [.nested_options()](PushVport::nested_options)\n- [.push_upcall_pid()](PushVport::push_upcall_pid)\n- [.push_ifindex()](PushVport::push_ifindex)\n\n"]
 #[derive(Debug)]
 pub struct OpNewDo<'r> {
     request: Request<'r>,
@@ -1164,7 +1170,7 @@ impl NetlinkRequest for OpNewDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete existing OVS vport from a data path\nRequest attributes:\n- [.push_port_no()](PushVport::push_port_no)\n- [.push_type()](PushVport::push_type)\n- [.push_name()](PushVport::push_name)\n"]
+#[doc = "Delete existing OVS vport from a data path\n\nRequest attributes:\n- [.push_port_no()](PushVport::push_port_no)\n- [.push_type()](PushVport::push_type)\n- [.push_name()](PushVport::push_name)\n\n"]
 #[derive(Debug)]
 pub struct OpDelDo<'r> {
     request: Request<'r>,
@@ -1222,7 +1228,7 @@ impl NetlinkRequest for OpDelDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump OVS vport configuration and state\nRequest attributes:\n- [.push_name()](PushVport::push_name)\n\nReply attributes:\n- [.get_port_no()](IterableVport::get_port_no)\n- [.get_type()](IterableVport::get_type)\n- [.get_name()](IterableVport::get_name)\n- [.get_upcall_pid()](IterableVport::get_upcall_pid)\n- [.get_stats()](IterableVport::get_stats)\n- [.get_ifindex()](IterableVport::get_ifindex)\n- [.get_netnsid()](IterableVport::get_netnsid)\n- [.get_upcall_stats()](IterableVport::get_upcall_stats)\n"]
+#[doc = "Get / dump OVS vport configuration and state\n\nRequest attributes:\n- [.push_name()](PushVport::push_name)\n\nReply attributes:\n- [.get_port_no()](IterableVport::get_port_no)\n- [.get_type()](IterableVport::get_type)\n- [.get_name()](IterableVport::get_name)\n- [.get_upcall_pid()](IterableVport::get_upcall_pid)\n- [.get_stats()](IterableVport::get_stats)\n- [.get_ifindex()](IterableVport::get_ifindex)\n- [.get_netnsid()](IterableVport::get_netnsid)\n- [.get_upcall_stats()](IterableVport::get_upcall_stats)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDump<'r> {
     request: Request<'r>,
@@ -1282,7 +1288,7 @@ impl NetlinkRequest for OpGetDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump OVS vport configuration and state\nRequest attributes:\n- [.push_name()](PushVport::push_name)\n\nReply attributes:\n- [.get_port_no()](IterableVport::get_port_no)\n- [.get_type()](IterableVport::get_type)\n- [.get_name()](IterableVport::get_name)\n- [.get_upcall_pid()](IterableVport::get_upcall_pid)\n- [.get_stats()](IterableVport::get_stats)\n- [.get_ifindex()](IterableVport::get_ifindex)\n- [.get_netnsid()](IterableVport::get_netnsid)\n- [.get_upcall_stats()](IterableVport::get_upcall_stats)\n"]
+#[doc = "Get / dump OVS vport configuration and state\n\nRequest attributes:\n- [.push_name()](PushVport::push_name)\n\nReply attributes:\n- [.get_port_no()](IterableVport::get_port_no)\n- [.get_type()](IterableVport::get_type)\n- [.get_name()](IterableVport::get_name)\n- [.get_upcall_pid()](IterableVport::get_upcall_pid)\n- [.get_stats()](IterableVport::get_stats)\n- [.get_ifindex()](IterableVport::get_ifindex)\n- [.get_netnsid()](IterableVport::get_netnsid)\n- [.get_upcall_stats()](IterableVport::get_upcall_stats)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDo<'r> {
     request: Request<'r>,
@@ -1442,28 +1448,28 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Create a new OVS vport\nRequest attributes:\n- [.push_type()](PushVport::push_type)\n- [.push_name()](PushVport::push_name)\n- [.nested_options()](PushVport::nested_options)\n- [.push_upcall_pid()](PushVport::push_upcall_pid)\n- [.push_ifindex()](PushVport::push_ifindex)\n"]
+    #[doc = "Create a new OVS vport\n\nRequest attributes:\n- [.push_type()](PushVport::push_type)\n- [.push_name()](PushVport::push_name)\n- [.nested_options()](PushVport::nested_options)\n- [.push_upcall_pid()](PushVport::push_upcall_pid)\n- [.push_ifindex()](PushVport::push_ifindex)\n\n"]
     pub fn op_new_do(self, header: &OvsHeader) -> OpNewDo<'buf> {
         let mut res = OpNewDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-new-do", OpNewDo::lookup);
         res
     }
-    #[doc = "Delete existing OVS vport from a data path\nRequest attributes:\n- [.push_port_no()](PushVport::push_port_no)\n- [.push_type()](PushVport::push_type)\n- [.push_name()](PushVport::push_name)\n"]
+    #[doc = "Delete existing OVS vport from a data path\n\nRequest attributes:\n- [.push_port_no()](PushVport::push_port_no)\n- [.push_type()](PushVport::push_type)\n- [.push_name()](PushVport::push_name)\n\n"]
     pub fn op_del_do(self, header: &OvsHeader) -> OpDelDo<'buf> {
         let mut res = OpDelDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-del-do", OpDelDo::lookup);
         res
     }
-    #[doc = "Get / dump OVS vport configuration and state\nRequest attributes:\n- [.push_name()](PushVport::push_name)\n\nReply attributes:\n- [.get_port_no()](IterableVport::get_port_no)\n- [.get_type()](IterableVport::get_type)\n- [.get_name()](IterableVport::get_name)\n- [.get_upcall_pid()](IterableVport::get_upcall_pid)\n- [.get_stats()](IterableVport::get_stats)\n- [.get_ifindex()](IterableVport::get_ifindex)\n- [.get_netnsid()](IterableVport::get_netnsid)\n- [.get_upcall_stats()](IterableVport::get_upcall_stats)\n"]
+    #[doc = "Get / dump OVS vport configuration and state\n\nRequest attributes:\n- [.push_name()](PushVport::push_name)\n\nReply attributes:\n- [.get_port_no()](IterableVport::get_port_no)\n- [.get_type()](IterableVport::get_type)\n- [.get_name()](IterableVport::get_name)\n- [.get_upcall_pid()](IterableVport::get_upcall_pid)\n- [.get_stats()](IterableVport::get_stats)\n- [.get_ifindex()](IterableVport::get_ifindex)\n- [.get_netnsid()](IterableVport::get_netnsid)\n- [.get_upcall_stats()](IterableVport::get_upcall_stats)\n\n"]
     pub fn op_get_dump(self, header: &OvsHeader) -> OpGetDump<'buf> {
         let mut res = OpGetDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-get-dump", OpGetDump::lookup);
         res
     }
-    #[doc = "Get / dump OVS vport configuration and state\nRequest attributes:\n- [.push_name()](PushVport::push_name)\n\nReply attributes:\n- [.get_port_no()](IterableVport::get_port_no)\n- [.get_type()](IterableVport::get_type)\n- [.get_name()](IterableVport::get_name)\n- [.get_upcall_pid()](IterableVport::get_upcall_pid)\n- [.get_stats()](IterableVport::get_stats)\n- [.get_ifindex()](IterableVport::get_ifindex)\n- [.get_netnsid()](IterableVport::get_netnsid)\n- [.get_upcall_stats()](IterableVport::get_upcall_stats)\n"]
+    #[doc = "Get / dump OVS vport configuration and state\n\nRequest attributes:\n- [.push_name()](PushVport::push_name)\n\nReply attributes:\n- [.get_port_no()](IterableVport::get_port_no)\n- [.get_type()](IterableVport::get_type)\n- [.get_name()](IterableVport::get_name)\n- [.get_upcall_pid()](IterableVport::get_upcall_pid)\n- [.get_stats()](IterableVport::get_stats)\n- [.get_ifindex()](IterableVport::get_ifindex)\n- [.get_netnsid()](IterableVport::get_netnsid)\n- [.get_upcall_stats()](IterableVport::get_upcall_stats)\n\n"]
     pub fn op_get_do(self, header: &OvsHeader) -> OpGetDo<'buf> {
         let mut res = OpGetDo::new(self, header);
         res.request

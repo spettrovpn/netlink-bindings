@@ -1,4 +1,4 @@
-#![doc = "Netlink protocol to request a transport layer security handshake\\."]
+#![doc = "Netlink protocol to request a transport layer security handshake.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -78,7 +78,7 @@ impl<'a> IterableX509<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let X509::Cert(val) = attr? {
+            if let Ok(X509::Cert(val)) = attr {
                 return Ok(val);
             }
         }
@@ -93,7 +93,7 @@ impl<'a> IterableX509<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let X509::Privkey(val) = attr? {
+            if let Ok(X509::Privkey(val)) = attr {
                 return Ok(val);
             }
         }
@@ -139,14 +139,16 @@ impl<'a> IterableX509<'a> {
 impl<'a> Iterator for IterableX509<'a> {
     type Item = Result<X509, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -259,7 +261,7 @@ impl<'a> IterableAccept<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Accept::Sockfd(val) = attr? {
+            if let Ok(Accept::Sockfd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -275,7 +277,7 @@ impl<'a> IterableAccept<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Accept::HandlerClass(val) = attr? {
+            if let Ok(Accept::HandlerClass(val)) = attr {
                 return Ok(val);
             }
         }
@@ -291,7 +293,7 @@ impl<'a> IterableAccept<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Accept::MessageType(val) = attr? {
+            if let Ok(Accept::MessageType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -306,7 +308,7 @@ impl<'a> IterableAccept<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Accept::Timeout(val) = attr? {
+            if let Ok(Accept::Timeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -322,7 +324,7 @@ impl<'a> IterableAccept<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Accept::AuthMode(val) = attr? {
+            if let Ok(Accept::AuthMode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -357,7 +359,7 @@ impl<'a> IterableAccept<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Accept::Peername(val) = attr? {
+            if let Ok(Accept::Peername(val)) = attr {
                 return Ok(val);
             }
         }
@@ -372,7 +374,7 @@ impl<'a> IterableAccept<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Accept::Keyring(val) = attr? {
+            if let Ok(Accept::Keyring(val)) = attr {
                 return Ok(val);
             }
         }
@@ -425,14 +427,16 @@ impl<'a> IterableAccept<'a> {
 impl<'a> Iterator for IterableAccept<'a> {
     type Item = Result<Accept<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -627,7 +631,7 @@ impl<'a> IterableDone<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Done::Status(val) = attr? {
+            if let Ok(Done::Status(val)) = attr {
                 return Ok(val);
             }
         }
@@ -642,7 +646,7 @@ impl<'a> IterableDone<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Done::Sockfd(val) = attr? {
+            if let Ok(Done::Sockfd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -699,14 +703,16 @@ impl<'a> IterableDone<'a> {
 impl<'a> Iterator for IterableDone<'a> {
     type Item = Result<Done, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1012,7 +1018,7 @@ impl NotifGroup {
     pub const TLSHD: &str = "tlshd";
     pub const TLSHD_CSTR: &CStr = c"tlshd";
 }
-#[doc = "Handler retrieves next queued handshake request\nFlags: admin-perm\nRequest attributes:\n- [.push_handler_class()](PushAccept::push_handler_class)\n\nReply attributes:\n- [.get_sockfd()](IterableAccept::get_sockfd)\n- [.get_message_type()](IterableAccept::get_message_type)\n- [.get_timeout()](IterableAccept::get_timeout)\n- [.get_auth_mode()](IterableAccept::get_auth_mode)\n- [.get_peer_identity()](IterableAccept::get_peer_identity)\n- [.get_certificate()](IterableAccept::get_certificate)\n- [.get_peername()](IterableAccept::get_peername)\n- [.get_keyring()](IterableAccept::get_keyring)\n"]
+#[doc = "Handler retrieves next queued handshake request\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_handler_class()](PushAccept::push_handler_class)\n\nReply attributes:\n- [.get_sockfd()](IterableAccept::get_sockfd)\n- [.get_message_type()](IterableAccept::get_message_type)\n- [.get_timeout()](IterableAccept::get_timeout)\n- [.get_auth_mode()](IterableAccept::get_auth_mode)\n- [.get_peer_identity()](IterableAccept::get_peer_identity)\n- [.get_certificate()](IterableAccept::get_certificate)\n- [.get_peername()](IterableAccept::get_peername)\n- [.get_keyring()](IterableAccept::get_keyring)\n\n"]
 #[derive(Debug)]
 pub struct OpAcceptDo<'r> {
     request: Request<'r>,
@@ -1065,7 +1071,7 @@ impl NetlinkRequest for OpAcceptDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Handler reports handshake completion\nRequest attributes:\n- [.push_status()](PushDone::push_status)\n- [.push_sockfd()](PushDone::push_sockfd)\n- [.push_remote_auth()](PushDone::push_remote_auth)\n"]
+#[doc = "Handler reports handshake completion\n\nRequest attributes:\n- [.push_status()](PushDone::push_status)\n- [.push_sockfd()](PushDone::push_sockfd)\n- [.push_remote_auth()](PushDone::push_remote_auth)\n\n"]
 #[derive(Debug)]
 pub struct OpDoneDo<'r> {
     request: Request<'r>,
@@ -1215,14 +1221,14 @@ impl<'buf> Request<'buf> {
         self.flags ^= self.flags & flags;
         self
     }
-    #[doc = "Handler retrieves next queued handshake request\nFlags: admin-perm\nRequest attributes:\n- [.push_handler_class()](PushAccept::push_handler_class)\n\nReply attributes:\n- [.get_sockfd()](IterableAccept::get_sockfd)\n- [.get_message_type()](IterableAccept::get_message_type)\n- [.get_timeout()](IterableAccept::get_timeout)\n- [.get_auth_mode()](IterableAccept::get_auth_mode)\n- [.get_peer_identity()](IterableAccept::get_peer_identity)\n- [.get_certificate()](IterableAccept::get_certificate)\n- [.get_peername()](IterableAccept::get_peername)\n- [.get_keyring()](IterableAccept::get_keyring)\n"]
+    #[doc = "Handler retrieves next queued handshake request\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_handler_class()](PushAccept::push_handler_class)\n\nReply attributes:\n- [.get_sockfd()](IterableAccept::get_sockfd)\n- [.get_message_type()](IterableAccept::get_message_type)\n- [.get_timeout()](IterableAccept::get_timeout)\n- [.get_auth_mode()](IterableAccept::get_auth_mode)\n- [.get_peer_identity()](IterableAccept::get_peer_identity)\n- [.get_certificate()](IterableAccept::get_certificate)\n- [.get_peername()](IterableAccept::get_peername)\n- [.get_keyring()](IterableAccept::get_keyring)\n\n"]
     pub fn op_accept_do(self) -> OpAcceptDo<'buf> {
         let mut res = OpAcceptDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-accept-do", OpAcceptDo::lookup);
         res
     }
-    #[doc = "Handler reports handshake completion\nRequest attributes:\n- [.push_status()](PushDone::push_status)\n- [.push_sockfd()](PushDone::push_sockfd)\n- [.push_remote_auth()](PushDone::push_remote_auth)\n"]
+    #[doc = "Handler reports handshake completion\n\nRequest attributes:\n- [.push_status()](PushDone::push_status)\n- [.push_sockfd()](PushDone::push_sockfd)\n- [.push_remote_auth()](PushDone::push_remote_auth)\n\n"]
     pub fn op_done_do(self) -> OpDoneDo<'buf> {
         let mut res = OpDoneDo::new(self);
         res.request

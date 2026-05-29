@@ -1,4 +1,4 @@
-#![doc = "Energy model netlink interface to notify its changes\\.\n"]
+#![doc = "Energy model netlink interface to notify its changes.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -18,7 +18,7 @@ pub const PROTONAME_CSTR: &CStr = c"dev-energymodel";
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum PerfStateFlags {
-    #[doc = "The performance state is inefficient\\. There is in this perf\\-domain, another performance state with a higher frequency but a lower or equal power cost\\."]
+    #[doc = "The performance state is inefficient. There is in this perf-domain,\nanother performance state with a higher frequency but a lower or equal\npower cost.\n"]
     PerfStateInefficient = 1 << 0,
 }
 impl PerfStateFlags {
@@ -32,11 +32,11 @@ impl PerfStateFlags {
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum PerfDomainFlags {
-    #[doc = "The power values are in micro\\-Watts or some other scale\\."]
+    #[doc = "The power values are in micro-Watts or some other scale.\n"]
     PerfDomainMicrowatts = 1 << 0,
-    #[doc = "Skip inefficient states when estimating energy consumption\\."]
+    #[doc = "Skip inefficient states when estimating energy consumption.\n"]
     PerfDomainSkipInefficiencies = 1 << 1,
-    #[doc = "The power values are artificial and might be created by platform missing real power information\\."]
+    #[doc = "The power values are artificial and might be created by platform missing\nreal power information.\n"]
     PerfDomainArtificial = 1 << 2,
 }
 impl PerfDomainFlags {
@@ -52,11 +52,11 @@ impl PerfDomainFlags {
 #[derive(Clone)]
 pub enum PerfDomain<'a> {
     Pad(&'a [u8]),
-    #[doc = "A unique ID number for each performance domain\\."]
+    #[doc = "A unique ID number for each performance domain.\n"]
     PerfDomainId(u32),
-    #[doc = "Bitmask of performance domain flags\\.\nAssociated type: [`PerfDomainFlags`] (enum)"]
+    #[doc = "Bitmask of performance domain flags.\n\nAssociated type: [`PerfDomainFlags`] (enum)"]
     Flags(u64),
-    #[doc = "CPUs that belong to this performance domain\\.\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "CPUs that belong to this performance domain.\n\nAttribute may repeat multiple times (treat it as array)"]
     Cpus(u64),
 }
 impl<'a> IterablePerfDomain<'a> {
@@ -64,7 +64,7 @@ impl<'a> IterablePerfDomain<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PerfDomain::Pad(val) = attr? {
+            if let Ok(PerfDomain::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -75,12 +75,12 @@ impl<'a> IterablePerfDomain<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "A unique ID number for each performance domain\\."]
+    #[doc = "A unique ID number for each performance domain.\n"]
     pub fn get_perf_domain_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PerfDomain::PerfDomainId(val) = attr? {
+            if let Ok(PerfDomain::PerfDomainId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -91,12 +91,12 @@ impl<'a> IterablePerfDomain<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Bitmask of performance domain flags\\.\nAssociated type: [`PerfDomainFlags`] (enum)"]
+    #[doc = "Bitmask of performance domain flags.\n\nAssociated type: [`PerfDomainFlags`] (enum)"]
     pub fn get_flags(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PerfDomain::Flags(val) = attr? {
+            if let Ok(PerfDomain::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -107,7 +107,7 @@ impl<'a> IterablePerfDomain<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "CPUs that belong to this performance domain\\.\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "CPUs that belong to this performance domain.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn get_cpus(&self) -> MultiAttrIterable<Self, PerfDomain<'a>, u64> {
         MultiAttrIterable::new(self.clone(), |variant| {
             if let PerfDomain::Cpus(val) = variant {
@@ -154,14 +154,16 @@ impl<'a> IterablePerfDomain<'a> {
 impl<'a> Iterator for IterablePerfDomain<'a> {
     type Item = Result<PerfDomain<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -284,18 +286,18 @@ impl IterablePerfDomain<'_> {
 }
 #[derive(Clone)]
 pub enum PerfTable<'a> {
-    #[doc = "A unique ID number for each performance domain\\."]
+    #[doc = "A unique ID number for each performance domain.\n"]
     PerfDomainId(u32),
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     PerfState(IterablePerfState<'a>),
 }
 impl<'a> IterablePerfTable<'a> {
-    #[doc = "A unique ID number for each performance domain\\."]
+    #[doc = "A unique ID number for each performance domain.\n"]
     pub fn get_perf_domain_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PerfTable::PerfDomainId(val) = attr? {
+            if let Ok(PerfTable::PerfDomainId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -351,14 +353,16 @@ impl<'a> IterablePerfTable<'a> {
 impl<'a> Iterator for IterablePerfTable<'a> {
     type Item = Result<PerfTable<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -456,15 +460,15 @@ impl IterablePerfTable<'_> {
 #[derive(Clone)]
 pub enum PerfState<'a> {
     Pad(&'a [u8]),
-    #[doc = "CPU performance (capacity) at a given frequency\\."]
+    #[doc = "CPU performance (capacity) at a given frequency.\n"]
     Performance(u64),
-    #[doc = "The frequency in KHz, for consistency with CPUFreq\\."]
+    #[doc = "The frequency in KHz, for consistency with CPUFreq.\n"]
     Frequency(u64),
-    #[doc = "The power consumed at this level (by 1 CPU or by a registered device)\\. It can be a total power: static and dynamic\\."]
+    #[doc = "The power consumed at this level (by 1 CPU or by a registered device).\nIt can be a total power: static and dynamic.\n"]
     Power(u64),
-    #[doc = "The cost coefficient associated with this level, used during energy calculation\\. Equal to: power \\* max\\_frequency / frequency\\."]
+    #[doc = "The cost coefficient associated with this level, used during energy\ncalculation. Equal to: power \\* max_frequency / frequency.\n"]
     Cost(u64),
-    #[doc = "Bitmask of performance state flags\\.\nAssociated type: [`PerfStateFlags`] (enum)"]
+    #[doc = "Bitmask of performance state flags.\n\nAssociated type: [`PerfStateFlags`] (enum)"]
     Flags(u64),
 }
 impl<'a> IterablePerfState<'a> {
@@ -472,7 +476,7 @@ impl<'a> IterablePerfState<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PerfState::Pad(val) = attr? {
+            if let Ok(PerfState::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -483,12 +487,12 @@ impl<'a> IterablePerfState<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "CPU performance (capacity) at a given frequency\\."]
+    #[doc = "CPU performance (capacity) at a given frequency.\n"]
     pub fn get_performance(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PerfState::Performance(val) = attr? {
+            if let Ok(PerfState::Performance(val)) = attr {
                 return Ok(val);
             }
         }
@@ -499,12 +503,12 @@ impl<'a> IterablePerfState<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The frequency in KHz, for consistency with CPUFreq\\."]
+    #[doc = "The frequency in KHz, for consistency with CPUFreq.\n"]
     pub fn get_frequency(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PerfState::Frequency(val) = attr? {
+            if let Ok(PerfState::Frequency(val)) = attr {
                 return Ok(val);
             }
         }
@@ -515,12 +519,12 @@ impl<'a> IterablePerfState<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The power consumed at this level (by 1 CPU or by a registered device)\\. It can be a total power: static and dynamic\\."]
+    #[doc = "The power consumed at this level (by 1 CPU or by a registered device).\nIt can be a total power: static and dynamic.\n"]
     pub fn get_power(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PerfState::Power(val) = attr? {
+            if let Ok(PerfState::Power(val)) = attr {
                 return Ok(val);
             }
         }
@@ -531,12 +535,12 @@ impl<'a> IterablePerfState<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The cost coefficient associated with this level, used during energy calculation\\. Equal to: power \\* max\\_frequency / frequency\\."]
+    #[doc = "The cost coefficient associated with this level, used during energy\ncalculation. Equal to: power \\* max_frequency / frequency.\n"]
     pub fn get_cost(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PerfState::Cost(val) = attr? {
+            if let Ok(PerfState::Cost(val)) = attr {
                 return Ok(val);
             }
         }
@@ -547,12 +551,12 @@ impl<'a> IterablePerfState<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Bitmask of performance state flags\\.\nAssociated type: [`PerfStateFlags`] (enum)"]
+    #[doc = "Bitmask of performance state flags.\n\nAssociated type: [`PerfStateFlags`] (enum)"]
     pub fn get_flags(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PerfState::Flags(val) = attr? {
+            if let Ok(PerfState::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -602,14 +606,16 @@ impl<'a> IterablePerfState<'a> {
 impl<'a> Iterator for IterablePerfState<'a> {
     type Item = Result<PerfState<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -785,19 +791,19 @@ impl<Prev: Rec> PushPerfDomain<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "A unique ID number for each performance domain\\."]
+    #[doc = "A unique ID number for each performance domain.\n"]
     pub fn push_perf_domain_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Bitmask of performance domain flags\\.\nAssociated type: [`PerfDomainFlags`] (enum)"]
+    #[doc = "Bitmask of performance domain flags.\n\nAssociated type: [`PerfDomainFlags`] (enum)"]
     pub fn push_flags(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 3u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "CPUs that belong to this performance domain\\.\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "CPUs that belong to this performance domain.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn push_cpus(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 4u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -839,7 +845,7 @@ impl<Prev: Rec> PushPerfTable<Prev> {
         }
         prev
     }
-    #[doc = "A unique ID number for each performance domain\\."]
+    #[doc = "A unique ID number for each performance domain.\n"]
     pub fn push_perf_domain_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -894,31 +900,31 @@ impl<Prev: Rec> PushPerfState<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "CPU performance (capacity) at a given frequency\\."]
+    #[doc = "CPU performance (capacity) at a given frequency.\n"]
     pub fn push_performance(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 2u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The frequency in KHz, for consistency with CPUFreq\\."]
+    #[doc = "The frequency in KHz, for consistency with CPUFreq.\n"]
     pub fn push_frequency(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 3u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The power consumed at this level (by 1 CPU or by a registered device)\\. It can be a total power: static and dynamic\\."]
+    #[doc = "The power consumed at this level (by 1 CPU or by a registered device).\nIt can be a total power: static and dynamic.\n"]
     pub fn push_power(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 4u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The cost coefficient associated with this level, used during energy calculation\\. Equal to: power \\* max\\_frequency / frequency\\."]
+    #[doc = "The cost coefficient associated with this level, used during energy\ncalculation. Equal to: power \\* max_frequency / frequency.\n"]
     pub fn push_cost(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 5u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Bitmask of performance state flags\\.\nAssociated type: [`PerfStateFlags`] (enum)"]
+    #[doc = "Bitmask of performance state flags.\n\nAssociated type: [`PerfStateFlags`] (enum)"]
     pub fn push_flags(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 6u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -971,7 +977,7 @@ impl NotifGroup {
     #[doc = "Notifications:\n- [`OpPerfDomainCreatedNotif`]\n- [`OpPerfDomainUpdatedNotif`]\n- [`OpPerfDomainDeletedNotif`]\n"]
     pub const EVENT_CSTR: &CStr = c"event";
 }
-#[doc = "Get the list of information for all performance domains\\.\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfDomain::get_perf_domain_id)\n- [.get_flags()](IterablePerfDomain::get_flags)\n- [.get_cpus()](IterablePerfDomain::get_cpus)\n"]
+#[doc = "Get the list of information for all performance domains.\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfDomain::get_perf_domain_id)\n- [.get_flags()](IterablePerfDomain::get_flags)\n- [.get_cpus()](IterablePerfDomain::get_cpus)\n\n"]
 #[derive(Debug)]
 pub struct OpGetPerfDomainsDump<'r> {
     request: Request<'r>,
@@ -1026,7 +1032,7 @@ impl NetlinkRequest for OpGetPerfDomainsDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get the list of information for all performance domains\\.\nRequest attributes:\n- [.push_perf_domain_id()](PushPerfDomain::push_perf_domain_id)\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfDomain::get_perf_domain_id)\n- [.get_flags()](IterablePerfDomain::get_flags)\n- [.get_cpus()](IterablePerfDomain::get_cpus)\n"]
+#[doc = "Get the list of information for all performance domains.\n\nRequest attributes:\n- [.push_perf_domain_id()](PushPerfDomain::push_perf_domain_id)\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfDomain::get_perf_domain_id)\n- [.get_flags()](IterablePerfDomain::get_flags)\n- [.get_cpus()](IterablePerfDomain::get_cpus)\n\n"]
 #[derive(Debug)]
 pub struct OpGetPerfDomainsDo<'r> {
     request: Request<'r>,
@@ -1079,7 +1085,7 @@ impl NetlinkRequest for OpGetPerfDomainsDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get the energy model table of a performance domain\\.\nRequest attributes:\n- [.push_perf_domain_id()](PushPerfTable::push_perf_domain_id)\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfTable::get_perf_domain_id)\n- [.get_perf_state()](IterablePerfTable::get_perf_state)\n"]
+#[doc = "Get the energy model table of a performance domain.\n\nRequest attributes:\n- [.push_perf_domain_id()](PushPerfTable::push_perf_domain_id)\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfTable::get_perf_domain_id)\n- [.get_perf_state()](IterablePerfTable::get_perf_state)\n\n"]
 #[derive(Debug)]
 pub struct OpGetPerfTableDo<'r> {
     request: Request<'r>,
@@ -1234,7 +1240,7 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get the list of information for all performance domains\\.\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfDomain::get_perf_domain_id)\n- [.get_flags()](IterablePerfDomain::get_flags)\n- [.get_cpus()](IterablePerfDomain::get_cpus)\n"]
+    #[doc = "Get the list of information for all performance domains.\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfDomain::get_perf_domain_id)\n- [.get_flags()](IterablePerfDomain::get_flags)\n- [.get_cpus()](IterablePerfDomain::get_cpus)\n\n"]
     pub fn op_get_perf_domains_dump(self) -> OpGetPerfDomainsDump<'buf> {
         let mut res = OpGetPerfDomainsDump::new(self);
         res.request.do_writeback(
@@ -1244,7 +1250,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get the list of information for all performance domains\\.\nRequest attributes:\n- [.push_perf_domain_id()](PushPerfDomain::push_perf_domain_id)\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfDomain::get_perf_domain_id)\n- [.get_flags()](IterablePerfDomain::get_flags)\n- [.get_cpus()](IterablePerfDomain::get_cpus)\n"]
+    #[doc = "Get the list of information for all performance domains.\n\nRequest attributes:\n- [.push_perf_domain_id()](PushPerfDomain::push_perf_domain_id)\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfDomain::get_perf_domain_id)\n- [.get_flags()](IterablePerfDomain::get_flags)\n- [.get_cpus()](IterablePerfDomain::get_cpus)\n\n"]
     pub fn op_get_perf_domains_do(self) -> OpGetPerfDomainsDo<'buf> {
         let mut res = OpGetPerfDomainsDo::new(self);
         res.request.do_writeback(
@@ -1254,7 +1260,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get the energy model table of a performance domain\\.\nRequest attributes:\n- [.push_perf_domain_id()](PushPerfTable::push_perf_domain_id)\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfTable::get_perf_domain_id)\n- [.get_perf_state()](IterablePerfTable::get_perf_state)\n"]
+    #[doc = "Get the energy model table of a performance domain.\n\nRequest attributes:\n- [.push_perf_domain_id()](PushPerfTable::push_perf_domain_id)\n\nReply attributes:\n- [.get_perf_domain_id()](IterablePerfTable::get_perf_domain_id)\n- [.get_perf_state()](IterablePerfTable::get_perf_state)\n\n"]
     pub fn op_get_perf_table_do(self) -> OpGetPerfTableDo<'buf> {
         let mut res = OpGetPerfTableDo::new(self);
         res.request.do_writeback(

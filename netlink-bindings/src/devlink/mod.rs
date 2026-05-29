@@ -1,4 +1,4 @@
-#![doc = "Partial family for Devlink\\."]
+#![doc = "Partial family for Devlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -273,6 +273,21 @@ impl ResourceUnit {
     pub fn from_value(value: u64) -> Option<Self> {
         Some(match value {
             0 => Self::Entry,
+            _ => return None,
+        })
+    }
+}
+#[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
+#[derive(Debug, Clone, Copy)]
+pub enum ResourceScope {
+    Dev = 0,
+    Port = 1,
+}
+impl ResourceScope {
+    pub fn from_value(value: u64) -> Option<Self> {
+        Some(match value {
+            0 => Self::Dev,
+            1 => Self::Port,
             _ => return None,
         })
     }
@@ -601,17 +616,21 @@ pub enum Devlink<'a> {
     RegionDirect(()),
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     RateTcBws(IterableDlRateTcBws<'a>),
-    #[doc = "Time (in msec) for recoveries before starting the grace period\\."]
+    #[doc = "Time (in msec) for recoveries before starting the grace period.\n"]
     HealthReporterBurstPeriod(u64),
-    #[doc = "Request restoring parameter to its default value\\."]
+    #[doc = "Request restoring parameter to its default value.\n"]
     ParamResetDefault(()),
+    #[doc = "Unique devlink instance index.\n"]
+    Index(u32),
+    #[doc = "Bitmask selecting which resource classes to include in a resource-dump\nresponse. Bit 0 (dev) selects device-level resources; bit 1 (port)\nselects port-level resources. When absent all classes are returned.\n\nAssociated type: [`ResourceScope`] (1 bit per enumeration)"]
+    ResourceScopeMask(u32),
 }
 impl<'a> IterableDevlink<'a> {
     pub fn get_bus_name(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::BusName(val) = attr? {
+            if let Ok(Devlink::BusName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -626,7 +645,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DevName(val) = attr? {
+            if let Ok(Devlink::DevName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -641,7 +660,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortIndex(val) = attr? {
+            if let Ok(Devlink::PortIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -657,7 +676,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortType(val) = attr? {
+            if let Ok(Devlink::PortType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -672,7 +691,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortDesiredType(val) = attr? {
+            if let Ok(Devlink::PortDesiredType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -687,7 +706,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortNetdevIfindex(val) = attr? {
+            if let Ok(Devlink::PortNetdevIfindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -702,7 +721,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortNetdevName(val) = attr? {
+            if let Ok(Devlink::PortNetdevName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -717,7 +736,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortIbdevName(val) = attr? {
+            if let Ok(Devlink::PortIbdevName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -732,7 +751,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortSplitCount(val) = attr? {
+            if let Ok(Devlink::PortSplitCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -747,7 +766,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortSplitGroup(val) = attr? {
+            if let Ok(Devlink::PortSplitGroup(val)) = attr {
                 return Ok(val);
             }
         }
@@ -762,7 +781,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbIndex(val) = attr? {
+            if let Ok(Devlink::SbIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -777,7 +796,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbSize(val) = attr? {
+            if let Ok(Devlink::SbSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -792,7 +811,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbIngressPoolCount(val) = attr? {
+            if let Ok(Devlink::SbIngressPoolCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -807,7 +826,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbEgressPoolCount(val) = attr? {
+            if let Ok(Devlink::SbEgressPoolCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -822,7 +841,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbIngressTcCount(val) = attr? {
+            if let Ok(Devlink::SbIngressTcCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -837,7 +856,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbEgressTcCount(val) = attr? {
+            if let Ok(Devlink::SbEgressTcCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -852,7 +871,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbPoolIndex(val) = attr? {
+            if let Ok(Devlink::SbPoolIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -868,7 +887,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbPoolType(val) = attr? {
+            if let Ok(Devlink::SbPoolType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -883,7 +902,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbPoolSize(val) = attr? {
+            if let Ok(Devlink::SbPoolSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -899,7 +918,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbPoolThresholdType(val) = attr? {
+            if let Ok(Devlink::SbPoolThresholdType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -914,7 +933,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbThreshold(val) = attr? {
+            if let Ok(Devlink::SbThreshold(val)) = attr {
                 return Ok(val);
             }
         }
@@ -929,7 +948,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbTcIndex(val) = attr? {
+            if let Ok(Devlink::SbTcIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -944,7 +963,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbOccCur(val) = attr? {
+            if let Ok(Devlink::SbOccCur(val)) = attr {
                 return Ok(val);
             }
         }
@@ -959,7 +978,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbOccMax(val) = attr? {
+            if let Ok(Devlink::SbOccMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -975,7 +994,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::EswitchMode(val) = attr? {
+            if let Ok(Devlink::EswitchMode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -991,7 +1010,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::EswitchInlineMode(val) = attr? {
+            if let Ok(Devlink::EswitchInlineMode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1006,7 +1025,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeTables(val) = attr? {
+            if let Ok(Devlink::DpipeTables(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1033,7 +1052,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeTableName(val) = attr? {
+            if let Ok(Devlink::DpipeTableName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1048,7 +1067,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeTableSize(val) = attr? {
+            if let Ok(Devlink::DpipeTableSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1063,7 +1082,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeTableMatches(val) = attr? {
+            if let Ok(Devlink::DpipeTableMatches(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1078,7 +1097,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeTableActions(val) = attr? {
+            if let Ok(Devlink::DpipeTableActions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1093,7 +1112,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeTableCountersEnabled(val) = attr? {
+            if let Ok(Devlink::DpipeTableCountersEnabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1108,7 +1127,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeEntries(val) = attr? {
+            if let Ok(Devlink::DpipeEntries(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1135,7 +1154,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeEntryIndex(val) = attr? {
+            if let Ok(Devlink::DpipeEntryIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1152,7 +1171,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeEntryMatchValues(val) = attr? {
+            if let Ok(Devlink::DpipeEntryMatchValues(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1169,7 +1188,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeEntryActionValues(val) = attr? {
+            if let Ok(Devlink::DpipeEntryActionValues(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1184,7 +1203,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeEntryCounter(val) = attr? {
+            if let Ok(Devlink::DpipeEntryCounter(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1224,7 +1243,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeMatchType(val) = attr? {
+            if let Ok(Devlink::DpipeMatchType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1264,7 +1283,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeActionType(val) = attr? {
+            if let Ok(Devlink::DpipeActionType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1279,7 +1298,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeValue(val) = attr? {
+            if let Ok(Devlink::DpipeValue(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1294,7 +1313,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeValueMask(val) = attr? {
+            if let Ok(Devlink::DpipeValueMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1309,7 +1328,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeValueMapping(val) = attr? {
+            if let Ok(Devlink::DpipeValueMapping(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1324,7 +1343,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeHeaders(val) = attr? {
+            if let Ok(Devlink::DpipeHeaders(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1351,7 +1370,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeHeaderName(val) = attr? {
+            if let Ok(Devlink::DpipeHeaderName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1367,7 +1386,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeHeaderId(val) = attr? {
+            if let Ok(Devlink::DpipeHeaderId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1382,7 +1401,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeHeaderFields(val) = attr? {
+            if let Ok(Devlink::DpipeHeaderFields(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1397,7 +1416,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeHeaderGlobal(val) = attr? {
+            if let Ok(Devlink::DpipeHeaderGlobal(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1412,7 +1431,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeHeaderIndex(val) = attr? {
+            if let Ok(Devlink::DpipeHeaderIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1439,7 +1458,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeFieldName(val) = attr? {
+            if let Ok(Devlink::DpipeFieldName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1454,7 +1473,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeFieldId(val) = attr? {
+            if let Ok(Devlink::DpipeFieldId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1469,7 +1488,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeFieldBitwidth(val) = attr? {
+            if let Ok(Devlink::DpipeFieldBitwidth(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1485,7 +1504,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeFieldMappingType(val) = attr? {
+            if let Ok(Devlink::DpipeFieldMappingType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1500,7 +1519,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::Pad(val) = attr? {
+            if let Ok(Devlink::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1516,7 +1535,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::EswitchEncapMode(val) = attr? {
+            if let Ok(Devlink::EswitchEncapMode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1531,7 +1550,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceList(val) = attr? {
+            if let Ok(Devlink::ResourceList(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1556,7 +1575,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceName(val) = attr? {
+            if let Ok(Devlink::ResourceName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1571,7 +1590,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceId(val) = attr? {
+            if let Ok(Devlink::ResourceId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1586,7 +1605,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceSize(val) = attr? {
+            if let Ok(Devlink::ResourceSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1601,7 +1620,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceSizeNew(val) = attr? {
+            if let Ok(Devlink::ResourceSizeNew(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1616,7 +1635,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceSizeValid(val) = attr? {
+            if let Ok(Devlink::ResourceSizeValid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1631,7 +1650,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceSizeMin(val) = attr? {
+            if let Ok(Devlink::ResourceSizeMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1646,7 +1665,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceSizeMax(val) = attr? {
+            if let Ok(Devlink::ResourceSizeMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1661,7 +1680,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceSizeGran(val) = attr? {
+            if let Ok(Devlink::ResourceSizeGran(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1677,7 +1696,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceUnit(val) = attr? {
+            if let Ok(Devlink::ResourceUnit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1692,7 +1711,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ResourceOcc(val) = attr? {
+            if let Ok(Devlink::ResourceOcc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1707,7 +1726,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeTableResourceId(val) = attr? {
+            if let Ok(Devlink::DpipeTableResourceId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1722,7 +1741,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DpipeTableResourceUnits(val) = attr? {
+            if let Ok(Devlink::DpipeTableResourceUnits(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1738,7 +1757,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortFlavour(val) = attr? {
+            if let Ok(Devlink::PortFlavour(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1753,7 +1772,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortNumber(val) = attr? {
+            if let Ok(Devlink::PortNumber(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1768,7 +1787,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortSplitSubportNumber(val) = attr? {
+            if let Ok(Devlink::PortSplitSubportNumber(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1783,7 +1802,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::Param(val) = attr? {
+            if let Ok(Devlink::Param(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1798,7 +1817,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ParamName(val) = attr? {
+            if let Ok(Devlink::ParamName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1813,7 +1832,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ParamGeneric(val) = attr? {
+            if let Ok(Devlink::ParamGeneric(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1829,7 +1848,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ParamType(val) = attr? {
+            if let Ok(Devlink::ParamType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1845,7 +1864,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ParamValueCmode(val) = attr? {
+            if let Ok(Devlink::ParamValueCmode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1860,7 +1879,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionName(val) = attr? {
+            if let Ok(Devlink::RegionName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1875,7 +1894,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionSize(val) = attr? {
+            if let Ok(Devlink::RegionSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1890,7 +1909,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionSnapshots(val) = attr? {
+            if let Ok(Devlink::RegionSnapshots(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1905,7 +1924,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionSnapshot(val) = attr? {
+            if let Ok(Devlink::RegionSnapshot(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1920,7 +1939,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionSnapshotId(val) = attr? {
+            if let Ok(Devlink::RegionSnapshotId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1935,7 +1954,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionChunks(val) = attr? {
+            if let Ok(Devlink::RegionChunks(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1950,7 +1969,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionChunk(val) = attr? {
+            if let Ok(Devlink::RegionChunk(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1965,7 +1984,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionChunkData(val) = attr? {
+            if let Ok(Devlink::RegionChunkData(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1980,7 +1999,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionChunkAddr(val) = attr? {
+            if let Ok(Devlink::RegionChunkAddr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1995,7 +2014,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionChunkLen(val) = attr? {
+            if let Ok(Devlink::RegionChunkLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2010,7 +2029,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::InfoDriverName(val) = attr? {
+            if let Ok(Devlink::InfoDriverName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2025,7 +2044,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::InfoSerialNumber(val) = attr? {
+            if let Ok(Devlink::InfoSerialNumber(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2076,7 +2095,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::InfoVersionName(val) = attr? {
+            if let Ok(Devlink::InfoVersionName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2091,7 +2110,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::InfoVersionValue(val) = attr? {
+            if let Ok(Devlink::InfoVersionValue(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2106,7 +2125,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::SbPoolCellSize(val) = attr? {
+            if let Ok(Devlink::SbPoolCellSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2121,7 +2140,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::Fmsg(val) = attr? {
+            if let Ok(Devlink::Fmsg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2136,7 +2155,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FmsgObjNestStart(val) = attr? {
+            if let Ok(Devlink::FmsgObjNestStart(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2151,7 +2170,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FmsgPairNestStart(val) = attr? {
+            if let Ok(Devlink::FmsgPairNestStart(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2166,7 +2185,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FmsgArrNestStart(val) = attr? {
+            if let Ok(Devlink::FmsgArrNestStart(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2181,7 +2200,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FmsgNestEnd(val) = attr? {
+            if let Ok(Devlink::FmsgNestEnd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2196,7 +2215,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FmsgObjName(val) = attr? {
+            if let Ok(Devlink::FmsgObjName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2212,7 +2231,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FmsgObjValueType(val) = attr? {
+            if let Ok(Devlink::FmsgObjValueType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2227,7 +2246,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporter(val) = attr? {
+            if let Ok(Devlink::HealthReporter(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2242,7 +2261,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporterName(val) = attr? {
+            if let Ok(Devlink::HealthReporterName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2257,7 +2276,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporterState(val) = attr? {
+            if let Ok(Devlink::HealthReporterState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2272,7 +2291,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporterErrCount(val) = attr? {
+            if let Ok(Devlink::HealthReporterErrCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2287,7 +2306,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporterRecoverCount(val) = attr? {
+            if let Ok(Devlink::HealthReporterRecoverCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2302,7 +2321,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporterDumpTs(val) = attr? {
+            if let Ok(Devlink::HealthReporterDumpTs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2317,7 +2336,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporterGracefulPeriod(val) = attr? {
+            if let Ok(Devlink::HealthReporterGracefulPeriod(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2332,7 +2351,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporterAutoRecover(val) = attr? {
+            if let Ok(Devlink::HealthReporterAutoRecover(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2347,7 +2366,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FlashUpdateFileName(val) = attr? {
+            if let Ok(Devlink::FlashUpdateFileName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2362,7 +2381,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FlashUpdateComponent(val) = attr? {
+            if let Ok(Devlink::FlashUpdateComponent(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2377,7 +2396,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FlashUpdateStatusMsg(val) = attr? {
+            if let Ok(Devlink::FlashUpdateStatusMsg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2392,7 +2411,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FlashUpdateStatusDone(val) = attr? {
+            if let Ok(Devlink::FlashUpdateStatusDone(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2407,7 +2426,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FlashUpdateStatusTotal(val) = attr? {
+            if let Ok(Devlink::FlashUpdateStatusTotal(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2422,7 +2441,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortPciPfNumber(val) = attr? {
+            if let Ok(Devlink::PortPciPfNumber(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2437,7 +2456,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortPciVfNumber(val) = attr? {
+            if let Ok(Devlink::PortPciVfNumber(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2452,7 +2471,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::Stats(val) = attr? {
+            if let Ok(Devlink::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2467,7 +2486,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::TrapName(val) = attr? {
+            if let Ok(Devlink::TrapName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2483,7 +2502,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::TrapAction(val) = attr? {
+            if let Ok(Devlink::TrapAction(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2499,7 +2518,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::TrapType(val) = attr? {
+            if let Ok(Devlink::TrapType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2514,7 +2533,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::TrapGeneric(val) = attr? {
+            if let Ok(Devlink::TrapGeneric(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2529,7 +2548,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::TrapMetadata(val) = attr? {
+            if let Ok(Devlink::TrapMetadata(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2544,7 +2563,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::TrapGroupName(val) = attr? {
+            if let Ok(Devlink::TrapGroupName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2559,7 +2578,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ReloadFailed(val) = attr? {
+            if let Ok(Devlink::ReloadFailed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2574,7 +2593,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporterDumpTsNs(val) = attr? {
+            if let Ok(Devlink::HealthReporterDumpTsNs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2589,7 +2608,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::NetnsFd(val) = attr? {
+            if let Ok(Devlink::NetnsFd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2604,7 +2623,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::NetnsPid(val) = attr? {
+            if let Ok(Devlink::NetnsPid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2619,7 +2638,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::NetnsId(val) = attr? {
+            if let Ok(Devlink::NetnsId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2634,7 +2653,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporterAutoDump(val) = attr? {
+            if let Ok(Devlink::HealthReporterAutoDump(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2649,7 +2668,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::TrapPolicerId(val) = attr? {
+            if let Ok(Devlink::TrapPolicerId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2664,7 +2683,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::TrapPolicerRate(val) = attr? {
+            if let Ok(Devlink::TrapPolicerRate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2679,7 +2698,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::TrapPolicerBurst(val) = attr? {
+            if let Ok(Devlink::TrapPolicerBurst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2694,7 +2713,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortFunction(val) = attr? {
+            if let Ok(Devlink::PortFunction(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2709,7 +2728,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::InfoBoardSerialNumber(val) = attr? {
+            if let Ok(Devlink::InfoBoardSerialNumber(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2724,7 +2743,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortLanes(val) = attr? {
+            if let Ok(Devlink::PortLanes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2739,7 +2758,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortSplittable(val) = attr? {
+            if let Ok(Devlink::PortSplittable(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2754,7 +2773,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortExternal(val) = attr? {
+            if let Ok(Devlink::PortExternal(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2769,7 +2788,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortControllerNumber(val) = attr? {
+            if let Ok(Devlink::PortControllerNumber(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2784,7 +2803,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FlashUpdateStatusTimeout(val) = attr? {
+            if let Ok(Devlink::FlashUpdateStatusTimeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2800,7 +2819,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::FlashUpdateOverwriteMask(val) = attr? {
+            if let Ok(Devlink::FlashUpdateOverwriteMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2816,7 +2835,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ReloadAction(val) = attr? {
+            if let Ok(Devlink::ReloadAction(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2832,7 +2851,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ReloadActionsPerformed(val) = attr? {
+            if let Ok(Devlink::ReloadActionsPerformed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2848,7 +2867,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ReloadLimits(val) = attr? {
+            if let Ok(Devlink::ReloadLimits(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2863,7 +2882,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::DevStats(val) = attr? {
+            if let Ok(Devlink::DevStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2878,7 +2897,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ReloadStats(val) = attr? {
+            if let Ok(Devlink::ReloadStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2905,7 +2924,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ReloadStatsLimit(val) = attr? {
+            if let Ok(Devlink::ReloadStatsLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2920,7 +2939,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ReloadStatsValue(val) = attr? {
+            if let Ok(Devlink::ReloadStatsValue(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2935,7 +2954,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RemoteReloadStats(val) = attr? {
+            if let Ok(Devlink::RemoteReloadStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2974,7 +2993,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::PortPciSfNumber(val) = attr? {
+            if let Ok(Devlink::PortPciSfNumber(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2990,7 +3009,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RateType(val) = attr? {
+            if let Ok(Devlink::RateType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3005,7 +3024,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RateTxShare(val) = attr? {
+            if let Ok(Devlink::RateTxShare(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3020,7 +3039,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RateTxMax(val) = attr? {
+            if let Ok(Devlink::RateTxMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3035,7 +3054,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RateNodeName(val) = attr? {
+            if let Ok(Devlink::RateNodeName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3050,7 +3069,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RateParentNodeName(val) = attr? {
+            if let Ok(Devlink::RateParentNodeName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3065,7 +3084,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionMaxSnapshots(val) = attr? {
+            if let Ok(Devlink::RegionMaxSnapshots(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3080,7 +3099,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::LinecardIndex(val) = attr? {
+            if let Ok(Devlink::LinecardIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3095,7 +3114,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::LinecardState(val) = attr? {
+            if let Ok(Devlink::LinecardState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3110,7 +3129,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::LinecardType(val) = attr? {
+            if let Ok(Devlink::LinecardType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3127,7 +3146,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::LinecardSupportedTypes(val) = attr? {
+            if let Ok(Devlink::LinecardSupportedTypes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3142,7 +3161,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::Selftests(val) = attr? {
+            if let Ok(Devlink::Selftests(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3157,7 +3176,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RateTxPriority(val) = attr? {
+            if let Ok(Devlink::RateTxPriority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3172,7 +3191,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RateTxWeight(val) = attr? {
+            if let Ok(Devlink::RateTxWeight(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3187,7 +3206,7 @@ impl<'a> IterableDevlink<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::RegionDirect(val) = attr? {
+            if let Ok(Devlink::RegionDirect(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3208,12 +3227,12 @@ impl<'a> IterableDevlink<'a> {
             }
         })
     }
-    #[doc = "Time (in msec) for recoveries before starting the grace period\\."]
+    #[doc = "Time (in msec) for recoveries before starting the grace period.\n"]
     pub fn get_health_reporter_burst_period(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::HealthReporterBurstPeriod(val) = attr? {
+            if let Ok(Devlink::HealthReporterBurstPeriod(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3224,18 +3243,50 @@ impl<'a> IterableDevlink<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Request restoring parameter to its default value\\."]
+    #[doc = "Request restoring parameter to its default value.\n"]
     pub fn get_param_reset_default(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Devlink::ParamResetDefault(val) = attr? {
+            if let Ok(Devlink::ParamResetDefault(val)) = attr {
                 return Ok(val);
             }
         }
         Err(ErrorContext::new_missing(
             "Devlink",
             "ParamResetDefault",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "Unique devlink instance index.\n"]
+    pub fn get_index(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Devlink::Index(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Devlink",
+            "Index",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "Bitmask selecting which resource classes to include in a resource-dump\nresponse. Bit 0 (dev) selects device-level resources; bit 1 (port)\nselects port-level resources. When absent all classes are returned.\n\nAssociated type: [`ResourceScope`] (1 bit per enumeration)"]
+    pub fn get_resource_scope_mask(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Devlink::ResourceScopeMask(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Devlink",
+            "ResourceScopeMask",
             self.orig_loc,
             self.buf.as_ptr() as usize,
         ))
@@ -3424,6 +3475,8 @@ impl Devlink<'_> {
             180u16 => "RateTcBws",
             181u16 => "HealthReporterBurstPeriod",
             183u16 => "ParamResetDefault",
+            184u16 => "Index",
+            185u16 => "ResourceScopeMask",
             _ => return None,
         };
         Some(res)
@@ -3450,14 +3503,16 @@ impl<'a> IterableDevlink<'a> {
 impl<'a> Iterator for IterableDevlink<'a> {
     type Item = Result<Devlink<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4324,6 +4379,16 @@ impl<'a> Iterator for IterableDevlink<'a> {
                     val
                 }),
                 183u16 => Devlink::ParamResetDefault(()),
+                184u16 => Devlink::Index({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                185u16 => Devlink::ResourceScopeMask({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -4609,6 +4674,13 @@ impl<'a> std::fmt::Debug for IterableDevlink<'_> {
                     fmt.field("HealthReporterBurstPeriod", &val)
                 }
                 Devlink::ParamResetDefault(val) => fmt.field("ParamResetDefault", &val),
+                Devlink::Index(val) => fmt.field("Index", &val),
+                Devlink::ResourceScopeMask(val) => fmt.field(
+                    "ResourceScopeMask",
+                    &FormatFlags(val.into(), |val| {
+                        ResourceScope::from_value(val.trailing_zeros().into())
+                    }),
+                ),
             };
         }
         fmt.finish()
@@ -5697,6 +5769,18 @@ impl IterableDevlink<'_> {
                         break;
                     }
                 }
+                Devlink::Index(val) => {
+                    if last_off == offset {
+                        stack.push(("Index", last_off));
+                        break;
+                    }
+                }
+                Devlink::ResourceScopeMask(val) => {
+                    if last_off == offset {
+                        stack.push(("ResourceScopeMask", last_off));
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -5717,7 +5801,7 @@ impl<'a> IterableDlDevStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDevStats::ReloadStats(val) = attr? {
+            if let Ok(DlDevStats::ReloadStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5732,7 +5816,7 @@ impl<'a> IterableDlDevStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDevStats::RemoteReloadStats(val) = attr? {
+            if let Ok(DlDevStats::RemoteReloadStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5773,14 +5857,16 @@ impl<'a> IterableDlDevStats<'a> {
 impl<'a> Iterator for IterableDlDevStats<'a> {
     type Item = Result<DlDevStats<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5923,14 +6009,16 @@ impl<'a> IterableDlReloadStats<'a> {
 impl<'a> Iterator for IterableDlReloadStats<'a> {
     type Item = Result<DlReloadStats<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6026,7 +6114,7 @@ impl<'a> IterableDlReloadActInfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlReloadActInfo::ReloadAction(val) = attr? {
+            if let Ok(DlReloadActInfo::ReloadAction(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6079,14 +6167,16 @@ impl<'a> IterableDlReloadActInfo<'a> {
 impl<'a> Iterator for IterableDlReloadActInfo<'a> {
     type Item = Result<DlReloadActInfo<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6232,14 +6322,16 @@ impl<'a> IterableDlReloadActStats<'a> {
 impl<'a> Iterator for IterableDlReloadActStats<'a> {
     type Item = Result<DlReloadActStats<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6332,7 +6424,7 @@ impl<'a> IterableDlReloadStatsEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlReloadStatsEntry::ReloadStatsLimit(val) = attr? {
+            if let Ok(DlReloadStatsEntry::ReloadStatsLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6347,7 +6439,7 @@ impl<'a> IterableDlReloadStatsEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlReloadStatsEntry::ReloadStatsValue(val) = attr? {
+            if let Ok(DlReloadStatsEntry::ReloadStatsValue(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6388,14 +6480,16 @@ impl<'a> IterableDlReloadStatsEntry<'a> {
 impl<'a> Iterator for IterableDlReloadStatsEntry<'a> {
     type Item = Result<DlReloadStatsEntry, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6499,7 +6593,7 @@ impl<'a> IterableDlInfoVersion<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlInfoVersion::InfoVersionName(val) = attr? {
+            if let Ok(DlInfoVersion::InfoVersionName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6514,7 +6608,7 @@ impl<'a> IterableDlInfoVersion<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlInfoVersion::InfoVersionValue(val) = attr? {
+            if let Ok(DlInfoVersion::InfoVersionValue(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6555,14 +6649,16 @@ impl<'a> IterableDlInfoVersion<'a> {
 impl<'a> Iterator for IterableDlInfoVersion<'a> {
     type Item = Result<DlInfoVersion<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6671,7 +6767,7 @@ impl<'a> IterableDlPortFunction<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlPortFunction::HwAddr(val) = attr? {
+            if let Ok(DlPortFunction::HwAddr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6687,7 +6783,7 @@ impl<'a> IterableDlPortFunction<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlPortFunction::State(val) = attr? {
+            if let Ok(DlPortFunction::State(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6703,7 +6799,7 @@ impl<'a> IterableDlPortFunction<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlPortFunction::Opstate(val) = attr? {
+            if let Ok(DlPortFunction::Opstate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6719,7 +6815,7 @@ impl<'a> IterableDlPortFunction<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlPortFunction::Caps(val) = attr? {
+            if let Ok(DlPortFunction::Caps(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6767,14 +6863,16 @@ impl<'a> IterableDlPortFunction<'a> {
 impl<'a> Iterator for IterableDlPortFunction<'a> {
     type Item = Result<DlPortFunction<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6950,14 +7048,16 @@ impl<'a> IterableDlDpipeTables<'a> {
 impl<'a> Iterator for IterableDlDpipeTables<'a> {
     type Item = Result<DlDpipeTables<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7055,7 +7155,7 @@ impl<'a> IterableDlDpipeTable<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeTable::DpipeTableName(val) = attr? {
+            if let Ok(DlDpipeTable::DpipeTableName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7070,7 +7170,7 @@ impl<'a> IterableDlDpipeTable<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeTable::DpipeTableSize(val) = attr? {
+            if let Ok(DlDpipeTable::DpipeTableSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7085,7 +7185,7 @@ impl<'a> IterableDlDpipeTable<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeTable::DpipeTableMatches(val) = attr? {
+            if let Ok(DlDpipeTable::DpipeTableMatches(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7100,7 +7200,7 @@ impl<'a> IterableDlDpipeTable<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeTable::DpipeTableActions(val) = attr? {
+            if let Ok(DlDpipeTable::DpipeTableActions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7115,7 +7215,7 @@ impl<'a> IterableDlDpipeTable<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeTable::DpipeTableCountersEnabled(val) = attr? {
+            if let Ok(DlDpipeTable::DpipeTableCountersEnabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7130,7 +7230,7 @@ impl<'a> IterableDlDpipeTable<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeTable::DpipeTableResourceId(val) = attr? {
+            if let Ok(DlDpipeTable::DpipeTableResourceId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7145,7 +7245,7 @@ impl<'a> IterableDlDpipeTable<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeTable::DpipeTableResourceUnits(val) = attr? {
+            if let Ok(DlDpipeTable::DpipeTableResourceUnits(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7186,14 +7286,16 @@ impl<'a> IterableDlDpipeTable<'a> {
 impl<'a> Iterator for IterableDlDpipeTable<'a> {
     type Item = Result<DlDpipeTable<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7400,14 +7502,16 @@ impl<'a> IterableDlDpipeTableMatches<'a> {
 impl<'a> Iterator for IterableDlDpipeTableMatches<'a> {
     type Item = Result<DlDpipeTableMatches<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7538,14 +7642,16 @@ impl<'a> IterableDlDpipeTableActions<'a> {
 impl<'a> Iterator for IterableDlDpipeTableActions<'a> {
     type Item = Result<DlDpipeTableActions<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7676,14 +7782,16 @@ impl<'a> IterableDlDpipeEntries<'a> {
 impl<'a> Iterator for IterableDlDpipeEntries<'a> {
     type Item = Result<DlDpipeEntries<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7778,7 +7886,7 @@ impl<'a> IterableDlDpipeEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeEntry::DpipeEntryIndex(val) = attr? {
+            if let Ok(DlDpipeEntry::DpipeEntryIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7795,7 +7903,7 @@ impl<'a> IterableDlDpipeEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeEntry::DpipeEntryMatchValues(val) = attr? {
+            if let Ok(DlDpipeEntry::DpipeEntryMatchValues(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7812,7 +7920,7 @@ impl<'a> IterableDlDpipeEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeEntry::DpipeEntryActionValues(val) = attr? {
+            if let Ok(DlDpipeEntry::DpipeEntryActionValues(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7827,7 +7935,7 @@ impl<'a> IterableDlDpipeEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeEntry::DpipeEntryCounter(val) = attr? {
+            if let Ok(DlDpipeEntry::DpipeEntryCounter(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7868,14 +7976,16 @@ impl<'a> IterableDlDpipeEntry<'a> {
 impl<'a> Iterator for IterableDlDpipeEntry<'a> {
     type Item = Result<DlDpipeEntry<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8052,14 +8162,16 @@ impl<'a> IterableDlDpipeEntryMatchValues<'a> {
 impl<'a> Iterator for IterableDlDpipeEntryMatchValues<'a> {
     type Item = Result<DlDpipeEntryMatchValues<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8190,14 +8302,16 @@ impl<'a> IterableDlDpipeEntryActionValues<'a> {
 impl<'a> Iterator for IterableDlDpipeEntryActionValues<'a> {
     type Item = Result<DlDpipeEntryActionValues<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8298,7 +8412,7 @@ impl<'a> IterableDlDpipeMatch<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeMatch::DpipeMatchType(val) = attr? {
+            if let Ok(DlDpipeMatch::DpipeMatchType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8314,7 +8428,7 @@ impl<'a> IterableDlDpipeMatch<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeMatch::DpipeHeaderId(val) = attr? {
+            if let Ok(DlDpipeMatch::DpipeHeaderId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8329,7 +8443,7 @@ impl<'a> IterableDlDpipeMatch<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeMatch::DpipeHeaderGlobal(val) = attr? {
+            if let Ok(DlDpipeMatch::DpipeHeaderGlobal(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8344,7 +8458,7 @@ impl<'a> IterableDlDpipeMatch<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeMatch::DpipeHeaderIndex(val) = attr? {
+            if let Ok(DlDpipeMatch::DpipeHeaderIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8359,7 +8473,7 @@ impl<'a> IterableDlDpipeMatch<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeMatch::DpipeFieldId(val) = attr? {
+            if let Ok(DlDpipeMatch::DpipeFieldId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8400,14 +8514,16 @@ impl<'a> IterableDlDpipeMatch<'a> {
 impl<'a> Iterator for IterableDlDpipeMatch<'a> {
     type Item = Result<DlDpipeMatch, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8568,7 +8684,7 @@ impl<'a> IterableDlDpipeMatchValue<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeMatchValue::DpipeValue(val) = attr? {
+            if let Ok(DlDpipeMatchValue::DpipeValue(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8583,7 +8699,7 @@ impl<'a> IterableDlDpipeMatchValue<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeMatchValue::DpipeValueMask(val) = attr? {
+            if let Ok(DlDpipeMatchValue::DpipeValueMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8598,7 +8714,7 @@ impl<'a> IterableDlDpipeMatchValue<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeMatchValue::DpipeValueMapping(val) = attr? {
+            if let Ok(DlDpipeMatchValue::DpipeValueMapping(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8639,14 +8755,16 @@ impl<'a> IterableDlDpipeMatchValue<'a> {
 impl<'a> Iterator for IterableDlDpipeMatchValue<'a> {
     type Item = Result<DlDpipeMatchValue<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8781,7 +8899,7 @@ impl<'a> IterableDlDpipeAction<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeAction::DpipeActionType(val) = attr? {
+            if let Ok(DlDpipeAction::DpipeActionType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8797,7 +8915,7 @@ impl<'a> IterableDlDpipeAction<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeAction::DpipeHeaderId(val) = attr? {
+            if let Ok(DlDpipeAction::DpipeHeaderId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8812,7 +8930,7 @@ impl<'a> IterableDlDpipeAction<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeAction::DpipeHeaderGlobal(val) = attr? {
+            if let Ok(DlDpipeAction::DpipeHeaderGlobal(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8827,7 +8945,7 @@ impl<'a> IterableDlDpipeAction<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeAction::DpipeHeaderIndex(val) = attr? {
+            if let Ok(DlDpipeAction::DpipeHeaderIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8842,7 +8960,7 @@ impl<'a> IterableDlDpipeAction<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeAction::DpipeFieldId(val) = attr? {
+            if let Ok(DlDpipeAction::DpipeFieldId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8883,14 +9001,16 @@ impl<'a> IterableDlDpipeAction<'a> {
 impl<'a> Iterator for IterableDlDpipeAction<'a> {
     type Item = Result<DlDpipeAction, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9051,7 +9171,7 @@ impl<'a> IterableDlDpipeActionValue<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeActionValue::DpipeValue(val) = attr? {
+            if let Ok(DlDpipeActionValue::DpipeValue(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9066,7 +9186,7 @@ impl<'a> IterableDlDpipeActionValue<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeActionValue::DpipeValueMask(val) = attr? {
+            if let Ok(DlDpipeActionValue::DpipeValueMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9081,7 +9201,7 @@ impl<'a> IterableDlDpipeActionValue<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeActionValue::DpipeValueMapping(val) = attr? {
+            if let Ok(DlDpipeActionValue::DpipeValueMapping(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9122,14 +9242,16 @@ impl<'a> IterableDlDpipeActionValue<'a> {
 impl<'a> Iterator for IterableDlDpipeActionValue<'a> {
     type Item = Result<DlDpipeActionValue<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9296,14 +9418,16 @@ impl<'a> IterableDlDpipeHeaders<'a> {
 impl<'a> Iterator for IterableDlDpipeHeaders<'a> {
     type Item = Result<DlDpipeHeaders<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9399,7 +9523,7 @@ impl<'a> IterableDlDpipeHeader<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeHeader::DpipeHeaderName(val) = attr? {
+            if let Ok(DlDpipeHeader::DpipeHeaderName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9415,7 +9539,7 @@ impl<'a> IterableDlDpipeHeader<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeHeader::DpipeHeaderId(val) = attr? {
+            if let Ok(DlDpipeHeader::DpipeHeaderId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9430,7 +9554,7 @@ impl<'a> IterableDlDpipeHeader<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeHeader::DpipeHeaderFields(val) = attr? {
+            if let Ok(DlDpipeHeader::DpipeHeaderFields(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9445,7 +9569,7 @@ impl<'a> IterableDlDpipeHeader<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeHeader::DpipeHeaderGlobal(val) = attr? {
+            if let Ok(DlDpipeHeader::DpipeHeaderGlobal(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9486,14 +9610,16 @@ impl<'a> IterableDlDpipeHeader<'a> {
 impl<'a> Iterator for IterableDlDpipeHeader<'a> {
     type Item = Result<DlDpipeHeader<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9663,14 +9789,16 @@ impl<'a> IterableDlDpipeHeaderFields<'a> {
 impl<'a> Iterator for IterableDlDpipeHeaderFields<'a> {
     type Item = Result<DlDpipeHeaderFields<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9766,7 +9894,7 @@ impl<'a> IterableDlDpipeField<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeField::DpipeFieldName(val) = attr? {
+            if let Ok(DlDpipeField::DpipeFieldName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9781,7 +9909,7 @@ impl<'a> IterableDlDpipeField<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeField::DpipeFieldId(val) = attr? {
+            if let Ok(DlDpipeField::DpipeFieldId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9796,7 +9924,7 @@ impl<'a> IterableDlDpipeField<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeField::DpipeFieldBitwidth(val) = attr? {
+            if let Ok(DlDpipeField::DpipeFieldBitwidth(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9812,7 +9940,7 @@ impl<'a> IterableDlDpipeField<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlDpipeField::DpipeFieldMappingType(val) = attr? {
+            if let Ok(DlDpipeField::DpipeFieldMappingType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9853,14 +9981,16 @@ impl<'a> IterableDlDpipeField<'a> {
 impl<'a> Iterator for IterableDlDpipeField<'a> {
     type Item = Result<DlDpipeField<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10000,7 +10130,7 @@ impl<'a> IterableDlResource<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlResource::ResourceName(val) = attr? {
+            if let Ok(DlResource::ResourceName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10015,7 +10145,7 @@ impl<'a> IterableDlResource<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlResource::ResourceId(val) = attr? {
+            if let Ok(DlResource::ResourceId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10030,7 +10160,7 @@ impl<'a> IterableDlResource<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlResource::ResourceSize(val) = attr? {
+            if let Ok(DlResource::ResourceSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10045,7 +10175,7 @@ impl<'a> IterableDlResource<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlResource::ResourceSizeNew(val) = attr? {
+            if let Ok(DlResource::ResourceSizeNew(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10060,7 +10190,7 @@ impl<'a> IterableDlResource<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlResource::ResourceSizeValid(val) = attr? {
+            if let Ok(DlResource::ResourceSizeValid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10075,7 +10205,7 @@ impl<'a> IterableDlResource<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlResource::ResourceSizeMin(val) = attr? {
+            if let Ok(DlResource::ResourceSizeMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10090,7 +10220,7 @@ impl<'a> IterableDlResource<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlResource::ResourceSizeMax(val) = attr? {
+            if let Ok(DlResource::ResourceSizeMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10105,7 +10235,7 @@ impl<'a> IterableDlResource<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlResource::ResourceSizeGran(val) = attr? {
+            if let Ok(DlResource::ResourceSizeGran(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10121,7 +10251,7 @@ impl<'a> IterableDlResource<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlResource::ResourceUnit(val) = attr? {
+            if let Ok(DlResource::ResourceUnit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10136,7 +10266,7 @@ impl<'a> IterableDlResource<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlResource::ResourceOcc(val) = attr? {
+            if let Ok(DlResource::ResourceOcc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10177,14 +10307,16 @@ impl<'a> IterableDlResource<'a> {
 impl<'a> Iterator for IterableDlResource<'a> {
     type Item = Result<DlResource<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10425,14 +10557,16 @@ impl<'a> IterableDlResourceList<'a> {
 impl<'a> Iterator for IterableDlResourceList<'a> {
     type Item = Result<DlResourceList<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10527,7 +10661,7 @@ impl<'a> IterableDlParam<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlParam::ParamName(val) = attr? {
+            if let Ok(DlParam::ParamName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10542,7 +10676,7 @@ impl<'a> IterableDlParam<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlParam::ParamGeneric(val) = attr? {
+            if let Ok(DlParam::ParamGeneric(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10558,7 +10692,7 @@ impl<'a> IterableDlParam<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlParam::ParamType(val) = attr? {
+            if let Ok(DlParam::ParamType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10599,14 +10733,16 @@ impl<'a> IterableDlParam<'a> {
 impl<'a> Iterator for IterableDlParam<'a> {
     type Item = Result<DlParam<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10717,7 +10853,7 @@ impl<'a> IterableDlRegionSnapshots<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlRegionSnapshots::RegionSnapshot(val) = attr? {
+            if let Ok(DlRegionSnapshots::RegionSnapshot(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10758,14 +10894,16 @@ impl<'a> IterableDlRegionSnapshots<'a> {
 impl<'a> Iterator for IterableDlRegionSnapshots<'a> {
     type Item = Result<DlRegionSnapshots<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10857,7 +10995,7 @@ impl<'a> IterableDlRegionSnapshot<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlRegionSnapshot::RegionSnapshotId(val) = attr? {
+            if let Ok(DlRegionSnapshot::RegionSnapshotId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10898,14 +11036,16 @@ impl<'a> IterableDlRegionSnapshot<'a> {
 impl<'a> Iterator for IterableDlRegionSnapshot<'a> {
     type Item = Result<DlRegionSnapshot, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10996,7 +11136,7 @@ impl<'a> IterableDlRegionChunks<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlRegionChunks::RegionChunk(val) = attr? {
+            if let Ok(DlRegionChunks::RegionChunk(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11037,14 +11177,16 @@ impl<'a> IterableDlRegionChunks<'a> {
 impl<'a> Iterator for IterableDlRegionChunks<'a> {
     type Item = Result<DlRegionChunks<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11137,7 +11279,7 @@ impl<'a> IterableDlRegionChunk<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlRegionChunk::RegionChunkData(val) = attr? {
+            if let Ok(DlRegionChunk::RegionChunkData(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11152,7 +11294,7 @@ impl<'a> IterableDlRegionChunk<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlRegionChunk::RegionChunkAddr(val) = attr? {
+            if let Ok(DlRegionChunk::RegionChunkAddr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11193,14 +11335,16 @@ impl<'a> IterableDlRegionChunk<'a> {
 impl<'a> Iterator for IterableDlRegionChunk<'a> {
     type Item = Result<DlRegionChunk<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11307,7 +11451,7 @@ impl<'a> IterableDlFmsg<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlFmsg::FmsgObjNestStart(val) = attr? {
+            if let Ok(DlFmsg::FmsgObjNestStart(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11322,7 +11466,7 @@ impl<'a> IterableDlFmsg<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlFmsg::FmsgPairNestStart(val) = attr? {
+            if let Ok(DlFmsg::FmsgPairNestStart(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11337,7 +11481,7 @@ impl<'a> IterableDlFmsg<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlFmsg::FmsgArrNestStart(val) = attr? {
+            if let Ok(DlFmsg::FmsgArrNestStart(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11352,7 +11496,7 @@ impl<'a> IterableDlFmsg<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlFmsg::FmsgNestEnd(val) = attr? {
+            if let Ok(DlFmsg::FmsgNestEnd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11367,7 +11511,7 @@ impl<'a> IterableDlFmsg<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlFmsg::FmsgObjName(val) = attr? {
+            if let Ok(DlFmsg::FmsgObjName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11408,14 +11552,16 @@ impl<'a> IterableDlFmsg<'a> {
 impl<'a> Iterator for IterableDlFmsg<'a> {
     type Item = Result<DlFmsg<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11537,7 +11683,7 @@ pub enum DlHealthReporter<'a> {
     HealthReporterAutoRecover(u8),
     HealthReporterDumpTsNs(u64),
     HealthReporterAutoDump(u8),
-    #[doc = "Time (in msec) for recoveries before starting the grace period\\."]
+    #[doc = "Time (in msec) for recoveries before starting the grace period.\n"]
     HealthReporterBurstPeriod(u64),
 }
 impl<'a> IterableDlHealthReporter<'a> {
@@ -11545,7 +11691,7 @@ impl<'a> IterableDlHealthReporter<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlHealthReporter::HealthReporterName(val) = attr? {
+            if let Ok(DlHealthReporter::HealthReporterName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11560,7 +11706,7 @@ impl<'a> IterableDlHealthReporter<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlHealthReporter::HealthReporterState(val) = attr? {
+            if let Ok(DlHealthReporter::HealthReporterState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11575,7 +11721,7 @@ impl<'a> IterableDlHealthReporter<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlHealthReporter::HealthReporterErrCount(val) = attr? {
+            if let Ok(DlHealthReporter::HealthReporterErrCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11590,7 +11736,7 @@ impl<'a> IterableDlHealthReporter<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlHealthReporter::HealthReporterRecoverCount(val) = attr? {
+            if let Ok(DlHealthReporter::HealthReporterRecoverCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11605,7 +11751,7 @@ impl<'a> IterableDlHealthReporter<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlHealthReporter::HealthReporterDumpTs(val) = attr? {
+            if let Ok(DlHealthReporter::HealthReporterDumpTs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11620,7 +11766,7 @@ impl<'a> IterableDlHealthReporter<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlHealthReporter::HealthReporterGracefulPeriod(val) = attr? {
+            if let Ok(DlHealthReporter::HealthReporterGracefulPeriod(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11635,7 +11781,7 @@ impl<'a> IterableDlHealthReporter<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlHealthReporter::HealthReporterAutoRecover(val) = attr? {
+            if let Ok(DlHealthReporter::HealthReporterAutoRecover(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11650,7 +11796,7 @@ impl<'a> IterableDlHealthReporter<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlHealthReporter::HealthReporterDumpTsNs(val) = attr? {
+            if let Ok(DlHealthReporter::HealthReporterDumpTsNs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11665,7 +11811,7 @@ impl<'a> IterableDlHealthReporter<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlHealthReporter::HealthReporterAutoDump(val) = attr? {
+            if let Ok(DlHealthReporter::HealthReporterAutoDump(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11676,12 +11822,12 @@ impl<'a> IterableDlHealthReporter<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Time (in msec) for recoveries before starting the grace period\\."]
+    #[doc = "Time (in msec) for recoveries before starting the grace period.\n"]
     pub fn get_health_reporter_burst_period(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlHealthReporter::HealthReporterBurstPeriod(val) = attr? {
+            if let Ok(DlHealthReporter::HealthReporterBurstPeriod(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11722,14 +11868,16 @@ impl<'a> IterableDlHealthReporter<'a> {
 impl<'a> Iterator for IterableDlHealthReporter<'a> {
     type Item = Result<DlHealthReporter<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11948,7 +12096,7 @@ impl<'a> IterableDlAttrStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlAttrStats::StatsRxPackets(val) = attr? {
+            if let Ok(DlAttrStats::StatsRxPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11963,7 +12111,7 @@ impl<'a> IterableDlAttrStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlAttrStats::StatsRxBytes(val) = attr? {
+            if let Ok(DlAttrStats::StatsRxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11978,7 +12126,7 @@ impl<'a> IterableDlAttrStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlAttrStats::StatsRxDropped(val) = attr? {
+            if let Ok(DlAttrStats::StatsRxDropped(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12025,14 +12173,16 @@ impl<'a> IterableDlAttrStats<'a> {
 impl<'a> Iterator for IterableDlAttrStats<'a> {
     type Item = Result<DlAttrStats, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12148,7 +12298,7 @@ impl<'a> IterableDlTrapMetadata<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlTrapMetadata::TrapMetadataTypeInPort(val) = attr? {
+            if let Ok(DlTrapMetadata::TrapMetadataTypeInPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12163,7 +12313,7 @@ impl<'a> IterableDlTrapMetadata<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlTrapMetadata::TrapMetadataTypeFaCookie(val) = attr? {
+            if let Ok(DlTrapMetadata::TrapMetadataTypeFaCookie(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12209,14 +12359,16 @@ impl<'a> IterableDlTrapMetadata<'a> {
 impl<'a> Iterator for IterableDlTrapMetadata<'a> {
     type Item = Result<DlTrapMetadata, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12315,7 +12467,7 @@ impl<'a> IterableDlLinecardSupportedTypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlLinecardSupportedTypes::LinecardType(val) = attr? {
+            if let Ok(DlLinecardSupportedTypes::LinecardType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12356,14 +12508,16 @@ impl<'a> IterableDlLinecardSupportedTypes<'a> {
 impl<'a> Iterator for IterableDlLinecardSupportedTypes<'a> {
     type Item = Result<DlLinecardSupportedTypes<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12454,7 +12608,7 @@ impl<'a> IterableDlSelftestId<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlSelftestId::Flash(val) = attr? {
+            if let Ok(DlSelftestId::Flash(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12499,14 +12653,16 @@ impl<'a> IterableDlSelftestId<'a> {
 impl<'a> Iterator for IterableDlSelftestId<'a> {
     type Item = Result<DlSelftestId, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12587,7 +12743,7 @@ impl IterableDlSelftestId<'_> {
 #[derive(Clone)]
 pub enum DlRateTcBws {
     Index(u8),
-    #[doc = "Specifies the bandwidth share assigned to the Traffic Class\\.\nThe bandwidth for the traffic class is determined\nin proportion to the sum of the shares of all configured classes\\.\n"]
+    #[doc = "Specifies the bandwidth share assigned to the Traffic Class. The\nbandwidth for the traffic class is determined in proportion to the sum\nof the shares of all configured classes.\n"]
     Bw(u32),
 }
 impl<'a> IterableDlRateTcBws<'a> {
@@ -12595,7 +12751,7 @@ impl<'a> IterableDlRateTcBws<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlRateTcBws::Index(val) = attr? {
+            if let Ok(DlRateTcBws::Index(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12606,12 +12762,12 @@ impl<'a> IterableDlRateTcBws<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Specifies the bandwidth share assigned to the Traffic Class\\.\nThe bandwidth for the traffic class is determined\nin proportion to the sum of the shares of all configured classes\\.\n"]
+    #[doc = "Specifies the bandwidth share assigned to the Traffic Class. The\nbandwidth for the traffic class is determined in proportion to the sum\nof the shares of all configured classes.\n"]
     pub fn get_bw(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DlRateTcBws::Bw(val) = attr? {
+            if let Ok(DlRateTcBws::Bw(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12657,14 +12813,16 @@ impl<'a> IterableDlRateTcBws<'a> {
 impl<'a> Iterator for IterableDlRateTcBws<'a> {
     type Item = Result<DlRateTcBws, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -14020,15 +14178,27 @@ impl<Prev: Rec> PushDevlink<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Time (in msec) for recoveries before starting the grace period\\."]
+    #[doc = "Time (in msec) for recoveries before starting the grace period.\n"]
     pub fn push_health_reporter_burst_period(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 181u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Request restoring parameter to its default value\\."]
+    #[doc = "Request restoring parameter to its default value.\n"]
     pub fn push_param_reset_default(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 183u16, 0 as u16);
+        self
+    }
+    #[doc = "Unique devlink instance index.\n"]
+    pub fn push_index(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 184u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "Bitmask selecting which resource classes to include in a resource-dump\nresponse. Bit 0 (dev) selects device-level resources; bit 1 (port)\nselects port-level resources. When absent all classes are returned.\n\nAssociated type: [`ResourceScope`] (1 bit per enumeration)"]
+    pub fn push_resource_scope_mask(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 185u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
 }
@@ -15800,7 +15970,7 @@ impl<Prev: Rec> PushDlHealthReporter<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Time (in msec) for recoveries before starting the grace period\\."]
+    #[doc = "Time (in msec) for recoveries before starting the grace period.\n"]
     pub fn push_health_reporter_burst_period(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 181u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -16033,7 +16203,7 @@ impl<Prev: Rec> PushDlRateTcBws<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Specifies the bandwidth share assigned to the Traffic Class\\.\nThe bandwidth for the traffic class is determined\nin proportion to the sum of the shares of all configured classes\\.\n"]
+    #[doc = "Specifies the bandwidth share assigned to the Traffic Class. The\nbandwidth for the traffic class is determined in proportion to the sum\nof the shares of all configured classes.\n"]
     pub fn push_bw(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -16049,7 +16219,7 @@ impl<Prev: Rec> Drop for PushDlRateTcBws<Prev> {
         }
     }
 }
-#[doc = "Get devlink instances\\.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_failed()](IterableDevlink::get_reload_failed)\n- [.get_dev_stats()](IterableDevlink::get_dev_stats)\n"]
+#[doc = "Get devlink instances.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_failed()](IterableDevlink::get_reload_failed)\n- [.get_dev_stats()](IterableDevlink::get_dev_stats)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDump<'r> {
     request: Request<'r>,
@@ -16104,7 +16274,7 @@ impl NetlinkRequest for OpGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get devlink instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_failed()](IterableDevlink::get_reload_failed)\n- [.get_dev_stats()](IterableDevlink::get_dev_stats)\n"]
+#[doc = "Get devlink instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_failed()](IterableDevlink::get_reload_failed)\n- [.get_dev_stats()](IterableDevlink::get_dev_stats)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDo<'r> {
     request: Request<'r>,
@@ -16157,7 +16327,7 @@ impl NetlinkRequest for OpGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get devlink port instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n"]
+#[doc = "Get devlink port instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpPortGetDump<'r> {
     request: Request<'r>,
@@ -16212,7 +16382,7 @@ impl NetlinkRequest for OpPortGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get devlink port instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n"]
+#[doc = "Get devlink port instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpPortGetDo<'r> {
     request: Request<'r>,
@@ -16265,7 +16435,7 @@ impl NetlinkRequest for OpPortGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set devlink port instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_type()](PushDevlink::push_port_type)\n- [.nested_port_function()](PushDevlink::nested_port_function)\n"]
+#[doc = "Set devlink port instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_type()](PushDevlink::push_port_type)\n- [.nested_port_function()](PushDevlink::nested_port_function)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpPortSetDo<'r> {
     request: Request<'r>,
@@ -16318,7 +16488,7 @@ impl NetlinkRequest for OpPortSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create devlink port instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_flavour()](PushDevlink::push_port_flavour)\n- [.push_port_pci_pf_number()](PushDevlink::push_port_pci_pf_number)\n- [.push_port_controller_number()](PushDevlink::push_port_controller_number)\n- [.push_port_pci_sf_number()](PushDevlink::push_port_pci_sf_number)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n"]
+#[doc = "Create devlink port instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_flavour()](PushDevlink::push_port_flavour)\n- [.push_port_pci_pf_number()](PushDevlink::push_port_pci_pf_number)\n- [.push_port_controller_number()](PushDevlink::push_port_controller_number)\n- [.push_port_pci_sf_number()](PushDevlink::push_port_pci_sf_number)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpPortNewDo<'r> {
     request: Request<'r>,
@@ -16371,7 +16541,7 @@ impl NetlinkRequest for OpPortNewDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete devlink port instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n"]
+#[doc = "Delete devlink port instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpPortDelDo<'r> {
     request: Request<'r>,
@@ -16424,7 +16594,7 @@ impl NetlinkRequest for OpPortDelDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Split devlink port instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_split_count()](PushDevlink::push_port_split_count)\n"]
+#[doc = "Split devlink port instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_split_count()](PushDevlink::push_port_split_count)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpPortSplitDo<'r> {
     request: Request<'r>,
@@ -16477,7 +16647,7 @@ impl NetlinkRequest for OpPortSplitDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Unplit devlink port instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n"]
+#[doc = "Unplit devlink port instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpPortUnsplitDo<'r> {
     request: Request<'r>,
@@ -16530,7 +16700,7 @@ impl NetlinkRequest for OpPortUnsplitDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get shared buffer instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n"]
+#[doc = "Get shared buffer instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbGetDump<'r> {
     request: Request<'r>,
@@ -16585,7 +16755,7 @@ impl NetlinkRequest for OpSbGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get shared buffer instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n"]
+#[doc = "Get shared buffer instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbGetDo<'r> {
     request: Request<'r>,
@@ -16638,7 +16808,7 @@ impl NetlinkRequest for OpSbGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get shared buffer pool instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n"]
+#[doc = "Get shared buffer pool instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbPoolGetDump<'r> {
     request: Request<'r>,
@@ -16693,7 +16863,7 @@ impl NetlinkRequest for OpSbPoolGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get shared buffer pool instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n"]
+#[doc = "Get shared buffer pool instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbPoolGetDo<'r> {
     request: Request<'r>,
@@ -16746,7 +16916,7 @@ impl NetlinkRequest for OpSbPoolGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set shared buffer pool instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_pool_size()](PushDevlink::push_sb_pool_size)\n- [.push_sb_pool_threshold_type()](PushDevlink::push_sb_pool_threshold_type)\n"]
+#[doc = "Set shared buffer pool instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_pool_size()](PushDevlink::push_sb_pool_size)\n- [.push_sb_pool_threshold_type()](PushDevlink::push_sb_pool_threshold_type)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbPoolSetDo<'r> {
     request: Request<'r>,
@@ -16799,7 +16969,7 @@ impl NetlinkRequest for OpSbPoolSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get shared buffer port\\-pool combinations and threshold\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n"]
+#[doc = "Get shared buffer port-pool combinations and threshold.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbPortPoolGetDump<'r> {
     request: Request<'r>,
@@ -16854,7 +17024,7 @@ impl NetlinkRequest for OpSbPortPoolGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get shared buffer port\\-pool combinations and threshold\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n"]
+#[doc = "Get shared buffer port-pool combinations and threshold.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbPortPoolGetDo<'r> {
     request: Request<'r>,
@@ -16907,7 +17077,7 @@ impl NetlinkRequest for OpSbPortPoolGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set shared buffer port\\-pool combinations and threshold\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_threshold()](PushDevlink::push_sb_threshold)\n"]
+#[doc = "Set shared buffer port-pool combinations and threshold.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_threshold()](PushDevlink::push_sb_threshold)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbPortPoolSetDo<'r> {
     request: Request<'r>,
@@ -16960,7 +17130,7 @@ impl NetlinkRequest for OpSbPortPoolSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get shared buffer port\\-TC to pool bindings and threshold\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_type()](IterableDevlink::get_sb_pool_type)\n- [.get_sb_tc_index()](IterableDevlink::get_sb_tc_index)\n"]
+#[doc = "Get shared buffer port-TC to pool bindings and threshold.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_type()](IterableDevlink::get_sb_pool_type)\n- [.get_sb_tc_index()](IterableDevlink::get_sb_tc_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbTcPoolBindGetDump<'r> {
     request: Request<'r>,
@@ -17015,7 +17185,7 @@ impl NetlinkRequest for OpSbTcPoolBindGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get shared buffer port\\-TC to pool bindings and threshold\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_type()](PushDevlink::push_sb_pool_type)\n- [.push_sb_tc_index()](PushDevlink::push_sb_tc_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_type()](IterableDevlink::get_sb_pool_type)\n- [.get_sb_tc_index()](IterableDevlink::get_sb_tc_index)\n"]
+#[doc = "Get shared buffer port-TC to pool bindings and threshold.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_type()](PushDevlink::push_sb_pool_type)\n- [.push_sb_tc_index()](PushDevlink::push_sb_tc_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_type()](IterableDevlink::get_sb_pool_type)\n- [.get_sb_tc_index()](IterableDevlink::get_sb_tc_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbTcPoolBindGetDo<'r> {
     request: Request<'r>,
@@ -17068,7 +17238,7 @@ impl NetlinkRequest for OpSbTcPoolBindGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set shared buffer port\\-TC to pool bindings and threshold\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_pool_type()](PushDevlink::push_sb_pool_type)\n- [.push_sb_threshold()](PushDevlink::push_sb_threshold)\n- [.push_sb_tc_index()](PushDevlink::push_sb_tc_index)\n"]
+#[doc = "Set shared buffer port-TC to pool bindings and threshold.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_pool_type()](PushDevlink::push_sb_pool_type)\n- [.push_sb_threshold()](PushDevlink::push_sb_threshold)\n- [.push_sb_tc_index()](PushDevlink::push_sb_tc_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbTcPoolBindSetDo<'r> {
     request: Request<'r>,
@@ -17121,7 +17291,7 @@ impl NetlinkRequest for OpSbTcPoolBindSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Take occupancy snapshot of shared buffer\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n"]
+#[doc = "Take occupancy snapshot of shared buffer.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbOccSnapshotDo<'r> {
     request: Request<'r>,
@@ -17174,7 +17344,7 @@ impl NetlinkRequest for OpSbOccSnapshotDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Clear occupancy watermarks of shared buffer\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n"]
+#[doc = "Clear occupancy watermarks of shared buffer.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSbOccMaxClearDo<'r> {
     request: Request<'r>,
@@ -17227,7 +17397,7 @@ impl NetlinkRequest for OpSbOccMaxClearDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get eswitch attributes\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_eswitch_mode()](IterableDevlink::get_eswitch_mode)\n- [.get_eswitch_inline_mode()](IterableDevlink::get_eswitch_inline_mode)\n- [.get_eswitch_encap_mode()](IterableDevlink::get_eswitch_encap_mode)\n"]
+#[doc = "Get eswitch attributes.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_eswitch_mode()](IterableDevlink::get_eswitch_mode)\n- [.get_eswitch_inline_mode()](IterableDevlink::get_eswitch_inline_mode)\n- [.get_eswitch_encap_mode()](IterableDevlink::get_eswitch_encap_mode)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpEswitchGetDo<'r> {
     request: Request<'r>,
@@ -17280,7 +17450,7 @@ impl NetlinkRequest for OpEswitchGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set eswitch attributes\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_eswitch_mode()](PushDevlink::push_eswitch_mode)\n- [.push_eswitch_inline_mode()](PushDevlink::push_eswitch_inline_mode)\n- [.push_eswitch_encap_mode()](PushDevlink::push_eswitch_encap_mode)\n"]
+#[doc = "Set eswitch attributes.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_eswitch_mode()](PushDevlink::push_eswitch_mode)\n- [.push_eswitch_inline_mode()](PushDevlink::push_eswitch_inline_mode)\n- [.push_eswitch_encap_mode()](PushDevlink::push_eswitch_encap_mode)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpEswitchSetDo<'r> {
     request: Request<'r>,
@@ -17333,7 +17503,7 @@ impl NetlinkRequest for OpEswitchSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get dpipe table attributes\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_tables()](IterableDevlink::get_dpipe_tables)\n"]
+#[doc = "Get dpipe table attributes.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_tables()](IterableDevlink::get_dpipe_tables)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpDpipeTableGetDo<'r> {
     request: Request<'r>,
@@ -17386,7 +17556,7 @@ impl NetlinkRequest for OpDpipeTableGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get dpipe entries attributes\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_entries()](IterableDevlink::get_dpipe_entries)\n"]
+#[doc = "Get dpipe entries attributes.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_entries()](IterableDevlink::get_dpipe_entries)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpDpipeEntriesGetDo<'r> {
     request: Request<'r>,
@@ -17439,7 +17609,7 @@ impl NetlinkRequest for OpDpipeEntriesGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get dpipe headers attributes\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_headers()](IterableDevlink::get_dpipe_headers)\n"]
+#[doc = "Get dpipe headers attributes.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_headers()](IterableDevlink::get_dpipe_headers)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpDpipeHeadersGetDo<'r> {
     request: Request<'r>,
@@ -17492,7 +17662,7 @@ impl NetlinkRequest for OpDpipeHeadersGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set dpipe counter attributes\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n- [.push_dpipe_table_counters_enabled()](PushDevlink::push_dpipe_table_counters_enabled)\n"]
+#[doc = "Set dpipe counter attributes.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n- [.push_dpipe_table_counters_enabled()](PushDevlink::push_dpipe_table_counters_enabled)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpDpipeTableCountersSetDo<'r> {
     request: Request<'r>,
@@ -17545,7 +17715,7 @@ impl NetlinkRequest for OpDpipeTableCountersSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set resource attributes\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_resource_id()](PushDevlink::push_resource_id)\n- [.push_resource_size()](PushDevlink::push_resource_size)\n"]
+#[doc = "Set resource attributes.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_resource_id()](PushDevlink::push_resource_id)\n- [.push_resource_size()](PushDevlink::push_resource_size)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpResourceSetDo<'r> {
     request: Request<'r>,
@@ -17598,7 +17768,62 @@ impl NetlinkRequest for OpResourceSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get resource attributes\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_resource_list()](IterableDevlink::get_resource_list)\n"]
+#[doc = "Get resource attributes.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n- [.push_resource_scope_mask()](PushDevlink::push_resource_scope_mask)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_resource_list()](IterableDevlink::get_resource_list)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
+#[derive(Debug)]
+pub struct OpResourceDumpDump<'r> {
+    request: Request<'r>,
+}
+impl<'r> OpResourceDumpDump<'r> {
+    pub fn new(mut request: Request<'r>) -> Self {
+        Self::write_header(request.buf_mut());
+        Self {
+            request: request.set_dump(),
+        }
+    }
+    pub fn encode_request<'buf>(buf: &'buf mut Vec<u8>) -> PushDevlink<&'buf mut Vec<u8>> {
+        Self::write_header(buf);
+        PushDevlink::new(buf)
+    }
+    pub fn encode(&mut self) -> PushDevlink<&mut Vec<u8>> {
+        PushDevlink::new(self.request.buf_mut())
+    }
+    pub fn into_encoder(self) -> PushDevlink<RequestBuf<'r>> {
+        PushDevlink::new(self.request.buf)
+    }
+    pub fn decode_request<'a>(buf: &'a [u8]) -> IterableDevlink<'a> {
+        let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
+        IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
+    }
+    fn write_header<Prev: Rec>(prev: &mut Prev) {
+        let mut header = BuiltinNfgenmsg::new();
+        header.cmd = 36u8;
+        header.version = 1u8;
+        prev.as_rec_mut().extend(header.as_slice());
+    }
+}
+impl NetlinkRequest for OpResourceDumpDump<'_> {
+    fn protocol(&self) -> Protocol {
+        Protocol::Generic("devlink".as_bytes())
+    }
+    fn flags(&self) -> u16 {
+        self.request.flags
+    }
+    fn payload(&self) -> &[u8] {
+        self.request.buf()
+    }
+    type ReplyType<'buf> = IterableDevlink<'buf>;
+    fn decode_reply<'buf>(buf: &'buf [u8]) -> Self::ReplyType<'buf> {
+        Self::decode_request(buf)
+    }
+    fn lookup(
+        buf: &[u8],
+        offset: usize,
+        missing_type: Option<u16>,
+    ) -> (Vec<(&'static str, usize)>, Option<&'static str>) {
+        Self::decode_request(buf).lookup_attr(offset, missing_type)
+    }
+}
+#[doc = "Get resource attributes.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_resource_list()](IterableDevlink::get_resource_list)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpResourceDumpDo<'r> {
     request: Request<'r>,
@@ -17651,7 +17876,7 @@ impl NetlinkRequest for OpResourceDumpDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Reload devlink\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_netns_fd()](PushDevlink::push_netns_fd)\n- [.push_netns_pid()](PushDevlink::push_netns_pid)\n- [.push_netns_id()](PushDevlink::push_netns_id)\n- [.push_reload_action()](PushDevlink::push_reload_action)\n- [.push_reload_limits()](PushDevlink::push_reload_limits)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_actions_performed()](IterableDevlink::get_reload_actions_performed)\n"]
+#[doc = "Reload devlink.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_netns_fd()](PushDevlink::push_netns_fd)\n- [.push_netns_pid()](PushDevlink::push_netns_pid)\n- [.push_netns_id()](PushDevlink::push_netns_id)\n- [.push_reload_action()](PushDevlink::push_reload_action)\n- [.push_reload_limits()](PushDevlink::push_reload_limits)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_actions_performed()](IterableDevlink::get_reload_actions_performed)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpReloadDo<'r> {
     request: Request<'r>,
@@ -17704,7 +17929,7 @@ impl NetlinkRequest for OpReloadDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get param instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_param_name()](IterableDevlink::get_param_name)\n"]
+#[doc = "Get param instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_param_name()](IterableDevlink::get_param_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpParamGetDump<'r> {
     request: Request<'r>,
@@ -17759,7 +17984,7 @@ impl NetlinkRequest for OpParamGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get param instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_param_name()](PushDevlink::push_param_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_param_name()](IterableDevlink::get_param_name)\n"]
+#[doc = "Get param instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_param_name()](PushDevlink::push_param_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_param_name()](IterableDevlink::get_param_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpParamGetDo<'r> {
     request: Request<'r>,
@@ -17812,7 +18037,7 @@ impl NetlinkRequest for OpParamGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set param instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_param_name()](PushDevlink::push_param_name)\n- [.push_param_type()](PushDevlink::push_param_type)\n- [.push_param_value_cmode()](PushDevlink::push_param_value_cmode)\n- [.push_param_reset_default()](PushDevlink::push_param_reset_default)\n"]
+#[doc = "Set param instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_param_name()](PushDevlink::push_param_name)\n- [.push_param_type()](PushDevlink::push_param_type)\n- [.push_param_value_cmode()](PushDevlink::push_param_value_cmode)\n- [.push_param_reset_default()](PushDevlink::push_param_reset_default)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpParamSetDo<'r> {
     request: Request<'r>,
@@ -17865,7 +18090,7 @@ impl NetlinkRequest for OpParamSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get region instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n"]
+#[doc = "Get region instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpRegionGetDump<'r> {
     request: Request<'r>,
@@ -17920,7 +18145,7 @@ impl NetlinkRequest for OpRegionGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get region instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n"]
+#[doc = "Get region instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpRegionGetDo<'r> {
     request: Request<'r>,
@@ -17973,7 +18198,7 @@ impl NetlinkRequest for OpRegionGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create region snapshot\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n- [.get_region_snapshot_id()](IterableDevlink::get_region_snapshot_id)\n"]
+#[doc = "Create region snapshot.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n- [.get_region_snapshot_id()](IterableDevlink::get_region_snapshot_id)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpRegionNewDo<'r> {
     request: Request<'r>,
@@ -18026,7 +18251,7 @@ impl NetlinkRequest for OpRegionNewDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete region snapshot\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n"]
+#[doc = "Delete region snapshot.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpRegionDelDo<'r> {
     request: Request<'r>,
@@ -18079,7 +18304,7 @@ impl NetlinkRequest for OpRegionDelDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Read region data\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n- [.push_region_chunk_addr()](PushDevlink::push_region_chunk_addr)\n- [.push_region_chunk_len()](PushDevlink::push_region_chunk_len)\n- [.push_region_direct()](PushDevlink::push_region_direct)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n"]
+#[doc = "Read region data.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n- [.push_region_chunk_addr()](PushDevlink::push_region_chunk_addr)\n- [.push_region_chunk_len()](PushDevlink::push_region_chunk_len)\n- [.push_region_direct()](PushDevlink::push_region_direct)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpRegionReadDump<'r> {
     request: Request<'r>,
@@ -18134,7 +18359,7 @@ impl NetlinkRequest for OpRegionReadDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get port param instances\\.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n"]
+#[doc = "Get port param instances.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpPortParamGetDump<'r> {
     request: Request<'r>,
@@ -18189,7 +18414,7 @@ impl NetlinkRequest for OpPortParamGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get port param instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n"]
+#[doc = "Get port param instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpPortParamGetDo<'r> {
     request: Request<'r>,
@@ -18242,7 +18467,7 @@ impl NetlinkRequest for OpPortParamGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set port param instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n"]
+#[doc = "Set port param instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpPortParamSetDo<'r> {
     request: Request<'r>,
@@ -18295,7 +18520,7 @@ impl NetlinkRequest for OpPortParamSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get device information, like driver name, hardware and firmware versions\netc\\.\n\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_info_driver_name()](IterableDevlink::get_info_driver_name)\n- [.get_info_serial_number()](IterableDevlink::get_info_serial_number)\n- [.get_info_version_fixed()](IterableDevlink::get_info_version_fixed)\n- [.get_info_version_running()](IterableDevlink::get_info_version_running)\n- [.get_info_version_stored()](IterableDevlink::get_info_version_stored)\n- [.get_info_board_serial_number()](IterableDevlink::get_info_board_serial_number)\n"]
+#[doc = "Get device information, like driver name, hardware and firmware versions\netc.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_info_driver_name()](IterableDevlink::get_info_driver_name)\n- [.get_info_serial_number()](IterableDevlink::get_info_serial_number)\n- [.get_info_version_fixed()](IterableDevlink::get_info_version_fixed)\n- [.get_info_version_running()](IterableDevlink::get_info_version_running)\n- [.get_info_version_stored()](IterableDevlink::get_info_version_stored)\n- [.get_info_board_serial_number()](IterableDevlink::get_info_board_serial_number)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpInfoGetDump<'r> {
     request: Request<'r>,
@@ -18350,7 +18575,7 @@ impl NetlinkRequest for OpInfoGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get device information, like driver name, hardware and firmware versions\netc\\.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_info_driver_name()](IterableDevlink::get_info_driver_name)\n- [.get_info_serial_number()](IterableDevlink::get_info_serial_number)\n- [.get_info_version_fixed()](IterableDevlink::get_info_version_fixed)\n- [.get_info_version_running()](IterableDevlink::get_info_version_running)\n- [.get_info_version_stored()](IterableDevlink::get_info_version_stored)\n- [.get_info_board_serial_number()](IterableDevlink::get_info_board_serial_number)\n"]
+#[doc = "Get device information, like driver name, hardware and firmware versions\netc.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_info_driver_name()](IterableDevlink::get_info_driver_name)\n- [.get_info_serial_number()](IterableDevlink::get_info_serial_number)\n- [.get_info_version_fixed()](IterableDevlink::get_info_version_fixed)\n- [.get_info_version_running()](IterableDevlink::get_info_version_running)\n- [.get_info_version_stored()](IterableDevlink::get_info_version_stored)\n- [.get_info_board_serial_number()](IterableDevlink::get_info_board_serial_number)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpInfoGetDo<'r> {
     request: Request<'r>,
@@ -18403,7 +18628,7 @@ impl NetlinkRequest for OpInfoGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get health reporter instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_health_reporter_name()](IterableDevlink::get_health_reporter_name)\n"]
+#[doc = "Get health reporter instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_health_reporter_name()](IterableDevlink::get_health_reporter_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpHealthReporterGetDump<'r> {
     request: Request<'r>,
@@ -18458,7 +18683,7 @@ impl NetlinkRequest for OpHealthReporterGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get health reporter instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_health_reporter_name()](IterableDevlink::get_health_reporter_name)\n"]
+#[doc = "Get health reporter instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_health_reporter_name()](IterableDevlink::get_health_reporter_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpHealthReporterGetDo<'r> {
     request: Request<'r>,
@@ -18511,7 +18736,7 @@ impl NetlinkRequest for OpHealthReporterGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_health_reporter_graceful_period()](PushDevlink::push_health_reporter_graceful_period)\n- [.push_health_reporter_auto_recover()](PushDevlink::push_health_reporter_auto_recover)\n- [.push_health_reporter_auto_dump()](PushDevlink::push_health_reporter_auto_dump)\n- [.push_health_reporter_burst_period()](PushDevlink::push_health_reporter_burst_period)\n"]
+#[doc = "Set health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_health_reporter_graceful_period()](PushDevlink::push_health_reporter_graceful_period)\n- [.push_health_reporter_auto_recover()](PushDevlink::push_health_reporter_auto_recover)\n- [.push_health_reporter_auto_dump()](PushDevlink::push_health_reporter_auto_dump)\n- [.push_health_reporter_burst_period()](PushDevlink::push_health_reporter_burst_period)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpHealthReporterSetDo<'r> {
     request: Request<'r>,
@@ -18564,7 +18789,7 @@ impl NetlinkRequest for OpHealthReporterSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Recover health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n"]
+#[doc = "Recover health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpHealthReporterRecoverDo<'r> {
     request: Request<'r>,
@@ -18617,7 +18842,7 @@ impl NetlinkRequest for OpHealthReporterRecoverDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Diagnose health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n"]
+#[doc = "Diagnose health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpHealthReporterDiagnoseDo<'r> {
     request: Request<'r>,
@@ -18670,7 +18895,7 @@ impl NetlinkRequest for OpHealthReporterDiagnoseDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Dump health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n\nReply attributes:\n- [.get_fmsg()](IterableDevlink::get_fmsg)\n"]
+#[doc = "Dump health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_fmsg()](IterableDevlink::get_fmsg)\n\n"]
 #[derive(Debug)]
 pub struct OpHealthReporterDumpGetDump<'r> {
     request: Request<'r>,
@@ -18725,7 +18950,7 @@ impl NetlinkRequest for OpHealthReporterDumpGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Clear dump of health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n"]
+#[doc = "Clear dump of health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpHealthReporterDumpClearDo<'r> {
     request: Request<'r>,
@@ -18778,7 +19003,7 @@ impl NetlinkRequest for OpHealthReporterDumpClearDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Flash update devlink instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_flash_update_file_name()](PushDevlink::push_flash_update_file_name)\n- [.push_flash_update_component()](PushDevlink::push_flash_update_component)\n- [.push_flash_update_overwrite_mask()](PushDevlink::push_flash_update_overwrite_mask)\n"]
+#[doc = "Flash update devlink instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_flash_update_file_name()](PushDevlink::push_flash_update_file_name)\n- [.push_flash_update_component()](PushDevlink::push_flash_update_component)\n- [.push_flash_update_overwrite_mask()](PushDevlink::push_flash_update_overwrite_mask)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpFlashUpdateDo<'r> {
     request: Request<'r>,
@@ -18831,7 +19056,7 @@ impl NetlinkRequest for OpFlashUpdateDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get trap instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_name()](IterableDevlink::get_trap_name)\n"]
+#[doc = "Get trap instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_name()](IterableDevlink::get_trap_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpTrapGetDump<'r> {
     request: Request<'r>,
@@ -18886,7 +19111,7 @@ impl NetlinkRequest for OpTrapGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get trap instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_name()](PushDevlink::push_trap_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_name()](IterableDevlink::get_trap_name)\n"]
+#[doc = "Get trap instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_name()](PushDevlink::push_trap_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_name()](IterableDevlink::get_trap_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpTrapGetDo<'r> {
     request: Request<'r>,
@@ -18939,7 +19164,7 @@ impl NetlinkRequest for OpTrapGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set trap instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_name()](PushDevlink::push_trap_name)\n- [.push_trap_action()](PushDevlink::push_trap_action)\n"]
+#[doc = "Set trap instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_name()](PushDevlink::push_trap_name)\n- [.push_trap_action()](PushDevlink::push_trap_action)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpTrapSetDo<'r> {
     request: Request<'r>,
@@ -18992,7 +19217,7 @@ impl NetlinkRequest for OpTrapSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get trap group instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_group_name()](IterableDevlink::get_trap_group_name)\n"]
+#[doc = "Get trap group instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_group_name()](IterableDevlink::get_trap_group_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpTrapGroupGetDump<'r> {
     request: Request<'r>,
@@ -19047,7 +19272,7 @@ impl NetlinkRequest for OpTrapGroupGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get trap group instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_group_name()](PushDevlink::push_trap_group_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_group_name()](IterableDevlink::get_trap_group_name)\n"]
+#[doc = "Get trap group instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_group_name()](PushDevlink::push_trap_group_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_group_name()](IterableDevlink::get_trap_group_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpTrapGroupGetDo<'r> {
     request: Request<'r>,
@@ -19100,7 +19325,7 @@ impl NetlinkRequest for OpTrapGroupGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set trap group instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_action()](PushDevlink::push_trap_action)\n- [.push_trap_group_name()](PushDevlink::push_trap_group_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n"]
+#[doc = "Set trap group instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_action()](PushDevlink::push_trap_action)\n- [.push_trap_group_name()](PushDevlink::push_trap_group_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpTrapGroupSetDo<'r> {
     request: Request<'r>,
@@ -19153,7 +19378,7 @@ impl NetlinkRequest for OpTrapGroupSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get trap policer instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_policer_id()](IterableDevlink::get_trap_policer_id)\n"]
+#[doc = "Get trap policer instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_policer_id()](IterableDevlink::get_trap_policer_id)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpTrapPolicerGetDump<'r> {
     request: Request<'r>,
@@ -19208,7 +19433,7 @@ impl NetlinkRequest for OpTrapPolicerGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get trap policer instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_policer_id()](IterableDevlink::get_trap_policer_id)\n"]
+#[doc = "Get trap policer instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_policer_id()](IterableDevlink::get_trap_policer_id)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpTrapPolicerGetDo<'r> {
     request: Request<'r>,
@@ -19261,7 +19486,7 @@ impl NetlinkRequest for OpTrapPolicerGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get trap policer instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n- [.push_trap_policer_rate()](PushDevlink::push_trap_policer_rate)\n- [.push_trap_policer_burst()](PushDevlink::push_trap_policer_burst)\n"]
+#[doc = "Get trap policer instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n- [.push_trap_policer_rate()](PushDevlink::push_trap_policer_rate)\n- [.push_trap_policer_burst()](PushDevlink::push_trap_policer_burst)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpTrapPolicerSetDo<'r> {
     request: Request<'r>,
@@ -19314,7 +19539,7 @@ impl NetlinkRequest for OpTrapPolicerSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Test health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n"]
+#[doc = "Test health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpHealthReporterTestDo<'r> {
     request: Request<'r>,
@@ -19367,7 +19592,7 @@ impl NetlinkRequest for OpHealthReporterTestDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get rate instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_rate_node_name()](IterableDevlink::get_rate_node_name)\n"]
+#[doc = "Get rate instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_rate_node_name()](IterableDevlink::get_rate_node_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpRateGetDump<'r> {
     request: Request<'r>,
@@ -19422,7 +19647,7 @@ impl NetlinkRequest for OpRateGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get rate instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_rate_node_name()](IterableDevlink::get_rate_node_name)\n"]
+#[doc = "Get rate instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_rate_node_name()](IterableDevlink::get_rate_node_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpRateGetDo<'r> {
     request: Request<'r>,
@@ -19475,7 +19700,7 @@ impl NetlinkRequest for OpRateGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set rate instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_tx_share()](PushDevlink::push_rate_tx_share)\n- [.push_rate_tx_max()](PushDevlink::push_rate_tx_max)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_rate_parent_node_name()](PushDevlink::push_rate_parent_node_name)\n- [.push_rate_tx_priority()](PushDevlink::push_rate_tx_priority)\n- [.push_rate_tx_weight()](PushDevlink::push_rate_tx_weight)\n- [.nested_rate_tc_bws()](PushDevlink::nested_rate_tc_bws)\n"]
+#[doc = "Set rate instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_tx_share()](PushDevlink::push_rate_tx_share)\n- [.push_rate_tx_max()](PushDevlink::push_rate_tx_max)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_rate_parent_node_name()](PushDevlink::push_rate_parent_node_name)\n- [.push_rate_tx_priority()](PushDevlink::push_rate_tx_priority)\n- [.push_rate_tx_weight()](PushDevlink::push_rate_tx_weight)\n- [.nested_rate_tc_bws()](PushDevlink::nested_rate_tc_bws)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpRateSetDo<'r> {
     request: Request<'r>,
@@ -19528,7 +19753,7 @@ impl NetlinkRequest for OpRateSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create rate instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_tx_share()](PushDevlink::push_rate_tx_share)\n- [.push_rate_tx_max()](PushDevlink::push_rate_tx_max)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_rate_parent_node_name()](PushDevlink::push_rate_parent_node_name)\n- [.push_rate_tx_priority()](PushDevlink::push_rate_tx_priority)\n- [.push_rate_tx_weight()](PushDevlink::push_rate_tx_weight)\n- [.nested_rate_tc_bws()](PushDevlink::nested_rate_tc_bws)\n"]
+#[doc = "Create rate instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_tx_share()](PushDevlink::push_rate_tx_share)\n- [.push_rate_tx_max()](PushDevlink::push_rate_tx_max)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_rate_parent_node_name()](PushDevlink::push_rate_parent_node_name)\n- [.push_rate_tx_priority()](PushDevlink::push_rate_tx_priority)\n- [.push_rate_tx_weight()](PushDevlink::push_rate_tx_weight)\n- [.nested_rate_tc_bws()](PushDevlink::nested_rate_tc_bws)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpRateNewDo<'r> {
     request: Request<'r>,
@@ -19581,7 +19806,7 @@ impl NetlinkRequest for OpRateNewDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete rate instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n"]
+#[doc = "Delete rate instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpRateDelDo<'r> {
     request: Request<'r>,
@@ -19634,7 +19859,7 @@ impl NetlinkRequest for OpRateDelDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get line card instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_linecard_index()](IterableDevlink::get_linecard_index)\n"]
+#[doc = "Get line card instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_linecard_index()](IterableDevlink::get_linecard_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpLinecardGetDump<'r> {
     request: Request<'r>,
@@ -19689,7 +19914,7 @@ impl NetlinkRequest for OpLinecardGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get line card instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_linecard_index()](PushDevlink::push_linecard_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_linecard_index()](IterableDevlink::get_linecard_index)\n"]
+#[doc = "Get line card instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_linecard_index()](PushDevlink::push_linecard_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_linecard_index()](IterableDevlink::get_linecard_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpLinecardGetDo<'r> {
     request: Request<'r>,
@@ -19742,7 +19967,7 @@ impl NetlinkRequest for OpLinecardGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set line card instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_linecard_index()](PushDevlink::push_linecard_index)\n- [.push_linecard_type()](PushDevlink::push_linecard_type)\n"]
+#[doc = "Set line card instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_linecard_index()](PushDevlink::push_linecard_index)\n- [.push_linecard_type()](PushDevlink::push_linecard_type)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpLinecardSetDo<'r> {
     request: Request<'r>,
@@ -19795,7 +20020,7 @@ impl NetlinkRequest for OpLinecardSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get device selftest instances\\.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n"]
+#[doc = "Get device selftest instances.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSelftestsGetDump<'r> {
     request: Request<'r>,
@@ -19850,7 +20075,7 @@ impl NetlinkRequest for OpSelftestsGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get device selftest instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n"]
+#[doc = "Get device selftest instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSelftestsGetDo<'r> {
     request: Request<'r>,
@@ -19903,7 +20128,7 @@ impl NetlinkRequest for OpSelftestsGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Run device selftest instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.nested_selftests()](PushDevlink::nested_selftests)\n"]
+#[doc = "Run device selftest instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.nested_selftests()](PushDevlink::nested_selftests)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpSelftestsRunDo<'r> {
     request: Request<'r>,
@@ -19956,7 +20181,7 @@ impl NetlinkRequest for OpSelftestsRunDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set notification messages socket filter\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n"]
+#[doc = "Set notification messages socket filter.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
 #[derive(Debug)]
 pub struct OpNotifyFilterSetDo<'r> {
     request: Request<'r>,
@@ -20111,63 +20336,63 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get devlink instances\\.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_failed()](IterableDevlink::get_reload_failed)\n- [.get_dev_stats()](IterableDevlink::get_dev_stats)\n"]
+    #[doc = "Get devlink instances.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_failed()](IterableDevlink::get_reload_failed)\n- [.get_dev_stats()](IterableDevlink::get_dev_stats)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_get_dump(self) -> OpGetDump<'buf> {
         let mut res = OpGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-dump", OpGetDump::lookup);
         res
     }
-    #[doc = "Get devlink instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_failed()](IterableDevlink::get_reload_failed)\n- [.get_dev_stats()](IterableDevlink::get_dev_stats)\n"]
+    #[doc = "Get devlink instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_failed()](IterableDevlink::get_reload_failed)\n- [.get_dev_stats()](IterableDevlink::get_dev_stats)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_get_do(self) -> OpGetDo<'buf> {
         let mut res = OpGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-do", OpGetDo::lookup);
         res
     }
-    #[doc = "Get devlink port instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n"]
+    #[doc = "Get devlink port instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_port_get_dump(self) -> OpPortGetDump<'buf> {
         let mut res = OpPortGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-port-get-dump", OpPortGetDump::lookup);
         res
     }
-    #[doc = "Get devlink port instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n"]
+    #[doc = "Get devlink port instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_port_get_do(self) -> OpPortGetDo<'buf> {
         let mut res = OpPortGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-port-get-do", OpPortGetDo::lookup);
         res
     }
-    #[doc = "Set devlink port instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_type()](PushDevlink::push_port_type)\n- [.nested_port_function()](PushDevlink::nested_port_function)\n"]
+    #[doc = "Set devlink port instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_type()](PushDevlink::push_port_type)\n- [.nested_port_function()](PushDevlink::nested_port_function)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_port_set_do(self) -> OpPortSetDo<'buf> {
         let mut res = OpPortSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-port-set-do", OpPortSetDo::lookup);
         res
     }
-    #[doc = "Create devlink port instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_flavour()](PushDevlink::push_port_flavour)\n- [.push_port_pci_pf_number()](PushDevlink::push_port_pci_pf_number)\n- [.push_port_controller_number()](PushDevlink::push_port_controller_number)\n- [.push_port_pci_sf_number()](PushDevlink::push_port_pci_sf_number)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n"]
+    #[doc = "Create devlink port instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_flavour()](PushDevlink::push_port_flavour)\n- [.push_port_pci_pf_number()](PushDevlink::push_port_pci_pf_number)\n- [.push_port_controller_number()](PushDevlink::push_port_controller_number)\n- [.push_port_pci_sf_number()](PushDevlink::push_port_pci_sf_number)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_port_new_do(self) -> OpPortNewDo<'buf> {
         let mut res = OpPortNewDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-port-new-do", OpPortNewDo::lookup);
         res
     }
-    #[doc = "Delete devlink port instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n"]
+    #[doc = "Delete devlink port instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_port_del_do(self) -> OpPortDelDo<'buf> {
         let mut res = OpPortDelDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-port-del-do", OpPortDelDo::lookup);
         res
     }
-    #[doc = "Split devlink port instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_split_count()](PushDevlink::push_port_split_count)\n"]
+    #[doc = "Split devlink port instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_port_split_count()](PushDevlink::push_port_split_count)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_port_split_do(self) -> OpPortSplitDo<'buf> {
         let mut res = OpPortSplitDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-port-split-do", OpPortSplitDo::lookup);
         res
     }
-    #[doc = "Unplit devlink port instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n"]
+    #[doc = "Unplit devlink port instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_port_unsplit_do(self) -> OpPortUnsplitDo<'buf> {
         let mut res = OpPortUnsplitDo::new(self);
         res.request.do_writeback(
@@ -20177,21 +20402,21 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get shared buffer instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n"]
+    #[doc = "Get shared buffer instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_sb_get_dump(self) -> OpSbGetDump<'buf> {
         let mut res = OpSbGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-sb-get-dump", OpSbGetDump::lookup);
         res
     }
-    #[doc = "Get shared buffer instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n"]
+    #[doc = "Get shared buffer instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_sb_get_do(self) -> OpSbGetDo<'buf> {
         let mut res = OpSbGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-sb-get-do", OpSbGetDo::lookup);
         res
     }
-    #[doc = "Get shared buffer pool instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n"]
+    #[doc = "Get shared buffer pool instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_sb_pool_get_dump(self) -> OpSbPoolGetDump<'buf> {
         let mut res = OpSbPoolGetDump::new(self);
         res.request.do_writeback(
@@ -20201,21 +20426,21 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get shared buffer pool instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n"]
+    #[doc = "Get shared buffer pool instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_sb_pool_get_do(self) -> OpSbPoolGetDo<'buf> {
         let mut res = OpSbPoolGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-sb-pool-get-do", OpSbPoolGetDo::lookup);
         res
     }
-    #[doc = "Set shared buffer pool instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_pool_size()](PushDevlink::push_sb_pool_size)\n- [.push_sb_pool_threshold_type()](PushDevlink::push_sb_pool_threshold_type)\n"]
+    #[doc = "Set shared buffer pool instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_pool_size()](PushDevlink::push_sb_pool_size)\n- [.push_sb_pool_threshold_type()](PushDevlink::push_sb_pool_threshold_type)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_sb_pool_set_do(self) -> OpSbPoolSetDo<'buf> {
         let mut res = OpSbPoolSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-sb-pool-set-do", OpSbPoolSetDo::lookup);
         res
     }
-    #[doc = "Get shared buffer port\\-pool combinations and threshold\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n"]
+    #[doc = "Get shared buffer port-pool combinations and threshold.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_sb_port_pool_get_dump(self) -> OpSbPortPoolGetDump<'buf> {
         let mut res = OpSbPortPoolGetDump::new(self);
         res.request.do_writeback(
@@ -20225,7 +20450,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get shared buffer port\\-pool combinations and threshold\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n"]
+    #[doc = "Get shared buffer port-pool combinations and threshold.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_index()](IterableDevlink::get_sb_pool_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_sb_port_pool_get_do(self) -> OpSbPortPoolGetDo<'buf> {
         let mut res = OpSbPortPoolGetDo::new(self);
         res.request.do_writeback(
@@ -20235,7 +20460,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set shared buffer port\\-pool combinations and threshold\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_threshold()](PushDevlink::push_sb_threshold)\n"]
+    #[doc = "Set shared buffer port-pool combinations and threshold.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_threshold()](PushDevlink::push_sb_threshold)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_sb_port_pool_set_do(self) -> OpSbPortPoolSetDo<'buf> {
         let mut res = OpSbPortPoolSetDo::new(self);
         res.request.do_writeback(
@@ -20245,7 +20470,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get shared buffer port\\-TC to pool bindings and threshold\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_type()](IterableDevlink::get_sb_pool_type)\n- [.get_sb_tc_index()](IterableDevlink::get_sb_tc_index)\n"]
+    #[doc = "Get shared buffer port-TC to pool bindings and threshold.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_type()](IterableDevlink::get_sb_pool_type)\n- [.get_sb_tc_index()](IterableDevlink::get_sb_tc_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_sb_tc_pool_bind_get_dump(self) -> OpSbTcPoolBindGetDump<'buf> {
         let mut res = OpSbTcPoolBindGetDump::new(self);
         res.request.do_writeback(
@@ -20255,7 +20480,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get shared buffer port\\-TC to pool bindings and threshold\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_type()](PushDevlink::push_sb_pool_type)\n- [.push_sb_tc_index()](PushDevlink::push_sb_tc_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_type()](IterableDevlink::get_sb_pool_type)\n- [.get_sb_tc_index()](IterableDevlink::get_sb_tc_index)\n"]
+    #[doc = "Get shared buffer port-TC to pool bindings and threshold.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_type()](PushDevlink::push_sb_pool_type)\n- [.push_sb_tc_index()](PushDevlink::push_sb_tc_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_sb_index()](IterableDevlink::get_sb_index)\n- [.get_sb_pool_type()](IterableDevlink::get_sb_pool_type)\n- [.get_sb_tc_index()](IterableDevlink::get_sb_tc_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_sb_tc_pool_bind_get_do(self) -> OpSbTcPoolBindGetDo<'buf> {
         let mut res = OpSbTcPoolBindGetDo::new(self);
         res.request.do_writeback(
@@ -20265,7 +20490,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set shared buffer port\\-TC to pool bindings and threshold\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_pool_type()](PushDevlink::push_sb_pool_type)\n- [.push_sb_threshold()](PushDevlink::push_sb_threshold)\n- [.push_sb_tc_index()](PushDevlink::push_sb_tc_index)\n"]
+    #[doc = "Set shared buffer port-TC to pool bindings and threshold.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_sb_pool_index()](PushDevlink::push_sb_pool_index)\n- [.push_sb_pool_type()](PushDevlink::push_sb_pool_type)\n- [.push_sb_threshold()](PushDevlink::push_sb_threshold)\n- [.push_sb_tc_index()](PushDevlink::push_sb_tc_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_sb_tc_pool_bind_set_do(self) -> OpSbTcPoolBindSetDo<'buf> {
         let mut res = OpSbTcPoolBindSetDo::new(self);
         res.request.do_writeback(
@@ -20275,7 +20500,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Take occupancy snapshot of shared buffer\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n"]
+    #[doc = "Take occupancy snapshot of shared buffer.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_sb_occ_snapshot_do(self) -> OpSbOccSnapshotDo<'buf> {
         let mut res = OpSbOccSnapshotDo::new(self);
         res.request.do_writeback(
@@ -20285,7 +20510,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Clear occupancy watermarks of shared buffer\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n"]
+    #[doc = "Clear occupancy watermarks of shared buffer.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_sb_index()](PushDevlink::push_sb_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_sb_occ_max_clear_do(self) -> OpSbOccMaxClearDo<'buf> {
         let mut res = OpSbOccMaxClearDo::new(self);
         res.request.do_writeback(
@@ -20295,21 +20520,21 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get eswitch attributes\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_eswitch_mode()](IterableDevlink::get_eswitch_mode)\n- [.get_eswitch_inline_mode()](IterableDevlink::get_eswitch_inline_mode)\n- [.get_eswitch_encap_mode()](IterableDevlink::get_eswitch_encap_mode)\n"]
+    #[doc = "Get eswitch attributes.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_eswitch_mode()](IterableDevlink::get_eswitch_mode)\n- [.get_eswitch_inline_mode()](IterableDevlink::get_eswitch_inline_mode)\n- [.get_eswitch_encap_mode()](IterableDevlink::get_eswitch_encap_mode)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_eswitch_get_do(self) -> OpEswitchGetDo<'buf> {
         let mut res = OpEswitchGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-eswitch-get-do", OpEswitchGetDo::lookup);
         res
     }
-    #[doc = "Set eswitch attributes\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_eswitch_mode()](PushDevlink::push_eswitch_mode)\n- [.push_eswitch_inline_mode()](PushDevlink::push_eswitch_inline_mode)\n- [.push_eswitch_encap_mode()](PushDevlink::push_eswitch_encap_mode)\n"]
+    #[doc = "Set eswitch attributes.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_eswitch_mode()](PushDevlink::push_eswitch_mode)\n- [.push_eswitch_inline_mode()](PushDevlink::push_eswitch_inline_mode)\n- [.push_eswitch_encap_mode()](PushDevlink::push_eswitch_encap_mode)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_eswitch_set_do(self) -> OpEswitchSetDo<'buf> {
         let mut res = OpEswitchSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-eswitch-set-do", OpEswitchSetDo::lookup);
         res
     }
-    #[doc = "Get dpipe table attributes\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_tables()](IterableDevlink::get_dpipe_tables)\n"]
+    #[doc = "Get dpipe table attributes.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_tables()](IterableDevlink::get_dpipe_tables)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_dpipe_table_get_do(self) -> OpDpipeTableGetDo<'buf> {
         let mut res = OpDpipeTableGetDo::new(self);
         res.request.do_writeback(
@@ -20319,7 +20544,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get dpipe entries attributes\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_entries()](IterableDevlink::get_dpipe_entries)\n"]
+    #[doc = "Get dpipe entries attributes.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_entries()](IterableDevlink::get_dpipe_entries)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_dpipe_entries_get_do(self) -> OpDpipeEntriesGetDo<'buf> {
         let mut res = OpDpipeEntriesGetDo::new(self);
         res.request.do_writeback(
@@ -20329,7 +20554,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get dpipe headers attributes\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_headers()](IterableDevlink::get_dpipe_headers)\n"]
+    #[doc = "Get dpipe headers attributes.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_dpipe_headers()](IterableDevlink::get_dpipe_headers)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_dpipe_headers_get_do(self) -> OpDpipeHeadersGetDo<'buf> {
         let mut res = OpDpipeHeadersGetDo::new(self);
         res.request.do_writeback(
@@ -20339,7 +20564,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set dpipe counter attributes\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n- [.push_dpipe_table_counters_enabled()](PushDevlink::push_dpipe_table_counters_enabled)\n"]
+    #[doc = "Set dpipe counter attributes.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_dpipe_table_name()](PushDevlink::push_dpipe_table_name)\n- [.push_dpipe_table_counters_enabled()](PushDevlink::push_dpipe_table_counters_enabled)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_dpipe_table_counters_set_do(self) -> OpDpipeTableCountersSetDo<'buf> {
         let mut res = OpDpipeTableCountersSetDo::new(self);
         res.request.do_writeback(
@@ -20349,7 +20574,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set resource attributes\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_resource_id()](PushDevlink::push_resource_id)\n- [.push_resource_size()](PushDevlink::push_resource_size)\n"]
+    #[doc = "Set resource attributes.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_resource_id()](PushDevlink::push_resource_id)\n- [.push_resource_size()](PushDevlink::push_resource_size)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_resource_set_do(self) -> OpResourceSetDo<'buf> {
         let mut res = OpResourceSetDo::new(self);
         res.request.do_writeback(
@@ -20359,7 +20584,17 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get resource attributes\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_resource_list()](IterableDevlink::get_resource_list)\n"]
+    #[doc = "Get resource attributes.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n- [.push_resource_scope_mask()](PushDevlink::push_resource_scope_mask)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_resource_list()](IterableDevlink::get_resource_list)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
+    pub fn op_resource_dump_dump(self) -> OpResourceDumpDump<'buf> {
+        let mut res = OpResourceDumpDump::new(self);
+        res.request.do_writeback(
+            res.protocol(),
+            "op-resource-dump-dump",
+            OpResourceDumpDump::lookup,
+        );
+        res
+    }
+    #[doc = "Get resource attributes.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_resource_list()](IterableDevlink::get_resource_list)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_resource_dump_do(self) -> OpResourceDumpDo<'buf> {
         let mut res = OpResourceDumpDo::new(self);
         res.request.do_writeback(
@@ -20369,35 +20604,35 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Reload devlink\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_netns_fd()](PushDevlink::push_netns_fd)\n- [.push_netns_pid()](PushDevlink::push_netns_pid)\n- [.push_netns_id()](PushDevlink::push_netns_id)\n- [.push_reload_action()](PushDevlink::push_reload_action)\n- [.push_reload_limits()](PushDevlink::push_reload_limits)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_actions_performed()](IterableDevlink::get_reload_actions_performed)\n"]
+    #[doc = "Reload devlink.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_netns_fd()](PushDevlink::push_netns_fd)\n- [.push_netns_pid()](PushDevlink::push_netns_pid)\n- [.push_netns_id()](PushDevlink::push_netns_id)\n- [.push_reload_action()](PushDevlink::push_reload_action)\n- [.push_reload_limits()](PushDevlink::push_reload_limits)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_reload_actions_performed()](IterableDevlink::get_reload_actions_performed)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_reload_do(self) -> OpReloadDo<'buf> {
         let mut res = OpReloadDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-reload-do", OpReloadDo::lookup);
         res
     }
-    #[doc = "Get param instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_param_name()](IterableDevlink::get_param_name)\n"]
+    #[doc = "Get param instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_param_name()](IterableDevlink::get_param_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_param_get_dump(self) -> OpParamGetDump<'buf> {
         let mut res = OpParamGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-param-get-dump", OpParamGetDump::lookup);
         res
     }
-    #[doc = "Get param instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_param_name()](PushDevlink::push_param_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_param_name()](IterableDevlink::get_param_name)\n"]
+    #[doc = "Get param instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_param_name()](PushDevlink::push_param_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_param_name()](IterableDevlink::get_param_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_param_get_do(self) -> OpParamGetDo<'buf> {
         let mut res = OpParamGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-param-get-do", OpParamGetDo::lookup);
         res
     }
-    #[doc = "Set param instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_param_name()](PushDevlink::push_param_name)\n- [.push_param_type()](PushDevlink::push_param_type)\n- [.push_param_value_cmode()](PushDevlink::push_param_value_cmode)\n- [.push_param_reset_default()](PushDevlink::push_param_reset_default)\n"]
+    #[doc = "Set param instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_param_name()](PushDevlink::push_param_name)\n- [.push_param_type()](PushDevlink::push_param_type)\n- [.push_param_value_cmode()](PushDevlink::push_param_value_cmode)\n- [.push_param_reset_default()](PushDevlink::push_param_reset_default)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_param_set_do(self) -> OpParamSetDo<'buf> {
         let mut res = OpParamSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-param-set-do", OpParamSetDo::lookup);
         res
     }
-    #[doc = "Get region instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n"]
+    #[doc = "Get region instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_region_get_dump(self) -> OpRegionGetDump<'buf> {
         let mut res = OpRegionGetDump::new(self);
         res.request.do_writeback(
@@ -20407,28 +20642,28 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get region instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n"]
+    #[doc = "Get region instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_region_get_do(self) -> OpRegionGetDo<'buf> {
         let mut res = OpRegionGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-region-get-do", OpRegionGetDo::lookup);
         res
     }
-    #[doc = "Create region snapshot\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n- [.get_region_snapshot_id()](IterableDevlink::get_region_snapshot_id)\n"]
+    #[doc = "Create region snapshot.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n- [.get_region_snapshot_id()](IterableDevlink::get_region_snapshot_id)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_region_new_do(self) -> OpRegionNewDo<'buf> {
         let mut res = OpRegionNewDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-region-new-do", OpRegionNewDo::lookup);
         res
     }
-    #[doc = "Delete region snapshot\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n"]
+    #[doc = "Delete region snapshot.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_region_del_do(self) -> OpRegionDelDo<'buf> {
         let mut res = OpRegionDelDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-region-del-do", OpRegionDelDo::lookup);
         res
     }
-    #[doc = "Read region data\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n- [.push_region_chunk_addr()](PushDevlink::push_region_chunk_addr)\n- [.push_region_chunk_len()](PushDevlink::push_region_chunk_len)\n- [.push_region_direct()](PushDevlink::push_region_direct)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n"]
+    #[doc = "Read region data.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_region_name()](PushDevlink::push_region_name)\n- [.push_region_snapshot_id()](PushDevlink::push_region_snapshot_id)\n- [.push_region_chunk_addr()](PushDevlink::push_region_chunk_addr)\n- [.push_region_chunk_len()](PushDevlink::push_region_chunk_len)\n- [.push_region_direct()](PushDevlink::push_region_direct)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_region_name()](IterableDevlink::get_region_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_region_read_dump(self) -> OpRegionReadDump<'buf> {
         let mut res = OpRegionReadDump::new(self);
         res.request.do_writeback(
@@ -20438,7 +20673,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get port param instances\\.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n"]
+    #[doc = "Get port param instances.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_port_param_get_dump(self) -> OpPortParamGetDump<'buf> {
         let mut res = OpPortParamGetDump::new(self);
         res.request.do_writeback(
@@ -20448,7 +20683,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get port param instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n"]
+    #[doc = "Get port param instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_port_param_get_do(self) -> OpPortParamGetDo<'buf> {
         let mut res = OpPortParamGetDo::new(self);
         res.request.do_writeback(
@@ -20458,7 +20693,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set port param instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n"]
+    #[doc = "Set port param instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_port_param_set_do(self) -> OpPortParamSetDo<'buf> {
         let mut res = OpPortParamSetDo::new(self);
         res.request.do_writeback(
@@ -20468,21 +20703,21 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get device information, like driver name, hardware and firmware versions\netc\\.\n\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_info_driver_name()](IterableDevlink::get_info_driver_name)\n- [.get_info_serial_number()](IterableDevlink::get_info_serial_number)\n- [.get_info_version_fixed()](IterableDevlink::get_info_version_fixed)\n- [.get_info_version_running()](IterableDevlink::get_info_version_running)\n- [.get_info_version_stored()](IterableDevlink::get_info_version_stored)\n- [.get_info_board_serial_number()](IterableDevlink::get_info_board_serial_number)\n"]
+    #[doc = "Get device information, like driver name, hardware and firmware versions\netc.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_info_driver_name()](IterableDevlink::get_info_driver_name)\n- [.get_info_serial_number()](IterableDevlink::get_info_serial_number)\n- [.get_info_version_fixed()](IterableDevlink::get_info_version_fixed)\n- [.get_info_version_running()](IterableDevlink::get_info_version_running)\n- [.get_info_version_stored()](IterableDevlink::get_info_version_stored)\n- [.get_info_board_serial_number()](IterableDevlink::get_info_board_serial_number)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_info_get_dump(self) -> OpInfoGetDump<'buf> {
         let mut res = OpInfoGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-info-get-dump", OpInfoGetDump::lookup);
         res
     }
-    #[doc = "Get device information, like driver name, hardware and firmware versions\netc\\.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_info_driver_name()](IterableDevlink::get_info_driver_name)\n- [.get_info_serial_number()](IterableDevlink::get_info_serial_number)\n- [.get_info_version_fixed()](IterableDevlink::get_info_version_fixed)\n- [.get_info_version_running()](IterableDevlink::get_info_version_running)\n- [.get_info_version_stored()](IterableDevlink::get_info_version_stored)\n- [.get_info_board_serial_number()](IterableDevlink::get_info_board_serial_number)\n"]
+    #[doc = "Get device information, like driver name, hardware and firmware versions\netc.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_info_driver_name()](IterableDevlink::get_info_driver_name)\n- [.get_info_serial_number()](IterableDevlink::get_info_serial_number)\n- [.get_info_version_fixed()](IterableDevlink::get_info_version_fixed)\n- [.get_info_version_running()](IterableDevlink::get_info_version_running)\n- [.get_info_version_stored()](IterableDevlink::get_info_version_stored)\n- [.get_info_board_serial_number()](IterableDevlink::get_info_board_serial_number)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_info_get_do(self) -> OpInfoGetDo<'buf> {
         let mut res = OpInfoGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-info-get-do", OpInfoGetDo::lookup);
         res
     }
-    #[doc = "Get health reporter instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_health_reporter_name()](IterableDevlink::get_health_reporter_name)\n"]
+    #[doc = "Get health reporter instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_health_reporter_name()](IterableDevlink::get_health_reporter_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_health_reporter_get_dump(self) -> OpHealthReporterGetDump<'buf> {
         let mut res = OpHealthReporterGetDump::new(self);
         res.request.do_writeback(
@@ -20492,7 +20727,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get health reporter instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_health_reporter_name()](IterableDevlink::get_health_reporter_name)\n"]
+    #[doc = "Get health reporter instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_health_reporter_name()](IterableDevlink::get_health_reporter_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_health_reporter_get_do(self) -> OpHealthReporterGetDo<'buf> {
         let mut res = OpHealthReporterGetDo::new(self);
         res.request.do_writeback(
@@ -20502,7 +20737,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_health_reporter_graceful_period()](PushDevlink::push_health_reporter_graceful_period)\n- [.push_health_reporter_auto_recover()](PushDevlink::push_health_reporter_auto_recover)\n- [.push_health_reporter_auto_dump()](PushDevlink::push_health_reporter_auto_dump)\n- [.push_health_reporter_burst_period()](PushDevlink::push_health_reporter_burst_period)\n"]
+    #[doc = "Set health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_health_reporter_graceful_period()](PushDevlink::push_health_reporter_graceful_period)\n- [.push_health_reporter_auto_recover()](PushDevlink::push_health_reporter_auto_recover)\n- [.push_health_reporter_auto_dump()](PushDevlink::push_health_reporter_auto_dump)\n- [.push_health_reporter_burst_period()](PushDevlink::push_health_reporter_burst_period)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_health_reporter_set_do(self) -> OpHealthReporterSetDo<'buf> {
         let mut res = OpHealthReporterSetDo::new(self);
         res.request.do_writeback(
@@ -20512,7 +20747,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Recover health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n"]
+    #[doc = "Recover health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_health_reporter_recover_do(self) -> OpHealthReporterRecoverDo<'buf> {
         let mut res = OpHealthReporterRecoverDo::new(self);
         res.request.do_writeback(
@@ -20522,7 +20757,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Diagnose health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n"]
+    #[doc = "Diagnose health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_health_reporter_diagnose_do(self) -> OpHealthReporterDiagnoseDo<'buf> {
         let mut res = OpHealthReporterDiagnoseDo::new(self);
         res.request.do_writeback(
@@ -20532,7 +20767,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Dump health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n\nReply attributes:\n- [.get_fmsg()](IterableDevlink::get_fmsg)\n"]
+    #[doc = "Dump health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_fmsg()](IterableDevlink::get_fmsg)\n\n"]
     pub fn op_health_reporter_dump_get_dump(self) -> OpHealthReporterDumpGetDump<'buf> {
         let mut res = OpHealthReporterDumpGetDump::new(self);
         res.request.do_writeback(
@@ -20542,7 +20777,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Clear dump of health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n"]
+    #[doc = "Clear dump of health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_health_reporter_dump_clear_do(self) -> OpHealthReporterDumpClearDo<'buf> {
         let mut res = OpHealthReporterDumpClearDo::new(self);
         res.request.do_writeback(
@@ -20552,7 +20787,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Flash update devlink instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_flash_update_file_name()](PushDevlink::push_flash_update_file_name)\n- [.push_flash_update_component()](PushDevlink::push_flash_update_component)\n- [.push_flash_update_overwrite_mask()](PushDevlink::push_flash_update_overwrite_mask)\n"]
+    #[doc = "Flash update devlink instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_flash_update_file_name()](PushDevlink::push_flash_update_file_name)\n- [.push_flash_update_component()](PushDevlink::push_flash_update_component)\n- [.push_flash_update_overwrite_mask()](PushDevlink::push_flash_update_overwrite_mask)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_flash_update_do(self) -> OpFlashUpdateDo<'buf> {
         let mut res = OpFlashUpdateDo::new(self);
         res.request.do_writeback(
@@ -20562,28 +20797,28 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get trap instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_name()](IterableDevlink::get_trap_name)\n"]
+    #[doc = "Get trap instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_name()](IterableDevlink::get_trap_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_trap_get_dump(self) -> OpTrapGetDump<'buf> {
         let mut res = OpTrapGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-trap-get-dump", OpTrapGetDump::lookup);
         res
     }
-    #[doc = "Get trap instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_name()](PushDevlink::push_trap_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_name()](IterableDevlink::get_trap_name)\n"]
+    #[doc = "Get trap instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_name()](PushDevlink::push_trap_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_name()](IterableDevlink::get_trap_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_trap_get_do(self) -> OpTrapGetDo<'buf> {
         let mut res = OpTrapGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-trap-get-do", OpTrapGetDo::lookup);
         res
     }
-    #[doc = "Set trap instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_name()](PushDevlink::push_trap_name)\n- [.push_trap_action()](PushDevlink::push_trap_action)\n"]
+    #[doc = "Set trap instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_name()](PushDevlink::push_trap_name)\n- [.push_trap_action()](PushDevlink::push_trap_action)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_trap_set_do(self) -> OpTrapSetDo<'buf> {
         let mut res = OpTrapSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-trap-set-do", OpTrapSetDo::lookup);
         res
     }
-    #[doc = "Get trap group instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_group_name()](IterableDevlink::get_trap_group_name)\n"]
+    #[doc = "Get trap group instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_group_name()](IterableDevlink::get_trap_group_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_trap_group_get_dump(self) -> OpTrapGroupGetDump<'buf> {
         let mut res = OpTrapGroupGetDump::new(self);
         res.request.do_writeback(
@@ -20593,7 +20828,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get trap group instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_group_name()](PushDevlink::push_trap_group_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_group_name()](IterableDevlink::get_trap_group_name)\n"]
+    #[doc = "Get trap group instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_group_name()](PushDevlink::push_trap_group_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_group_name()](IterableDevlink::get_trap_group_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_trap_group_get_do(self) -> OpTrapGroupGetDo<'buf> {
         let mut res = OpTrapGroupGetDo::new(self);
         res.request.do_writeback(
@@ -20603,7 +20838,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set trap group instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_action()](PushDevlink::push_trap_action)\n- [.push_trap_group_name()](PushDevlink::push_trap_group_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n"]
+    #[doc = "Set trap group instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_action()](PushDevlink::push_trap_action)\n- [.push_trap_group_name()](PushDevlink::push_trap_group_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_trap_group_set_do(self) -> OpTrapGroupSetDo<'buf> {
         let mut res = OpTrapGroupSetDo::new(self);
         res.request.do_writeback(
@@ -20613,7 +20848,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get trap policer instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_policer_id()](IterableDevlink::get_trap_policer_id)\n"]
+    #[doc = "Get trap policer instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_policer_id()](IterableDevlink::get_trap_policer_id)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_trap_policer_get_dump(self) -> OpTrapPolicerGetDump<'buf> {
         let mut res = OpTrapPolicerGetDump::new(self);
         res.request.do_writeback(
@@ -20623,7 +20858,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get trap policer instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_policer_id()](IterableDevlink::get_trap_policer_id)\n"]
+    #[doc = "Get trap policer instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_trap_policer_id()](IterableDevlink::get_trap_policer_id)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_trap_policer_get_do(self) -> OpTrapPolicerGetDo<'buf> {
         let mut res = OpTrapPolicerGetDo::new(self);
         res.request.do_writeback(
@@ -20633,7 +20868,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get trap policer instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n- [.push_trap_policer_rate()](PushDevlink::push_trap_policer_rate)\n- [.push_trap_policer_burst()](PushDevlink::push_trap_policer_burst)\n"]
+    #[doc = "Get trap policer instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_trap_policer_id()](PushDevlink::push_trap_policer_id)\n- [.push_trap_policer_rate()](PushDevlink::push_trap_policer_rate)\n- [.push_trap_policer_burst()](PushDevlink::push_trap_policer_burst)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_trap_policer_set_do(self) -> OpTrapPolicerSetDo<'buf> {
         let mut res = OpTrapPolicerSetDo::new(self);
         res.request.do_writeback(
@@ -20643,7 +20878,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Test health reporter instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n"]
+    #[doc = "Test health reporter instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_health_reporter_name()](PushDevlink::push_health_reporter_name)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_health_reporter_test_do(self) -> OpHealthReporterTestDo<'buf> {
         let mut res = OpHealthReporterTestDo::new(self);
         res.request.do_writeback(
@@ -20653,42 +20888,42 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get rate instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_rate_node_name()](IterableDevlink::get_rate_node_name)\n"]
+    #[doc = "Get rate instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_rate_node_name()](IterableDevlink::get_rate_node_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_rate_get_dump(self) -> OpRateGetDump<'buf> {
         let mut res = OpRateGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rate-get-dump", OpRateGetDump::lookup);
         res
     }
-    #[doc = "Get rate instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_rate_node_name()](IterableDevlink::get_rate_node_name)\n"]
+    #[doc = "Get rate instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_port_index()](IterableDevlink::get_port_index)\n- [.get_rate_node_name()](IterableDevlink::get_rate_node_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_rate_get_do(self) -> OpRateGetDo<'buf> {
         let mut res = OpRateGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rate-get-do", OpRateGetDo::lookup);
         res
     }
-    #[doc = "Set rate instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_tx_share()](PushDevlink::push_rate_tx_share)\n- [.push_rate_tx_max()](PushDevlink::push_rate_tx_max)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_rate_parent_node_name()](PushDevlink::push_rate_parent_node_name)\n- [.push_rate_tx_priority()](PushDevlink::push_rate_tx_priority)\n- [.push_rate_tx_weight()](PushDevlink::push_rate_tx_weight)\n- [.nested_rate_tc_bws()](PushDevlink::nested_rate_tc_bws)\n"]
+    #[doc = "Set rate instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_tx_share()](PushDevlink::push_rate_tx_share)\n- [.push_rate_tx_max()](PushDevlink::push_rate_tx_max)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_rate_parent_node_name()](PushDevlink::push_rate_parent_node_name)\n- [.push_rate_tx_priority()](PushDevlink::push_rate_tx_priority)\n- [.push_rate_tx_weight()](PushDevlink::push_rate_tx_weight)\n- [.nested_rate_tc_bws()](PushDevlink::nested_rate_tc_bws)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_rate_set_do(self) -> OpRateSetDo<'buf> {
         let mut res = OpRateSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rate-set-do", OpRateSetDo::lookup);
         res
     }
-    #[doc = "Create rate instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_tx_share()](PushDevlink::push_rate_tx_share)\n- [.push_rate_tx_max()](PushDevlink::push_rate_tx_max)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_rate_parent_node_name()](PushDevlink::push_rate_parent_node_name)\n- [.push_rate_tx_priority()](PushDevlink::push_rate_tx_priority)\n- [.push_rate_tx_weight()](PushDevlink::push_rate_tx_weight)\n- [.nested_rate_tc_bws()](PushDevlink::nested_rate_tc_bws)\n"]
+    #[doc = "Create rate instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_tx_share()](PushDevlink::push_rate_tx_share)\n- [.push_rate_tx_max()](PushDevlink::push_rate_tx_max)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_rate_parent_node_name()](PushDevlink::push_rate_parent_node_name)\n- [.push_rate_tx_priority()](PushDevlink::push_rate_tx_priority)\n- [.push_rate_tx_weight()](PushDevlink::push_rate_tx_weight)\n- [.nested_rate_tc_bws()](PushDevlink::nested_rate_tc_bws)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_rate_new_do(self) -> OpRateNewDo<'buf> {
         let mut res = OpRateNewDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rate-new-do", OpRateNewDo::lookup);
         res
     }
-    #[doc = "Delete rate instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n"]
+    #[doc = "Delete rate instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_rate_node_name()](PushDevlink::push_rate_node_name)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_rate_del_do(self) -> OpRateDelDo<'buf> {
         let mut res = OpRateDelDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rate-del-do", OpRateDelDo::lookup);
         res
     }
-    #[doc = "Get line card instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_linecard_index()](IterableDevlink::get_linecard_index)\n"]
+    #[doc = "Get line card instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_linecard_index()](IterableDevlink::get_linecard_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_linecard_get_dump(self) -> OpLinecardGetDump<'buf> {
         let mut res = OpLinecardGetDump::new(self);
         res.request.do_writeback(
@@ -20698,7 +20933,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get line card instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_linecard_index()](PushDevlink::push_linecard_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_linecard_index()](IterableDevlink::get_linecard_index)\n"]
+    #[doc = "Get line card instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_linecard_index()](PushDevlink::push_linecard_index)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_linecard_index()](IterableDevlink::get_linecard_index)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_linecard_get_do(self) -> OpLinecardGetDo<'buf> {
         let mut res = OpLinecardGetDo::new(self);
         res.request.do_writeback(
@@ -20708,7 +20943,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set line card instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_linecard_index()](PushDevlink::push_linecard_index)\n- [.push_linecard_type()](PushDevlink::push_linecard_type)\n"]
+    #[doc = "Set line card instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_linecard_index()](PushDevlink::push_linecard_index)\n- [.push_linecard_type()](PushDevlink::push_linecard_type)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_linecard_set_do(self) -> OpLinecardSetDo<'buf> {
         let mut res = OpLinecardSetDo::new(self);
         res.request.do_writeback(
@@ -20718,7 +20953,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get device selftest instances\\.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n"]
+    #[doc = "Get device selftest instances.\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_selftests_get_dump(self) -> OpSelftestsGetDump<'buf> {
         let mut res = OpSelftestsGetDump::new(self);
         res.request.do_writeback(
@@ -20728,7 +20963,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get device selftest instances\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n"]
+    #[doc = "Get device selftest instances.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_index()](PushDevlink::push_index)\n\nReply attributes:\n- [.get_bus_name()](IterableDevlink::get_bus_name)\n- [.get_dev_name()](IterableDevlink::get_dev_name)\n- [.get_index()](IterableDevlink::get_index)\n\n"]
     pub fn op_selftests_get_do(self) -> OpSelftestsGetDo<'buf> {
         let mut res = OpSelftestsGetDo::new(self);
         res.request.do_writeback(
@@ -20738,7 +20973,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Run device selftest instances\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.nested_selftests()](PushDevlink::nested_selftests)\n"]
+    #[doc = "Run device selftest instances.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.nested_selftests()](PushDevlink::nested_selftests)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_selftests_run_do(self) -> OpSelftestsRunDo<'buf> {
         let mut res = OpSelftestsRunDo::new(self);
         res.request.do_writeback(
@@ -20748,7 +20983,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set notification messages socket filter\\.\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n"]
+    #[doc = "Set notification messages socket filter.\n\nRequest attributes:\n- [.push_bus_name()](PushDevlink::push_bus_name)\n- [.push_dev_name()](PushDevlink::push_dev_name)\n- [.push_port_index()](PushDevlink::push_port_index)\n- [.push_index()](PushDevlink::push_index)\n\n"]
     pub fn op_notify_filter_set_do(self) -> OpNotifyFilterSetDo<'buf> {
         let mut res = OpNotifyFilterSetDo::new(self);
         res.request.do_writeback(
@@ -20775,6 +21010,7 @@ mod generated_tests {
         let _ = IterableDevlink::get_eswitch_mode;
         let _ = IterableDevlink::get_fmsg;
         let _ = IterableDevlink::get_health_reporter_name;
+        let _ = IterableDevlink::get_index;
         let _ = IterableDevlink::get_info_board_serial_number;
         let _ = IterableDevlink::get_info_driver_name;
         let _ = IterableDevlink::get_info_serial_number;
@@ -20815,6 +21051,7 @@ mod generated_tests {
         let _ = PushDevlink::<&mut Vec<u8>>::push_health_reporter_burst_period;
         let _ = PushDevlink::<&mut Vec<u8>>::push_health_reporter_graceful_period;
         let _ = PushDevlink::<&mut Vec<u8>>::push_health_reporter_name;
+        let _ = PushDevlink::<&mut Vec<u8>>::push_index;
         let _ = PushDevlink::<&mut Vec<u8>>::push_linecard_index;
         let _ = PushDevlink::<&mut Vec<u8>>::push_linecard_type;
         let _ = PushDevlink::<&mut Vec<u8>>::push_netns_fd;
@@ -20845,6 +21082,7 @@ mod generated_tests {
         let _ = PushDevlink::<&mut Vec<u8>>::push_reload_action;
         let _ = PushDevlink::<&mut Vec<u8>>::push_reload_limits;
         let _ = PushDevlink::<&mut Vec<u8>>::push_resource_id;
+        let _ = PushDevlink::<&mut Vec<u8>>::push_resource_scope_mask;
         let _ = PushDevlink::<&mut Vec<u8>>::push_resource_size;
         let _ = PushDevlink::<&mut Vec<u8>>::push_sb_index;
         let _ = PushDevlink::<&mut Vec<u8>>::push_sb_pool_index;

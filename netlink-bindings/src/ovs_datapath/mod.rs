@@ -1,4 +1,4 @@
-#![doc = "OVS datapath configuration over generic netlink\\."]
+#![doc = "OVS datapath configuration over generic netlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -18,13 +18,13 @@ pub const PROTONAME_CSTR: &CStr = c"ovs_datapath";
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum UserFeatures {
-    #[doc = "Allow last Netlink attribute to be unaligned"]
+    #[doc = "Allow last Netlink attribute to be unaligned\n"]
     Unaligned = 1 << 0,
-    #[doc = "Allow datapath to associate multiple Netlink PIDs to each vport"]
+    #[doc = "Allow datapath to associate multiple Netlink PIDs to each vport\n"]
     VportPids = 1 << 1,
-    #[doc = "Allow tc offload recirc sharing"]
+    #[doc = "Allow tc offload recirc sharing\n"]
     TcRecircSharing = 1 << 2,
-    #[doc = "Allow per\\-cpu dispatch of upcalls"]
+    #[doc = "Allow per-cpu dispatch of upcalls\n"]
     DispatchUpcallPerCpu = 1 << 3,
 }
 impl UserFeatures {
@@ -265,7 +265,7 @@ impl std::fmt::Debug for OvsDpMegaflowStats {
 #[derive(Clone)]
 pub enum Datapath<'a> {
     Name(&'a CStr),
-    #[doc = "upcall pid"]
+    #[doc = "upcall pid\n"]
     UpcallPid(u32),
     Stats(OvsDpStats),
     MegaflowStats(OvsDpMegaflowStats),
@@ -280,7 +280,7 @@ impl<'a> IterableDatapath<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Datapath::Name(val) = attr? {
+            if let Ok(Datapath::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -291,12 +291,12 @@ impl<'a> IterableDatapath<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "upcall pid"]
+    #[doc = "upcall pid\n"]
     pub fn get_upcall_pid(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Datapath::UpcallPid(val) = attr? {
+            if let Ok(Datapath::UpcallPid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -311,7 +311,7 @@ impl<'a> IterableDatapath<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Datapath::Stats(val) = attr? {
+            if let Ok(Datapath::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -326,7 +326,7 @@ impl<'a> IterableDatapath<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Datapath::MegaflowStats(val) = attr? {
+            if let Ok(Datapath::MegaflowStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -342,7 +342,7 @@ impl<'a> IterableDatapath<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Datapath::UserFeatures(val) = attr? {
+            if let Ok(Datapath::UserFeatures(val)) = attr {
                 return Ok(val);
             }
         }
@@ -357,7 +357,7 @@ impl<'a> IterableDatapath<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Datapath::MasksCacheSize(val) = attr? {
+            if let Ok(Datapath::MasksCacheSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -372,7 +372,7 @@ impl<'a> IterableDatapath<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Datapath::PerCpuPids(val) = attr? {
+            if let Ok(Datapath::PerCpuPids(val)) = attr {
                 return Ok(val);
             }
         }
@@ -387,7 +387,7 @@ impl<'a> IterableDatapath<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Datapath::Ifindex(val) = attr? {
+            if let Ok(Datapath::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -440,14 +440,16 @@ impl<'a> IterableDatapath<'a> {
 impl<'a> Iterator for IterableDatapath<'a> {
     type Item = Result<Datapath<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -657,7 +659,7 @@ impl<Prev: Rec> PushDatapath<Prev> {
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "upcall pid"]
+    #[doc = "upcall pid\n"]
     pub fn push_upcall_pid(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -709,7 +711,7 @@ impl NotifGroup {
     pub const OVS_DATAPATH: &str = "ovs_datapath";
     pub const OVS_DATAPATH_CSTR: &CStr = c"ovs_datapath";
 }
-#[doc = "Get / dump OVS data path configuration and state\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n\nReply attributes:\n- [.get_name()](IterableDatapath::get_name)\n- [.get_upcall_pid()](IterableDatapath::get_upcall_pid)\n- [.get_stats()](IterableDatapath::get_stats)\n- [.get_megaflow_stats()](IterableDatapath::get_megaflow_stats)\n- [.get_user_features()](IterableDatapath::get_user_features)\n- [.get_masks_cache_size()](IterableDatapath::get_masks_cache_size)\n- [.get_per_cpu_pids()](IterableDatapath::get_per_cpu_pids)\n"]
+#[doc = "Get / dump OVS data path configuration and state\n\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n\nReply attributes:\n- [.get_name()](IterableDatapath::get_name)\n- [.get_upcall_pid()](IterableDatapath::get_upcall_pid)\n- [.get_stats()](IterableDatapath::get_stats)\n- [.get_megaflow_stats()](IterableDatapath::get_megaflow_stats)\n- [.get_user_features()](IterableDatapath::get_user_features)\n- [.get_masks_cache_size()](IterableDatapath::get_masks_cache_size)\n- [.get_per_cpu_pids()](IterableDatapath::get_per_cpu_pids)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDump<'r> {
     request: Request<'r>,
@@ -769,7 +771,7 @@ impl NetlinkRequest for OpGetDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump OVS data path configuration and state\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n\nReply attributes:\n- [.get_name()](IterableDatapath::get_name)\n- [.get_upcall_pid()](IterableDatapath::get_upcall_pid)\n- [.get_stats()](IterableDatapath::get_stats)\n- [.get_megaflow_stats()](IterableDatapath::get_megaflow_stats)\n- [.get_user_features()](IterableDatapath::get_user_features)\n- [.get_masks_cache_size()](IterableDatapath::get_masks_cache_size)\n- [.get_per_cpu_pids()](IterableDatapath::get_per_cpu_pids)\n"]
+#[doc = "Get / dump OVS data path configuration and state\n\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n\nReply attributes:\n- [.get_name()](IterableDatapath::get_name)\n- [.get_upcall_pid()](IterableDatapath::get_upcall_pid)\n- [.get_stats()](IterableDatapath::get_stats)\n- [.get_megaflow_stats()](IterableDatapath::get_megaflow_stats)\n- [.get_user_features()](IterableDatapath::get_user_features)\n- [.get_masks_cache_size()](IterableDatapath::get_masks_cache_size)\n- [.get_per_cpu_pids()](IterableDatapath::get_per_cpu_pids)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDo<'r> {
     request: Request<'r>,
@@ -827,7 +829,7 @@ impl NetlinkRequest for OpGetDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create new OVS data path\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n- [.push_upcall_pid()](PushDatapath::push_upcall_pid)\n- [.push_user_features()](PushDatapath::push_user_features)\n"]
+#[doc = "Create new OVS data path\n\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n- [.push_upcall_pid()](PushDatapath::push_upcall_pid)\n- [.push_user_features()](PushDatapath::push_user_features)\n\n"]
 #[derive(Debug)]
 pub struct OpNewDo<'r> {
     request: Request<'r>,
@@ -885,7 +887,7 @@ impl NetlinkRequest for OpNewDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete existing OVS data path\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n"]
+#[doc = "Delete existing OVS data path\n\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n\n"]
 #[derive(Debug)]
 pub struct OpDelDo<'r> {
     request: Request<'r>,
@@ -1045,28 +1047,28 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get / dump OVS data path configuration and state\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n\nReply attributes:\n- [.get_name()](IterableDatapath::get_name)\n- [.get_upcall_pid()](IterableDatapath::get_upcall_pid)\n- [.get_stats()](IterableDatapath::get_stats)\n- [.get_megaflow_stats()](IterableDatapath::get_megaflow_stats)\n- [.get_user_features()](IterableDatapath::get_user_features)\n- [.get_masks_cache_size()](IterableDatapath::get_masks_cache_size)\n- [.get_per_cpu_pids()](IterableDatapath::get_per_cpu_pids)\n"]
+    #[doc = "Get / dump OVS data path configuration and state\n\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n\nReply attributes:\n- [.get_name()](IterableDatapath::get_name)\n- [.get_upcall_pid()](IterableDatapath::get_upcall_pid)\n- [.get_stats()](IterableDatapath::get_stats)\n- [.get_megaflow_stats()](IterableDatapath::get_megaflow_stats)\n- [.get_user_features()](IterableDatapath::get_user_features)\n- [.get_masks_cache_size()](IterableDatapath::get_masks_cache_size)\n- [.get_per_cpu_pids()](IterableDatapath::get_per_cpu_pids)\n\n"]
     pub fn op_get_dump(self, header: &OvsHeader) -> OpGetDump<'buf> {
         let mut res = OpGetDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-get-dump", OpGetDump::lookup);
         res
     }
-    #[doc = "Get / dump OVS data path configuration and state\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n\nReply attributes:\n- [.get_name()](IterableDatapath::get_name)\n- [.get_upcall_pid()](IterableDatapath::get_upcall_pid)\n- [.get_stats()](IterableDatapath::get_stats)\n- [.get_megaflow_stats()](IterableDatapath::get_megaflow_stats)\n- [.get_user_features()](IterableDatapath::get_user_features)\n- [.get_masks_cache_size()](IterableDatapath::get_masks_cache_size)\n- [.get_per_cpu_pids()](IterableDatapath::get_per_cpu_pids)\n"]
+    #[doc = "Get / dump OVS data path configuration and state\n\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n\nReply attributes:\n- [.get_name()](IterableDatapath::get_name)\n- [.get_upcall_pid()](IterableDatapath::get_upcall_pid)\n- [.get_stats()](IterableDatapath::get_stats)\n- [.get_megaflow_stats()](IterableDatapath::get_megaflow_stats)\n- [.get_user_features()](IterableDatapath::get_user_features)\n- [.get_masks_cache_size()](IterableDatapath::get_masks_cache_size)\n- [.get_per_cpu_pids()](IterableDatapath::get_per_cpu_pids)\n\n"]
     pub fn op_get_do(self, header: &OvsHeader) -> OpGetDo<'buf> {
         let mut res = OpGetDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-get-do", OpGetDo::lookup);
         res
     }
-    #[doc = "Create new OVS data path\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n- [.push_upcall_pid()](PushDatapath::push_upcall_pid)\n- [.push_user_features()](PushDatapath::push_user_features)\n"]
+    #[doc = "Create new OVS data path\n\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n- [.push_upcall_pid()](PushDatapath::push_upcall_pid)\n- [.push_user_features()](PushDatapath::push_user_features)\n\n"]
     pub fn op_new_do(self, header: &OvsHeader) -> OpNewDo<'buf> {
         let mut res = OpNewDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-new-do", OpNewDo::lookup);
         res
     }
-    #[doc = "Delete existing OVS data path\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n"]
+    #[doc = "Delete existing OVS data path\n\nRequest attributes:\n- [.push_name()](PushDatapath::push_name)\n\n"]
     pub fn op_del_do(self, header: &OvsHeader) -> OpDelDo<'buf> {
         let mut res = OpDelDo::new(self, header);
         res.request

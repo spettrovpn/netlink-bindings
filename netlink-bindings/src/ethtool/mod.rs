@@ -1,4 +1,4 @@
-#![doc = "Partial family for Ethtool Netlink\\."]
+#![doc = "Partial family for Ethtool Netlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -32,15 +32,15 @@ impl UdpTunnelType {
         })
     }
 }
-#[doc = "common ethtool header flags"]
+#[doc = "common ethtool header flags\n"]
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum HeaderFlags {
-    #[doc = "use compact bitsets in reply"]
+    #[doc = "use compact bitsets in reply\n"]
     CompactBitsets = 1 << 0,
-    #[doc = "provide optional reply for SET or ACT requests"]
+    #[doc = "provide optional reply for SET or ACT requests\n"]
     OmitReply = 1 << 1,
-    #[doc = "request statistics, if supported by the driver"]
+    #[doc = "request statistics, if supported by the driver\n"]
     Stats = 1 << 2,
 }
 impl HeaderFlags {
@@ -53,17 +53,17 @@ impl HeaderFlags {
         })
     }
 }
-#[doc = "plug\\-in module firmware flashing status"]
+#[doc = "plug-in module firmware flashing status\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum ModuleFwFlashStatus {
-    #[doc = "The firmware flashing process has started\\."]
+    #[doc = "The firmware flashing process has started.\n"]
     Started = 0,
-    #[doc = "The firmware flashing process is in progress\\."]
+    #[doc = "The firmware flashing process is in progress.\n"]
     InProgress = 1,
-    #[doc = "The firmware flashing process was completed successfully\\."]
+    #[doc = "The firmware flashing process was completed successfully.\n"]
     Completed = 2,
-    #[doc = "The firmware flashing process was stopped due to an error\\."]
+    #[doc = "The firmware flashing process was stopped due to an error.\n"]
     Error = 3,
 }
 impl ModuleFwFlashStatus {
@@ -77,27 +77,27 @@ impl ModuleFwFlashStatus {
         })
     }
 }
-#[doc = "\"groups of PSE extended states functions\\. IEEE 802\\.3\\-2022 33\\.2\\.4\\.4\nVariables\"\n"]
+#[doc = "\\\"groups of PSE extended states functions. IEEE 802.3-2022 33.2.4.4\nVariables\\\"\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum C33PseExtState {
-    #[doc = "none"]
+    #[doc = "none\n"]
     None = 0,
-    #[doc = "Group of error\\_condition states"]
+    #[doc = "Group of error_condition states\n"]
     ErrorCondition = 1,
-    #[doc = "Group of mr\\_mps\\_valid states"]
+    #[doc = "Group of mr_mps_valid states\n"]
     MrMpsValid = 2,
-    #[doc = "Group of mr\\_pse\\_enable states"]
+    #[doc = "Group of mr_pse_enable states\n"]
     MrPseEnable = 3,
-    #[doc = "Group of option\\_detect\\_ted states"]
+    #[doc = "Group of option_detect_ted states\n"]
     OptionDetectTed = 4,
-    #[doc = "Group of option\\_vport\\_lim states"]
+    #[doc = "Group of option_vport_lim states\n"]
     OptionVportLim = 5,
-    #[doc = "Group of ovld\\_detected states"]
+    #[doc = "Group of ovld_detected states\n"]
     OvldDetected = 6,
-    #[doc = "Group of power\\_not\\_available states"]
+    #[doc = "Group of power_not_available states\n"]
     PowerNotAvailable = 7,
-    #[doc = "Group of short\\_detected states"]
+    #[doc = "Group of short_detected states\n"]
     ShortDetected = 8,
 }
 impl C33PseExtState {
@@ -148,13 +148,13 @@ impl TcpDataSplit {
         })
     }
 }
-#[doc = "Source of the hardware timestamp"]
+#[doc = "Source of the hardware timestamp\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum HwtstampSource {
-    #[doc = "Hardware timestamp comes from a MAC or a device\nwhich has MAC and PHY integrated\n"]
+    #[doc = "Hardware timestamp comes from a MAC or a device which has MAC and PHY\nintegrated\n"]
     Netdev = 1,
-    #[doc = "Hardware timestamp comes from one PHY device\nof the network topology\n"]
+    #[doc = "Hardware timestamp comes from one PHY device of the network topology\n"]
     Phylib = 2,
 }
 impl HwtstampSource {
@@ -166,23 +166,23 @@ impl HwtstampSource {
         })
     }
 }
-#[doc = "PSE event list for the PSE controller"]
+#[doc = "PSE event list for the PSE controller\n"]
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum PseEvent {
-    #[doc = "PSE output current is too high"]
+    #[doc = "PSE output current is too high\n"]
     PseEventOverCurrent = 1 << 0,
-    #[doc = "PSE in over temperature state"]
+    #[doc = "PSE in over temperature state\n"]
     PseEventOverTemp = 1 << 1,
-    #[doc = "detection process occur on the PSE\\. IEEE 802\\.3\\-2022 33\\.2\\.5 and\n145\\.2\\.6 PSE detection of PDs\\. IEEE 802\\.3\\-202 30\\.9\\.1\\.1\\.5\naPSEPowerDetectionStatus\n"]
+    #[doc = "detection process occur on the PSE. IEEE 802.3-2022 33.2.5 and 145.2.6\nPSE detection of PDs. IEEE 802.3-202 30.9.1.1.5 aPSEPowerDetectionStatus\n"]
     C33PseEventDetection = 1 << 2,
-    #[doc = "classification process occur on the PSE\\. IEEE 802\\.3\\-2022 33\\.2\\.6\nand 145\\.2\\.8 classification of PDs mutual identification\\.\nIEEE 802\\.3\\-2022 30\\.9\\.1\\.1\\.8 aPSEPowerClassification\\.\n"]
+    #[doc = "classification process occur on the PSE. IEEE 802.3-2022 33.2.6 and\n145.2.8 classification of PDs mutual identification. IEEE 802.3-2022\n30.9.1.1.8 aPSEPowerClassification.\n"]
     C33PseEventClassification = 1 << 3,
-    #[doc = "PD has been disconnected on the PSE\\. IEEE 802\\.3\\-2022 33\\.3\\.8\nand 145\\.3\\.9 PD Maintain Power Signature\\. IEEE 802\\.3\\-2022\n33\\.5\\.1\\.2\\.9 MPS Absent\\. IEEE 802\\.3\\-2022 30\\.9\\.1\\.1\\.20\naPSEMPSAbsentCounter\\.\n"]
+    #[doc = "PD has been disconnected on the PSE. IEEE 802.3-2022 33.3.8 and 145.3.9\nPD Maintain Power Signature. IEEE 802.3-2022 33.5.1.2.9 MPS Absent. IEEE\n802.3-2022 30.9.1.1.20 aPSEMPSAbsentCounter.\n"]
     C33PseEventDisconnection = 1 << 4,
-    #[doc = "PSE turned off due to over budget situation"]
+    #[doc = "PSE turned off due to over budget situation\n"]
     PseEventOverBudget = 1 << 5,
-    #[doc = "PSE faced an error managing the power control from software"]
+    #[doc = "PSE faced an error managing the power control from software\n"]
     PseEventSwPwControlError = 1 << 6,
 }
 impl PseEvent {
@@ -199,13 +199,13 @@ impl PseEvent {
         })
     }
 }
-#[doc = "RSS hash function transformations\\."]
+#[doc = "RSS hash function transformations.\n"]
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum InputXfrm {
-    #[doc = "XOR the corresponding source and destination fields of each specified protocol\\. Both copies of the XOR'ed fields are fed into the RSS and RXHASH calculation\\. Note that this XORing reduces the input set entropy and could be exploited to reduce the RSS queue spread\\."]
+    #[doc = "XOR the corresponding source and destination fields of each specified\nprotocol. Both copies of the XOR\\'ed fields are fed into the RSS and\nRXHASH calculation. Note that this XORing reduces the input set entropy\nand could be exploited to reduce the RSS queue spread.\n"]
     SymXor = 1 << 0,
-    #[doc = "Similar to SYM\\_XOR, except that one copy of the XOR'ed fields is replaced by an OR of the same fields\\."]
+    #[doc = "Similar to SYM_XOR, except that one copy of the XOR\\'ed fields is\nreplaced by an OR of the same fields.\n"]
     SymOrXor = 1 << 1,
 }
 impl InputXfrm {
@@ -225,12 +225,12 @@ pub enum RxfhFields {
     L3Proto = 1 << 3,
     IpSrc = 1 << 4,
     IpDst = 1 << 5,
-    #[doc = "src port in case of TCP/UDP/SCTP"]
+    #[doc = "src port in case of TCP/UDP/SCTP\n"]
     L4B01 = 1 << 6,
-    #[doc = "dst port in case of TCP/UDP/SCTP"]
+    #[doc = "dst port in case of TCP/UDP/SCTP\n"]
     L4B23 = 1 << 7,
     GtpTeid = 1 << 8,
-    #[doc = "IPv6 Flow Label"]
+    #[doc = "IPv6 Flow Label\n"]
     Ip6Fl = 1 << 9,
     Discard = 1 << 31,
 }
@@ -264,7 +264,7 @@ impl<'a> IterableHeader<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Header::DevIndex(val) = attr? {
+            if let Ok(Header::DevIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -279,7 +279,7 @@ impl<'a> IterableHeader<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Header::DevName(val) = attr? {
+            if let Ok(Header::DevName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -295,7 +295,7 @@ impl<'a> IterableHeader<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Header::Flags(val) = attr? {
+            if let Ok(Header::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -310,7 +310,7 @@ impl<'a> IterableHeader<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Header::PhyIndex(val) = attr? {
+            if let Ok(Header::PhyIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -359,14 +359,16 @@ impl<'a> IterableHeader<'a> {
 impl<'a> Iterator for IterableHeader<'a> {
     type Item = Result<Header<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -494,7 +496,7 @@ impl<'a> IterableBitsetBit<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BitsetBit::Index(val) = attr? {
+            if let Ok(BitsetBit::Index(val)) = attr {
                 return Ok(val);
             }
         }
@@ -509,7 +511,7 @@ impl<'a> IterableBitsetBit<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BitsetBit::Name(val) = attr? {
+            if let Ok(BitsetBit::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -524,7 +526,7 @@ impl<'a> IterableBitsetBit<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BitsetBit::Value(val) = attr? {
+            if let Ok(BitsetBit::Value(val)) = attr {
                 return Ok(val);
             }
         }
@@ -572,14 +574,16 @@ impl<'a> IterableBitsetBit<'a> {
 impl<'a> Iterator for IterableBitsetBit<'a> {
     type Item = Result<BitsetBit<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -732,14 +736,16 @@ impl<'a> IterableBitsetBits<'a> {
 impl<'a> Iterator for IterableBitsetBits<'a> {
     type Item = Result<BitsetBits<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -835,7 +841,7 @@ impl<'a> IterableBitset<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Bitset::Nomask(val) = attr? {
+            if let Ok(Bitset::Nomask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -850,7 +856,7 @@ impl<'a> IterableBitset<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Bitset::Size(val) = attr? {
+            if let Ok(Bitset::Size(val)) = attr {
                 return Ok(val);
             }
         }
@@ -865,7 +871,7 @@ impl<'a> IterableBitset<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Bitset::Bits(val) = attr? {
+            if let Ok(Bitset::Bits(val)) = attr {
                 return Ok(val);
             }
         }
@@ -880,7 +886,7 @@ impl<'a> IterableBitset<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Bitset::Value(val) = attr? {
+            if let Ok(Bitset::Value(val)) = attr {
                 return Ok(val);
             }
         }
@@ -895,7 +901,7 @@ impl<'a> IterableBitset<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Bitset::Mask(val) = attr? {
+            if let Ok(Bitset::Mask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -945,14 +951,16 @@ impl<'a> IterableBitset<'a> {
 impl<'a> Iterator for IterableBitset<'a> {
     type Item = Result<Bitset<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1086,7 +1094,7 @@ impl<'a> IterableString<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let String::Index(val) = attr? {
+            if let Ok(String::Index(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1101,7 +1109,7 @@ impl<'a> IterableString<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let String::Value(val) = attr? {
+            if let Ok(String::Value(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1148,14 +1156,16 @@ impl<'a> IterableString<'a> {
 impl<'a> Iterator for IterableString<'a> {
     type Item = Result<String<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1270,7 +1280,6 @@ impl Strings<'_> {
     fn attr_from_type(r#type: u16) -> Option<&'static str> {
         let res = match r#type {
             0u16 => "Unspec",
-            0u16 => "Unspec",
             1u16 => "String",
             _ => return None,
         };
@@ -1298,14 +1307,16 @@ impl<'a> IterableStrings<'a> {
 impl<'a> Iterator for IterableStrings<'a> {
     type Item = Result<Strings<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1397,7 +1408,7 @@ impl<'a> IterableStringset<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stringset::Id(val) = attr? {
+            if let Ok(Stringset::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1412,7 +1423,7 @@ impl<'a> IterableStringset<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stringset::Count(val) = attr? {
+            if let Ok(Stringset::Count(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1470,14 +1481,16 @@ impl<'a> IterableStringset<'a> {
 impl<'a> Iterator for IterableStringset<'a> {
     type Item = Result<Stringset<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1635,14 +1648,16 @@ impl<'a> IterableStringsets<'a> {
 impl<'a> Iterator for IterableStringsets<'a> {
     type Item = Result<Stringsets<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1736,7 +1751,7 @@ impl<'a> IterableStrset<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Strset::Header(val) = attr? {
+            if let Ok(Strset::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1751,7 +1766,7 @@ impl<'a> IterableStrset<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Strset::Stringsets(val) = attr? {
+            if let Ok(Strset::Stringsets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1766,7 +1781,7 @@ impl<'a> IterableStrset<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Strset::CountsOnly(val) = attr? {
+            if let Ok(Strset::CountsOnly(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1814,14 +1829,16 @@ impl<'a> IterableStrset<'a> {
 impl<'a> Iterator for IterableStrset<'a> {
     type Item = Result<Strset<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1931,7 +1948,7 @@ impl<'a> IterablePrivflags<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Privflags::Header(val) = attr? {
+            if let Ok(Privflags::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1946,7 +1963,7 @@ impl<'a> IterablePrivflags<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Privflags::Flags(val) = attr? {
+            if let Ok(Privflags::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1993,14 +2010,16 @@ impl<'a> IterablePrivflags<'a> {
 impl<'a> Iterator for IterablePrivflags<'a> {
     type Item = Result<Privflags<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2122,7 +2141,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::Header(val) = attr? {
+            if let Ok(Rings::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2137,7 +2156,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::RxMax(val) = attr? {
+            if let Ok(Rings::RxMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2152,7 +2171,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::RxMiniMax(val) = attr? {
+            if let Ok(Rings::RxMiniMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2167,7 +2186,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::RxJumboMax(val) = attr? {
+            if let Ok(Rings::RxJumboMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2182,7 +2201,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::TxMax(val) = attr? {
+            if let Ok(Rings::TxMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2197,7 +2216,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::Rx(val) = attr? {
+            if let Ok(Rings::Rx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2212,7 +2231,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::RxMini(val) = attr? {
+            if let Ok(Rings::RxMini(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2227,7 +2246,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::RxJumbo(val) = attr? {
+            if let Ok(Rings::RxJumbo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2242,7 +2261,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::Tx(val) = attr? {
+            if let Ok(Rings::Tx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2257,7 +2276,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::RxBufLen(val) = attr? {
+            if let Ok(Rings::RxBufLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2273,7 +2292,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::TcpDataSplit(val) = attr? {
+            if let Ok(Rings::TcpDataSplit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2288,7 +2307,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::CqeSize(val) = attr? {
+            if let Ok(Rings::CqeSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2303,7 +2322,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::TxPush(val) = attr? {
+            if let Ok(Rings::TxPush(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2318,7 +2337,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::RxPush(val) = attr? {
+            if let Ok(Rings::RxPush(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2333,7 +2352,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::TxPushBufLen(val) = attr? {
+            if let Ok(Rings::TxPushBufLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2348,7 +2367,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::TxPushBufLenMax(val) = attr? {
+            if let Ok(Rings::TxPushBufLenMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2363,7 +2382,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::HdsThresh(val) = attr? {
+            if let Ok(Rings::HdsThresh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2378,7 +2397,7 @@ impl<'a> IterableRings<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rings::HdsThreshMax(val) = attr? {
+            if let Ok(Rings::HdsThreshMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2441,14 +2460,16 @@ impl<'a> IterableRings<'a> {
 impl<'a> Iterator for IterableRings<'a> {
     type Item = Result<Rings<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2738,17 +2759,17 @@ impl IterableRings<'_> {
 #[derive(Clone)]
 pub enum MmStat<'a> {
     Pad(&'a [u8]),
-    #[doc = "aMACMergeFrameAssErrorCount"]
+    #[doc = "aMACMergeFrameAssErrorCount\n"]
     ReassemblyErrors(u64),
-    #[doc = "aMACMergeFrameSmdErrorCount"]
+    #[doc = "aMACMergeFrameSmdErrorCount\n"]
     SmdErrors(u64),
-    #[doc = "aMACMergeFrameAssOkCount"]
+    #[doc = "aMACMergeFrameAssOkCount\n"]
     ReassemblyOk(u64),
-    #[doc = "aMACMergeFragCountRx"]
+    #[doc = "aMACMergeFragCountRx\n"]
     RxFragCount(u64),
-    #[doc = "aMACMergeFragCountTx"]
+    #[doc = "aMACMergeFragCountTx\n"]
     TxFragCount(u64),
-    #[doc = "aMACMergeHoldCount"]
+    #[doc = "aMACMergeHoldCount\n"]
     HoldCount(u64),
 }
 impl<'a> IterableMmStat<'a> {
@@ -2756,7 +2777,7 @@ impl<'a> IterableMmStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MmStat::Pad(val) = attr? {
+            if let Ok(MmStat::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2767,12 +2788,12 @@ impl<'a> IterableMmStat<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "aMACMergeFrameAssErrorCount"]
+    #[doc = "aMACMergeFrameAssErrorCount\n"]
     pub fn get_reassembly_errors(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MmStat::ReassemblyErrors(val) = attr? {
+            if let Ok(MmStat::ReassemblyErrors(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2783,12 +2804,12 @@ impl<'a> IterableMmStat<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "aMACMergeFrameSmdErrorCount"]
+    #[doc = "aMACMergeFrameSmdErrorCount\n"]
     pub fn get_smd_errors(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MmStat::SmdErrors(val) = attr? {
+            if let Ok(MmStat::SmdErrors(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2799,12 +2820,12 @@ impl<'a> IterableMmStat<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "aMACMergeFrameAssOkCount"]
+    #[doc = "aMACMergeFrameAssOkCount\n"]
     pub fn get_reassembly_ok(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MmStat::ReassemblyOk(val) = attr? {
+            if let Ok(MmStat::ReassemblyOk(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2815,12 +2836,12 @@ impl<'a> IterableMmStat<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "aMACMergeFragCountRx"]
+    #[doc = "aMACMergeFragCountRx\n"]
     pub fn get_rx_frag_count(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MmStat::RxFragCount(val) = attr? {
+            if let Ok(MmStat::RxFragCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2831,12 +2852,12 @@ impl<'a> IterableMmStat<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "aMACMergeFragCountTx"]
+    #[doc = "aMACMergeFragCountTx\n"]
     pub fn get_tx_frag_count(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MmStat::TxFragCount(val) = attr? {
+            if let Ok(MmStat::TxFragCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2847,12 +2868,12 @@ impl<'a> IterableMmStat<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "aMACMergeHoldCount"]
+    #[doc = "aMACMergeHoldCount\n"]
     pub fn get_hold_count(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MmStat::HoldCount(val) = attr? {
+            if let Ok(MmStat::HoldCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2904,14 +2925,16 @@ impl<'a> IterableMmStat<'a> {
 impl<'a> Iterator for IterableMmStat<'a> {
     type Item = Result<MmStat<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3081,7 +3104,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::Header(val) = attr? {
+            if let Ok(Mm::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3096,7 +3119,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::PmacEnabled(val) = attr? {
+            if let Ok(Mm::PmacEnabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3111,7 +3134,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::TxEnabled(val) = attr? {
+            if let Ok(Mm::TxEnabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3126,7 +3149,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::TxActive(val) = attr? {
+            if let Ok(Mm::TxActive(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3141,7 +3164,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::TxMinFragSize(val) = attr? {
+            if let Ok(Mm::TxMinFragSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3156,7 +3179,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::RxMinFragSize(val) = attr? {
+            if let Ok(Mm::RxMinFragSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3171,7 +3194,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::VerifyEnabled(val) = attr? {
+            if let Ok(Mm::VerifyEnabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3186,7 +3209,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::VerifyStatus(val) = attr? {
+            if let Ok(Mm::VerifyStatus(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3201,7 +3224,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::VerifyTime(val) = attr? {
+            if let Ok(Mm::VerifyTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3216,7 +3239,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::MaxVerifyTime(val) = attr? {
+            if let Ok(Mm::MaxVerifyTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3231,7 +3254,7 @@ impl<'a> IterableMm<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mm::Stats(val) = attr? {
+            if let Ok(Mm::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3287,14 +3310,16 @@ impl<'a> IterableMm<'a> {
 impl<'a> Iterator for IterableMm<'a> {
     type Item = Result<Mm<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3508,7 +3533,7 @@ impl<'a> IterableLinkinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkinfo::Header(val) = attr? {
+            if let Ok(Linkinfo::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3523,7 +3548,7 @@ impl<'a> IterableLinkinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkinfo::Port(val) = attr? {
+            if let Ok(Linkinfo::Port(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3538,7 +3563,7 @@ impl<'a> IterableLinkinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkinfo::Phyaddr(val) = attr? {
+            if let Ok(Linkinfo::Phyaddr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3553,7 +3578,7 @@ impl<'a> IterableLinkinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkinfo::TpMdix(val) = attr? {
+            if let Ok(Linkinfo::TpMdix(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3568,7 +3593,7 @@ impl<'a> IterableLinkinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkinfo::TpMdixCtrl(val) = attr? {
+            if let Ok(Linkinfo::TpMdixCtrl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3583,7 +3608,7 @@ impl<'a> IterableLinkinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkinfo::Transceiver(val) = attr? {
+            if let Ok(Linkinfo::Transceiver(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3634,14 +3659,16 @@ impl<'a> IterableLinkinfo<'a> {
 impl<'a> Iterator for IterableLinkinfo<'a> {
     type Item = Result<Linkinfo<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3802,7 +3829,7 @@ impl<'a> IterableLinkmodes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkmodes::Header(val) = attr? {
+            if let Ok(Linkmodes::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3817,7 +3844,7 @@ impl<'a> IterableLinkmodes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkmodes::Autoneg(val) = attr? {
+            if let Ok(Linkmodes::Autoneg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3832,7 +3859,7 @@ impl<'a> IterableLinkmodes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkmodes::Ours(val) = attr? {
+            if let Ok(Linkmodes::Ours(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3847,7 +3874,7 @@ impl<'a> IterableLinkmodes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkmodes::Peer(val) = attr? {
+            if let Ok(Linkmodes::Peer(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3862,7 +3889,7 @@ impl<'a> IterableLinkmodes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkmodes::Speed(val) = attr? {
+            if let Ok(Linkmodes::Speed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3877,7 +3904,7 @@ impl<'a> IterableLinkmodes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkmodes::Duplex(val) = attr? {
+            if let Ok(Linkmodes::Duplex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3892,7 +3919,7 @@ impl<'a> IterableLinkmodes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkmodes::MasterSlaveCfg(val) = attr? {
+            if let Ok(Linkmodes::MasterSlaveCfg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3907,7 +3934,7 @@ impl<'a> IterableLinkmodes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkmodes::MasterSlaveState(val) = attr? {
+            if let Ok(Linkmodes::MasterSlaveState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3922,7 +3949,7 @@ impl<'a> IterableLinkmodes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkmodes::Lanes(val) = attr? {
+            if let Ok(Linkmodes::Lanes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3937,7 +3964,7 @@ impl<'a> IterableLinkmodes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkmodes::RateMatching(val) = attr? {
+            if let Ok(Linkmodes::RateMatching(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3992,14 +4019,16 @@ impl<'a> IterableLinkmodes<'a> {
 impl<'a> Iterator for IterableLinkmodes<'a> {
     type Item = Result<Linkmodes<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4205,7 +4234,7 @@ impl<'a> IterableLinkstate<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkstate::Header(val) = attr? {
+            if let Ok(Linkstate::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4220,7 +4249,7 @@ impl<'a> IterableLinkstate<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkstate::Link(val) = attr? {
+            if let Ok(Linkstate::Link(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4235,7 +4264,7 @@ impl<'a> IterableLinkstate<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkstate::Sqi(val) = attr? {
+            if let Ok(Linkstate::Sqi(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4250,7 +4279,7 @@ impl<'a> IterableLinkstate<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkstate::SqiMax(val) = attr? {
+            if let Ok(Linkstate::SqiMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4265,7 +4294,7 @@ impl<'a> IterableLinkstate<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkstate::ExtState(val) = attr? {
+            if let Ok(Linkstate::ExtState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4280,7 +4309,7 @@ impl<'a> IterableLinkstate<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkstate::ExtSubstate(val) = attr? {
+            if let Ok(Linkstate::ExtSubstate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4295,7 +4324,7 @@ impl<'a> IterableLinkstate<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Linkstate::ExtDownCnt(val) = attr? {
+            if let Ok(Linkstate::ExtDownCnt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4347,14 +4376,16 @@ impl<'a> IterableLinkstate<'a> {
 impl<'a> Iterator for IterableLinkstate<'a> {
     type Item = Result<Linkstate<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4519,7 +4550,7 @@ impl<'a> IterableDebug<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Debug::Header(val) = attr? {
+            if let Ok(Debug::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4534,7 +4565,7 @@ impl<'a> IterableDebug<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Debug::Msgmask(val) = attr? {
+            if let Ok(Debug::Msgmask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4581,14 +4612,16 @@ impl<'a> IterableDebug<'a> {
 impl<'a> Iterator for IterableDebug<'a> {
     type Item = Result<Debug<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4691,7 +4724,7 @@ impl<'a> IterableWol<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wol::Header(val) = attr? {
+            if let Ok(Wol::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4706,7 +4739,7 @@ impl<'a> IterableWol<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wol::Modes(val) = attr? {
+            if let Ok(Wol::Modes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4721,7 +4754,7 @@ impl<'a> IterableWol<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Wol::Sopass(val) = attr? {
+            if let Ok(Wol::Sopass(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4769,14 +4802,16 @@ impl<'a> IterableWol<'a> {
 impl<'a> Iterator for IterableWol<'a> {
     type Item = Result<Wol<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4893,7 +4928,7 @@ impl<'a> IterableFeatures<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Features::Header(val) = attr? {
+            if let Ok(Features::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4908,7 +4943,7 @@ impl<'a> IterableFeatures<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Features::Hw(val) = attr? {
+            if let Ok(Features::Hw(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4923,7 +4958,7 @@ impl<'a> IterableFeatures<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Features::Wanted(val) = attr? {
+            if let Ok(Features::Wanted(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4938,7 +4973,7 @@ impl<'a> IterableFeatures<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Features::Active(val) = attr? {
+            if let Ok(Features::Active(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4953,7 +4988,7 @@ impl<'a> IterableFeatures<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Features::Nochange(val) = attr? {
+            if let Ok(Features::Nochange(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5003,14 +5038,16 @@ impl<'a> IterableFeatures<'a> {
 impl<'a> Iterator for IterableFeatures<'a> {
     type Item = Result<Features<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5158,7 +5195,7 @@ impl<'a> IterableChannels<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Channels::Header(val) = attr? {
+            if let Ok(Channels::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5173,7 +5210,7 @@ impl<'a> IterableChannels<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Channels::RxMax(val) = attr? {
+            if let Ok(Channels::RxMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5188,7 +5225,7 @@ impl<'a> IterableChannels<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Channels::TxMax(val) = attr? {
+            if let Ok(Channels::TxMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5203,7 +5240,7 @@ impl<'a> IterableChannels<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Channels::OtherMax(val) = attr? {
+            if let Ok(Channels::OtherMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5218,7 +5255,7 @@ impl<'a> IterableChannels<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Channels::CombinedMax(val) = attr? {
+            if let Ok(Channels::CombinedMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5233,7 +5270,7 @@ impl<'a> IterableChannels<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Channels::RxCount(val) = attr? {
+            if let Ok(Channels::RxCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5248,7 +5285,7 @@ impl<'a> IterableChannels<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Channels::TxCount(val) = attr? {
+            if let Ok(Channels::TxCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5263,7 +5300,7 @@ impl<'a> IterableChannels<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Channels::OtherCount(val) = attr? {
+            if let Ok(Channels::OtherCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5278,7 +5315,7 @@ impl<'a> IterableChannels<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Channels::CombinedCount(val) = attr? {
+            if let Ok(Channels::CombinedCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5332,14 +5369,16 @@ impl<'a> IterableChannels<'a> {
 impl<'a> Iterator for IterableChannels<'a> {
     type Item = Result<Channels<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5529,7 +5568,7 @@ impl<'a> IterableIrqModeration<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IrqModeration::Usec(val) = attr? {
+            if let Ok(IrqModeration::Usec(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5544,7 +5583,7 @@ impl<'a> IterableIrqModeration<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IrqModeration::Pkts(val) = attr? {
+            if let Ok(IrqModeration::Pkts(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5559,7 +5598,7 @@ impl<'a> IterableIrqModeration<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IrqModeration::Comps(val) = attr? {
+            if let Ok(IrqModeration::Comps(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5607,14 +5646,16 @@ impl<'a> IterableIrqModeration<'a> {
 impl<'a> Iterator for IterableIrqModeration<'a> {
     type Item = Result<IrqModeration, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5773,14 +5814,16 @@ impl<'a> IterableProfile<'a> {
 impl<'a> Iterator for IterableProfile<'a> {
     type Item = Result<Profile<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5892,13 +5935,15 @@ pub enum Coalesce<'a> {
     TxAggrTimeUsecs(u32),
     RxProfile(IterableProfile<'a>),
     TxProfile(IterableProfile<'a>),
+    RxCqeFrames(u32),
+    RxCqeNsecs(u32),
 }
 impl<'a> IterableCoalesce<'a> {
     pub fn get_header(&self) -> Result<IterableHeader<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::Header(val) = attr? {
+            if let Ok(Coalesce::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5913,7 +5958,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::RxUsecs(val) = attr? {
+            if let Ok(Coalesce::RxUsecs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5928,7 +5973,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::RxMaxFrames(val) = attr? {
+            if let Ok(Coalesce::RxMaxFrames(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5943,7 +5988,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::RxUsecsIrq(val) = attr? {
+            if let Ok(Coalesce::RxUsecsIrq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5958,7 +6003,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::RxMaxFramesIrq(val) = attr? {
+            if let Ok(Coalesce::RxMaxFramesIrq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5973,7 +6018,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxUsecs(val) = attr? {
+            if let Ok(Coalesce::TxUsecs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5988,7 +6033,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxMaxFrames(val) = attr? {
+            if let Ok(Coalesce::TxMaxFrames(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6003,7 +6048,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxUsecsIrq(val) = attr? {
+            if let Ok(Coalesce::TxUsecsIrq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6018,7 +6063,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxMaxFramesIrq(val) = attr? {
+            if let Ok(Coalesce::TxMaxFramesIrq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6033,7 +6078,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::StatsBlockUsecs(val) = attr? {
+            if let Ok(Coalesce::StatsBlockUsecs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6048,7 +6093,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::UseAdaptiveRx(val) = attr? {
+            if let Ok(Coalesce::UseAdaptiveRx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6063,7 +6108,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::UseAdaptiveTx(val) = attr? {
+            if let Ok(Coalesce::UseAdaptiveTx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6078,7 +6123,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::PktRateLow(val) = attr? {
+            if let Ok(Coalesce::PktRateLow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6093,7 +6138,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::RxUsecsLow(val) = attr? {
+            if let Ok(Coalesce::RxUsecsLow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6108,7 +6153,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::RxMaxFramesLow(val) = attr? {
+            if let Ok(Coalesce::RxMaxFramesLow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6123,7 +6168,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxUsecsLow(val) = attr? {
+            if let Ok(Coalesce::TxUsecsLow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6138,7 +6183,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxMaxFramesLow(val) = attr? {
+            if let Ok(Coalesce::TxMaxFramesLow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6153,7 +6198,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::PktRateHigh(val) = attr? {
+            if let Ok(Coalesce::PktRateHigh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6168,7 +6213,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::RxUsecsHigh(val) = attr? {
+            if let Ok(Coalesce::RxUsecsHigh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6183,7 +6228,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::RxMaxFramesHigh(val) = attr? {
+            if let Ok(Coalesce::RxMaxFramesHigh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6198,7 +6243,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxUsecsHigh(val) = attr? {
+            if let Ok(Coalesce::TxUsecsHigh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6213,7 +6258,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxMaxFramesHigh(val) = attr? {
+            if let Ok(Coalesce::TxMaxFramesHigh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6228,7 +6273,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::RateSampleInterval(val) = attr? {
+            if let Ok(Coalesce::RateSampleInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6243,7 +6288,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::UseCqeModeTx(val) = attr? {
+            if let Ok(Coalesce::UseCqeModeTx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6258,7 +6303,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::UseCqeModeRx(val) = attr? {
+            if let Ok(Coalesce::UseCqeModeRx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6273,7 +6318,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxAggrMaxBytes(val) = attr? {
+            if let Ok(Coalesce::TxAggrMaxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6288,7 +6333,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxAggrMaxFrames(val) = attr? {
+            if let Ok(Coalesce::TxAggrMaxFrames(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6303,7 +6348,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxAggrTimeUsecs(val) = attr? {
+            if let Ok(Coalesce::TxAggrTimeUsecs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6318,7 +6363,7 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::RxProfile(val) = attr? {
+            if let Ok(Coalesce::RxProfile(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6333,13 +6378,43 @@ impl<'a> IterableCoalesce<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Coalesce::TxProfile(val) = attr? {
+            if let Ok(Coalesce::TxProfile(val)) = attr {
                 return Ok(val);
             }
         }
         Err(ErrorContext::new_missing(
             "Coalesce",
             "TxProfile",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    pub fn get_rx_cqe_frames(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Coalesce::RxCqeFrames(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Coalesce",
+            "RxCqeFrames",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    pub fn get_rx_cqe_nsecs(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Coalesce::RxCqeNsecs(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Coalesce",
+            "RxCqeNsecs",
             self.orig_loc,
             self.buf.as_ptr() as usize,
         ))
@@ -6382,6 +6457,8 @@ impl Coalesce<'_> {
             28u16 => "TxAggrTimeUsecs",
             29u16 => "RxProfile",
             30u16 => "TxProfile",
+            31u16 => "RxCqeFrames",
+            32u16 => "RxCqeNsecs",
             _ => return None,
         };
         Some(res)
@@ -6408,14 +6485,16 @@ impl<'a> IterableCoalesce<'a> {
 impl<'a> Iterator for IterableCoalesce<'a> {
     type Item = Result<Coalesce<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6570,6 +6649,16 @@ impl<'a> Iterator for IterableCoalesce<'a> {
                     let Some(val) = res else { break };
                     val
                 }),
+                31u16 => Coalesce::RxCqeFrames({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                32u16 => Coalesce::RxCqeNsecs({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -6627,6 +6716,8 @@ impl<'a> std::fmt::Debug for IterableCoalesce<'_> {
                 Coalesce::TxAggrTimeUsecs(val) => fmt.field("TxAggrTimeUsecs", &val),
                 Coalesce::RxProfile(val) => fmt.field("RxProfile", &val),
                 Coalesce::TxProfile(val) => fmt.field("TxProfile", &val),
+                Coalesce::RxCqeFrames(val) => fmt.field("RxCqeFrames", &val),
+                Coalesce::RxCqeNsecs(val) => fmt.field("RxCqeNsecs", &val),
             };
         }
         fmt.finish()
@@ -6836,6 +6927,18 @@ impl IterableCoalesce<'_> {
                         break;
                     }
                 }
+                Coalesce::RxCqeFrames(val) => {
+                    if last_off == offset {
+                        stack.push(("RxCqeFrames", last_off));
+                        break;
+                    }
+                }
+                Coalesce::RxCqeNsecs(val) => {
+                    if last_off == offset {
+                        stack.push(("RxCqeNsecs", last_off));
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -6851,7 +6954,7 @@ pub enum PauseStat<'a> {
     Pad(&'a [u8]),
     TxFrames(u64),
     RxFrames(u64),
-    #[doc = "TX pause storm event count\\. Increments each time device detects that its pause assertion condition has been true for too long for normal operation\\. As a result, the device has temporarily disabled its own Pause TX function to protect the network from itself\\. This counter should never increment under normal overload conditions; it indicates catastrophic failure like an OS crash\\. The rate of incrementing is implementation specific\\."]
+    #[doc = "TX pause storm event count. Increments each time device detects that its\npause assertion condition has been true for too long for normal\noperation. As a result, the device has temporarily disabled its own\nPause TX function to protect the network from itself. This counter\nshould never increment under normal overload conditions; it indicates\ncatastrophic failure like an OS crash. The rate of incrementing is\nimplementation specific.\n"]
     TxPauseStormEvents(u64),
 }
 impl<'a> IterablePauseStat<'a> {
@@ -6859,7 +6962,7 @@ impl<'a> IterablePauseStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PauseStat::Pad(val) = attr? {
+            if let Ok(PauseStat::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6874,7 +6977,7 @@ impl<'a> IterablePauseStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PauseStat::TxFrames(val) = attr? {
+            if let Ok(PauseStat::TxFrames(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6889,7 +6992,7 @@ impl<'a> IterablePauseStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PauseStat::RxFrames(val) = attr? {
+            if let Ok(PauseStat::RxFrames(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6900,12 +7003,12 @@ impl<'a> IterablePauseStat<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "TX pause storm event count\\. Increments each time device detects that its pause assertion condition has been true for too long for normal operation\\. As a result, the device has temporarily disabled its own Pause TX function to protect the network from itself\\. This counter should never increment under normal overload conditions; it indicates catastrophic failure like an OS crash\\. The rate of incrementing is implementation specific\\."]
+    #[doc = "TX pause storm event count. Increments each time device detects that its\npause assertion condition has been true for too long for normal\noperation. As a result, the device has temporarily disabled its own\nPause TX function to protect the network from itself. This counter\nshould never increment under normal overload conditions; it indicates\ncatastrophic failure like an OS crash. The rate of incrementing is\nimplementation specific.\n"]
     pub fn get_tx_pause_storm_events(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PauseStat::TxPauseStormEvents(val) = attr? {
+            if let Ok(PauseStat::TxPauseStormEvents(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6954,14 +7057,16 @@ impl<'a> IterablePauseStat<'a> {
 impl<'a> Iterator for IterablePauseStat<'a> {
     type Item = Result<PauseStat<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7093,7 +7198,7 @@ impl<'a> IterablePause<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pause::Header(val) = attr? {
+            if let Ok(Pause::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7108,7 +7213,7 @@ impl<'a> IterablePause<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pause::Autoneg(val) = attr? {
+            if let Ok(Pause::Autoneg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7123,7 +7228,7 @@ impl<'a> IterablePause<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pause::Rx(val) = attr? {
+            if let Ok(Pause::Rx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7138,7 +7243,7 @@ impl<'a> IterablePause<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pause::Tx(val) = attr? {
+            if let Ok(Pause::Tx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7153,7 +7258,7 @@ impl<'a> IterablePause<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pause::Stats(val) = attr? {
+            if let Ok(Pause::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7168,7 +7273,7 @@ impl<'a> IterablePause<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pause::StatsSrc(val) = attr? {
+            if let Ok(Pause::StatsSrc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7219,14 +7324,16 @@ impl<'a> IterablePause<'a> {
 impl<'a> Iterator for IterablePause<'a> {
     type Item = Result<Pause<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7381,7 +7488,7 @@ impl<'a> IterableEee<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Eee::Header(val) = attr? {
+            if let Ok(Eee::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7396,7 +7503,7 @@ impl<'a> IterableEee<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Eee::ModesOurs(val) = attr? {
+            if let Ok(Eee::ModesOurs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7411,7 +7518,7 @@ impl<'a> IterableEee<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Eee::ModesPeer(val) = attr? {
+            if let Ok(Eee::ModesPeer(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7426,7 +7533,7 @@ impl<'a> IterableEee<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Eee::Active(val) = attr? {
+            if let Ok(Eee::Active(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7441,7 +7548,7 @@ impl<'a> IterableEee<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Eee::Enabled(val) = attr? {
+            if let Ok(Eee::Enabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7456,7 +7563,7 @@ impl<'a> IterableEee<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Eee::TxLpiEnabled(val) = attr? {
+            if let Ok(Eee::TxLpiEnabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7471,7 +7578,7 @@ impl<'a> IterableEee<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Eee::TxLpiTimer(val) = attr? {
+            if let Ok(Eee::TxLpiTimer(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7523,14 +7630,16 @@ impl<'a> IterableEee<'a> {
 impl<'a> Iterator for IterableEee<'a> {
     type Item = Result<Eee<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7694,7 +7803,7 @@ impl<'a> IterableTsStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TsStat::TxPkts(val) = attr? {
+            if let Ok(TsStat::TxPkts(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7709,7 +7818,7 @@ impl<'a> IterableTsStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TsStat::TxLost(val) = attr? {
+            if let Ok(TsStat::TxLost(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7724,7 +7833,7 @@ impl<'a> IterableTsStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TsStat::TxErr(val) = attr? {
+            if let Ok(TsStat::TxErr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7739,7 +7848,7 @@ impl<'a> IterableTsStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TsStat::TxOnestepPktsUnconfirmed(val) = attr? {
+            if let Ok(TsStat::TxOnestepPktsUnconfirmed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7788,14 +7897,16 @@ impl<'a> IterableTsStat<'a> {
 impl<'a> Iterator for IterableTsStat<'a> {
     type Item = Result<TsStat, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7922,7 +8033,7 @@ impl<'a> IterableTsHwtstampProvider<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TsHwtstampProvider::Index(val) = attr? {
+            if let Ok(TsHwtstampProvider::Index(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7937,7 +8048,7 @@ impl<'a> IterableTsHwtstampProvider<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TsHwtstampProvider::Qualifier(val) = attr? {
+            if let Ok(TsHwtstampProvider::Qualifier(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7984,14 +8095,16 @@ impl<'a> IterableTsHwtstampProvider<'a> {
 impl<'a> Iterator for IterableTsHwtstampProvider<'a> {
     type Item = Result<TsHwtstampProvider, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8103,7 +8216,7 @@ impl<'a> IterableTsinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsinfo::Header(val) = attr? {
+            if let Ok(Tsinfo::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8118,7 +8231,7 @@ impl<'a> IterableTsinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsinfo::Timestamping(val) = attr? {
+            if let Ok(Tsinfo::Timestamping(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8133,7 +8246,7 @@ impl<'a> IterableTsinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsinfo::TxTypes(val) = attr? {
+            if let Ok(Tsinfo::TxTypes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8148,7 +8261,7 @@ impl<'a> IterableTsinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsinfo::RxFilters(val) = attr? {
+            if let Ok(Tsinfo::RxFilters(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8163,7 +8276,7 @@ impl<'a> IterableTsinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsinfo::PhcIndex(val) = attr? {
+            if let Ok(Tsinfo::PhcIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8178,7 +8291,7 @@ impl<'a> IterableTsinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsinfo::Stats(val) = attr? {
+            if let Ok(Tsinfo::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8193,7 +8306,7 @@ impl<'a> IterableTsinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsinfo::HwtstampProvider(val) = attr? {
+            if let Ok(Tsinfo::HwtstampProvider(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8209,7 +8322,7 @@ impl<'a> IterableTsinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsinfo::HwtstampSource(val) = attr? {
+            if let Ok(Tsinfo::HwtstampSource(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8224,7 +8337,7 @@ impl<'a> IterableTsinfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsinfo::HwtstampPhyindex(val) = attr? {
+            if let Ok(Tsinfo::HwtstampPhyindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8278,14 +8391,16 @@ impl<'a> IterableTsinfo<'a> {
 impl<'a> Iterator for IterableTsinfo<'a> {
     type Item = Result<Tsinfo<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8466,20 +8581,20 @@ impl IterableTsinfo<'_> {
 }
 #[derive(Clone)]
 pub enum CableResult {
-    #[doc = "ETHTOOL\\_A\\_CABLE\\_PAIR"]
+    #[doc = "ETHTOOL_A_CABLE_PAIR\n"]
     Pair(u8),
-    #[doc = "ETHTOOL\\_A\\_CABLE\\_RESULT\\_CODE"]
+    #[doc = "ETHTOOL_A_CABLE_RESULT_CODE\n"]
     Code(u8),
-    #[doc = "ETHTOOL\\_A\\_CABLE\\_INF\\_SRC"]
+    #[doc = "ETHTOOL_A_CABLE_INF_SRC\n"]
     Src(u32),
 }
 impl<'a> IterableCableResult<'a> {
-    #[doc = "ETHTOOL\\_A\\_CABLE\\_PAIR"]
+    #[doc = "ETHTOOL_A_CABLE_PAIR\n"]
     pub fn get_pair(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableResult::Pair(val) = attr? {
+            if let Ok(CableResult::Pair(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8490,12 +8605,12 @@ impl<'a> IterableCableResult<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ETHTOOL\\_A\\_CABLE\\_RESULT\\_CODE"]
+    #[doc = "ETHTOOL_A_CABLE_RESULT_CODE\n"]
     pub fn get_code(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableResult::Code(val) = attr? {
+            if let Ok(CableResult::Code(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8506,12 +8621,12 @@ impl<'a> IterableCableResult<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ETHTOOL\\_A\\_CABLE\\_INF\\_SRC"]
+    #[doc = "ETHTOOL_A_CABLE_INF_SRC\n"]
     pub fn get_src(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableResult::Src(val) = attr? {
+            if let Ok(CableResult::Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8559,14 +8674,16 @@ impl<'a> IterableCableResult<'a> {
 impl<'a> Iterator for IterableCableResult<'a> {
     type Item = Result<CableResult, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8683,7 +8800,7 @@ impl<'a> IterableCableFaultLength<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableFaultLength::Pair(val) = attr? {
+            if let Ok(CableFaultLength::Pair(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8698,7 +8815,7 @@ impl<'a> IterableCableFaultLength<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableFaultLength::Cm(val) = attr? {
+            if let Ok(CableFaultLength::Cm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8713,7 +8830,7 @@ impl<'a> IterableCableFaultLength<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableFaultLength::Src(val) = attr? {
+            if let Ok(CableFaultLength::Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8761,14 +8878,16 @@ impl<'a> IterableCableFaultLength<'a> {
 impl<'a> Iterator for IterableCableFaultLength<'a> {
     type Item = Result<CableFaultLength, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8884,7 +9003,7 @@ impl<'a> IterableCableNest<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableNest::Result(val) = attr? {
+            if let Ok(CableNest::Result(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8899,7 +9018,7 @@ impl<'a> IterableCableNest<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableNest::FaultLength(val) = attr? {
+            if let Ok(CableNest::FaultLength(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8946,14 +9065,16 @@ impl<'a> IterableCableNest<'a> {
 impl<'a> Iterator for IterableCableNest<'a> {
     type Item = Result<CableNest<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9057,7 +9178,7 @@ impl<'a> IterableCableTest<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTest::Header(val) = attr? {
+            if let Ok(CableTest::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9103,14 +9224,16 @@ impl<'a> IterableCableTest<'a> {
 impl<'a> Iterator for IterableCableTest<'a> {
     type Item = Result<CableTest<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9196,7 +9319,7 @@ impl IterableCableTest<'_> {
 #[derive(Clone)]
 pub enum CableTestNtf<'a> {
     Header(IterableHeader<'a>),
-    #[doc = "\\_STARTED/\\_COMPLETE"]
+    #[doc = "[STARTED]{#started}/\\_COMPLETE\n"]
     Status(u8),
     Nest(IterableCableNest<'a>),
 }
@@ -9205,7 +9328,7 @@ impl<'a> IterableCableTestNtf<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestNtf::Header(val) = attr? {
+            if let Ok(CableTestNtf::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9216,12 +9339,12 @@ impl<'a> IterableCableTestNtf<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "\\_STARTED/\\_COMPLETE"]
+    #[doc = "[STARTED]{#started}/\\_COMPLETE\n"]
     pub fn get_status(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestNtf::Status(val) = attr? {
+            if let Ok(CableTestNtf::Status(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9236,7 +9359,7 @@ impl<'a> IterableCableTestNtf<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestNtf::Nest(val) = attr? {
+            if let Ok(CableTestNtf::Nest(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9284,14 +9407,16 @@ impl<'a> IterableCableTestNtf<'a> {
 impl<'a> Iterator for IterableCableTestNtf<'a> {
     type Item = Result<CableTestNtf<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9410,7 +9535,7 @@ impl<'a> IterableCableTestTdrCfg<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestTdrCfg::First(val) = attr? {
+            if let Ok(CableTestTdrCfg::First(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9425,7 +9550,7 @@ impl<'a> IterableCableTestTdrCfg<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestTdrCfg::Last(val) = attr? {
+            if let Ok(CableTestTdrCfg::Last(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9440,7 +9565,7 @@ impl<'a> IterableCableTestTdrCfg<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestTdrCfg::Step(val) = attr? {
+            if let Ok(CableTestTdrCfg::Step(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9455,7 +9580,7 @@ impl<'a> IterableCableTestTdrCfg<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestTdrCfg::Pair(val) = attr? {
+            if let Ok(CableTestTdrCfg::Pair(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9504,14 +9629,16 @@ impl<'a> IterableCableTestTdrCfg<'a> {
 impl<'a> Iterator for IterableCableTestTdrCfg<'a> {
     type Item = Result<CableTestTdrCfg, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9640,7 +9767,7 @@ impl<'a> IterableCableTestTdrNtf<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestTdrNtf::Header(val) = attr? {
+            if let Ok(CableTestTdrNtf::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9655,7 +9782,7 @@ impl<'a> IterableCableTestTdrNtf<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestTdrNtf::Status(val) = attr? {
+            if let Ok(CableTestTdrNtf::Status(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9670,7 +9797,7 @@ impl<'a> IterableCableTestTdrNtf<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestTdrNtf::Nest(val) = attr? {
+            if let Ok(CableTestTdrNtf::Nest(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9718,14 +9845,16 @@ impl<'a> IterableCableTestTdrNtf<'a> {
 impl<'a> Iterator for IterableCableTestTdrNtf<'a> {
     type Item = Result<CableTestTdrNtf<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9842,7 +9971,7 @@ impl<'a> IterableCableTestTdr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestTdr::Header(val) = attr? {
+            if let Ok(CableTestTdr::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9857,7 +9986,7 @@ impl<'a> IterableCableTestTdr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CableTestTdr::Cfg(val) = attr? {
+            if let Ok(CableTestTdr::Cfg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9904,14 +10033,16 @@ impl<'a> IterableCableTestTdr<'a> {
 impl<'a> Iterator for IterableCableTestTdr<'a> {
     type Item = Result<CableTestTdr<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10017,7 +10148,7 @@ impl<'a> IterableTunnelUdpEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelUdpEntry::Port(val) = attr? {
+            if let Ok(TunnelUdpEntry::Port(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10033,7 +10164,7 @@ impl<'a> IterableTunnelUdpEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelUdpEntry::Type(val) = attr? {
+            if let Ok(TunnelUdpEntry::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10080,14 +10211,16 @@ impl<'a> IterableTunnelUdpEntry<'a> {
 impl<'a> Iterator for IterableTunnelUdpEntry<'a> {
     type Item = Result<TunnelUdpEntry, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10195,7 +10328,7 @@ impl<'a> IterableTunnelUdpTable<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelUdpTable::Size(val) = attr? {
+            if let Ok(TunnelUdpTable::Size(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10210,7 +10343,7 @@ impl<'a> IterableTunnelUdpTable<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelUdpTable::Types(val) = attr? {
+            if let Ok(TunnelUdpTable::Types(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10270,14 +10403,16 @@ impl<'a> IterableTunnelUdpTable<'a> {
 impl<'a> Iterator for IterableTunnelUdpTable<'a> {
     type Item = Result<TunnelUdpTable<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10393,7 +10528,7 @@ impl<'a> IterableTunnelUdp<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelUdp::Table(val) = attr? {
+            if let Ok(TunnelUdp::Table(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10439,14 +10574,16 @@ impl<'a> IterableTunnelUdp<'a> {
 impl<'a> Iterator for IterableTunnelUdp<'a> {
     type Item = Result<TunnelUdp<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10539,7 +10676,7 @@ impl<'a> IterableTunnelInfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelInfo::Header(val) = attr? {
+            if let Ok(TunnelInfo::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10554,7 +10691,7 @@ impl<'a> IterableTunnelInfo<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelInfo::UdpPorts(val) = attr? {
+            if let Ok(TunnelInfo::UdpPorts(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10601,14 +10738,16 @@ impl<'a> IterableTunnelInfo<'a> {
 impl<'a> Iterator for IterableTunnelInfo<'a> {
     type Item = Result<TunnelInfo<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10706,13 +10845,13 @@ impl IterableTunnelInfo<'_> {
 #[derive(Clone)]
 pub enum FecHist<'a> {
     Pad(&'a [u8]),
-    #[doc = "Low bound of FEC bin (inclusive)"]
+    #[doc = "Low bound of FEC bin (inclusive)\n"]
     BinLow(u32),
-    #[doc = "High bound of FEC bin (inclusive)"]
+    #[doc = "High bound of FEC bin (inclusive)\n"]
     BinHigh(u32),
-    #[doc = "Error count in the bin (optional if per\\-lane values exist)"]
+    #[doc = "Error count in the bin (optional if per-lane values exist)\n"]
     BinVal(u32),
-    #[doc = "An array of per\\-lane error counters in the bin (optional)"]
+    #[doc = "An array of per-lane error counters in the bin (optional)\n"]
     BinValPerLane(&'a [u8]),
 }
 impl<'a> IterableFecHist<'a> {
@@ -10720,7 +10859,7 @@ impl<'a> IterableFecHist<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FecHist::Pad(val) = attr? {
+            if let Ok(FecHist::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10731,12 +10870,12 @@ impl<'a> IterableFecHist<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Low bound of FEC bin (inclusive)"]
+    #[doc = "Low bound of FEC bin (inclusive)\n"]
     pub fn get_bin_low(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FecHist::BinLow(val) = attr? {
+            if let Ok(FecHist::BinLow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10747,12 +10886,12 @@ impl<'a> IterableFecHist<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "High bound of FEC bin (inclusive)"]
+    #[doc = "High bound of FEC bin (inclusive)\n"]
     pub fn get_bin_high(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FecHist::BinHigh(val) = attr? {
+            if let Ok(FecHist::BinHigh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10763,12 +10902,12 @@ impl<'a> IterableFecHist<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Error count in the bin (optional if per\\-lane values exist)"]
+    #[doc = "Error count in the bin (optional if per-lane values exist)\n"]
     pub fn get_bin_val(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FecHist::BinVal(val) = attr? {
+            if let Ok(FecHist::BinVal(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10779,12 +10918,12 @@ impl<'a> IterableFecHist<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "An array of per\\-lane error counters in the bin (optional)"]
+    #[doc = "An array of per-lane error counters in the bin (optional)\n"]
     pub fn get_bin_val_per_lane(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FecHist::BinValPerLane(val) = attr? {
+            if let Ok(FecHist::BinValPerLane(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10833,14 +10972,16 @@ impl<'a> IterableFecHist<'a> {
 impl<'a> Iterator for IterableFecHist<'a> {
     type Item = Result<FecHist<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10981,7 +11122,7 @@ impl<'a> IterableFecStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FecStat::Pad(val) = attr? {
+            if let Ok(FecStat::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10996,7 +11137,7 @@ impl<'a> IterableFecStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FecStat::Corrected(val) = attr? {
+            if let Ok(FecStat::Corrected(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11011,7 +11152,7 @@ impl<'a> IterableFecStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FecStat::Uncorr(val) = attr? {
+            if let Ok(FecStat::Uncorr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11026,7 +11167,7 @@ impl<'a> IterableFecStat<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FecStat::CorrBits(val) = attr? {
+            if let Ok(FecStat::CorrBits(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11086,14 +11227,16 @@ impl<'a> IterableFecStat<'a> {
 impl<'a> Iterator for IterableFecStat<'a> {
     type Item = Result<FecStat<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11234,7 +11377,7 @@ impl<'a> IterableFec<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fec::Header(val) = attr? {
+            if let Ok(Fec::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11249,7 +11392,7 @@ impl<'a> IterableFec<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fec::Modes(val) = attr? {
+            if let Ok(Fec::Modes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11264,7 +11407,7 @@ impl<'a> IterableFec<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fec::Auto(val) = attr? {
+            if let Ok(Fec::Auto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11279,7 +11422,7 @@ impl<'a> IterableFec<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fec::Active(val) = attr? {
+            if let Ok(Fec::Active(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11294,7 +11437,7 @@ impl<'a> IterableFec<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fec::Stats(val) = attr? {
+            if let Ok(Fec::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11344,14 +11487,16 @@ impl<'a> IterableFec<'a> {
 impl<'a> Iterator for IterableFec<'a> {
     type Item = Result<Fec<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11494,7 +11639,7 @@ impl<'a> IterableModuleEeprom<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleEeprom::Header(val) = attr? {
+            if let Ok(ModuleEeprom::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11509,7 +11654,7 @@ impl<'a> IterableModuleEeprom<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleEeprom::Offset(val) = attr? {
+            if let Ok(ModuleEeprom::Offset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11524,7 +11669,7 @@ impl<'a> IterableModuleEeprom<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleEeprom::Length(val) = attr? {
+            if let Ok(ModuleEeprom::Length(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11539,7 +11684,7 @@ impl<'a> IterableModuleEeprom<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleEeprom::Page(val) = attr? {
+            if let Ok(ModuleEeprom::Page(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11554,7 +11699,7 @@ impl<'a> IterableModuleEeprom<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleEeprom::Bank(val) = attr? {
+            if let Ok(ModuleEeprom::Bank(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11569,7 +11714,7 @@ impl<'a> IterableModuleEeprom<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleEeprom::I2cAddress(val) = attr? {
+            if let Ok(ModuleEeprom::I2cAddress(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11584,7 +11729,7 @@ impl<'a> IterableModuleEeprom<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleEeprom::Data(val) = attr? {
+            if let Ok(ModuleEeprom::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11636,14 +11781,16 @@ impl<'a> IterableModuleEeprom<'a> {
 impl<'a> Iterator for IterableModuleEeprom<'a> {
     type Item = Result<ModuleEeprom<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11815,7 +11962,7 @@ impl<'a> IterableStatsGrp<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrp::Pad(val) = attr? {
+            if let Ok(StatsGrp::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11830,7 +11977,7 @@ impl<'a> IterableStatsGrp<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrp::Id(val) = attr? {
+            if let Ok(StatsGrp::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11845,7 +11992,7 @@ impl<'a> IterableStatsGrp<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrp::SsId(val) = attr? {
+            if let Ok(StatsGrp::SsId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11860,7 +12007,7 @@ impl<'a> IterableStatsGrp<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrp::Stat(val) = attr? {
+            if let Ok(StatsGrp::Stat(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11875,7 +12022,7 @@ impl<'a> IterableStatsGrp<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrp::HistRx(val) = attr? {
+            if let Ok(StatsGrp::HistRx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11890,7 +12037,7 @@ impl<'a> IterableStatsGrp<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrp::HistTx(val) = attr? {
+            if let Ok(StatsGrp::HistTx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11905,7 +12052,7 @@ impl<'a> IterableStatsGrp<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrp::HistBktLow(val) = attr? {
+            if let Ok(StatsGrp::HistBktLow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11920,7 +12067,7 @@ impl<'a> IterableStatsGrp<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrp::HistBktHi(val) = attr? {
+            if let Ok(StatsGrp::HistBktHi(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11935,7 +12082,7 @@ impl<'a> IterableStatsGrp<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrp::HistVal(val) = attr? {
+            if let Ok(StatsGrp::HistVal(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11989,14 +12136,16 @@ impl<'a> IterableStatsGrp<'a> {
 impl<'a> Iterator for IterableStatsGrp<'a> {
     type Item = Result<StatsGrp<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12186,7 +12335,7 @@ impl<'a> IterableStatsGrpHist<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrpHist::HistBktLow(val) = attr? {
+            if let Ok(StatsGrpHist::HistBktLow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12201,7 +12350,7 @@ impl<'a> IterableStatsGrpHist<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrpHist::HistBktHi(val) = attr? {
+            if let Ok(StatsGrpHist::HistBktHi(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12216,7 +12365,7 @@ impl<'a> IterableStatsGrpHist<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let StatsGrpHist::HistVal(val) = attr? {
+            if let Ok(StatsGrpHist::HistVal(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12257,14 +12406,16 @@ impl<'a> IterableStatsGrpHist<'a> {
 impl<'a> Iterator for IterableStatsGrpHist<'a> {
     type Item = Result<StatsGrpHist, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12383,7 +12534,7 @@ impl<'a> IterableStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::Pad(val) = attr? {
+            if let Ok(Stats::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12398,7 +12549,7 @@ impl<'a> IterableStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::Header(val) = attr? {
+            if let Ok(Stats::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12413,7 +12564,7 @@ impl<'a> IterableStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::Groups(val) = attr? {
+            if let Ok(Stats::Groups(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12428,7 +12579,7 @@ impl<'a> IterableStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::Grp(val) = attr? {
+            if let Ok(Stats::Grp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12443,7 +12594,7 @@ impl<'a> IterableStats<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::Src(val) = attr? {
+            if let Ok(Stats::Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12493,14 +12644,16 @@ impl<'a> IterableStats<'a> {
 impl<'a> Iterator for IterableStats<'a> {
     type Item = Result<Stats<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12639,7 +12792,7 @@ impl<'a> IterablePhcVclocks<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PhcVclocks::Header(val) = attr? {
+            if let Ok(PhcVclocks::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12654,7 +12807,7 @@ impl<'a> IterablePhcVclocks<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PhcVclocks::Num(val) = attr? {
+            if let Ok(PhcVclocks::Num(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12669,7 +12822,7 @@ impl<'a> IterablePhcVclocks<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PhcVclocks::Index(val) = attr? {
+            if let Ok(PhcVclocks::Index(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12717,14 +12870,16 @@ impl<'a> IterablePhcVclocks<'a> {
 impl<'a> Iterator for IterablePhcVclocks<'a> {
     type Item = Result<PhcVclocks<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12842,7 +12997,7 @@ impl<'a> IterableModule<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Module::Header(val) = attr? {
+            if let Ok(Module::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12857,7 +13012,7 @@ impl<'a> IterableModule<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Module::PowerModePolicy(val) = attr? {
+            if let Ok(Module::PowerModePolicy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12872,7 +13027,7 @@ impl<'a> IterableModule<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Module::PowerMode(val) = attr? {
+            if let Ok(Module::PowerMode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12920,14 +13075,16 @@ impl<'a> IterableModule<'a> {
 impl<'a> Iterator for IterableModule<'a> {
     type Item = Result<Module<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -13041,7 +13198,7 @@ impl<'a> IterableC33PsePwLimit<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let C33PsePwLimit::Min(val) = attr? {
+            if let Ok(C33PsePwLimit::Min(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13056,7 +13213,7 @@ impl<'a> IterableC33PsePwLimit<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let C33PsePwLimit::Max(val) = attr? {
+            if let Ok(C33PsePwLimit::Max(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13103,14 +13260,16 @@ impl<'a> IterableC33PsePwLimit<'a> {
 impl<'a> Iterator for IterableC33PsePwLimit<'a> {
     type Item = Result<C33PsePwLimit, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -13230,7 +13389,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::Header(val) = attr? {
+            if let Ok(Pse::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13245,7 +13404,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::PodlPseAdminState(val) = attr? {
+            if let Ok(Pse::PodlPseAdminState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13260,7 +13419,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::PodlPseAdminControl(val) = attr? {
+            if let Ok(Pse::PodlPseAdminControl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13275,7 +13434,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::PodlPsePwDStatus(val) = attr? {
+            if let Ok(Pse::PodlPsePwDStatus(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13290,7 +13449,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::C33PseAdminState(val) = attr? {
+            if let Ok(Pse::C33PseAdminState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13305,7 +13464,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::C33PseAdminControl(val) = attr? {
+            if let Ok(Pse::C33PseAdminControl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13320,7 +13479,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::C33PsePwDStatus(val) = attr? {
+            if let Ok(Pse::C33PsePwDStatus(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13335,7 +13494,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::C33PsePwClass(val) = attr? {
+            if let Ok(Pse::C33PsePwClass(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13350,7 +13509,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::C33PseActualPw(val) = attr? {
+            if let Ok(Pse::C33PseActualPw(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13366,7 +13525,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::C33PseExtState(val) = attr? {
+            if let Ok(Pse::C33PseExtState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13381,7 +13540,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::C33PseExtSubstate(val) = attr? {
+            if let Ok(Pse::C33PseExtSubstate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13396,7 +13555,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::C33PseAvailPwLimit(val) = attr? {
+            if let Ok(Pse::C33PseAvailPwLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13423,7 +13582,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::PsePwDId(val) = attr? {
+            if let Ok(Pse::PsePwDId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13438,7 +13597,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::PsePrioMax(val) = attr? {
+            if let Ok(Pse::PsePrioMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13453,7 +13612,7 @@ impl<'a> IterablePse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pse::PsePrio(val) = attr? {
+            if let Ok(Pse::PsePrio(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13514,14 +13673,16 @@ impl<'a> IterablePse<'a> {
 impl<'a> Iterator for IterablePse<'a> {
     type Item = Result<Pse<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -13847,7 +14008,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Ether(val) = attr? {
+            if let Ok(Flow::Ether(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13863,7 +14024,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Ip4(val) = attr? {
+            if let Ok(Flow::Ip4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13879,7 +14040,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Ip6(val) = attr? {
+            if let Ok(Flow::Ip6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13895,7 +14056,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Tcp4(val) = attr? {
+            if let Ok(Flow::Tcp4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13911,7 +14072,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Tcp6(val) = attr? {
+            if let Ok(Flow::Tcp6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13927,7 +14088,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Udp4(val) = attr? {
+            if let Ok(Flow::Udp4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13943,7 +14104,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Udp6(val) = attr? {
+            if let Ok(Flow::Udp6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13959,7 +14120,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Sctp4(val) = attr? {
+            if let Ok(Flow::Sctp4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13975,7 +14136,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Sctp6(val) = attr? {
+            if let Ok(Flow::Sctp6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13991,7 +14152,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Ah4(val) = attr? {
+            if let Ok(Flow::Ah4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14007,7 +14168,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Ah6(val) = attr? {
+            if let Ok(Flow::Ah6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14023,7 +14184,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Esp4(val) = attr? {
+            if let Ok(Flow::Esp4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14039,7 +14200,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Esp6(val) = attr? {
+            if let Ok(Flow::Esp6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14055,7 +14216,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::AhEsp4(val) = attr? {
+            if let Ok(Flow::AhEsp4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14071,7 +14232,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::AhEsp6(val) = attr? {
+            if let Ok(Flow::AhEsp6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14087,7 +14248,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Gtpu4(val) = attr? {
+            if let Ok(Flow::Gtpu4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14103,7 +14264,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Gtpu6(val) = attr? {
+            if let Ok(Flow::Gtpu6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14119,7 +14280,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Gtpc4(val) = attr? {
+            if let Ok(Flow::Gtpc4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14135,7 +14296,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::Gtpc6(val) = attr? {
+            if let Ok(Flow::Gtpc6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14151,7 +14312,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::GtpcTeid4(val) = attr? {
+            if let Ok(Flow::GtpcTeid4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14167,7 +14328,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::GtpcTeid6(val) = attr? {
+            if let Ok(Flow::GtpcTeid6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14183,7 +14344,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::GtpuEh4(val) = attr? {
+            if let Ok(Flow::GtpuEh4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14199,7 +14360,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::GtpuEh6(val) = attr? {
+            if let Ok(Flow::GtpuEh6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14215,7 +14376,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::GtpuUl4(val) = attr? {
+            if let Ok(Flow::GtpuUl4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14231,7 +14392,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::GtpuUl6(val) = attr? {
+            if let Ok(Flow::GtpuUl6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14247,7 +14408,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::GtpuDl4(val) = attr? {
+            if let Ok(Flow::GtpuDl4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14263,7 +14424,7 @@ impl<'a> IterableFlow<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Flow::GtpuDl6(val) = attr? {
+            if let Ok(Flow::GtpuDl6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14334,14 +14495,16 @@ impl<'a> IterableFlow<'a> {
 impl<'a> Iterator for IterableFlow<'a> {
     type Item = Result<Flow, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -14805,7 +14968,7 @@ impl<'a> IterableRss<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rss::Header(val) = attr? {
+            if let Ok(Rss::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14820,7 +14983,7 @@ impl<'a> IterableRss<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rss::Context(val) = attr? {
+            if let Ok(Rss::Context(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14835,7 +14998,7 @@ impl<'a> IterableRss<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rss::Hfunc(val) = attr? {
+            if let Ok(Rss::Hfunc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14850,7 +15013,7 @@ impl<'a> IterableRss<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rss::Indir(val) = attr? {
+            if let Ok(Rss::Indir(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14865,7 +15028,7 @@ impl<'a> IterableRss<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rss::Hkey(val) = attr? {
+            if let Ok(Rss::Hkey(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14881,7 +15044,7 @@ impl<'a> IterableRss<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rss::InputXfrm(val) = attr? {
+            if let Ok(Rss::InputXfrm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14896,7 +15059,7 @@ impl<'a> IterableRss<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rss::StartContext(val) = attr? {
+            if let Ok(Rss::StartContext(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14911,7 +15074,7 @@ impl<'a> IterableRss<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Rss::FlowHash(val) = attr? {
+            if let Ok(Rss::FlowHash(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14964,14 +15127,16 @@ impl<'a> IterableRss<'a> {
 impl<'a> Iterator for IterableRss<'a> {
     type Item = Result<Rss<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -15154,7 +15319,7 @@ impl<'a> IterablePlca<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Plca::Header(val) = attr? {
+            if let Ok(Plca::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15169,7 +15334,7 @@ impl<'a> IterablePlca<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Plca::Version(val) = attr? {
+            if let Ok(Plca::Version(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15184,7 +15349,7 @@ impl<'a> IterablePlca<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Plca::Enabled(val) = attr? {
+            if let Ok(Plca::Enabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15199,7 +15364,7 @@ impl<'a> IterablePlca<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Plca::Status(val) = attr? {
+            if let Ok(Plca::Status(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15214,7 +15379,7 @@ impl<'a> IterablePlca<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Plca::NodeCnt(val) = attr? {
+            if let Ok(Plca::NodeCnt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15229,7 +15394,7 @@ impl<'a> IterablePlca<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Plca::NodeId(val) = attr? {
+            if let Ok(Plca::NodeId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15244,7 +15409,7 @@ impl<'a> IterablePlca<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Plca::ToTmr(val) = attr? {
+            if let Ok(Plca::ToTmr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15259,7 +15424,7 @@ impl<'a> IterablePlca<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Plca::BurstCnt(val) = attr? {
+            if let Ok(Plca::BurstCnt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15274,7 +15439,7 @@ impl<'a> IterablePlca<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Plca::BurstTmr(val) = attr? {
+            if let Ok(Plca::BurstTmr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15328,14 +15493,16 @@ impl<'a> IterablePlca<'a> {
 impl<'a> Iterator for IterablePlca<'a> {
     type Item = Result<Plca<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -15527,7 +15694,7 @@ impl<'a> IterableModuleFwFlash<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleFwFlash::Header(val) = attr? {
+            if let Ok(ModuleFwFlash::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15542,7 +15709,7 @@ impl<'a> IterableModuleFwFlash<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleFwFlash::FileName(val) = attr? {
+            if let Ok(ModuleFwFlash::FileName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15557,7 +15724,7 @@ impl<'a> IterableModuleFwFlash<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleFwFlash::Password(val) = attr? {
+            if let Ok(ModuleFwFlash::Password(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15573,7 +15740,7 @@ impl<'a> IterableModuleFwFlash<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleFwFlash::Status(val) = attr? {
+            if let Ok(ModuleFwFlash::Status(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15588,7 +15755,7 @@ impl<'a> IterableModuleFwFlash<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleFwFlash::StatusMsg(val) = attr? {
+            if let Ok(ModuleFwFlash::StatusMsg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15603,7 +15770,7 @@ impl<'a> IterableModuleFwFlash<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleFwFlash::Done(val) = attr? {
+            if let Ok(ModuleFwFlash::Done(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15618,7 +15785,7 @@ impl<'a> IterableModuleFwFlash<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ModuleFwFlash::Total(val) = attr? {
+            if let Ok(ModuleFwFlash::Total(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15670,14 +15837,16 @@ impl<'a> IterableModuleFwFlash<'a> {
 impl<'a> Iterator for IterableModuleFwFlash<'a> {
     type Item = Result<ModuleFwFlash<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -15852,7 +16021,7 @@ impl<'a> IterablePhy<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Phy::Header(val) = attr? {
+            if let Ok(Phy::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15867,7 +16036,7 @@ impl<'a> IterablePhy<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Phy::Index(val) = attr? {
+            if let Ok(Phy::Index(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15882,7 +16051,7 @@ impl<'a> IterablePhy<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Phy::Drvname(val) = attr? {
+            if let Ok(Phy::Drvname(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15897,7 +16066,7 @@ impl<'a> IterablePhy<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Phy::Name(val) = attr? {
+            if let Ok(Phy::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15913,7 +16082,7 @@ impl<'a> IterablePhy<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Phy::UpstreamType(val) = attr? {
+            if let Ok(Phy::UpstreamType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15928,7 +16097,7 @@ impl<'a> IterablePhy<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Phy::UpstreamIndex(val) = attr? {
+            if let Ok(Phy::UpstreamIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15943,7 +16112,7 @@ impl<'a> IterablePhy<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Phy::UpstreamSfpName(val) = attr? {
+            if let Ok(Phy::UpstreamSfpName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15958,7 +16127,7 @@ impl<'a> IterablePhy<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Phy::DownstreamSfpName(val) = attr? {
+            if let Ok(Phy::DownstreamSfpName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16011,14 +16180,16 @@ impl<'a> IterablePhy<'a> {
 impl<'a> Iterator for IterablePhy<'a> {
     type Item = Result<Phy<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -16198,7 +16369,7 @@ impl<'a> IterableTsconfig<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsconfig::Header(val) = attr? {
+            if let Ok(Tsconfig::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16213,7 +16384,7 @@ impl<'a> IterableTsconfig<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsconfig::HwtstampProvider(val) = attr? {
+            if let Ok(Tsconfig::HwtstampProvider(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16228,7 +16399,7 @@ impl<'a> IterableTsconfig<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsconfig::TxTypes(val) = attr? {
+            if let Ok(Tsconfig::TxTypes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16243,7 +16414,7 @@ impl<'a> IterableTsconfig<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsconfig::RxFilters(val) = attr? {
+            if let Ok(Tsconfig::RxFilters(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16258,7 +16429,7 @@ impl<'a> IterableTsconfig<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Tsconfig::HwtstampFlags(val) = attr? {
+            if let Ok(Tsconfig::HwtstampFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16308,14 +16479,16 @@ impl<'a> IterableTsconfig<'a> {
 impl<'a> Iterator for IterableTsconfig<'a> {
     type Item = Result<Tsconfig<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -16449,7 +16622,7 @@ impl IterableTsconfig<'_> {
 #[derive(Clone)]
 pub enum PseNtf<'a> {
     Header(IterableHeader<'a>),
-    #[doc = "List of events reported by the PSE controller\nAssociated type: [`PseEvent`] (enum)"]
+    #[doc = "List of events reported by the PSE controller\n\nAssociated type: [`PseEvent`] (enum)"]
     Events(u32),
 }
 impl<'a> IterablePseNtf<'a> {
@@ -16457,7 +16630,7 @@ impl<'a> IterablePseNtf<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PseNtf::Header(val) = attr? {
+            if let Ok(PseNtf::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16468,12 +16641,12 @@ impl<'a> IterablePseNtf<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "List of events reported by the PSE controller\nAssociated type: [`PseEvent`] (enum)"]
+    #[doc = "List of events reported by the PSE controller\n\nAssociated type: [`PseEvent`] (enum)"]
     pub fn get_events(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PseNtf::Events(val) = attr? {
+            if let Ok(PseNtf::Events(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16519,14 +16692,16 @@ impl<'a> IterablePseNtf<'a> {
 impl<'a> Iterator for IterablePseNtf<'a> {
     type Item = Result<PseNtf<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -16632,7 +16807,7 @@ impl<'a> IterableMseCapabilities<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MseCapabilities::MaxAverageMse(val) = attr? {
+            if let Ok(MseCapabilities::MaxAverageMse(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16647,7 +16822,7 @@ impl<'a> IterableMseCapabilities<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MseCapabilities::MaxPeakMse(val) = attr? {
+            if let Ok(MseCapabilities::MaxPeakMse(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16662,7 +16837,7 @@ impl<'a> IterableMseCapabilities<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MseCapabilities::RefreshRatePs(val) = attr? {
+            if let Ok(MseCapabilities::RefreshRatePs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16677,7 +16852,7 @@ impl<'a> IterableMseCapabilities<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MseCapabilities::NumSymbols(val) = attr? {
+            if let Ok(MseCapabilities::NumSymbols(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16725,14 +16900,16 @@ impl<'a> IterableMseCapabilities<'a> {
 impl<'a> Iterator for IterableMseCapabilities<'a> {
     type Item = Result<MseCapabilities, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -16861,7 +17038,7 @@ impl<'a> IterableMseSnapshot<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MseSnapshot::AverageMse(val) = attr? {
+            if let Ok(MseSnapshot::AverageMse(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16876,7 +17053,7 @@ impl<'a> IterableMseSnapshot<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MseSnapshot::PeakMse(val) = attr? {
+            if let Ok(MseSnapshot::PeakMse(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16891,7 +17068,7 @@ impl<'a> IterableMseSnapshot<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MseSnapshot::WorstPeakMse(val) = attr? {
+            if let Ok(MseSnapshot::WorstPeakMse(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16938,14 +17115,16 @@ impl<'a> IterableMseSnapshot<'a> {
 impl<'a> Iterator for IterableMseSnapshot<'a> {
     type Item = Result<MseSnapshot, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -17067,7 +17246,7 @@ impl<'a> IterableMse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mse::Header(val) = attr? {
+            if let Ok(Mse::Header(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17082,7 +17261,7 @@ impl<'a> IterableMse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mse::Capabilities(val) = attr? {
+            if let Ok(Mse::Capabilities(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17097,7 +17276,7 @@ impl<'a> IterableMse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mse::ChannelA(val) = attr? {
+            if let Ok(Mse::ChannelA(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17112,7 +17291,7 @@ impl<'a> IterableMse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mse::ChannelB(val) = attr? {
+            if let Ok(Mse::ChannelB(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17127,7 +17306,7 @@ impl<'a> IterableMse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mse::ChannelC(val) = attr? {
+            if let Ok(Mse::ChannelC(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17142,7 +17321,7 @@ impl<'a> IterableMse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mse::ChannelD(val) = attr? {
+            if let Ok(Mse::ChannelD(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17157,7 +17336,7 @@ impl<'a> IterableMse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mse::WorstChannel(val) = attr? {
+            if let Ok(Mse::WorstChannel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17172,7 +17351,7 @@ impl<'a> IterableMse<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Mse::Link(val) = attr? {
+            if let Ok(Mse::Link(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17224,14 +17403,16 @@ impl<'a> IterableMse<'a> {
 impl<'a> Iterator for IterableMse<'a> {
     type Item = Result<Mse<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -18090,37 +18271,37 @@ impl<Prev: Rec> PushMmStat<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "aMACMergeFrameAssErrorCount"]
+    #[doc = "aMACMergeFrameAssErrorCount\n"]
     pub fn push_reassembly_errors(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 2u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "aMACMergeFrameSmdErrorCount"]
+    #[doc = "aMACMergeFrameSmdErrorCount\n"]
     pub fn push_smd_errors(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 3u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "aMACMergeFrameAssOkCount"]
+    #[doc = "aMACMergeFrameAssOkCount\n"]
     pub fn push_reassembly_ok(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 4u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "aMACMergeFragCountRx"]
+    #[doc = "aMACMergeFragCountRx\n"]
     pub fn push_rx_frag_count(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 5u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "aMACMergeFragCountTx"]
+    #[doc = "aMACMergeFragCountTx\n"]
     pub fn push_tx_frag_count(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 6u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "aMACMergeHoldCount"]
+    #[doc = "aMACMergeHoldCount\n"]
     pub fn push_hold_count(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 7u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -19000,6 +19181,16 @@ impl<Prev: Rec> PushCoalesce<Prev> {
             header_offset: Some(header_offset),
         }
     }
+    pub fn push_rx_cqe_frames(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 31u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    pub fn push_rx_cqe_nsecs(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 32u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
 }
 impl<Prev: Rec> Drop for PushCoalesce<Prev> {
     fn drop(&mut self) {
@@ -19051,7 +19242,7 @@ impl<Prev: Rec> PushPauseStat<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "TX pause storm event count\\. Increments each time device detects that its pause assertion condition has been true for too long for normal operation\\. As a result, the device has temporarily disabled its own Pause TX function to protect the network from itself\\. This counter should never increment under normal overload conditions; it indicates catastrophic failure like an OS crash\\. The rate of incrementing is implementation specific\\."]
+    #[doc = "TX pause storm event count. Increments each time device detects that its\npause assertion condition has been true for too long for normal\noperation. As a result, the device has temporarily disabled its own\nPause TX function to protect the network from itself. This counter\nshould never increment under normal overload conditions; it indicates\ncatastrophic failure like an OS crash. The rate of incrementing is\nimplementation specific.\n"]
     pub fn push_tx_pause_storm_events(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 4u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -19436,19 +19627,19 @@ impl<Prev: Rec> PushCableResult<Prev> {
         }
         prev
     }
-    #[doc = "ETHTOOL\\_A\\_CABLE\\_PAIR"]
+    #[doc = "ETHTOOL_A_CABLE_PAIR\n"]
     pub fn push_pair(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 1u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ETHTOOL\\_A\\_CABLE\\_RESULT\\_CODE"]
+    #[doc = "ETHTOOL_A_CABLE_RESULT_CODE\n"]
     pub fn push_code(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 2u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ETHTOOL\\_A\\_CABLE\\_INF\\_SRC"]
+    #[doc = "ETHTOOL_A_CABLE_INF_SRC\n"]
     pub fn push_src(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -19641,7 +19832,7 @@ impl<Prev: Rec> PushCableTestNtf<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "\\_STARTED/\\_COMPLETE"]
+    #[doc = "[STARTED]{#started}/\\_COMPLETE\n"]
     pub fn push_status(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 2u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -20052,25 +20243,25 @@ impl<Prev: Rec> PushFecHist<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "Low bound of FEC bin (inclusive)"]
+    #[doc = "Low bound of FEC bin (inclusive)\n"]
     pub fn push_bin_low(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "High bound of FEC bin (inclusive)"]
+    #[doc = "High bound of FEC bin (inclusive)\n"]
     pub fn push_bin_high(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Error count in the bin (optional if per\\-lane values exist)"]
+    #[doc = "Error count in the bin (optional if per-lane values exist)\n"]
     pub fn push_bin_val(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "An array of per\\-lane error counters in the bin (optional)"]
+    #[doc = "An array of per-lane error counters in the bin (optional)\n"]
     pub fn push_bin_val_per_lane(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 5u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -21446,7 +21637,7 @@ impl<Prev: Rec> PushPseNtf<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "List of events reported by the PSE controller\nAssociated type: [`PseEvent`] (enum)"]
+    #[doc = "List of events reported by the PSE controller\n\nAssociated type: [`PseEvent`] (enum)"]
     pub fn push_events(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -21666,7 +21857,7 @@ impl NotifGroup {
     pub const MONITOR: &str = "monitor";
     pub const MONITOR_CSTR: &CStr = c"monitor";
 }
-#[doc = "Get string set from the kernel\\.\nRequest attributes:\n- [.nested_header()](PushStrset::nested_header)\n- [.nested_stringsets()](PushStrset::nested_stringsets)\n- [.push_counts_only()](PushStrset::push_counts_only)\n\nReply attributes:\n- [.get_header()](IterableStrset::get_header)\n- [.get_stringsets()](IterableStrset::get_stringsets)\n"]
+#[doc = "Get string set from the kernel.\n\nRequest attributes:\n- [.nested_header()](PushStrset::nested_header)\n- [.nested_stringsets()](PushStrset::nested_stringsets)\n- [.push_counts_only()](PushStrset::push_counts_only)\n\nReply attributes:\n- [.get_header()](IterableStrset::get_header)\n- [.get_stringsets()](IterableStrset::get_stringsets)\n\n"]
 #[derive(Debug)]
 pub struct OpStrsetGetDump<'r> {
     request: Request<'r>,
@@ -21721,7 +21912,7 @@ impl NetlinkRequest for OpStrsetGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get string set from the kernel\\.\nRequest attributes:\n- [.nested_header()](PushStrset::nested_header)\n- [.nested_stringsets()](PushStrset::nested_stringsets)\n- [.push_counts_only()](PushStrset::push_counts_only)\n\nReply attributes:\n- [.get_header()](IterableStrset::get_header)\n- [.get_stringsets()](IterableStrset::get_stringsets)\n"]
+#[doc = "Get string set from the kernel.\n\nRequest attributes:\n- [.nested_header()](PushStrset::nested_header)\n- [.nested_stringsets()](PushStrset::nested_stringsets)\n- [.push_counts_only()](PushStrset::push_counts_only)\n\nReply attributes:\n- [.get_header()](IterableStrset::get_header)\n- [.get_stringsets()](IterableStrset::get_stringsets)\n\n"]
 #[derive(Debug)]
 pub struct OpStrsetGetDo<'r> {
     request: Request<'r>,
@@ -21774,7 +21965,7 @@ impl NetlinkRequest for OpStrsetGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get link info\\.\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkinfo::get_header)\n- [.get_port()](IterableLinkinfo::get_port)\n- [.get_phyaddr()](IterableLinkinfo::get_phyaddr)\n- [.get_tp_mdix()](IterableLinkinfo::get_tp_mdix)\n- [.get_tp_mdix_ctrl()](IterableLinkinfo::get_tp_mdix_ctrl)\n- [.get_transceiver()](IterableLinkinfo::get_transceiver)\n"]
+#[doc = "Get link info.\n\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkinfo::get_header)\n- [.get_port()](IterableLinkinfo::get_port)\n- [.get_phyaddr()](IterableLinkinfo::get_phyaddr)\n- [.get_tp_mdix()](IterableLinkinfo::get_tp_mdix)\n- [.get_tp_mdix_ctrl()](IterableLinkinfo::get_tp_mdix_ctrl)\n- [.get_transceiver()](IterableLinkinfo::get_transceiver)\n\n"]
 #[derive(Debug)]
 pub struct OpLinkinfoGetDump<'r> {
     request: Request<'r>,
@@ -21829,7 +22020,7 @@ impl NetlinkRequest for OpLinkinfoGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get link info\\.\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkinfo::get_header)\n- [.get_port()](IterableLinkinfo::get_port)\n- [.get_phyaddr()](IterableLinkinfo::get_phyaddr)\n- [.get_tp_mdix()](IterableLinkinfo::get_tp_mdix)\n- [.get_tp_mdix_ctrl()](IterableLinkinfo::get_tp_mdix_ctrl)\n- [.get_transceiver()](IterableLinkinfo::get_transceiver)\n"]
+#[doc = "Get link info.\n\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkinfo::get_header)\n- [.get_port()](IterableLinkinfo::get_port)\n- [.get_phyaddr()](IterableLinkinfo::get_phyaddr)\n- [.get_tp_mdix()](IterableLinkinfo::get_tp_mdix)\n- [.get_tp_mdix_ctrl()](IterableLinkinfo::get_tp_mdix_ctrl)\n- [.get_transceiver()](IterableLinkinfo::get_transceiver)\n\n"]
 #[derive(Debug)]
 pub struct OpLinkinfoGetDo<'r> {
     request: Request<'r>,
@@ -21882,7 +22073,7 @@ impl NetlinkRequest for OpLinkinfoGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set link info\\.\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n- [.push_port()](PushLinkinfo::push_port)\n- [.push_phyaddr()](PushLinkinfo::push_phyaddr)\n- [.push_tp_mdix()](PushLinkinfo::push_tp_mdix)\n- [.push_tp_mdix_ctrl()](PushLinkinfo::push_tp_mdix_ctrl)\n- [.push_transceiver()](PushLinkinfo::push_transceiver)\n"]
+#[doc = "Set link info.\n\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n- [.push_port()](PushLinkinfo::push_port)\n- [.push_phyaddr()](PushLinkinfo::push_phyaddr)\n- [.push_tp_mdix()](PushLinkinfo::push_tp_mdix)\n- [.push_tp_mdix_ctrl()](PushLinkinfo::push_tp_mdix_ctrl)\n- [.push_transceiver()](PushLinkinfo::push_transceiver)\n\n"]
 #[derive(Debug)]
 pub struct OpLinkinfoSetDo<'r> {
     request: Request<'r>,
@@ -21935,7 +22126,7 @@ impl NetlinkRequest for OpLinkinfoSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get link modes\\.\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkmodes::get_header)\n- [.get_autoneg()](IterableLinkmodes::get_autoneg)\n- [.get_ours()](IterableLinkmodes::get_ours)\n- [.get_peer()](IterableLinkmodes::get_peer)\n- [.get_speed()](IterableLinkmodes::get_speed)\n- [.get_duplex()](IterableLinkmodes::get_duplex)\n- [.get_master_slave_cfg()](IterableLinkmodes::get_master_slave_cfg)\n- [.get_master_slave_state()](IterableLinkmodes::get_master_slave_state)\n- [.get_lanes()](IterableLinkmodes::get_lanes)\n- [.get_rate_matching()](IterableLinkmodes::get_rate_matching)\n"]
+#[doc = "Get link modes.\n\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkmodes::get_header)\n- [.get_autoneg()](IterableLinkmodes::get_autoneg)\n- [.get_ours()](IterableLinkmodes::get_ours)\n- [.get_peer()](IterableLinkmodes::get_peer)\n- [.get_speed()](IterableLinkmodes::get_speed)\n- [.get_duplex()](IterableLinkmodes::get_duplex)\n- [.get_master_slave_cfg()](IterableLinkmodes::get_master_slave_cfg)\n- [.get_master_slave_state()](IterableLinkmodes::get_master_slave_state)\n- [.get_lanes()](IterableLinkmodes::get_lanes)\n- [.get_rate_matching()](IterableLinkmodes::get_rate_matching)\n\n"]
 #[derive(Debug)]
 pub struct OpLinkmodesGetDump<'r> {
     request: Request<'r>,
@@ -21990,7 +22181,7 @@ impl NetlinkRequest for OpLinkmodesGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get link modes\\.\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkmodes::get_header)\n- [.get_autoneg()](IterableLinkmodes::get_autoneg)\n- [.get_ours()](IterableLinkmodes::get_ours)\n- [.get_peer()](IterableLinkmodes::get_peer)\n- [.get_speed()](IterableLinkmodes::get_speed)\n- [.get_duplex()](IterableLinkmodes::get_duplex)\n- [.get_master_slave_cfg()](IterableLinkmodes::get_master_slave_cfg)\n- [.get_master_slave_state()](IterableLinkmodes::get_master_slave_state)\n- [.get_lanes()](IterableLinkmodes::get_lanes)\n- [.get_rate_matching()](IterableLinkmodes::get_rate_matching)\n"]
+#[doc = "Get link modes.\n\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkmodes::get_header)\n- [.get_autoneg()](IterableLinkmodes::get_autoneg)\n- [.get_ours()](IterableLinkmodes::get_ours)\n- [.get_peer()](IterableLinkmodes::get_peer)\n- [.get_speed()](IterableLinkmodes::get_speed)\n- [.get_duplex()](IterableLinkmodes::get_duplex)\n- [.get_master_slave_cfg()](IterableLinkmodes::get_master_slave_cfg)\n- [.get_master_slave_state()](IterableLinkmodes::get_master_slave_state)\n- [.get_lanes()](IterableLinkmodes::get_lanes)\n- [.get_rate_matching()](IterableLinkmodes::get_rate_matching)\n\n"]
 #[derive(Debug)]
 pub struct OpLinkmodesGetDo<'r> {
     request: Request<'r>,
@@ -22043,7 +22234,7 @@ impl NetlinkRequest for OpLinkmodesGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set link modes\\.\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n- [.push_autoneg()](PushLinkmodes::push_autoneg)\n- [.nested_ours()](PushLinkmodes::nested_ours)\n- [.nested_peer()](PushLinkmodes::nested_peer)\n- [.push_speed()](PushLinkmodes::push_speed)\n- [.push_duplex()](PushLinkmodes::push_duplex)\n- [.push_master_slave_cfg()](PushLinkmodes::push_master_slave_cfg)\n- [.push_master_slave_state()](PushLinkmodes::push_master_slave_state)\n- [.push_lanes()](PushLinkmodes::push_lanes)\n- [.push_rate_matching()](PushLinkmodes::push_rate_matching)\n"]
+#[doc = "Set link modes.\n\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n- [.push_autoneg()](PushLinkmodes::push_autoneg)\n- [.nested_ours()](PushLinkmodes::nested_ours)\n- [.nested_peer()](PushLinkmodes::nested_peer)\n- [.push_speed()](PushLinkmodes::push_speed)\n- [.push_duplex()](PushLinkmodes::push_duplex)\n- [.push_master_slave_cfg()](PushLinkmodes::push_master_slave_cfg)\n- [.push_master_slave_state()](PushLinkmodes::push_master_slave_state)\n- [.push_lanes()](PushLinkmodes::push_lanes)\n- [.push_rate_matching()](PushLinkmodes::push_rate_matching)\n\n"]
 #[derive(Debug)]
 pub struct OpLinkmodesSetDo<'r> {
     request: Request<'r>,
@@ -22096,7 +22287,7 @@ impl NetlinkRequest for OpLinkmodesSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get link state\\.\nRequest attributes:\n- [.nested_header()](PushLinkstate::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkstate::get_header)\n- [.get_link()](IterableLinkstate::get_link)\n- [.get_sqi()](IterableLinkstate::get_sqi)\n- [.get_sqi_max()](IterableLinkstate::get_sqi_max)\n- [.get_ext_state()](IterableLinkstate::get_ext_state)\n- [.get_ext_substate()](IterableLinkstate::get_ext_substate)\n- [.get_ext_down_cnt()](IterableLinkstate::get_ext_down_cnt)\n"]
+#[doc = "Get link state.\n\nRequest attributes:\n- [.nested_header()](PushLinkstate::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkstate::get_header)\n- [.get_link()](IterableLinkstate::get_link)\n- [.get_sqi()](IterableLinkstate::get_sqi)\n- [.get_sqi_max()](IterableLinkstate::get_sqi_max)\n- [.get_ext_state()](IterableLinkstate::get_ext_state)\n- [.get_ext_substate()](IterableLinkstate::get_ext_substate)\n- [.get_ext_down_cnt()](IterableLinkstate::get_ext_down_cnt)\n\n"]
 #[derive(Debug)]
 pub struct OpLinkstateGetDump<'r> {
     request: Request<'r>,
@@ -22151,7 +22342,7 @@ impl NetlinkRequest for OpLinkstateGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get link state\\.\nRequest attributes:\n- [.nested_header()](PushLinkstate::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkstate::get_header)\n- [.get_link()](IterableLinkstate::get_link)\n- [.get_sqi()](IterableLinkstate::get_sqi)\n- [.get_sqi_max()](IterableLinkstate::get_sqi_max)\n- [.get_ext_state()](IterableLinkstate::get_ext_state)\n- [.get_ext_substate()](IterableLinkstate::get_ext_substate)\n- [.get_ext_down_cnt()](IterableLinkstate::get_ext_down_cnt)\n"]
+#[doc = "Get link state.\n\nRequest attributes:\n- [.nested_header()](PushLinkstate::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkstate::get_header)\n- [.get_link()](IterableLinkstate::get_link)\n- [.get_sqi()](IterableLinkstate::get_sqi)\n- [.get_sqi_max()](IterableLinkstate::get_sqi_max)\n- [.get_ext_state()](IterableLinkstate::get_ext_state)\n- [.get_ext_substate()](IterableLinkstate::get_ext_substate)\n- [.get_ext_down_cnt()](IterableLinkstate::get_ext_down_cnt)\n\n"]
 #[derive(Debug)]
 pub struct OpLinkstateGetDo<'r> {
     request: Request<'r>,
@@ -22204,7 +22395,7 @@ impl NetlinkRequest for OpLinkstateGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get debug message mask\\.\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n\nReply attributes:\n- [.get_header()](IterableDebug::get_header)\n- [.get_msgmask()](IterableDebug::get_msgmask)\n"]
+#[doc = "Get debug message mask.\n\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n\nReply attributes:\n- [.get_header()](IterableDebug::get_header)\n- [.get_msgmask()](IterableDebug::get_msgmask)\n\n"]
 #[derive(Debug)]
 pub struct OpDebugGetDump<'r> {
     request: Request<'r>,
@@ -22259,7 +22450,7 @@ impl NetlinkRequest for OpDebugGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get debug message mask\\.\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n\nReply attributes:\n- [.get_header()](IterableDebug::get_header)\n- [.get_msgmask()](IterableDebug::get_msgmask)\n"]
+#[doc = "Get debug message mask.\n\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n\nReply attributes:\n- [.get_header()](IterableDebug::get_header)\n- [.get_msgmask()](IterableDebug::get_msgmask)\n\n"]
 #[derive(Debug)]
 pub struct OpDebugGetDo<'r> {
     request: Request<'r>,
@@ -22312,7 +22503,7 @@ impl NetlinkRequest for OpDebugGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set debug message mask\\.\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n- [.nested_msgmask()](PushDebug::nested_msgmask)\n"]
+#[doc = "Set debug message mask.\n\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n- [.nested_msgmask()](PushDebug::nested_msgmask)\n\n"]
 #[derive(Debug)]
 pub struct OpDebugSetDo<'r> {
     request: Request<'r>,
@@ -22365,7 +22556,7 @@ impl NetlinkRequest for OpDebugSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get WOL params\\.\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n\nReply attributes:\n- [.get_header()](IterableWol::get_header)\n- [.get_modes()](IterableWol::get_modes)\n- [.get_sopass()](IterableWol::get_sopass)\n"]
+#[doc = "Get WOL params.\n\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n\nReply attributes:\n- [.get_header()](IterableWol::get_header)\n- [.get_modes()](IterableWol::get_modes)\n- [.get_sopass()](IterableWol::get_sopass)\n\n"]
 #[derive(Debug)]
 pub struct OpWolGetDump<'r> {
     request: Request<'r>,
@@ -22420,7 +22611,7 @@ impl NetlinkRequest for OpWolGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get WOL params\\.\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n\nReply attributes:\n- [.get_header()](IterableWol::get_header)\n- [.get_modes()](IterableWol::get_modes)\n- [.get_sopass()](IterableWol::get_sopass)\n"]
+#[doc = "Get WOL params.\n\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n\nReply attributes:\n- [.get_header()](IterableWol::get_header)\n- [.get_modes()](IterableWol::get_modes)\n- [.get_sopass()](IterableWol::get_sopass)\n\n"]
 #[derive(Debug)]
 pub struct OpWolGetDo<'r> {
     request: Request<'r>,
@@ -22473,7 +22664,7 @@ impl NetlinkRequest for OpWolGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set WOL params\\.\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n- [.nested_modes()](PushWol::nested_modes)\n- [.push_sopass()](PushWol::push_sopass)\n"]
+#[doc = "Set WOL params.\n\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n- [.nested_modes()](PushWol::nested_modes)\n- [.push_sopass()](PushWol::push_sopass)\n\n"]
 #[derive(Debug)]
 pub struct OpWolSetDo<'r> {
     request: Request<'r>,
@@ -22526,7 +22717,7 @@ impl NetlinkRequest for OpWolSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get features\\.\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n"]
+#[doc = "Get features.\n\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n\n"]
 #[derive(Debug)]
 pub struct OpFeaturesGetDump<'r> {
     request: Request<'r>,
@@ -22581,7 +22772,7 @@ impl NetlinkRequest for OpFeaturesGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get features\\.\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n"]
+#[doc = "Get features.\n\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n\n"]
 #[derive(Debug)]
 pub struct OpFeaturesGetDo<'r> {
     request: Request<'r>,
@@ -22634,7 +22825,7 @@ impl NetlinkRequest for OpFeaturesGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set features\\.\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n- [.nested_hw()](PushFeatures::nested_hw)\n- [.nested_wanted()](PushFeatures::nested_wanted)\n- [.nested_active()](PushFeatures::nested_active)\n- [.nested_nochange()](PushFeatures::nested_nochange)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n"]
+#[doc = "Set features.\n\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n- [.nested_hw()](PushFeatures::nested_hw)\n- [.nested_wanted()](PushFeatures::nested_wanted)\n- [.nested_active()](PushFeatures::nested_active)\n- [.nested_nochange()](PushFeatures::nested_nochange)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n\n"]
 #[derive(Debug)]
 pub struct OpFeaturesSetDo<'r> {
     request: Request<'r>,
@@ -22687,7 +22878,7 @@ impl NetlinkRequest for OpFeaturesSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get device private flags\\.\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePrivflags::get_header)\n- [.get_flags()](IterablePrivflags::get_flags)\n"]
+#[doc = "Get device private flags.\n\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePrivflags::get_header)\n- [.get_flags()](IterablePrivflags::get_flags)\n\n"]
 #[derive(Debug)]
 pub struct OpPrivflagsGetDump<'r> {
     request: Request<'r>,
@@ -22742,7 +22933,7 @@ impl NetlinkRequest for OpPrivflagsGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get device private flags\\.\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePrivflags::get_header)\n- [.get_flags()](IterablePrivflags::get_flags)\n"]
+#[doc = "Get device private flags.\n\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePrivflags::get_header)\n- [.get_flags()](IterablePrivflags::get_flags)\n\n"]
 #[derive(Debug)]
 pub struct OpPrivflagsGetDo<'r> {
     request: Request<'r>,
@@ -22795,7 +22986,7 @@ impl NetlinkRequest for OpPrivflagsGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set device private flags\\.\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n- [.nested_flags()](PushPrivflags::nested_flags)\n"]
+#[doc = "Set device private flags.\n\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n- [.nested_flags()](PushPrivflags::nested_flags)\n\n"]
 #[derive(Debug)]
 pub struct OpPrivflagsSetDo<'r> {
     request: Request<'r>,
@@ -22848,7 +23039,7 @@ impl NetlinkRequest for OpPrivflagsSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get ring params\\.\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n\nReply attributes:\n- [.get_header()](IterableRings::get_header)\n- [.get_rx_max()](IterableRings::get_rx_max)\n- [.get_rx_mini_max()](IterableRings::get_rx_mini_max)\n- [.get_rx_jumbo_max()](IterableRings::get_rx_jumbo_max)\n- [.get_tx_max()](IterableRings::get_tx_max)\n- [.get_rx()](IterableRings::get_rx)\n- [.get_rx_mini()](IterableRings::get_rx_mini)\n- [.get_rx_jumbo()](IterableRings::get_rx_jumbo)\n- [.get_tx()](IterableRings::get_tx)\n- [.get_rx_buf_len()](IterableRings::get_rx_buf_len)\n- [.get_tcp_data_split()](IterableRings::get_tcp_data_split)\n- [.get_cqe_size()](IterableRings::get_cqe_size)\n- [.get_tx_push()](IterableRings::get_tx_push)\n- [.get_rx_push()](IterableRings::get_rx_push)\n- [.get_tx_push_buf_len()](IterableRings::get_tx_push_buf_len)\n- [.get_tx_push_buf_len_max()](IterableRings::get_tx_push_buf_len_max)\n- [.get_hds_thresh()](IterableRings::get_hds_thresh)\n- [.get_hds_thresh_max()](IterableRings::get_hds_thresh_max)\n"]
+#[doc = "Get ring params.\n\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n\nReply attributes:\n- [.get_header()](IterableRings::get_header)\n- [.get_rx_max()](IterableRings::get_rx_max)\n- [.get_rx_mini_max()](IterableRings::get_rx_mini_max)\n- [.get_rx_jumbo_max()](IterableRings::get_rx_jumbo_max)\n- [.get_tx_max()](IterableRings::get_tx_max)\n- [.get_rx()](IterableRings::get_rx)\n- [.get_rx_mini()](IterableRings::get_rx_mini)\n- [.get_rx_jumbo()](IterableRings::get_rx_jumbo)\n- [.get_tx()](IterableRings::get_tx)\n- [.get_rx_buf_len()](IterableRings::get_rx_buf_len)\n- [.get_tcp_data_split()](IterableRings::get_tcp_data_split)\n- [.get_cqe_size()](IterableRings::get_cqe_size)\n- [.get_tx_push()](IterableRings::get_tx_push)\n- [.get_rx_push()](IterableRings::get_rx_push)\n- [.get_tx_push_buf_len()](IterableRings::get_tx_push_buf_len)\n- [.get_tx_push_buf_len_max()](IterableRings::get_tx_push_buf_len_max)\n- [.get_hds_thresh()](IterableRings::get_hds_thresh)\n- [.get_hds_thresh_max()](IterableRings::get_hds_thresh_max)\n\n"]
 #[derive(Debug)]
 pub struct OpRingsGetDump<'r> {
     request: Request<'r>,
@@ -22903,7 +23094,7 @@ impl NetlinkRequest for OpRingsGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get ring params\\.\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n\nReply attributes:\n- [.get_header()](IterableRings::get_header)\n- [.get_rx_max()](IterableRings::get_rx_max)\n- [.get_rx_mini_max()](IterableRings::get_rx_mini_max)\n- [.get_rx_jumbo_max()](IterableRings::get_rx_jumbo_max)\n- [.get_tx_max()](IterableRings::get_tx_max)\n- [.get_rx()](IterableRings::get_rx)\n- [.get_rx_mini()](IterableRings::get_rx_mini)\n- [.get_rx_jumbo()](IterableRings::get_rx_jumbo)\n- [.get_tx()](IterableRings::get_tx)\n- [.get_rx_buf_len()](IterableRings::get_rx_buf_len)\n- [.get_tcp_data_split()](IterableRings::get_tcp_data_split)\n- [.get_cqe_size()](IterableRings::get_cqe_size)\n- [.get_tx_push()](IterableRings::get_tx_push)\n- [.get_rx_push()](IterableRings::get_rx_push)\n- [.get_tx_push_buf_len()](IterableRings::get_tx_push_buf_len)\n- [.get_tx_push_buf_len_max()](IterableRings::get_tx_push_buf_len_max)\n- [.get_hds_thresh()](IterableRings::get_hds_thresh)\n- [.get_hds_thresh_max()](IterableRings::get_hds_thresh_max)\n"]
+#[doc = "Get ring params.\n\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n\nReply attributes:\n- [.get_header()](IterableRings::get_header)\n- [.get_rx_max()](IterableRings::get_rx_max)\n- [.get_rx_mini_max()](IterableRings::get_rx_mini_max)\n- [.get_rx_jumbo_max()](IterableRings::get_rx_jumbo_max)\n- [.get_tx_max()](IterableRings::get_tx_max)\n- [.get_rx()](IterableRings::get_rx)\n- [.get_rx_mini()](IterableRings::get_rx_mini)\n- [.get_rx_jumbo()](IterableRings::get_rx_jumbo)\n- [.get_tx()](IterableRings::get_tx)\n- [.get_rx_buf_len()](IterableRings::get_rx_buf_len)\n- [.get_tcp_data_split()](IterableRings::get_tcp_data_split)\n- [.get_cqe_size()](IterableRings::get_cqe_size)\n- [.get_tx_push()](IterableRings::get_tx_push)\n- [.get_rx_push()](IterableRings::get_rx_push)\n- [.get_tx_push_buf_len()](IterableRings::get_tx_push_buf_len)\n- [.get_tx_push_buf_len_max()](IterableRings::get_tx_push_buf_len_max)\n- [.get_hds_thresh()](IterableRings::get_hds_thresh)\n- [.get_hds_thresh_max()](IterableRings::get_hds_thresh_max)\n\n"]
 #[derive(Debug)]
 pub struct OpRingsGetDo<'r> {
     request: Request<'r>,
@@ -22956,7 +23147,7 @@ impl NetlinkRequest for OpRingsGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set ring params\\.\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n- [.push_rx_max()](PushRings::push_rx_max)\n- [.push_rx_mini_max()](PushRings::push_rx_mini_max)\n- [.push_rx_jumbo_max()](PushRings::push_rx_jumbo_max)\n- [.push_tx_max()](PushRings::push_tx_max)\n- [.push_rx()](PushRings::push_rx)\n- [.push_rx_mini()](PushRings::push_rx_mini)\n- [.push_rx_jumbo()](PushRings::push_rx_jumbo)\n- [.push_tx()](PushRings::push_tx)\n- [.push_rx_buf_len()](PushRings::push_rx_buf_len)\n- [.push_tcp_data_split()](PushRings::push_tcp_data_split)\n- [.push_cqe_size()](PushRings::push_cqe_size)\n- [.push_tx_push()](PushRings::push_tx_push)\n- [.push_rx_push()](PushRings::push_rx_push)\n- [.push_tx_push_buf_len()](PushRings::push_tx_push_buf_len)\n- [.push_tx_push_buf_len_max()](PushRings::push_tx_push_buf_len_max)\n- [.push_hds_thresh()](PushRings::push_hds_thresh)\n- [.push_hds_thresh_max()](PushRings::push_hds_thresh_max)\n"]
+#[doc = "Set ring params.\n\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n- [.push_rx_max()](PushRings::push_rx_max)\n- [.push_rx_mini_max()](PushRings::push_rx_mini_max)\n- [.push_rx_jumbo_max()](PushRings::push_rx_jumbo_max)\n- [.push_tx_max()](PushRings::push_tx_max)\n- [.push_rx()](PushRings::push_rx)\n- [.push_rx_mini()](PushRings::push_rx_mini)\n- [.push_rx_jumbo()](PushRings::push_rx_jumbo)\n- [.push_tx()](PushRings::push_tx)\n- [.push_rx_buf_len()](PushRings::push_rx_buf_len)\n- [.push_tcp_data_split()](PushRings::push_tcp_data_split)\n- [.push_cqe_size()](PushRings::push_cqe_size)\n- [.push_tx_push()](PushRings::push_tx_push)\n- [.push_rx_push()](PushRings::push_rx_push)\n- [.push_tx_push_buf_len()](PushRings::push_tx_push_buf_len)\n- [.push_tx_push_buf_len_max()](PushRings::push_tx_push_buf_len_max)\n- [.push_hds_thresh()](PushRings::push_hds_thresh)\n- [.push_hds_thresh_max()](PushRings::push_hds_thresh_max)\n\n"]
 #[derive(Debug)]
 pub struct OpRingsSetDo<'r> {
     request: Request<'r>,
@@ -23009,7 +23200,7 @@ impl NetlinkRequest for OpRingsSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get channel params\\.\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n\nReply attributes:\n- [.get_header()](IterableChannels::get_header)\n- [.get_rx_max()](IterableChannels::get_rx_max)\n- [.get_tx_max()](IterableChannels::get_tx_max)\n- [.get_other_max()](IterableChannels::get_other_max)\n- [.get_combined_max()](IterableChannels::get_combined_max)\n- [.get_rx_count()](IterableChannels::get_rx_count)\n- [.get_tx_count()](IterableChannels::get_tx_count)\n- [.get_other_count()](IterableChannels::get_other_count)\n- [.get_combined_count()](IterableChannels::get_combined_count)\n"]
+#[doc = "Get channel params.\n\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n\nReply attributes:\n- [.get_header()](IterableChannels::get_header)\n- [.get_rx_max()](IterableChannels::get_rx_max)\n- [.get_tx_max()](IterableChannels::get_tx_max)\n- [.get_other_max()](IterableChannels::get_other_max)\n- [.get_combined_max()](IterableChannels::get_combined_max)\n- [.get_rx_count()](IterableChannels::get_rx_count)\n- [.get_tx_count()](IterableChannels::get_tx_count)\n- [.get_other_count()](IterableChannels::get_other_count)\n- [.get_combined_count()](IterableChannels::get_combined_count)\n\n"]
 #[derive(Debug)]
 pub struct OpChannelsGetDump<'r> {
     request: Request<'r>,
@@ -23064,7 +23255,7 @@ impl NetlinkRequest for OpChannelsGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get channel params\\.\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n\nReply attributes:\n- [.get_header()](IterableChannels::get_header)\n- [.get_rx_max()](IterableChannels::get_rx_max)\n- [.get_tx_max()](IterableChannels::get_tx_max)\n- [.get_other_max()](IterableChannels::get_other_max)\n- [.get_combined_max()](IterableChannels::get_combined_max)\n- [.get_rx_count()](IterableChannels::get_rx_count)\n- [.get_tx_count()](IterableChannels::get_tx_count)\n- [.get_other_count()](IterableChannels::get_other_count)\n- [.get_combined_count()](IterableChannels::get_combined_count)\n"]
+#[doc = "Get channel params.\n\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n\nReply attributes:\n- [.get_header()](IterableChannels::get_header)\n- [.get_rx_max()](IterableChannels::get_rx_max)\n- [.get_tx_max()](IterableChannels::get_tx_max)\n- [.get_other_max()](IterableChannels::get_other_max)\n- [.get_combined_max()](IterableChannels::get_combined_max)\n- [.get_rx_count()](IterableChannels::get_rx_count)\n- [.get_tx_count()](IterableChannels::get_tx_count)\n- [.get_other_count()](IterableChannels::get_other_count)\n- [.get_combined_count()](IterableChannels::get_combined_count)\n\n"]
 #[derive(Debug)]
 pub struct OpChannelsGetDo<'r> {
     request: Request<'r>,
@@ -23117,7 +23308,7 @@ impl NetlinkRequest for OpChannelsGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set channel params\\.\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n- [.push_rx_max()](PushChannels::push_rx_max)\n- [.push_tx_max()](PushChannels::push_tx_max)\n- [.push_other_max()](PushChannels::push_other_max)\n- [.push_combined_max()](PushChannels::push_combined_max)\n- [.push_rx_count()](PushChannels::push_rx_count)\n- [.push_tx_count()](PushChannels::push_tx_count)\n- [.push_other_count()](PushChannels::push_other_count)\n- [.push_combined_count()](PushChannels::push_combined_count)\n"]
+#[doc = "Set channel params.\n\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n- [.push_rx_max()](PushChannels::push_rx_max)\n- [.push_tx_max()](PushChannels::push_tx_max)\n- [.push_other_max()](PushChannels::push_other_max)\n- [.push_combined_max()](PushChannels::push_combined_max)\n- [.push_rx_count()](PushChannels::push_rx_count)\n- [.push_tx_count()](PushChannels::push_tx_count)\n- [.push_other_count()](PushChannels::push_other_count)\n- [.push_combined_count()](PushChannels::push_combined_count)\n\n"]
 #[derive(Debug)]
 pub struct OpChannelsSetDo<'r> {
     request: Request<'r>,
@@ -23170,7 +23361,7 @@ impl NetlinkRequest for OpChannelsSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get coalesce params\\.\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n\nReply attributes:\n- [.get_header()](IterableCoalesce::get_header)\n- [.get_rx_usecs()](IterableCoalesce::get_rx_usecs)\n- [.get_rx_max_frames()](IterableCoalesce::get_rx_max_frames)\n- [.get_rx_usecs_irq()](IterableCoalesce::get_rx_usecs_irq)\n- [.get_rx_max_frames_irq()](IterableCoalesce::get_rx_max_frames_irq)\n- [.get_tx_usecs()](IterableCoalesce::get_tx_usecs)\n- [.get_tx_max_frames()](IterableCoalesce::get_tx_max_frames)\n- [.get_tx_usecs_irq()](IterableCoalesce::get_tx_usecs_irq)\n- [.get_tx_max_frames_irq()](IterableCoalesce::get_tx_max_frames_irq)\n- [.get_stats_block_usecs()](IterableCoalesce::get_stats_block_usecs)\n- [.get_use_adaptive_rx()](IterableCoalesce::get_use_adaptive_rx)\n- [.get_use_adaptive_tx()](IterableCoalesce::get_use_adaptive_tx)\n- [.get_pkt_rate_low()](IterableCoalesce::get_pkt_rate_low)\n- [.get_rx_usecs_low()](IterableCoalesce::get_rx_usecs_low)\n- [.get_rx_max_frames_low()](IterableCoalesce::get_rx_max_frames_low)\n- [.get_tx_usecs_low()](IterableCoalesce::get_tx_usecs_low)\n- [.get_tx_max_frames_low()](IterableCoalesce::get_tx_max_frames_low)\n- [.get_pkt_rate_high()](IterableCoalesce::get_pkt_rate_high)\n- [.get_rx_usecs_high()](IterableCoalesce::get_rx_usecs_high)\n- [.get_rx_max_frames_high()](IterableCoalesce::get_rx_max_frames_high)\n- [.get_tx_usecs_high()](IterableCoalesce::get_tx_usecs_high)\n- [.get_tx_max_frames_high()](IterableCoalesce::get_tx_max_frames_high)\n- [.get_rate_sample_interval()](IterableCoalesce::get_rate_sample_interval)\n- [.get_use_cqe_mode_tx()](IterableCoalesce::get_use_cqe_mode_tx)\n- [.get_use_cqe_mode_rx()](IterableCoalesce::get_use_cqe_mode_rx)\n- [.get_tx_aggr_max_bytes()](IterableCoalesce::get_tx_aggr_max_bytes)\n- [.get_tx_aggr_max_frames()](IterableCoalesce::get_tx_aggr_max_frames)\n- [.get_tx_aggr_time_usecs()](IterableCoalesce::get_tx_aggr_time_usecs)\n- [.get_rx_profile()](IterableCoalesce::get_rx_profile)\n- [.get_tx_profile()](IterableCoalesce::get_tx_profile)\n"]
+#[doc = "Get coalesce params.\n\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n\nReply attributes:\n- [.get_header()](IterableCoalesce::get_header)\n- [.get_rx_usecs()](IterableCoalesce::get_rx_usecs)\n- [.get_rx_max_frames()](IterableCoalesce::get_rx_max_frames)\n- [.get_rx_usecs_irq()](IterableCoalesce::get_rx_usecs_irq)\n- [.get_rx_max_frames_irq()](IterableCoalesce::get_rx_max_frames_irq)\n- [.get_tx_usecs()](IterableCoalesce::get_tx_usecs)\n- [.get_tx_max_frames()](IterableCoalesce::get_tx_max_frames)\n- [.get_tx_usecs_irq()](IterableCoalesce::get_tx_usecs_irq)\n- [.get_tx_max_frames_irq()](IterableCoalesce::get_tx_max_frames_irq)\n- [.get_stats_block_usecs()](IterableCoalesce::get_stats_block_usecs)\n- [.get_use_adaptive_rx()](IterableCoalesce::get_use_adaptive_rx)\n- [.get_use_adaptive_tx()](IterableCoalesce::get_use_adaptive_tx)\n- [.get_pkt_rate_low()](IterableCoalesce::get_pkt_rate_low)\n- [.get_rx_usecs_low()](IterableCoalesce::get_rx_usecs_low)\n- [.get_rx_max_frames_low()](IterableCoalesce::get_rx_max_frames_low)\n- [.get_tx_usecs_low()](IterableCoalesce::get_tx_usecs_low)\n- [.get_tx_max_frames_low()](IterableCoalesce::get_tx_max_frames_low)\n- [.get_pkt_rate_high()](IterableCoalesce::get_pkt_rate_high)\n- [.get_rx_usecs_high()](IterableCoalesce::get_rx_usecs_high)\n- [.get_rx_max_frames_high()](IterableCoalesce::get_rx_max_frames_high)\n- [.get_tx_usecs_high()](IterableCoalesce::get_tx_usecs_high)\n- [.get_tx_max_frames_high()](IterableCoalesce::get_tx_max_frames_high)\n- [.get_rate_sample_interval()](IterableCoalesce::get_rate_sample_interval)\n- [.get_use_cqe_mode_tx()](IterableCoalesce::get_use_cqe_mode_tx)\n- [.get_use_cqe_mode_rx()](IterableCoalesce::get_use_cqe_mode_rx)\n- [.get_tx_aggr_max_bytes()](IterableCoalesce::get_tx_aggr_max_bytes)\n- [.get_tx_aggr_max_frames()](IterableCoalesce::get_tx_aggr_max_frames)\n- [.get_tx_aggr_time_usecs()](IterableCoalesce::get_tx_aggr_time_usecs)\n- [.get_rx_profile()](IterableCoalesce::get_rx_profile)\n- [.get_tx_profile()](IterableCoalesce::get_tx_profile)\n- [.get_rx_cqe_frames()](IterableCoalesce::get_rx_cqe_frames)\n- [.get_rx_cqe_nsecs()](IterableCoalesce::get_rx_cqe_nsecs)\n\n"]
 #[derive(Debug)]
 pub struct OpCoalesceGetDump<'r> {
     request: Request<'r>,
@@ -23225,7 +23416,7 @@ impl NetlinkRequest for OpCoalesceGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get coalesce params\\.\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n\nReply attributes:\n- [.get_header()](IterableCoalesce::get_header)\n- [.get_rx_usecs()](IterableCoalesce::get_rx_usecs)\n- [.get_rx_max_frames()](IterableCoalesce::get_rx_max_frames)\n- [.get_rx_usecs_irq()](IterableCoalesce::get_rx_usecs_irq)\n- [.get_rx_max_frames_irq()](IterableCoalesce::get_rx_max_frames_irq)\n- [.get_tx_usecs()](IterableCoalesce::get_tx_usecs)\n- [.get_tx_max_frames()](IterableCoalesce::get_tx_max_frames)\n- [.get_tx_usecs_irq()](IterableCoalesce::get_tx_usecs_irq)\n- [.get_tx_max_frames_irq()](IterableCoalesce::get_tx_max_frames_irq)\n- [.get_stats_block_usecs()](IterableCoalesce::get_stats_block_usecs)\n- [.get_use_adaptive_rx()](IterableCoalesce::get_use_adaptive_rx)\n- [.get_use_adaptive_tx()](IterableCoalesce::get_use_adaptive_tx)\n- [.get_pkt_rate_low()](IterableCoalesce::get_pkt_rate_low)\n- [.get_rx_usecs_low()](IterableCoalesce::get_rx_usecs_low)\n- [.get_rx_max_frames_low()](IterableCoalesce::get_rx_max_frames_low)\n- [.get_tx_usecs_low()](IterableCoalesce::get_tx_usecs_low)\n- [.get_tx_max_frames_low()](IterableCoalesce::get_tx_max_frames_low)\n- [.get_pkt_rate_high()](IterableCoalesce::get_pkt_rate_high)\n- [.get_rx_usecs_high()](IterableCoalesce::get_rx_usecs_high)\n- [.get_rx_max_frames_high()](IterableCoalesce::get_rx_max_frames_high)\n- [.get_tx_usecs_high()](IterableCoalesce::get_tx_usecs_high)\n- [.get_tx_max_frames_high()](IterableCoalesce::get_tx_max_frames_high)\n- [.get_rate_sample_interval()](IterableCoalesce::get_rate_sample_interval)\n- [.get_use_cqe_mode_tx()](IterableCoalesce::get_use_cqe_mode_tx)\n- [.get_use_cqe_mode_rx()](IterableCoalesce::get_use_cqe_mode_rx)\n- [.get_tx_aggr_max_bytes()](IterableCoalesce::get_tx_aggr_max_bytes)\n- [.get_tx_aggr_max_frames()](IterableCoalesce::get_tx_aggr_max_frames)\n- [.get_tx_aggr_time_usecs()](IterableCoalesce::get_tx_aggr_time_usecs)\n- [.get_rx_profile()](IterableCoalesce::get_rx_profile)\n- [.get_tx_profile()](IterableCoalesce::get_tx_profile)\n"]
+#[doc = "Get coalesce params.\n\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n\nReply attributes:\n- [.get_header()](IterableCoalesce::get_header)\n- [.get_rx_usecs()](IterableCoalesce::get_rx_usecs)\n- [.get_rx_max_frames()](IterableCoalesce::get_rx_max_frames)\n- [.get_rx_usecs_irq()](IterableCoalesce::get_rx_usecs_irq)\n- [.get_rx_max_frames_irq()](IterableCoalesce::get_rx_max_frames_irq)\n- [.get_tx_usecs()](IterableCoalesce::get_tx_usecs)\n- [.get_tx_max_frames()](IterableCoalesce::get_tx_max_frames)\n- [.get_tx_usecs_irq()](IterableCoalesce::get_tx_usecs_irq)\n- [.get_tx_max_frames_irq()](IterableCoalesce::get_tx_max_frames_irq)\n- [.get_stats_block_usecs()](IterableCoalesce::get_stats_block_usecs)\n- [.get_use_adaptive_rx()](IterableCoalesce::get_use_adaptive_rx)\n- [.get_use_adaptive_tx()](IterableCoalesce::get_use_adaptive_tx)\n- [.get_pkt_rate_low()](IterableCoalesce::get_pkt_rate_low)\n- [.get_rx_usecs_low()](IterableCoalesce::get_rx_usecs_low)\n- [.get_rx_max_frames_low()](IterableCoalesce::get_rx_max_frames_low)\n- [.get_tx_usecs_low()](IterableCoalesce::get_tx_usecs_low)\n- [.get_tx_max_frames_low()](IterableCoalesce::get_tx_max_frames_low)\n- [.get_pkt_rate_high()](IterableCoalesce::get_pkt_rate_high)\n- [.get_rx_usecs_high()](IterableCoalesce::get_rx_usecs_high)\n- [.get_rx_max_frames_high()](IterableCoalesce::get_rx_max_frames_high)\n- [.get_tx_usecs_high()](IterableCoalesce::get_tx_usecs_high)\n- [.get_tx_max_frames_high()](IterableCoalesce::get_tx_max_frames_high)\n- [.get_rate_sample_interval()](IterableCoalesce::get_rate_sample_interval)\n- [.get_use_cqe_mode_tx()](IterableCoalesce::get_use_cqe_mode_tx)\n- [.get_use_cqe_mode_rx()](IterableCoalesce::get_use_cqe_mode_rx)\n- [.get_tx_aggr_max_bytes()](IterableCoalesce::get_tx_aggr_max_bytes)\n- [.get_tx_aggr_max_frames()](IterableCoalesce::get_tx_aggr_max_frames)\n- [.get_tx_aggr_time_usecs()](IterableCoalesce::get_tx_aggr_time_usecs)\n- [.get_rx_profile()](IterableCoalesce::get_rx_profile)\n- [.get_tx_profile()](IterableCoalesce::get_tx_profile)\n- [.get_rx_cqe_frames()](IterableCoalesce::get_rx_cqe_frames)\n- [.get_rx_cqe_nsecs()](IterableCoalesce::get_rx_cqe_nsecs)\n\n"]
 #[derive(Debug)]
 pub struct OpCoalesceGetDo<'r> {
     request: Request<'r>,
@@ -23278,7 +23469,7 @@ impl NetlinkRequest for OpCoalesceGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set coalesce params\\.\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n- [.push_rx_usecs()](PushCoalesce::push_rx_usecs)\n- [.push_rx_max_frames()](PushCoalesce::push_rx_max_frames)\n- [.push_rx_usecs_irq()](PushCoalesce::push_rx_usecs_irq)\n- [.push_rx_max_frames_irq()](PushCoalesce::push_rx_max_frames_irq)\n- [.push_tx_usecs()](PushCoalesce::push_tx_usecs)\n- [.push_tx_max_frames()](PushCoalesce::push_tx_max_frames)\n- [.push_tx_usecs_irq()](PushCoalesce::push_tx_usecs_irq)\n- [.push_tx_max_frames_irq()](PushCoalesce::push_tx_max_frames_irq)\n- [.push_stats_block_usecs()](PushCoalesce::push_stats_block_usecs)\n- [.push_use_adaptive_rx()](PushCoalesce::push_use_adaptive_rx)\n- [.push_use_adaptive_tx()](PushCoalesce::push_use_adaptive_tx)\n- [.push_pkt_rate_low()](PushCoalesce::push_pkt_rate_low)\n- [.push_rx_usecs_low()](PushCoalesce::push_rx_usecs_low)\n- [.push_rx_max_frames_low()](PushCoalesce::push_rx_max_frames_low)\n- [.push_tx_usecs_low()](PushCoalesce::push_tx_usecs_low)\n- [.push_tx_max_frames_low()](PushCoalesce::push_tx_max_frames_low)\n- [.push_pkt_rate_high()](PushCoalesce::push_pkt_rate_high)\n- [.push_rx_usecs_high()](PushCoalesce::push_rx_usecs_high)\n- [.push_rx_max_frames_high()](PushCoalesce::push_rx_max_frames_high)\n- [.push_tx_usecs_high()](PushCoalesce::push_tx_usecs_high)\n- [.push_tx_max_frames_high()](PushCoalesce::push_tx_max_frames_high)\n- [.push_rate_sample_interval()](PushCoalesce::push_rate_sample_interval)\n- [.push_use_cqe_mode_tx()](PushCoalesce::push_use_cqe_mode_tx)\n- [.push_use_cqe_mode_rx()](PushCoalesce::push_use_cqe_mode_rx)\n- [.push_tx_aggr_max_bytes()](PushCoalesce::push_tx_aggr_max_bytes)\n- [.push_tx_aggr_max_frames()](PushCoalesce::push_tx_aggr_max_frames)\n- [.push_tx_aggr_time_usecs()](PushCoalesce::push_tx_aggr_time_usecs)\n- [.nested_rx_profile()](PushCoalesce::nested_rx_profile)\n- [.nested_tx_profile()](PushCoalesce::nested_tx_profile)\n"]
+#[doc = "Set coalesce params.\n\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n- [.push_rx_usecs()](PushCoalesce::push_rx_usecs)\n- [.push_rx_max_frames()](PushCoalesce::push_rx_max_frames)\n- [.push_rx_usecs_irq()](PushCoalesce::push_rx_usecs_irq)\n- [.push_rx_max_frames_irq()](PushCoalesce::push_rx_max_frames_irq)\n- [.push_tx_usecs()](PushCoalesce::push_tx_usecs)\n- [.push_tx_max_frames()](PushCoalesce::push_tx_max_frames)\n- [.push_tx_usecs_irq()](PushCoalesce::push_tx_usecs_irq)\n- [.push_tx_max_frames_irq()](PushCoalesce::push_tx_max_frames_irq)\n- [.push_stats_block_usecs()](PushCoalesce::push_stats_block_usecs)\n- [.push_use_adaptive_rx()](PushCoalesce::push_use_adaptive_rx)\n- [.push_use_adaptive_tx()](PushCoalesce::push_use_adaptive_tx)\n- [.push_pkt_rate_low()](PushCoalesce::push_pkt_rate_low)\n- [.push_rx_usecs_low()](PushCoalesce::push_rx_usecs_low)\n- [.push_rx_max_frames_low()](PushCoalesce::push_rx_max_frames_low)\n- [.push_tx_usecs_low()](PushCoalesce::push_tx_usecs_low)\n- [.push_tx_max_frames_low()](PushCoalesce::push_tx_max_frames_low)\n- [.push_pkt_rate_high()](PushCoalesce::push_pkt_rate_high)\n- [.push_rx_usecs_high()](PushCoalesce::push_rx_usecs_high)\n- [.push_rx_max_frames_high()](PushCoalesce::push_rx_max_frames_high)\n- [.push_tx_usecs_high()](PushCoalesce::push_tx_usecs_high)\n- [.push_tx_max_frames_high()](PushCoalesce::push_tx_max_frames_high)\n- [.push_rate_sample_interval()](PushCoalesce::push_rate_sample_interval)\n- [.push_use_cqe_mode_tx()](PushCoalesce::push_use_cqe_mode_tx)\n- [.push_use_cqe_mode_rx()](PushCoalesce::push_use_cqe_mode_rx)\n- [.push_tx_aggr_max_bytes()](PushCoalesce::push_tx_aggr_max_bytes)\n- [.push_tx_aggr_max_frames()](PushCoalesce::push_tx_aggr_max_frames)\n- [.push_tx_aggr_time_usecs()](PushCoalesce::push_tx_aggr_time_usecs)\n- [.nested_rx_profile()](PushCoalesce::nested_rx_profile)\n- [.nested_tx_profile()](PushCoalesce::nested_tx_profile)\n- [.push_rx_cqe_frames()](PushCoalesce::push_rx_cqe_frames)\n- [.push_rx_cqe_nsecs()](PushCoalesce::push_rx_cqe_nsecs)\n\n"]
 #[derive(Debug)]
 pub struct OpCoalesceSetDo<'r> {
     request: Request<'r>,
@@ -23331,7 +23522,7 @@ impl NetlinkRequest for OpCoalesceSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get pause params\\.\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePause::get_header)\n- [.get_autoneg()](IterablePause::get_autoneg)\n- [.get_rx()](IterablePause::get_rx)\n- [.get_tx()](IterablePause::get_tx)\n- [.get_stats()](IterablePause::get_stats)\n- [.get_stats_src()](IterablePause::get_stats_src)\n"]
+#[doc = "Get pause params.\n\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePause::get_header)\n- [.get_autoneg()](IterablePause::get_autoneg)\n- [.get_rx()](IterablePause::get_rx)\n- [.get_tx()](IterablePause::get_tx)\n- [.get_stats()](IterablePause::get_stats)\n- [.get_stats_src()](IterablePause::get_stats_src)\n\n"]
 #[derive(Debug)]
 pub struct OpPauseGetDump<'r> {
     request: Request<'r>,
@@ -23386,7 +23577,7 @@ impl NetlinkRequest for OpPauseGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get pause params\\.\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePause::get_header)\n- [.get_autoneg()](IterablePause::get_autoneg)\n- [.get_rx()](IterablePause::get_rx)\n- [.get_tx()](IterablePause::get_tx)\n- [.get_stats()](IterablePause::get_stats)\n- [.get_stats_src()](IterablePause::get_stats_src)\n"]
+#[doc = "Get pause params.\n\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePause::get_header)\n- [.get_autoneg()](IterablePause::get_autoneg)\n- [.get_rx()](IterablePause::get_rx)\n- [.get_tx()](IterablePause::get_tx)\n- [.get_stats()](IterablePause::get_stats)\n- [.get_stats_src()](IterablePause::get_stats_src)\n\n"]
 #[derive(Debug)]
 pub struct OpPauseGetDo<'r> {
     request: Request<'r>,
@@ -23439,7 +23630,7 @@ impl NetlinkRequest for OpPauseGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set pause params\\.\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n- [.push_autoneg()](PushPause::push_autoneg)\n- [.push_rx()](PushPause::push_rx)\n- [.push_tx()](PushPause::push_tx)\n- [.nested_stats()](PushPause::nested_stats)\n- [.push_stats_src()](PushPause::push_stats_src)\n"]
+#[doc = "Set pause params.\n\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n- [.push_autoneg()](PushPause::push_autoneg)\n- [.push_rx()](PushPause::push_rx)\n- [.push_tx()](PushPause::push_tx)\n- [.nested_stats()](PushPause::nested_stats)\n- [.push_stats_src()](PushPause::push_stats_src)\n\n"]
 #[derive(Debug)]
 pub struct OpPauseSetDo<'r> {
     request: Request<'r>,
@@ -23492,7 +23683,7 @@ impl NetlinkRequest for OpPauseSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get eee params\\.\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n\nReply attributes:\n- [.get_header()](IterableEee::get_header)\n- [.get_modes_ours()](IterableEee::get_modes_ours)\n- [.get_modes_peer()](IterableEee::get_modes_peer)\n- [.get_active()](IterableEee::get_active)\n- [.get_enabled()](IterableEee::get_enabled)\n- [.get_tx_lpi_enabled()](IterableEee::get_tx_lpi_enabled)\n- [.get_tx_lpi_timer()](IterableEee::get_tx_lpi_timer)\n"]
+#[doc = "Get eee params.\n\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n\nReply attributes:\n- [.get_header()](IterableEee::get_header)\n- [.get_modes_ours()](IterableEee::get_modes_ours)\n- [.get_modes_peer()](IterableEee::get_modes_peer)\n- [.get_active()](IterableEee::get_active)\n- [.get_enabled()](IterableEee::get_enabled)\n- [.get_tx_lpi_enabled()](IterableEee::get_tx_lpi_enabled)\n- [.get_tx_lpi_timer()](IterableEee::get_tx_lpi_timer)\n\n"]
 #[derive(Debug)]
 pub struct OpEeeGetDump<'r> {
     request: Request<'r>,
@@ -23547,7 +23738,7 @@ impl NetlinkRequest for OpEeeGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get eee params\\.\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n\nReply attributes:\n- [.get_header()](IterableEee::get_header)\n- [.get_modes_ours()](IterableEee::get_modes_ours)\n- [.get_modes_peer()](IterableEee::get_modes_peer)\n- [.get_active()](IterableEee::get_active)\n- [.get_enabled()](IterableEee::get_enabled)\n- [.get_tx_lpi_enabled()](IterableEee::get_tx_lpi_enabled)\n- [.get_tx_lpi_timer()](IterableEee::get_tx_lpi_timer)\n"]
+#[doc = "Get eee params.\n\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n\nReply attributes:\n- [.get_header()](IterableEee::get_header)\n- [.get_modes_ours()](IterableEee::get_modes_ours)\n- [.get_modes_peer()](IterableEee::get_modes_peer)\n- [.get_active()](IterableEee::get_active)\n- [.get_enabled()](IterableEee::get_enabled)\n- [.get_tx_lpi_enabled()](IterableEee::get_tx_lpi_enabled)\n- [.get_tx_lpi_timer()](IterableEee::get_tx_lpi_timer)\n\n"]
 #[derive(Debug)]
 pub struct OpEeeGetDo<'r> {
     request: Request<'r>,
@@ -23600,7 +23791,7 @@ impl NetlinkRequest for OpEeeGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set eee params\\.\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n- [.nested_modes_ours()](PushEee::nested_modes_ours)\n- [.nested_modes_peer()](PushEee::nested_modes_peer)\n- [.push_active()](PushEee::push_active)\n- [.push_enabled()](PushEee::push_enabled)\n- [.push_tx_lpi_enabled()](PushEee::push_tx_lpi_enabled)\n- [.push_tx_lpi_timer()](PushEee::push_tx_lpi_timer)\n"]
+#[doc = "Set eee params.\n\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n- [.nested_modes_ours()](PushEee::nested_modes_ours)\n- [.nested_modes_peer()](PushEee::nested_modes_peer)\n- [.push_active()](PushEee::push_active)\n- [.push_enabled()](PushEee::push_enabled)\n- [.push_tx_lpi_enabled()](PushEee::push_tx_lpi_enabled)\n- [.push_tx_lpi_timer()](PushEee::push_tx_lpi_timer)\n\n"]
 #[derive(Debug)]
 pub struct OpEeeSetDo<'r> {
     request: Request<'r>,
@@ -23653,7 +23844,7 @@ impl NetlinkRequest for OpEeeSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get tsinfo params\\.\nRequest attributes:\n- [.nested_header()](PushTsinfo::nested_header)\n- [.nested_hwtstamp_provider()](PushTsinfo::nested_hwtstamp_provider)\n\nReply attributes:\n- [.get_header()](IterableTsinfo::get_header)\n- [.get_timestamping()](IterableTsinfo::get_timestamping)\n- [.get_tx_types()](IterableTsinfo::get_tx_types)\n- [.get_rx_filters()](IterableTsinfo::get_rx_filters)\n- [.get_phc_index()](IterableTsinfo::get_phc_index)\n- [.get_stats()](IterableTsinfo::get_stats)\n- [.get_hwtstamp_provider()](IterableTsinfo::get_hwtstamp_provider)\n- [.get_hwtstamp_source()](IterableTsinfo::get_hwtstamp_source)\n- [.get_hwtstamp_phyindex()](IterableTsinfo::get_hwtstamp_phyindex)\n"]
+#[doc = "Get tsinfo params.\n\nRequest attributes:\n- [.nested_header()](PushTsinfo::nested_header)\n- [.nested_hwtstamp_provider()](PushTsinfo::nested_hwtstamp_provider)\n\nReply attributes:\n- [.get_header()](IterableTsinfo::get_header)\n- [.get_timestamping()](IterableTsinfo::get_timestamping)\n- [.get_tx_types()](IterableTsinfo::get_tx_types)\n- [.get_rx_filters()](IterableTsinfo::get_rx_filters)\n- [.get_phc_index()](IterableTsinfo::get_phc_index)\n- [.get_stats()](IterableTsinfo::get_stats)\n- [.get_hwtstamp_provider()](IterableTsinfo::get_hwtstamp_provider)\n- [.get_hwtstamp_source()](IterableTsinfo::get_hwtstamp_source)\n- [.get_hwtstamp_phyindex()](IterableTsinfo::get_hwtstamp_phyindex)\n\n"]
 #[derive(Debug)]
 pub struct OpTsinfoGetDump<'r> {
     request: Request<'r>,
@@ -23708,7 +23899,7 @@ impl NetlinkRequest for OpTsinfoGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get tsinfo params\\.\nRequest attributes:\n- [.nested_header()](PushTsinfo::nested_header)\n- [.nested_hwtstamp_provider()](PushTsinfo::nested_hwtstamp_provider)\n\nReply attributes:\n- [.get_header()](IterableTsinfo::get_header)\n- [.get_timestamping()](IterableTsinfo::get_timestamping)\n- [.get_tx_types()](IterableTsinfo::get_tx_types)\n- [.get_rx_filters()](IterableTsinfo::get_rx_filters)\n- [.get_phc_index()](IterableTsinfo::get_phc_index)\n- [.get_stats()](IterableTsinfo::get_stats)\n- [.get_hwtstamp_provider()](IterableTsinfo::get_hwtstamp_provider)\n- [.get_hwtstamp_source()](IterableTsinfo::get_hwtstamp_source)\n- [.get_hwtstamp_phyindex()](IterableTsinfo::get_hwtstamp_phyindex)\n"]
+#[doc = "Get tsinfo params.\n\nRequest attributes:\n- [.nested_header()](PushTsinfo::nested_header)\n- [.nested_hwtstamp_provider()](PushTsinfo::nested_hwtstamp_provider)\n\nReply attributes:\n- [.get_header()](IterableTsinfo::get_header)\n- [.get_timestamping()](IterableTsinfo::get_timestamping)\n- [.get_tx_types()](IterableTsinfo::get_tx_types)\n- [.get_rx_filters()](IterableTsinfo::get_rx_filters)\n- [.get_phc_index()](IterableTsinfo::get_phc_index)\n- [.get_stats()](IterableTsinfo::get_stats)\n- [.get_hwtstamp_provider()](IterableTsinfo::get_hwtstamp_provider)\n- [.get_hwtstamp_source()](IterableTsinfo::get_hwtstamp_source)\n- [.get_hwtstamp_phyindex()](IterableTsinfo::get_hwtstamp_phyindex)\n\n"]
 #[derive(Debug)]
 pub struct OpTsinfoGetDo<'r> {
     request: Request<'r>,
@@ -23761,7 +23952,7 @@ impl NetlinkRequest for OpTsinfoGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Cable test\\.\nRequest attributes:\n- [.nested_header()](PushCableTest::nested_header)\n"]
+#[doc = "Cable test.\n\nRequest attributes:\n- [.nested_header()](PushCableTest::nested_header)\n\n"]
 #[derive(Debug)]
 pub struct OpCableTestActDo<'r> {
     request: Request<'r>,
@@ -23814,7 +24005,7 @@ impl NetlinkRequest for OpCableTestActDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Cable test TDR\\.\nRequest attributes:\n- [.nested_header()](PushCableTestTdr::nested_header)\n"]
+#[doc = "Cable test TDR.\n\nRequest attributes:\n- [.nested_header()](PushCableTestTdr::nested_header)\n\n"]
 #[derive(Debug)]
 pub struct OpCableTestTdrActDo<'r> {
     request: Request<'r>,
@@ -23867,7 +24058,7 @@ impl NetlinkRequest for OpCableTestTdrActDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get tsinfo params\\.\nRequest attributes:\n- [.nested_header()](PushTunnelInfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTunnelInfo::get_header)\n- [.get_udp_ports()](IterableTunnelInfo::get_udp_ports)\n"]
+#[doc = "Get tsinfo params.\n\nRequest attributes:\n- [.nested_header()](PushTunnelInfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTunnelInfo::get_header)\n- [.get_udp_ports()](IterableTunnelInfo::get_udp_ports)\n\n"]
 #[derive(Debug)]
 pub struct OpTunnelInfoGetDump<'r> {
     request: Request<'r>,
@@ -23922,7 +24113,7 @@ impl NetlinkRequest for OpTunnelInfoGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get tsinfo params\\.\nRequest attributes:\n- [.nested_header()](PushTunnelInfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTunnelInfo::get_header)\n- [.get_udp_ports()](IterableTunnelInfo::get_udp_ports)\n"]
+#[doc = "Get tsinfo params.\n\nRequest attributes:\n- [.nested_header()](PushTunnelInfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTunnelInfo::get_header)\n- [.get_udp_ports()](IterableTunnelInfo::get_udp_ports)\n\n"]
 #[derive(Debug)]
 pub struct OpTunnelInfoGetDo<'r> {
     request: Request<'r>,
@@ -23975,7 +24166,7 @@ impl NetlinkRequest for OpTunnelInfoGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get FEC params\\.\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFec::get_header)\n- [.get_modes()](IterableFec::get_modes)\n- [.get_auto()](IterableFec::get_auto)\n- [.get_active()](IterableFec::get_active)\n- [.get_stats()](IterableFec::get_stats)\n"]
+#[doc = "Get FEC params.\n\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFec::get_header)\n- [.get_modes()](IterableFec::get_modes)\n- [.get_auto()](IterableFec::get_auto)\n- [.get_active()](IterableFec::get_active)\n- [.get_stats()](IterableFec::get_stats)\n\n"]
 #[derive(Debug)]
 pub struct OpFecGetDump<'r> {
     request: Request<'r>,
@@ -24030,7 +24221,7 @@ impl NetlinkRequest for OpFecGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get FEC params\\.\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFec::get_header)\n- [.get_modes()](IterableFec::get_modes)\n- [.get_auto()](IterableFec::get_auto)\n- [.get_active()](IterableFec::get_active)\n- [.get_stats()](IterableFec::get_stats)\n"]
+#[doc = "Get FEC params.\n\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFec::get_header)\n- [.get_modes()](IterableFec::get_modes)\n- [.get_auto()](IterableFec::get_auto)\n- [.get_active()](IterableFec::get_active)\n- [.get_stats()](IterableFec::get_stats)\n\n"]
 #[derive(Debug)]
 pub struct OpFecGetDo<'r> {
     request: Request<'r>,
@@ -24083,7 +24274,7 @@ impl NetlinkRequest for OpFecGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set FEC params\\.\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n- [.nested_modes()](PushFec::nested_modes)\n- [.push_auto()](PushFec::push_auto)\n- [.push_active()](PushFec::push_active)\n- [.nested_stats()](PushFec::nested_stats)\n"]
+#[doc = "Set FEC params.\n\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n- [.nested_modes()](PushFec::nested_modes)\n- [.push_auto()](PushFec::push_auto)\n- [.push_active()](PushFec::push_active)\n- [.nested_stats()](PushFec::nested_stats)\n\n"]
 #[derive(Debug)]
 pub struct OpFecSetDo<'r> {
     request: Request<'r>,
@@ -24136,7 +24327,7 @@ impl NetlinkRequest for OpFecSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get module EEPROM params\\.\nRequest attributes:\n- [.nested_header()](PushModuleEeprom::nested_header)\n- [.push_offset()](PushModuleEeprom::push_offset)\n- [.push_length()](PushModuleEeprom::push_length)\n- [.push_page()](PushModuleEeprom::push_page)\n- [.push_bank()](PushModuleEeprom::push_bank)\n- [.push_i2c_address()](PushModuleEeprom::push_i2c_address)\n\nReply attributes:\n- [.get_header()](IterableModuleEeprom::get_header)\n- [.get_data()](IterableModuleEeprom::get_data)\n"]
+#[doc = "Get module EEPROM params.\n\nRequest attributes:\n- [.nested_header()](PushModuleEeprom::nested_header)\n- [.push_offset()](PushModuleEeprom::push_offset)\n- [.push_length()](PushModuleEeprom::push_length)\n- [.push_page()](PushModuleEeprom::push_page)\n- [.push_bank()](PushModuleEeprom::push_bank)\n- [.push_i2c_address()](PushModuleEeprom::push_i2c_address)\n\nReply attributes:\n- [.get_header()](IterableModuleEeprom::get_header)\n- [.get_data()](IterableModuleEeprom::get_data)\n\n"]
 #[derive(Debug)]
 pub struct OpModuleEepromGetDump<'r> {
     request: Request<'r>,
@@ -24191,7 +24382,7 @@ impl NetlinkRequest for OpModuleEepromGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get module EEPROM params\\.\nRequest attributes:\n- [.nested_header()](PushModuleEeprom::nested_header)\n- [.push_offset()](PushModuleEeprom::push_offset)\n- [.push_length()](PushModuleEeprom::push_length)\n- [.push_page()](PushModuleEeprom::push_page)\n- [.push_bank()](PushModuleEeprom::push_bank)\n- [.push_i2c_address()](PushModuleEeprom::push_i2c_address)\n\nReply attributes:\n- [.get_header()](IterableModuleEeprom::get_header)\n- [.get_data()](IterableModuleEeprom::get_data)\n"]
+#[doc = "Get module EEPROM params.\n\nRequest attributes:\n- [.nested_header()](PushModuleEeprom::nested_header)\n- [.push_offset()](PushModuleEeprom::push_offset)\n- [.push_length()](PushModuleEeprom::push_length)\n- [.push_page()](PushModuleEeprom::push_page)\n- [.push_bank()](PushModuleEeprom::push_bank)\n- [.push_i2c_address()](PushModuleEeprom::push_i2c_address)\n\nReply attributes:\n- [.get_header()](IterableModuleEeprom::get_header)\n- [.get_data()](IterableModuleEeprom::get_data)\n\n"]
 #[derive(Debug)]
 pub struct OpModuleEepromGetDo<'r> {
     request: Request<'r>,
@@ -24244,7 +24435,7 @@ impl NetlinkRequest for OpModuleEepromGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get statistics\\.\nRequest attributes:\n- [.nested_header()](PushStats::nested_header)\n- [.nested_groups()](PushStats::nested_groups)\n\nReply attributes:\n- [.get_header()](IterableStats::get_header)\n- [.get_groups()](IterableStats::get_groups)\n- [.get_grp()](IterableStats::get_grp)\n- [.get_src()](IterableStats::get_src)\n"]
+#[doc = "Get statistics.\n\nRequest attributes:\n- [.nested_header()](PushStats::nested_header)\n- [.nested_groups()](PushStats::nested_groups)\n\nReply attributes:\n- [.get_header()](IterableStats::get_header)\n- [.get_groups()](IterableStats::get_groups)\n- [.get_grp()](IterableStats::get_grp)\n- [.get_src()](IterableStats::get_src)\n\n"]
 #[derive(Debug)]
 pub struct OpStatsGetDump<'r> {
     request: Request<'r>,
@@ -24299,7 +24490,7 @@ impl NetlinkRequest for OpStatsGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get statistics\\.\nRequest attributes:\n- [.nested_header()](PushStats::nested_header)\n- [.nested_groups()](PushStats::nested_groups)\n\nReply attributes:\n- [.get_header()](IterableStats::get_header)\n- [.get_groups()](IterableStats::get_groups)\n- [.get_grp()](IterableStats::get_grp)\n- [.get_src()](IterableStats::get_src)\n"]
+#[doc = "Get statistics.\n\nRequest attributes:\n- [.nested_header()](PushStats::nested_header)\n- [.nested_groups()](PushStats::nested_groups)\n\nReply attributes:\n- [.get_header()](IterableStats::get_header)\n- [.get_groups()](IterableStats::get_groups)\n- [.get_grp()](IterableStats::get_grp)\n- [.get_src()](IterableStats::get_src)\n\n"]
 #[derive(Debug)]
 pub struct OpStatsGetDo<'r> {
     request: Request<'r>,
@@ -24352,7 +24543,7 @@ impl NetlinkRequest for OpStatsGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get PHC VCLOCKs\\.\nRequest attributes:\n- [.nested_header()](PushPhcVclocks::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhcVclocks::get_header)\n- [.get_num()](IterablePhcVclocks::get_num)\n"]
+#[doc = "Get PHC VCLOCKs.\n\nRequest attributes:\n- [.nested_header()](PushPhcVclocks::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhcVclocks::get_header)\n- [.get_num()](IterablePhcVclocks::get_num)\n\n"]
 #[derive(Debug)]
 pub struct OpPhcVclocksGetDump<'r> {
     request: Request<'r>,
@@ -24407,7 +24598,7 @@ impl NetlinkRequest for OpPhcVclocksGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get PHC VCLOCKs\\.\nRequest attributes:\n- [.nested_header()](PushPhcVclocks::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhcVclocks::get_header)\n- [.get_num()](IterablePhcVclocks::get_num)\n"]
+#[doc = "Get PHC VCLOCKs.\n\nRequest attributes:\n- [.nested_header()](PushPhcVclocks::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhcVclocks::get_header)\n- [.get_num()](IterablePhcVclocks::get_num)\n\n"]
 #[derive(Debug)]
 pub struct OpPhcVclocksGetDo<'r> {
     request: Request<'r>,
@@ -24460,7 +24651,7 @@ impl NetlinkRequest for OpPhcVclocksGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get module params\\.\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n\nReply attributes:\n- [.get_header()](IterableModule::get_header)\n- [.get_power_mode_policy()](IterableModule::get_power_mode_policy)\n- [.get_power_mode()](IterableModule::get_power_mode)\n"]
+#[doc = "Get module params.\n\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n\nReply attributes:\n- [.get_header()](IterableModule::get_header)\n- [.get_power_mode_policy()](IterableModule::get_power_mode_policy)\n- [.get_power_mode()](IterableModule::get_power_mode)\n\n"]
 #[derive(Debug)]
 pub struct OpModuleGetDump<'r> {
     request: Request<'r>,
@@ -24515,7 +24706,7 @@ impl NetlinkRequest for OpModuleGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get module params\\.\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n\nReply attributes:\n- [.get_header()](IterableModule::get_header)\n- [.get_power_mode_policy()](IterableModule::get_power_mode_policy)\n- [.get_power_mode()](IterableModule::get_power_mode)\n"]
+#[doc = "Get module params.\n\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n\nReply attributes:\n- [.get_header()](IterableModule::get_header)\n- [.get_power_mode_policy()](IterableModule::get_power_mode_policy)\n- [.get_power_mode()](IterableModule::get_power_mode)\n\n"]
 #[derive(Debug)]
 pub struct OpModuleGetDo<'r> {
     request: Request<'r>,
@@ -24568,7 +24759,7 @@ impl NetlinkRequest for OpModuleGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set module params\\.\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n- [.push_power_mode_policy()](PushModule::push_power_mode_policy)\n- [.push_power_mode()](PushModule::push_power_mode)\n"]
+#[doc = "Set module params.\n\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n- [.push_power_mode_policy()](PushModule::push_power_mode_policy)\n- [.push_power_mode()](PushModule::push_power_mode)\n\n"]
 #[derive(Debug)]
 pub struct OpModuleSetDo<'r> {
     request: Request<'r>,
@@ -24621,7 +24812,7 @@ impl NetlinkRequest for OpModuleSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get Power Sourcing Equipment params\\.\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePse::get_header)\n- [.get_podl_pse_admin_state()](IterablePse::get_podl_pse_admin_state)\n- [.get_podl_pse_admin_control()](IterablePse::get_podl_pse_admin_control)\n- [.get_podl_pse_pw_d_status()](IterablePse::get_podl_pse_pw_d_status)\n- [.get_c33_pse_admin_state()](IterablePse::get_c33_pse_admin_state)\n- [.get_c33_pse_admin_control()](IterablePse::get_c33_pse_admin_control)\n- [.get_c33_pse_pw_d_status()](IterablePse::get_c33_pse_pw_d_status)\n- [.get_c33_pse_pw_class()](IterablePse::get_c33_pse_pw_class)\n- [.get_c33_pse_actual_pw()](IterablePse::get_c33_pse_actual_pw)\n- [.get_c33_pse_ext_state()](IterablePse::get_c33_pse_ext_state)\n- [.get_c33_pse_ext_substate()](IterablePse::get_c33_pse_ext_substate)\n- [.get_c33_pse_avail_pw_limit()](IterablePse::get_c33_pse_avail_pw_limit)\n- [.get_c33_pse_pw_limit_ranges()](IterablePse::get_c33_pse_pw_limit_ranges)\n- [.get_pse_pw_d_id()](IterablePse::get_pse_pw_d_id)\n- [.get_pse_prio_max()](IterablePse::get_pse_prio_max)\n- [.get_pse_prio()](IterablePse::get_pse_prio)\n"]
+#[doc = "Get Power Sourcing Equipment params.\n\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePse::get_header)\n- [.get_podl_pse_admin_state()](IterablePse::get_podl_pse_admin_state)\n- [.get_podl_pse_admin_control()](IterablePse::get_podl_pse_admin_control)\n- [.get_podl_pse_pw_d_status()](IterablePse::get_podl_pse_pw_d_status)\n- [.get_c33_pse_admin_state()](IterablePse::get_c33_pse_admin_state)\n- [.get_c33_pse_admin_control()](IterablePse::get_c33_pse_admin_control)\n- [.get_c33_pse_pw_d_status()](IterablePse::get_c33_pse_pw_d_status)\n- [.get_c33_pse_pw_class()](IterablePse::get_c33_pse_pw_class)\n- [.get_c33_pse_actual_pw()](IterablePse::get_c33_pse_actual_pw)\n- [.get_c33_pse_ext_state()](IterablePse::get_c33_pse_ext_state)\n- [.get_c33_pse_ext_substate()](IterablePse::get_c33_pse_ext_substate)\n- [.get_c33_pse_avail_pw_limit()](IterablePse::get_c33_pse_avail_pw_limit)\n- [.get_c33_pse_pw_limit_ranges()](IterablePse::get_c33_pse_pw_limit_ranges)\n- [.get_pse_pw_d_id()](IterablePse::get_pse_pw_d_id)\n- [.get_pse_prio_max()](IterablePse::get_pse_prio_max)\n- [.get_pse_prio()](IterablePse::get_pse_prio)\n\n"]
 #[derive(Debug)]
 pub struct OpPseGetDump<'r> {
     request: Request<'r>,
@@ -24676,7 +24867,7 @@ impl NetlinkRequest for OpPseGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get Power Sourcing Equipment params\\.\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePse::get_header)\n- [.get_podl_pse_admin_state()](IterablePse::get_podl_pse_admin_state)\n- [.get_podl_pse_admin_control()](IterablePse::get_podl_pse_admin_control)\n- [.get_podl_pse_pw_d_status()](IterablePse::get_podl_pse_pw_d_status)\n- [.get_c33_pse_admin_state()](IterablePse::get_c33_pse_admin_state)\n- [.get_c33_pse_admin_control()](IterablePse::get_c33_pse_admin_control)\n- [.get_c33_pse_pw_d_status()](IterablePse::get_c33_pse_pw_d_status)\n- [.get_c33_pse_pw_class()](IterablePse::get_c33_pse_pw_class)\n- [.get_c33_pse_actual_pw()](IterablePse::get_c33_pse_actual_pw)\n- [.get_c33_pse_ext_state()](IterablePse::get_c33_pse_ext_state)\n- [.get_c33_pse_ext_substate()](IterablePse::get_c33_pse_ext_substate)\n- [.get_c33_pse_avail_pw_limit()](IterablePse::get_c33_pse_avail_pw_limit)\n- [.get_c33_pse_pw_limit_ranges()](IterablePse::get_c33_pse_pw_limit_ranges)\n- [.get_pse_pw_d_id()](IterablePse::get_pse_pw_d_id)\n- [.get_pse_prio_max()](IterablePse::get_pse_prio_max)\n- [.get_pse_prio()](IterablePse::get_pse_prio)\n"]
+#[doc = "Get Power Sourcing Equipment params.\n\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePse::get_header)\n- [.get_podl_pse_admin_state()](IterablePse::get_podl_pse_admin_state)\n- [.get_podl_pse_admin_control()](IterablePse::get_podl_pse_admin_control)\n- [.get_podl_pse_pw_d_status()](IterablePse::get_podl_pse_pw_d_status)\n- [.get_c33_pse_admin_state()](IterablePse::get_c33_pse_admin_state)\n- [.get_c33_pse_admin_control()](IterablePse::get_c33_pse_admin_control)\n- [.get_c33_pse_pw_d_status()](IterablePse::get_c33_pse_pw_d_status)\n- [.get_c33_pse_pw_class()](IterablePse::get_c33_pse_pw_class)\n- [.get_c33_pse_actual_pw()](IterablePse::get_c33_pse_actual_pw)\n- [.get_c33_pse_ext_state()](IterablePse::get_c33_pse_ext_state)\n- [.get_c33_pse_ext_substate()](IterablePse::get_c33_pse_ext_substate)\n- [.get_c33_pse_avail_pw_limit()](IterablePse::get_c33_pse_avail_pw_limit)\n- [.get_c33_pse_pw_limit_ranges()](IterablePse::get_c33_pse_pw_limit_ranges)\n- [.get_pse_pw_d_id()](IterablePse::get_pse_pw_d_id)\n- [.get_pse_prio_max()](IterablePse::get_pse_prio_max)\n- [.get_pse_prio()](IterablePse::get_pse_prio)\n\n"]
 #[derive(Debug)]
 pub struct OpPseGetDo<'r> {
     request: Request<'r>,
@@ -24729,7 +24920,7 @@ impl NetlinkRequest for OpPseGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set Power Sourcing Equipment params\\.\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n- [.push_podl_pse_admin_control()](PushPse::push_podl_pse_admin_control)\n- [.push_c33_pse_admin_control()](PushPse::push_c33_pse_admin_control)\n- [.push_c33_pse_avail_pw_limit()](PushPse::push_c33_pse_avail_pw_limit)\n- [.push_pse_prio()](PushPse::push_pse_prio)\n"]
+#[doc = "Set Power Sourcing Equipment params.\n\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n- [.push_podl_pse_admin_control()](PushPse::push_podl_pse_admin_control)\n- [.push_c33_pse_admin_control()](PushPse::push_c33_pse_admin_control)\n- [.push_c33_pse_avail_pw_limit()](PushPse::push_c33_pse_avail_pw_limit)\n- [.push_pse_prio()](PushPse::push_pse_prio)\n\n"]
 #[derive(Debug)]
 pub struct OpPseSetDo<'r> {
     request: Request<'r>,
@@ -24782,7 +24973,7 @@ impl NetlinkRequest for OpPseSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get RSS params\\.\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_start_context()](PushRss::push_start_context)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n- [.get_flow_hash()](IterableRss::get_flow_hash)\n"]
+#[doc = "Get RSS params.\n\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_start_context()](PushRss::push_start_context)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n- [.get_flow_hash()](IterableRss::get_flow_hash)\n\n"]
 #[derive(Debug)]
 pub struct OpRssGetDump<'r> {
     request: Request<'r>,
@@ -24837,7 +25028,7 @@ impl NetlinkRequest for OpRssGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get RSS params\\.\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n- [.get_flow_hash()](IterableRss::get_flow_hash)\n"]
+#[doc = "Get RSS params.\n\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n- [.get_flow_hash()](IterableRss::get_flow_hash)\n\n"]
 #[derive(Debug)]
 pub struct OpRssGetDo<'r> {
     request: Request<'r>,
@@ -24890,7 +25081,7 @@ impl NetlinkRequest for OpRssGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get PLCA params\\.\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n"]
+#[doc = "Get PLCA params.\n\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n\n"]
 #[derive(Debug)]
 pub struct OpPlcaGetCfgDump<'r> {
     request: Request<'r>,
@@ -24945,7 +25136,7 @@ impl NetlinkRequest for OpPlcaGetCfgDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get PLCA params\\.\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n"]
+#[doc = "Get PLCA params.\n\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n\n"]
 #[derive(Debug)]
 pub struct OpPlcaGetCfgDo<'r> {
     request: Request<'r>,
@@ -24998,7 +25189,7 @@ impl NetlinkRequest for OpPlcaGetCfgDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set PLCA params\\.\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n- [.push_version()](PushPlca::push_version)\n- [.push_enabled()](PushPlca::push_enabled)\n- [.push_status()](PushPlca::push_status)\n- [.push_node_cnt()](PushPlca::push_node_cnt)\n- [.push_node_id()](PushPlca::push_node_id)\n- [.push_to_tmr()](PushPlca::push_to_tmr)\n- [.push_burst_cnt()](PushPlca::push_burst_cnt)\n- [.push_burst_tmr()](PushPlca::push_burst_tmr)\n"]
+#[doc = "Set PLCA params.\n\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n- [.push_version()](PushPlca::push_version)\n- [.push_enabled()](PushPlca::push_enabled)\n- [.push_status()](PushPlca::push_status)\n- [.push_node_cnt()](PushPlca::push_node_cnt)\n- [.push_node_id()](PushPlca::push_node_id)\n- [.push_to_tmr()](PushPlca::push_to_tmr)\n- [.push_burst_cnt()](PushPlca::push_burst_cnt)\n- [.push_burst_tmr()](PushPlca::push_burst_tmr)\n\n"]
 #[derive(Debug)]
 pub struct OpPlcaSetCfgDo<'r> {
     request: Request<'r>,
@@ -25051,7 +25242,7 @@ impl NetlinkRequest for OpPlcaSetCfgDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get PLCA status params\\.\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n"]
+#[doc = "Get PLCA status params.\n\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n\n"]
 #[derive(Debug)]
 pub struct OpPlcaGetStatusDump<'r> {
     request: Request<'r>,
@@ -25106,7 +25297,7 @@ impl NetlinkRequest for OpPlcaGetStatusDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get PLCA status params\\.\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n"]
+#[doc = "Get PLCA status params.\n\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n\n"]
 #[derive(Debug)]
 pub struct OpPlcaGetStatusDo<'r> {
     request: Request<'r>,
@@ -25159,7 +25350,7 @@ impl NetlinkRequest for OpPlcaGetStatusDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get MAC Merge configuration and state\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMm::get_header)\n- [.get_pmac_enabled()](IterableMm::get_pmac_enabled)\n- [.get_tx_enabled()](IterableMm::get_tx_enabled)\n- [.get_tx_active()](IterableMm::get_tx_active)\n- [.get_tx_min_frag_size()](IterableMm::get_tx_min_frag_size)\n- [.get_rx_min_frag_size()](IterableMm::get_rx_min_frag_size)\n- [.get_verify_enabled()](IterableMm::get_verify_enabled)\n- [.get_verify_time()](IterableMm::get_verify_time)\n- [.get_max_verify_time()](IterableMm::get_max_verify_time)\n- [.get_stats()](IterableMm::get_stats)\n"]
+#[doc = "Get MAC Merge configuration and state\n\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMm::get_header)\n- [.get_pmac_enabled()](IterableMm::get_pmac_enabled)\n- [.get_tx_enabled()](IterableMm::get_tx_enabled)\n- [.get_tx_active()](IterableMm::get_tx_active)\n- [.get_tx_min_frag_size()](IterableMm::get_tx_min_frag_size)\n- [.get_rx_min_frag_size()](IterableMm::get_rx_min_frag_size)\n- [.get_verify_enabled()](IterableMm::get_verify_enabled)\n- [.get_verify_time()](IterableMm::get_verify_time)\n- [.get_max_verify_time()](IterableMm::get_max_verify_time)\n- [.get_stats()](IterableMm::get_stats)\n\n"]
 #[derive(Debug)]
 pub struct OpMmGetDump<'r> {
     request: Request<'r>,
@@ -25214,7 +25405,7 @@ impl NetlinkRequest for OpMmGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get MAC Merge configuration and state\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMm::get_header)\n- [.get_pmac_enabled()](IterableMm::get_pmac_enabled)\n- [.get_tx_enabled()](IterableMm::get_tx_enabled)\n- [.get_tx_active()](IterableMm::get_tx_active)\n- [.get_tx_min_frag_size()](IterableMm::get_tx_min_frag_size)\n- [.get_rx_min_frag_size()](IterableMm::get_rx_min_frag_size)\n- [.get_verify_enabled()](IterableMm::get_verify_enabled)\n- [.get_verify_time()](IterableMm::get_verify_time)\n- [.get_max_verify_time()](IterableMm::get_max_verify_time)\n- [.get_stats()](IterableMm::get_stats)\n"]
+#[doc = "Get MAC Merge configuration and state\n\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMm::get_header)\n- [.get_pmac_enabled()](IterableMm::get_pmac_enabled)\n- [.get_tx_enabled()](IterableMm::get_tx_enabled)\n- [.get_tx_active()](IterableMm::get_tx_active)\n- [.get_tx_min_frag_size()](IterableMm::get_tx_min_frag_size)\n- [.get_rx_min_frag_size()](IterableMm::get_rx_min_frag_size)\n- [.get_verify_enabled()](IterableMm::get_verify_enabled)\n- [.get_verify_time()](IterableMm::get_verify_time)\n- [.get_max_verify_time()](IterableMm::get_max_verify_time)\n- [.get_stats()](IterableMm::get_stats)\n\n"]
 #[derive(Debug)]
 pub struct OpMmGetDo<'r> {
     request: Request<'r>,
@@ -25267,7 +25458,7 @@ impl NetlinkRequest for OpMmGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set MAC Merge configuration\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n- [.push_pmac_enabled()](PushMm::push_pmac_enabled)\n- [.push_tx_enabled()](PushMm::push_tx_enabled)\n- [.push_tx_min_frag_size()](PushMm::push_tx_min_frag_size)\n- [.push_verify_enabled()](PushMm::push_verify_enabled)\n- [.push_verify_time()](PushMm::push_verify_time)\n"]
+#[doc = "Set MAC Merge configuration\n\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n- [.push_pmac_enabled()](PushMm::push_pmac_enabled)\n- [.push_tx_enabled()](PushMm::push_tx_enabled)\n- [.push_tx_min_frag_size()](PushMm::push_tx_min_frag_size)\n- [.push_verify_enabled()](PushMm::push_verify_enabled)\n- [.push_verify_time()](PushMm::push_verify_time)\n\n"]
 #[derive(Debug)]
 pub struct OpMmSetDo<'r> {
     request: Request<'r>,
@@ -25320,7 +25511,7 @@ impl NetlinkRequest for OpMmSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Flash transceiver module firmware\\.\nRequest attributes:\n- [.nested_header()](PushModuleFwFlash::nested_header)\n- [.push_file_name()](PushModuleFwFlash::push_file_name)\n- [.push_password()](PushModuleFwFlash::push_password)\n"]
+#[doc = "Flash transceiver module firmware.\n\nRequest attributes:\n- [.nested_header()](PushModuleFwFlash::nested_header)\n- [.push_file_name()](PushModuleFwFlash::push_file_name)\n- [.push_password()](PushModuleFwFlash::push_password)\n\n"]
 #[derive(Debug)]
 pub struct OpModuleFwFlashActDo<'r> {
     request: Request<'r>,
@@ -25373,7 +25564,7 @@ impl NetlinkRequest for OpModuleFwFlashActDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get PHY devices attached to an interface\nRequest attributes:\n- [.nested_header()](PushPhy::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhy::get_header)\n- [.get_index()](IterablePhy::get_index)\n- [.get_drvname()](IterablePhy::get_drvname)\n- [.get_name()](IterablePhy::get_name)\n- [.get_upstream_type()](IterablePhy::get_upstream_type)\n- [.get_upstream_index()](IterablePhy::get_upstream_index)\n- [.get_upstream_sfp_name()](IterablePhy::get_upstream_sfp_name)\n- [.get_downstream_sfp_name()](IterablePhy::get_downstream_sfp_name)\n"]
+#[doc = "Get PHY devices attached to an interface\n\nRequest attributes:\n- [.nested_header()](PushPhy::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhy::get_header)\n- [.get_index()](IterablePhy::get_index)\n- [.get_drvname()](IterablePhy::get_drvname)\n- [.get_name()](IterablePhy::get_name)\n- [.get_upstream_type()](IterablePhy::get_upstream_type)\n- [.get_upstream_index()](IterablePhy::get_upstream_index)\n- [.get_upstream_sfp_name()](IterablePhy::get_upstream_sfp_name)\n- [.get_downstream_sfp_name()](IterablePhy::get_downstream_sfp_name)\n\n"]
 #[derive(Debug)]
 pub struct OpPhyGetDump<'r> {
     request: Request<'r>,
@@ -25428,7 +25619,7 @@ impl NetlinkRequest for OpPhyGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get PHY devices attached to an interface\nRequest attributes:\n- [.nested_header()](PushPhy::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhy::get_header)\n- [.get_index()](IterablePhy::get_index)\n- [.get_drvname()](IterablePhy::get_drvname)\n- [.get_name()](IterablePhy::get_name)\n- [.get_upstream_type()](IterablePhy::get_upstream_type)\n- [.get_upstream_index()](IterablePhy::get_upstream_index)\n- [.get_upstream_sfp_name()](IterablePhy::get_upstream_sfp_name)\n- [.get_downstream_sfp_name()](IterablePhy::get_downstream_sfp_name)\n"]
+#[doc = "Get PHY devices attached to an interface\n\nRequest attributes:\n- [.nested_header()](PushPhy::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhy::get_header)\n- [.get_index()](IterablePhy::get_index)\n- [.get_drvname()](IterablePhy::get_drvname)\n- [.get_name()](IterablePhy::get_name)\n- [.get_upstream_type()](IterablePhy::get_upstream_type)\n- [.get_upstream_index()](IterablePhy::get_upstream_index)\n- [.get_upstream_sfp_name()](IterablePhy::get_upstream_sfp_name)\n- [.get_downstream_sfp_name()](IterablePhy::get_downstream_sfp_name)\n\n"]
 #[derive(Debug)]
 pub struct OpPhyGetDo<'r> {
     request: Request<'r>,
@@ -25481,7 +25672,7 @@ impl NetlinkRequest for OpPhyGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get hwtstamp config\\.\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n"]
+#[doc = "Get hwtstamp config.\n\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n\n"]
 #[derive(Debug)]
 pub struct OpTsconfigGetDump<'r> {
     request: Request<'r>,
@@ -25536,7 +25727,7 @@ impl NetlinkRequest for OpTsconfigGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get hwtstamp config\\.\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n"]
+#[doc = "Get hwtstamp config.\n\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n\n"]
 #[derive(Debug)]
 pub struct OpTsconfigGetDo<'r> {
     request: Request<'r>,
@@ -25589,7 +25780,7 @@ impl NetlinkRequest for OpTsconfigGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set hwtstamp config\\.\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n- [.nested_hwtstamp_provider()](PushTsconfig::nested_hwtstamp_provider)\n- [.nested_tx_types()](PushTsconfig::nested_tx_types)\n- [.nested_rx_filters()](PushTsconfig::nested_rx_filters)\n- [.nested_hwtstamp_flags()](PushTsconfig::nested_hwtstamp_flags)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n"]
+#[doc = "Set hwtstamp config.\n\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n- [.nested_hwtstamp_provider()](PushTsconfig::nested_hwtstamp_provider)\n- [.nested_tx_types()](PushTsconfig::nested_tx_types)\n- [.nested_rx_filters()](PushTsconfig::nested_rx_filters)\n- [.nested_hwtstamp_flags()](PushTsconfig::nested_hwtstamp_flags)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n\n"]
 #[derive(Debug)]
 pub struct OpTsconfigSetDo<'r> {
     request: Request<'r>,
@@ -25642,7 +25833,7 @@ impl NetlinkRequest for OpTsconfigSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set RSS params\\.\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n- [.push_hfunc()](PushRss::push_hfunc)\n- [.push_indir()](PushRss::push_indir)\n- [.push_hkey()](PushRss::push_hkey)\n- [.push_input_xfrm()](PushRss::push_input_xfrm)\n- [.nested_flow_hash()](PushRss::nested_flow_hash)\n"]
+#[doc = "Set RSS params.\n\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n- [.push_hfunc()](PushRss::push_hfunc)\n- [.push_indir()](PushRss::push_indir)\n- [.push_hkey()](PushRss::push_hkey)\n- [.push_input_xfrm()](PushRss::push_input_xfrm)\n- [.nested_flow_hash()](PushRss::nested_flow_hash)\n\n"]
 #[derive(Debug)]
 pub struct OpRssSetDo<'r> {
     request: Request<'r>,
@@ -25695,7 +25886,7 @@ impl NetlinkRequest for OpRssSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create an RSS context\\.\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n- [.push_hfunc()](PushRss::push_hfunc)\n- [.push_indir()](PushRss::push_indir)\n- [.push_hkey()](PushRss::push_hkey)\n- [.push_input_xfrm()](PushRss::push_input_xfrm)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n"]
+#[doc = "Create an RSS context.\n\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n- [.push_hfunc()](PushRss::push_hfunc)\n- [.push_indir()](PushRss::push_indir)\n- [.push_hkey()](PushRss::push_hkey)\n- [.push_input_xfrm()](PushRss::push_input_xfrm)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n\n"]
 #[derive(Debug)]
 pub struct OpRssCreateActDo<'r> {
     request: Request<'r>,
@@ -25748,7 +25939,7 @@ impl NetlinkRequest for OpRssCreateActDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an RSS context\\.\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n"]
+#[doc = "Delete an RSS context.\n\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n\n"]
 #[derive(Debug)]
 pub struct OpRssDeleteActDo<'r> {
     request: Request<'r>,
@@ -25801,7 +25992,7 @@ impl NetlinkRequest for OpRssDeleteActDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get PHY MSE measurement data and capabilities\\.\nRequest attributes:\n- [.nested_header()](PushMse::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMse::get_header)\n- [.get_capabilities()](IterableMse::get_capabilities)\n- [.get_channel_a()](IterableMse::get_channel_a)\n- [.get_channel_b()](IterableMse::get_channel_b)\n- [.get_channel_c()](IterableMse::get_channel_c)\n- [.get_channel_d()](IterableMse::get_channel_d)\n- [.get_worst_channel()](IterableMse::get_worst_channel)\n- [.get_link()](IterableMse::get_link)\n"]
+#[doc = "Get PHY MSE measurement data and capabilities.\n\nRequest attributes:\n- [.nested_header()](PushMse::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMse::get_header)\n- [.get_capabilities()](IterableMse::get_capabilities)\n- [.get_channel_a()](IterableMse::get_channel_a)\n- [.get_channel_b()](IterableMse::get_channel_b)\n- [.get_channel_c()](IterableMse::get_channel_c)\n- [.get_channel_d()](IterableMse::get_channel_d)\n- [.get_worst_channel()](IterableMse::get_worst_channel)\n- [.get_link()](IterableMse::get_link)\n\n"]
 #[derive(Debug)]
 pub struct OpMseGetDump<'r> {
     request: Request<'r>,
@@ -25856,7 +26047,7 @@ impl NetlinkRequest for OpMseGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get PHY MSE measurement data and capabilities\\.\nRequest attributes:\n- [.nested_header()](PushMse::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMse::get_header)\n- [.get_capabilities()](IterableMse::get_capabilities)\n- [.get_channel_a()](IterableMse::get_channel_a)\n- [.get_channel_b()](IterableMse::get_channel_b)\n- [.get_channel_c()](IterableMse::get_channel_c)\n- [.get_channel_d()](IterableMse::get_channel_d)\n- [.get_worst_channel()](IterableMse::get_worst_channel)\n- [.get_link()](IterableMse::get_link)\n"]
+#[doc = "Get PHY MSE measurement data and capabilities.\n\nRequest attributes:\n- [.nested_header()](PushMse::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMse::get_header)\n- [.get_capabilities()](IterableMse::get_capabilities)\n- [.get_channel_a()](IterableMse::get_channel_a)\n- [.get_channel_b()](IterableMse::get_channel_b)\n- [.get_channel_c()](IterableMse::get_channel_c)\n- [.get_channel_d()](IterableMse::get_channel_d)\n- [.get_worst_channel()](IterableMse::get_worst_channel)\n- [.get_link()](IterableMse::get_link)\n\n"]
 #[derive(Debug)]
 pub struct OpMseGetDo<'r> {
     request: Request<'r>,
@@ -26011,7 +26202,7 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get string set from the kernel\\.\nRequest attributes:\n- [.nested_header()](PushStrset::nested_header)\n- [.nested_stringsets()](PushStrset::nested_stringsets)\n- [.push_counts_only()](PushStrset::push_counts_only)\n\nReply attributes:\n- [.get_header()](IterableStrset::get_header)\n- [.get_stringsets()](IterableStrset::get_stringsets)\n"]
+    #[doc = "Get string set from the kernel.\n\nRequest attributes:\n- [.nested_header()](PushStrset::nested_header)\n- [.nested_stringsets()](PushStrset::nested_stringsets)\n- [.push_counts_only()](PushStrset::push_counts_only)\n\nReply attributes:\n- [.get_header()](IterableStrset::get_header)\n- [.get_stringsets()](IterableStrset::get_stringsets)\n\n"]
     pub fn op_strset_get_dump(self) -> OpStrsetGetDump<'buf> {
         let mut res = OpStrsetGetDump::new(self);
         res.request.do_writeback(
@@ -26021,14 +26212,14 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get string set from the kernel\\.\nRequest attributes:\n- [.nested_header()](PushStrset::nested_header)\n- [.nested_stringsets()](PushStrset::nested_stringsets)\n- [.push_counts_only()](PushStrset::push_counts_only)\n\nReply attributes:\n- [.get_header()](IterableStrset::get_header)\n- [.get_stringsets()](IterableStrset::get_stringsets)\n"]
+    #[doc = "Get string set from the kernel.\n\nRequest attributes:\n- [.nested_header()](PushStrset::nested_header)\n- [.nested_stringsets()](PushStrset::nested_stringsets)\n- [.push_counts_only()](PushStrset::push_counts_only)\n\nReply attributes:\n- [.get_header()](IterableStrset::get_header)\n- [.get_stringsets()](IterableStrset::get_stringsets)\n\n"]
     pub fn op_strset_get_do(self) -> OpStrsetGetDo<'buf> {
         let mut res = OpStrsetGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-strset-get-do", OpStrsetGetDo::lookup);
         res
     }
-    #[doc = "Get link info\\.\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkinfo::get_header)\n- [.get_port()](IterableLinkinfo::get_port)\n- [.get_phyaddr()](IterableLinkinfo::get_phyaddr)\n- [.get_tp_mdix()](IterableLinkinfo::get_tp_mdix)\n- [.get_tp_mdix_ctrl()](IterableLinkinfo::get_tp_mdix_ctrl)\n- [.get_transceiver()](IterableLinkinfo::get_transceiver)\n"]
+    #[doc = "Get link info.\n\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkinfo::get_header)\n- [.get_port()](IterableLinkinfo::get_port)\n- [.get_phyaddr()](IterableLinkinfo::get_phyaddr)\n- [.get_tp_mdix()](IterableLinkinfo::get_tp_mdix)\n- [.get_tp_mdix_ctrl()](IterableLinkinfo::get_tp_mdix_ctrl)\n- [.get_transceiver()](IterableLinkinfo::get_transceiver)\n\n"]
     pub fn op_linkinfo_get_dump(self) -> OpLinkinfoGetDump<'buf> {
         let mut res = OpLinkinfoGetDump::new(self);
         res.request.do_writeback(
@@ -26038,7 +26229,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get link info\\.\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkinfo::get_header)\n- [.get_port()](IterableLinkinfo::get_port)\n- [.get_phyaddr()](IterableLinkinfo::get_phyaddr)\n- [.get_tp_mdix()](IterableLinkinfo::get_tp_mdix)\n- [.get_tp_mdix_ctrl()](IterableLinkinfo::get_tp_mdix_ctrl)\n- [.get_transceiver()](IterableLinkinfo::get_transceiver)\n"]
+    #[doc = "Get link info.\n\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkinfo::get_header)\n- [.get_port()](IterableLinkinfo::get_port)\n- [.get_phyaddr()](IterableLinkinfo::get_phyaddr)\n- [.get_tp_mdix()](IterableLinkinfo::get_tp_mdix)\n- [.get_tp_mdix_ctrl()](IterableLinkinfo::get_tp_mdix_ctrl)\n- [.get_transceiver()](IterableLinkinfo::get_transceiver)\n\n"]
     pub fn op_linkinfo_get_do(self) -> OpLinkinfoGetDo<'buf> {
         let mut res = OpLinkinfoGetDo::new(self);
         res.request.do_writeback(
@@ -26048,7 +26239,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set link info\\.\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n- [.push_port()](PushLinkinfo::push_port)\n- [.push_phyaddr()](PushLinkinfo::push_phyaddr)\n- [.push_tp_mdix()](PushLinkinfo::push_tp_mdix)\n- [.push_tp_mdix_ctrl()](PushLinkinfo::push_tp_mdix_ctrl)\n- [.push_transceiver()](PushLinkinfo::push_transceiver)\n"]
+    #[doc = "Set link info.\n\nRequest attributes:\n- [.nested_header()](PushLinkinfo::nested_header)\n- [.push_port()](PushLinkinfo::push_port)\n- [.push_phyaddr()](PushLinkinfo::push_phyaddr)\n- [.push_tp_mdix()](PushLinkinfo::push_tp_mdix)\n- [.push_tp_mdix_ctrl()](PushLinkinfo::push_tp_mdix_ctrl)\n- [.push_transceiver()](PushLinkinfo::push_transceiver)\n\n"]
     pub fn op_linkinfo_set_do(self) -> OpLinkinfoSetDo<'buf> {
         let mut res = OpLinkinfoSetDo::new(self);
         res.request.do_writeback(
@@ -26058,7 +26249,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get link modes\\.\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkmodes::get_header)\n- [.get_autoneg()](IterableLinkmodes::get_autoneg)\n- [.get_ours()](IterableLinkmodes::get_ours)\n- [.get_peer()](IterableLinkmodes::get_peer)\n- [.get_speed()](IterableLinkmodes::get_speed)\n- [.get_duplex()](IterableLinkmodes::get_duplex)\n- [.get_master_slave_cfg()](IterableLinkmodes::get_master_slave_cfg)\n- [.get_master_slave_state()](IterableLinkmodes::get_master_slave_state)\n- [.get_lanes()](IterableLinkmodes::get_lanes)\n- [.get_rate_matching()](IterableLinkmodes::get_rate_matching)\n"]
+    #[doc = "Get link modes.\n\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkmodes::get_header)\n- [.get_autoneg()](IterableLinkmodes::get_autoneg)\n- [.get_ours()](IterableLinkmodes::get_ours)\n- [.get_peer()](IterableLinkmodes::get_peer)\n- [.get_speed()](IterableLinkmodes::get_speed)\n- [.get_duplex()](IterableLinkmodes::get_duplex)\n- [.get_master_slave_cfg()](IterableLinkmodes::get_master_slave_cfg)\n- [.get_master_slave_state()](IterableLinkmodes::get_master_slave_state)\n- [.get_lanes()](IterableLinkmodes::get_lanes)\n- [.get_rate_matching()](IterableLinkmodes::get_rate_matching)\n\n"]
     pub fn op_linkmodes_get_dump(self) -> OpLinkmodesGetDump<'buf> {
         let mut res = OpLinkmodesGetDump::new(self);
         res.request.do_writeback(
@@ -26068,7 +26259,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get link modes\\.\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkmodes::get_header)\n- [.get_autoneg()](IterableLinkmodes::get_autoneg)\n- [.get_ours()](IterableLinkmodes::get_ours)\n- [.get_peer()](IterableLinkmodes::get_peer)\n- [.get_speed()](IterableLinkmodes::get_speed)\n- [.get_duplex()](IterableLinkmodes::get_duplex)\n- [.get_master_slave_cfg()](IterableLinkmodes::get_master_slave_cfg)\n- [.get_master_slave_state()](IterableLinkmodes::get_master_slave_state)\n- [.get_lanes()](IterableLinkmodes::get_lanes)\n- [.get_rate_matching()](IterableLinkmodes::get_rate_matching)\n"]
+    #[doc = "Get link modes.\n\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkmodes::get_header)\n- [.get_autoneg()](IterableLinkmodes::get_autoneg)\n- [.get_ours()](IterableLinkmodes::get_ours)\n- [.get_peer()](IterableLinkmodes::get_peer)\n- [.get_speed()](IterableLinkmodes::get_speed)\n- [.get_duplex()](IterableLinkmodes::get_duplex)\n- [.get_master_slave_cfg()](IterableLinkmodes::get_master_slave_cfg)\n- [.get_master_slave_state()](IterableLinkmodes::get_master_slave_state)\n- [.get_lanes()](IterableLinkmodes::get_lanes)\n- [.get_rate_matching()](IterableLinkmodes::get_rate_matching)\n\n"]
     pub fn op_linkmodes_get_do(self) -> OpLinkmodesGetDo<'buf> {
         let mut res = OpLinkmodesGetDo::new(self);
         res.request.do_writeback(
@@ -26078,7 +26269,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set link modes\\.\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n- [.push_autoneg()](PushLinkmodes::push_autoneg)\n- [.nested_ours()](PushLinkmodes::nested_ours)\n- [.nested_peer()](PushLinkmodes::nested_peer)\n- [.push_speed()](PushLinkmodes::push_speed)\n- [.push_duplex()](PushLinkmodes::push_duplex)\n- [.push_master_slave_cfg()](PushLinkmodes::push_master_slave_cfg)\n- [.push_master_slave_state()](PushLinkmodes::push_master_slave_state)\n- [.push_lanes()](PushLinkmodes::push_lanes)\n- [.push_rate_matching()](PushLinkmodes::push_rate_matching)\n"]
+    #[doc = "Set link modes.\n\nRequest attributes:\n- [.nested_header()](PushLinkmodes::nested_header)\n- [.push_autoneg()](PushLinkmodes::push_autoneg)\n- [.nested_ours()](PushLinkmodes::nested_ours)\n- [.nested_peer()](PushLinkmodes::nested_peer)\n- [.push_speed()](PushLinkmodes::push_speed)\n- [.push_duplex()](PushLinkmodes::push_duplex)\n- [.push_master_slave_cfg()](PushLinkmodes::push_master_slave_cfg)\n- [.push_master_slave_state()](PushLinkmodes::push_master_slave_state)\n- [.push_lanes()](PushLinkmodes::push_lanes)\n- [.push_rate_matching()](PushLinkmodes::push_rate_matching)\n\n"]
     pub fn op_linkmodes_set_do(self) -> OpLinkmodesSetDo<'buf> {
         let mut res = OpLinkmodesSetDo::new(self);
         res.request.do_writeback(
@@ -26088,7 +26279,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get link state\\.\nRequest attributes:\n- [.nested_header()](PushLinkstate::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkstate::get_header)\n- [.get_link()](IterableLinkstate::get_link)\n- [.get_sqi()](IterableLinkstate::get_sqi)\n- [.get_sqi_max()](IterableLinkstate::get_sqi_max)\n- [.get_ext_state()](IterableLinkstate::get_ext_state)\n- [.get_ext_substate()](IterableLinkstate::get_ext_substate)\n- [.get_ext_down_cnt()](IterableLinkstate::get_ext_down_cnt)\n"]
+    #[doc = "Get link state.\n\nRequest attributes:\n- [.nested_header()](PushLinkstate::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkstate::get_header)\n- [.get_link()](IterableLinkstate::get_link)\n- [.get_sqi()](IterableLinkstate::get_sqi)\n- [.get_sqi_max()](IterableLinkstate::get_sqi_max)\n- [.get_ext_state()](IterableLinkstate::get_ext_state)\n- [.get_ext_substate()](IterableLinkstate::get_ext_substate)\n- [.get_ext_down_cnt()](IterableLinkstate::get_ext_down_cnt)\n\n"]
     pub fn op_linkstate_get_dump(self) -> OpLinkstateGetDump<'buf> {
         let mut res = OpLinkstateGetDump::new(self);
         res.request.do_writeback(
@@ -26098,7 +26289,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get link state\\.\nRequest attributes:\n- [.nested_header()](PushLinkstate::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkstate::get_header)\n- [.get_link()](IterableLinkstate::get_link)\n- [.get_sqi()](IterableLinkstate::get_sqi)\n- [.get_sqi_max()](IterableLinkstate::get_sqi_max)\n- [.get_ext_state()](IterableLinkstate::get_ext_state)\n- [.get_ext_substate()](IterableLinkstate::get_ext_substate)\n- [.get_ext_down_cnt()](IterableLinkstate::get_ext_down_cnt)\n"]
+    #[doc = "Get link state.\n\nRequest attributes:\n- [.nested_header()](PushLinkstate::nested_header)\n\nReply attributes:\n- [.get_header()](IterableLinkstate::get_header)\n- [.get_link()](IterableLinkstate::get_link)\n- [.get_sqi()](IterableLinkstate::get_sqi)\n- [.get_sqi_max()](IterableLinkstate::get_sqi_max)\n- [.get_ext_state()](IterableLinkstate::get_ext_state)\n- [.get_ext_substate()](IterableLinkstate::get_ext_substate)\n- [.get_ext_down_cnt()](IterableLinkstate::get_ext_down_cnt)\n\n"]
     pub fn op_linkstate_get_do(self) -> OpLinkstateGetDo<'buf> {
         let mut res = OpLinkstateGetDo::new(self);
         res.request.do_writeback(
@@ -26108,49 +26299,49 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get debug message mask\\.\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n\nReply attributes:\n- [.get_header()](IterableDebug::get_header)\n- [.get_msgmask()](IterableDebug::get_msgmask)\n"]
+    #[doc = "Get debug message mask.\n\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n\nReply attributes:\n- [.get_header()](IterableDebug::get_header)\n- [.get_msgmask()](IterableDebug::get_msgmask)\n\n"]
     pub fn op_debug_get_dump(self) -> OpDebugGetDump<'buf> {
         let mut res = OpDebugGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-debug-get-dump", OpDebugGetDump::lookup);
         res
     }
-    #[doc = "Get debug message mask\\.\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n\nReply attributes:\n- [.get_header()](IterableDebug::get_header)\n- [.get_msgmask()](IterableDebug::get_msgmask)\n"]
+    #[doc = "Get debug message mask.\n\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n\nReply attributes:\n- [.get_header()](IterableDebug::get_header)\n- [.get_msgmask()](IterableDebug::get_msgmask)\n\n"]
     pub fn op_debug_get_do(self) -> OpDebugGetDo<'buf> {
         let mut res = OpDebugGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-debug-get-do", OpDebugGetDo::lookup);
         res
     }
-    #[doc = "Set debug message mask\\.\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n- [.nested_msgmask()](PushDebug::nested_msgmask)\n"]
+    #[doc = "Set debug message mask.\n\nRequest attributes:\n- [.nested_header()](PushDebug::nested_header)\n- [.nested_msgmask()](PushDebug::nested_msgmask)\n\n"]
     pub fn op_debug_set_do(self) -> OpDebugSetDo<'buf> {
         let mut res = OpDebugSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-debug-set-do", OpDebugSetDo::lookup);
         res
     }
-    #[doc = "Get WOL params\\.\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n\nReply attributes:\n- [.get_header()](IterableWol::get_header)\n- [.get_modes()](IterableWol::get_modes)\n- [.get_sopass()](IterableWol::get_sopass)\n"]
+    #[doc = "Get WOL params.\n\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n\nReply attributes:\n- [.get_header()](IterableWol::get_header)\n- [.get_modes()](IterableWol::get_modes)\n- [.get_sopass()](IterableWol::get_sopass)\n\n"]
     pub fn op_wol_get_dump(self) -> OpWolGetDump<'buf> {
         let mut res = OpWolGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-wol-get-dump", OpWolGetDump::lookup);
         res
     }
-    #[doc = "Get WOL params\\.\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n\nReply attributes:\n- [.get_header()](IterableWol::get_header)\n- [.get_modes()](IterableWol::get_modes)\n- [.get_sopass()](IterableWol::get_sopass)\n"]
+    #[doc = "Get WOL params.\n\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n\nReply attributes:\n- [.get_header()](IterableWol::get_header)\n- [.get_modes()](IterableWol::get_modes)\n- [.get_sopass()](IterableWol::get_sopass)\n\n"]
     pub fn op_wol_get_do(self) -> OpWolGetDo<'buf> {
         let mut res = OpWolGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-wol-get-do", OpWolGetDo::lookup);
         res
     }
-    #[doc = "Set WOL params\\.\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n- [.nested_modes()](PushWol::nested_modes)\n- [.push_sopass()](PushWol::push_sopass)\n"]
+    #[doc = "Set WOL params.\n\nRequest attributes:\n- [.nested_header()](PushWol::nested_header)\n- [.nested_modes()](PushWol::nested_modes)\n- [.push_sopass()](PushWol::push_sopass)\n\n"]
     pub fn op_wol_set_do(self) -> OpWolSetDo<'buf> {
         let mut res = OpWolSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-wol-set-do", OpWolSetDo::lookup);
         res
     }
-    #[doc = "Get features\\.\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n"]
+    #[doc = "Get features.\n\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n\n"]
     pub fn op_features_get_dump(self) -> OpFeaturesGetDump<'buf> {
         let mut res = OpFeaturesGetDump::new(self);
         res.request.do_writeback(
@@ -26160,7 +26351,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get features\\.\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n"]
+    #[doc = "Get features.\n\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n\n"]
     pub fn op_features_get_do(self) -> OpFeaturesGetDo<'buf> {
         let mut res = OpFeaturesGetDo::new(self);
         res.request.do_writeback(
@@ -26170,7 +26361,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set features\\.\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n- [.nested_hw()](PushFeatures::nested_hw)\n- [.nested_wanted()](PushFeatures::nested_wanted)\n- [.nested_active()](PushFeatures::nested_active)\n- [.nested_nochange()](PushFeatures::nested_nochange)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n"]
+    #[doc = "Set features.\n\nRequest attributes:\n- [.nested_header()](PushFeatures::nested_header)\n- [.nested_hw()](PushFeatures::nested_hw)\n- [.nested_wanted()](PushFeatures::nested_wanted)\n- [.nested_active()](PushFeatures::nested_active)\n- [.nested_nochange()](PushFeatures::nested_nochange)\n\nReply attributes:\n- [.get_header()](IterableFeatures::get_header)\n- [.get_hw()](IterableFeatures::get_hw)\n- [.get_wanted()](IterableFeatures::get_wanted)\n- [.get_active()](IterableFeatures::get_active)\n- [.get_nochange()](IterableFeatures::get_nochange)\n\n"]
     pub fn op_features_set_do(self) -> OpFeaturesSetDo<'buf> {
         let mut res = OpFeaturesSetDo::new(self);
         res.request.do_writeback(
@@ -26180,7 +26371,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get device private flags\\.\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePrivflags::get_header)\n- [.get_flags()](IterablePrivflags::get_flags)\n"]
+    #[doc = "Get device private flags.\n\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePrivflags::get_header)\n- [.get_flags()](IterablePrivflags::get_flags)\n\n"]
     pub fn op_privflags_get_dump(self) -> OpPrivflagsGetDump<'buf> {
         let mut res = OpPrivflagsGetDump::new(self);
         res.request.do_writeback(
@@ -26190,7 +26381,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get device private flags\\.\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePrivflags::get_header)\n- [.get_flags()](IterablePrivflags::get_flags)\n"]
+    #[doc = "Get device private flags.\n\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePrivflags::get_header)\n- [.get_flags()](IterablePrivflags::get_flags)\n\n"]
     pub fn op_privflags_get_do(self) -> OpPrivflagsGetDo<'buf> {
         let mut res = OpPrivflagsGetDo::new(self);
         res.request.do_writeback(
@@ -26200,7 +26391,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set device private flags\\.\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n- [.nested_flags()](PushPrivflags::nested_flags)\n"]
+    #[doc = "Set device private flags.\n\nRequest attributes:\n- [.nested_header()](PushPrivflags::nested_header)\n- [.nested_flags()](PushPrivflags::nested_flags)\n\n"]
     pub fn op_privflags_set_do(self) -> OpPrivflagsSetDo<'buf> {
         let mut res = OpPrivflagsSetDo::new(self);
         res.request.do_writeback(
@@ -26210,28 +26401,28 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get ring params\\.\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n\nReply attributes:\n- [.get_header()](IterableRings::get_header)\n- [.get_rx_max()](IterableRings::get_rx_max)\n- [.get_rx_mini_max()](IterableRings::get_rx_mini_max)\n- [.get_rx_jumbo_max()](IterableRings::get_rx_jumbo_max)\n- [.get_tx_max()](IterableRings::get_tx_max)\n- [.get_rx()](IterableRings::get_rx)\n- [.get_rx_mini()](IterableRings::get_rx_mini)\n- [.get_rx_jumbo()](IterableRings::get_rx_jumbo)\n- [.get_tx()](IterableRings::get_tx)\n- [.get_rx_buf_len()](IterableRings::get_rx_buf_len)\n- [.get_tcp_data_split()](IterableRings::get_tcp_data_split)\n- [.get_cqe_size()](IterableRings::get_cqe_size)\n- [.get_tx_push()](IterableRings::get_tx_push)\n- [.get_rx_push()](IterableRings::get_rx_push)\n- [.get_tx_push_buf_len()](IterableRings::get_tx_push_buf_len)\n- [.get_tx_push_buf_len_max()](IterableRings::get_tx_push_buf_len_max)\n- [.get_hds_thresh()](IterableRings::get_hds_thresh)\n- [.get_hds_thresh_max()](IterableRings::get_hds_thresh_max)\n"]
+    #[doc = "Get ring params.\n\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n\nReply attributes:\n- [.get_header()](IterableRings::get_header)\n- [.get_rx_max()](IterableRings::get_rx_max)\n- [.get_rx_mini_max()](IterableRings::get_rx_mini_max)\n- [.get_rx_jumbo_max()](IterableRings::get_rx_jumbo_max)\n- [.get_tx_max()](IterableRings::get_tx_max)\n- [.get_rx()](IterableRings::get_rx)\n- [.get_rx_mini()](IterableRings::get_rx_mini)\n- [.get_rx_jumbo()](IterableRings::get_rx_jumbo)\n- [.get_tx()](IterableRings::get_tx)\n- [.get_rx_buf_len()](IterableRings::get_rx_buf_len)\n- [.get_tcp_data_split()](IterableRings::get_tcp_data_split)\n- [.get_cqe_size()](IterableRings::get_cqe_size)\n- [.get_tx_push()](IterableRings::get_tx_push)\n- [.get_rx_push()](IterableRings::get_rx_push)\n- [.get_tx_push_buf_len()](IterableRings::get_tx_push_buf_len)\n- [.get_tx_push_buf_len_max()](IterableRings::get_tx_push_buf_len_max)\n- [.get_hds_thresh()](IterableRings::get_hds_thresh)\n- [.get_hds_thresh_max()](IterableRings::get_hds_thresh_max)\n\n"]
     pub fn op_rings_get_dump(self) -> OpRingsGetDump<'buf> {
         let mut res = OpRingsGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rings-get-dump", OpRingsGetDump::lookup);
         res
     }
-    #[doc = "Get ring params\\.\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n\nReply attributes:\n- [.get_header()](IterableRings::get_header)\n- [.get_rx_max()](IterableRings::get_rx_max)\n- [.get_rx_mini_max()](IterableRings::get_rx_mini_max)\n- [.get_rx_jumbo_max()](IterableRings::get_rx_jumbo_max)\n- [.get_tx_max()](IterableRings::get_tx_max)\n- [.get_rx()](IterableRings::get_rx)\n- [.get_rx_mini()](IterableRings::get_rx_mini)\n- [.get_rx_jumbo()](IterableRings::get_rx_jumbo)\n- [.get_tx()](IterableRings::get_tx)\n- [.get_rx_buf_len()](IterableRings::get_rx_buf_len)\n- [.get_tcp_data_split()](IterableRings::get_tcp_data_split)\n- [.get_cqe_size()](IterableRings::get_cqe_size)\n- [.get_tx_push()](IterableRings::get_tx_push)\n- [.get_rx_push()](IterableRings::get_rx_push)\n- [.get_tx_push_buf_len()](IterableRings::get_tx_push_buf_len)\n- [.get_tx_push_buf_len_max()](IterableRings::get_tx_push_buf_len_max)\n- [.get_hds_thresh()](IterableRings::get_hds_thresh)\n- [.get_hds_thresh_max()](IterableRings::get_hds_thresh_max)\n"]
+    #[doc = "Get ring params.\n\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n\nReply attributes:\n- [.get_header()](IterableRings::get_header)\n- [.get_rx_max()](IterableRings::get_rx_max)\n- [.get_rx_mini_max()](IterableRings::get_rx_mini_max)\n- [.get_rx_jumbo_max()](IterableRings::get_rx_jumbo_max)\n- [.get_tx_max()](IterableRings::get_tx_max)\n- [.get_rx()](IterableRings::get_rx)\n- [.get_rx_mini()](IterableRings::get_rx_mini)\n- [.get_rx_jumbo()](IterableRings::get_rx_jumbo)\n- [.get_tx()](IterableRings::get_tx)\n- [.get_rx_buf_len()](IterableRings::get_rx_buf_len)\n- [.get_tcp_data_split()](IterableRings::get_tcp_data_split)\n- [.get_cqe_size()](IterableRings::get_cqe_size)\n- [.get_tx_push()](IterableRings::get_tx_push)\n- [.get_rx_push()](IterableRings::get_rx_push)\n- [.get_tx_push_buf_len()](IterableRings::get_tx_push_buf_len)\n- [.get_tx_push_buf_len_max()](IterableRings::get_tx_push_buf_len_max)\n- [.get_hds_thresh()](IterableRings::get_hds_thresh)\n- [.get_hds_thresh_max()](IterableRings::get_hds_thresh_max)\n\n"]
     pub fn op_rings_get_do(self) -> OpRingsGetDo<'buf> {
         let mut res = OpRingsGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rings-get-do", OpRingsGetDo::lookup);
         res
     }
-    #[doc = "Set ring params\\.\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n- [.push_rx_max()](PushRings::push_rx_max)\n- [.push_rx_mini_max()](PushRings::push_rx_mini_max)\n- [.push_rx_jumbo_max()](PushRings::push_rx_jumbo_max)\n- [.push_tx_max()](PushRings::push_tx_max)\n- [.push_rx()](PushRings::push_rx)\n- [.push_rx_mini()](PushRings::push_rx_mini)\n- [.push_rx_jumbo()](PushRings::push_rx_jumbo)\n- [.push_tx()](PushRings::push_tx)\n- [.push_rx_buf_len()](PushRings::push_rx_buf_len)\n- [.push_tcp_data_split()](PushRings::push_tcp_data_split)\n- [.push_cqe_size()](PushRings::push_cqe_size)\n- [.push_tx_push()](PushRings::push_tx_push)\n- [.push_rx_push()](PushRings::push_rx_push)\n- [.push_tx_push_buf_len()](PushRings::push_tx_push_buf_len)\n- [.push_tx_push_buf_len_max()](PushRings::push_tx_push_buf_len_max)\n- [.push_hds_thresh()](PushRings::push_hds_thresh)\n- [.push_hds_thresh_max()](PushRings::push_hds_thresh_max)\n"]
+    #[doc = "Set ring params.\n\nRequest attributes:\n- [.nested_header()](PushRings::nested_header)\n- [.push_rx_max()](PushRings::push_rx_max)\n- [.push_rx_mini_max()](PushRings::push_rx_mini_max)\n- [.push_rx_jumbo_max()](PushRings::push_rx_jumbo_max)\n- [.push_tx_max()](PushRings::push_tx_max)\n- [.push_rx()](PushRings::push_rx)\n- [.push_rx_mini()](PushRings::push_rx_mini)\n- [.push_rx_jumbo()](PushRings::push_rx_jumbo)\n- [.push_tx()](PushRings::push_tx)\n- [.push_rx_buf_len()](PushRings::push_rx_buf_len)\n- [.push_tcp_data_split()](PushRings::push_tcp_data_split)\n- [.push_cqe_size()](PushRings::push_cqe_size)\n- [.push_tx_push()](PushRings::push_tx_push)\n- [.push_rx_push()](PushRings::push_rx_push)\n- [.push_tx_push_buf_len()](PushRings::push_tx_push_buf_len)\n- [.push_tx_push_buf_len_max()](PushRings::push_tx_push_buf_len_max)\n- [.push_hds_thresh()](PushRings::push_hds_thresh)\n- [.push_hds_thresh_max()](PushRings::push_hds_thresh_max)\n\n"]
     pub fn op_rings_set_do(self) -> OpRingsSetDo<'buf> {
         let mut res = OpRingsSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rings-set-do", OpRingsSetDo::lookup);
         res
     }
-    #[doc = "Get channel params\\.\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n\nReply attributes:\n- [.get_header()](IterableChannels::get_header)\n- [.get_rx_max()](IterableChannels::get_rx_max)\n- [.get_tx_max()](IterableChannels::get_tx_max)\n- [.get_other_max()](IterableChannels::get_other_max)\n- [.get_combined_max()](IterableChannels::get_combined_max)\n- [.get_rx_count()](IterableChannels::get_rx_count)\n- [.get_tx_count()](IterableChannels::get_tx_count)\n- [.get_other_count()](IterableChannels::get_other_count)\n- [.get_combined_count()](IterableChannels::get_combined_count)\n"]
+    #[doc = "Get channel params.\n\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n\nReply attributes:\n- [.get_header()](IterableChannels::get_header)\n- [.get_rx_max()](IterableChannels::get_rx_max)\n- [.get_tx_max()](IterableChannels::get_tx_max)\n- [.get_other_max()](IterableChannels::get_other_max)\n- [.get_combined_max()](IterableChannels::get_combined_max)\n- [.get_rx_count()](IterableChannels::get_rx_count)\n- [.get_tx_count()](IterableChannels::get_tx_count)\n- [.get_other_count()](IterableChannels::get_other_count)\n- [.get_combined_count()](IterableChannels::get_combined_count)\n\n"]
     pub fn op_channels_get_dump(self) -> OpChannelsGetDump<'buf> {
         let mut res = OpChannelsGetDump::new(self);
         res.request.do_writeback(
@@ -26241,7 +26432,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get channel params\\.\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n\nReply attributes:\n- [.get_header()](IterableChannels::get_header)\n- [.get_rx_max()](IterableChannels::get_rx_max)\n- [.get_tx_max()](IterableChannels::get_tx_max)\n- [.get_other_max()](IterableChannels::get_other_max)\n- [.get_combined_max()](IterableChannels::get_combined_max)\n- [.get_rx_count()](IterableChannels::get_rx_count)\n- [.get_tx_count()](IterableChannels::get_tx_count)\n- [.get_other_count()](IterableChannels::get_other_count)\n- [.get_combined_count()](IterableChannels::get_combined_count)\n"]
+    #[doc = "Get channel params.\n\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n\nReply attributes:\n- [.get_header()](IterableChannels::get_header)\n- [.get_rx_max()](IterableChannels::get_rx_max)\n- [.get_tx_max()](IterableChannels::get_tx_max)\n- [.get_other_max()](IterableChannels::get_other_max)\n- [.get_combined_max()](IterableChannels::get_combined_max)\n- [.get_rx_count()](IterableChannels::get_rx_count)\n- [.get_tx_count()](IterableChannels::get_tx_count)\n- [.get_other_count()](IterableChannels::get_other_count)\n- [.get_combined_count()](IterableChannels::get_combined_count)\n\n"]
     pub fn op_channels_get_do(self) -> OpChannelsGetDo<'buf> {
         let mut res = OpChannelsGetDo::new(self);
         res.request.do_writeback(
@@ -26251,7 +26442,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set channel params\\.\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n- [.push_rx_max()](PushChannels::push_rx_max)\n- [.push_tx_max()](PushChannels::push_tx_max)\n- [.push_other_max()](PushChannels::push_other_max)\n- [.push_combined_max()](PushChannels::push_combined_max)\n- [.push_rx_count()](PushChannels::push_rx_count)\n- [.push_tx_count()](PushChannels::push_tx_count)\n- [.push_other_count()](PushChannels::push_other_count)\n- [.push_combined_count()](PushChannels::push_combined_count)\n"]
+    #[doc = "Set channel params.\n\nRequest attributes:\n- [.nested_header()](PushChannels::nested_header)\n- [.push_rx_max()](PushChannels::push_rx_max)\n- [.push_tx_max()](PushChannels::push_tx_max)\n- [.push_other_max()](PushChannels::push_other_max)\n- [.push_combined_max()](PushChannels::push_combined_max)\n- [.push_rx_count()](PushChannels::push_rx_count)\n- [.push_tx_count()](PushChannels::push_tx_count)\n- [.push_other_count()](PushChannels::push_other_count)\n- [.push_combined_count()](PushChannels::push_combined_count)\n\n"]
     pub fn op_channels_set_do(self) -> OpChannelsSetDo<'buf> {
         let mut res = OpChannelsSetDo::new(self);
         res.request.do_writeback(
@@ -26261,7 +26452,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get coalesce params\\.\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n\nReply attributes:\n- [.get_header()](IterableCoalesce::get_header)\n- [.get_rx_usecs()](IterableCoalesce::get_rx_usecs)\n- [.get_rx_max_frames()](IterableCoalesce::get_rx_max_frames)\n- [.get_rx_usecs_irq()](IterableCoalesce::get_rx_usecs_irq)\n- [.get_rx_max_frames_irq()](IterableCoalesce::get_rx_max_frames_irq)\n- [.get_tx_usecs()](IterableCoalesce::get_tx_usecs)\n- [.get_tx_max_frames()](IterableCoalesce::get_tx_max_frames)\n- [.get_tx_usecs_irq()](IterableCoalesce::get_tx_usecs_irq)\n- [.get_tx_max_frames_irq()](IterableCoalesce::get_tx_max_frames_irq)\n- [.get_stats_block_usecs()](IterableCoalesce::get_stats_block_usecs)\n- [.get_use_adaptive_rx()](IterableCoalesce::get_use_adaptive_rx)\n- [.get_use_adaptive_tx()](IterableCoalesce::get_use_adaptive_tx)\n- [.get_pkt_rate_low()](IterableCoalesce::get_pkt_rate_low)\n- [.get_rx_usecs_low()](IterableCoalesce::get_rx_usecs_low)\n- [.get_rx_max_frames_low()](IterableCoalesce::get_rx_max_frames_low)\n- [.get_tx_usecs_low()](IterableCoalesce::get_tx_usecs_low)\n- [.get_tx_max_frames_low()](IterableCoalesce::get_tx_max_frames_low)\n- [.get_pkt_rate_high()](IterableCoalesce::get_pkt_rate_high)\n- [.get_rx_usecs_high()](IterableCoalesce::get_rx_usecs_high)\n- [.get_rx_max_frames_high()](IterableCoalesce::get_rx_max_frames_high)\n- [.get_tx_usecs_high()](IterableCoalesce::get_tx_usecs_high)\n- [.get_tx_max_frames_high()](IterableCoalesce::get_tx_max_frames_high)\n- [.get_rate_sample_interval()](IterableCoalesce::get_rate_sample_interval)\n- [.get_use_cqe_mode_tx()](IterableCoalesce::get_use_cqe_mode_tx)\n- [.get_use_cqe_mode_rx()](IterableCoalesce::get_use_cqe_mode_rx)\n- [.get_tx_aggr_max_bytes()](IterableCoalesce::get_tx_aggr_max_bytes)\n- [.get_tx_aggr_max_frames()](IterableCoalesce::get_tx_aggr_max_frames)\n- [.get_tx_aggr_time_usecs()](IterableCoalesce::get_tx_aggr_time_usecs)\n- [.get_rx_profile()](IterableCoalesce::get_rx_profile)\n- [.get_tx_profile()](IterableCoalesce::get_tx_profile)\n"]
+    #[doc = "Get coalesce params.\n\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n\nReply attributes:\n- [.get_header()](IterableCoalesce::get_header)\n- [.get_rx_usecs()](IterableCoalesce::get_rx_usecs)\n- [.get_rx_max_frames()](IterableCoalesce::get_rx_max_frames)\n- [.get_rx_usecs_irq()](IterableCoalesce::get_rx_usecs_irq)\n- [.get_rx_max_frames_irq()](IterableCoalesce::get_rx_max_frames_irq)\n- [.get_tx_usecs()](IterableCoalesce::get_tx_usecs)\n- [.get_tx_max_frames()](IterableCoalesce::get_tx_max_frames)\n- [.get_tx_usecs_irq()](IterableCoalesce::get_tx_usecs_irq)\n- [.get_tx_max_frames_irq()](IterableCoalesce::get_tx_max_frames_irq)\n- [.get_stats_block_usecs()](IterableCoalesce::get_stats_block_usecs)\n- [.get_use_adaptive_rx()](IterableCoalesce::get_use_adaptive_rx)\n- [.get_use_adaptive_tx()](IterableCoalesce::get_use_adaptive_tx)\n- [.get_pkt_rate_low()](IterableCoalesce::get_pkt_rate_low)\n- [.get_rx_usecs_low()](IterableCoalesce::get_rx_usecs_low)\n- [.get_rx_max_frames_low()](IterableCoalesce::get_rx_max_frames_low)\n- [.get_tx_usecs_low()](IterableCoalesce::get_tx_usecs_low)\n- [.get_tx_max_frames_low()](IterableCoalesce::get_tx_max_frames_low)\n- [.get_pkt_rate_high()](IterableCoalesce::get_pkt_rate_high)\n- [.get_rx_usecs_high()](IterableCoalesce::get_rx_usecs_high)\n- [.get_rx_max_frames_high()](IterableCoalesce::get_rx_max_frames_high)\n- [.get_tx_usecs_high()](IterableCoalesce::get_tx_usecs_high)\n- [.get_tx_max_frames_high()](IterableCoalesce::get_tx_max_frames_high)\n- [.get_rate_sample_interval()](IterableCoalesce::get_rate_sample_interval)\n- [.get_use_cqe_mode_tx()](IterableCoalesce::get_use_cqe_mode_tx)\n- [.get_use_cqe_mode_rx()](IterableCoalesce::get_use_cqe_mode_rx)\n- [.get_tx_aggr_max_bytes()](IterableCoalesce::get_tx_aggr_max_bytes)\n- [.get_tx_aggr_max_frames()](IterableCoalesce::get_tx_aggr_max_frames)\n- [.get_tx_aggr_time_usecs()](IterableCoalesce::get_tx_aggr_time_usecs)\n- [.get_rx_profile()](IterableCoalesce::get_rx_profile)\n- [.get_tx_profile()](IterableCoalesce::get_tx_profile)\n- [.get_rx_cqe_frames()](IterableCoalesce::get_rx_cqe_frames)\n- [.get_rx_cqe_nsecs()](IterableCoalesce::get_rx_cqe_nsecs)\n\n"]
     pub fn op_coalesce_get_dump(self) -> OpCoalesceGetDump<'buf> {
         let mut res = OpCoalesceGetDump::new(self);
         res.request.do_writeback(
@@ -26271,7 +26462,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get coalesce params\\.\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n\nReply attributes:\n- [.get_header()](IterableCoalesce::get_header)\n- [.get_rx_usecs()](IterableCoalesce::get_rx_usecs)\n- [.get_rx_max_frames()](IterableCoalesce::get_rx_max_frames)\n- [.get_rx_usecs_irq()](IterableCoalesce::get_rx_usecs_irq)\n- [.get_rx_max_frames_irq()](IterableCoalesce::get_rx_max_frames_irq)\n- [.get_tx_usecs()](IterableCoalesce::get_tx_usecs)\n- [.get_tx_max_frames()](IterableCoalesce::get_tx_max_frames)\n- [.get_tx_usecs_irq()](IterableCoalesce::get_tx_usecs_irq)\n- [.get_tx_max_frames_irq()](IterableCoalesce::get_tx_max_frames_irq)\n- [.get_stats_block_usecs()](IterableCoalesce::get_stats_block_usecs)\n- [.get_use_adaptive_rx()](IterableCoalesce::get_use_adaptive_rx)\n- [.get_use_adaptive_tx()](IterableCoalesce::get_use_adaptive_tx)\n- [.get_pkt_rate_low()](IterableCoalesce::get_pkt_rate_low)\n- [.get_rx_usecs_low()](IterableCoalesce::get_rx_usecs_low)\n- [.get_rx_max_frames_low()](IterableCoalesce::get_rx_max_frames_low)\n- [.get_tx_usecs_low()](IterableCoalesce::get_tx_usecs_low)\n- [.get_tx_max_frames_low()](IterableCoalesce::get_tx_max_frames_low)\n- [.get_pkt_rate_high()](IterableCoalesce::get_pkt_rate_high)\n- [.get_rx_usecs_high()](IterableCoalesce::get_rx_usecs_high)\n- [.get_rx_max_frames_high()](IterableCoalesce::get_rx_max_frames_high)\n- [.get_tx_usecs_high()](IterableCoalesce::get_tx_usecs_high)\n- [.get_tx_max_frames_high()](IterableCoalesce::get_tx_max_frames_high)\n- [.get_rate_sample_interval()](IterableCoalesce::get_rate_sample_interval)\n- [.get_use_cqe_mode_tx()](IterableCoalesce::get_use_cqe_mode_tx)\n- [.get_use_cqe_mode_rx()](IterableCoalesce::get_use_cqe_mode_rx)\n- [.get_tx_aggr_max_bytes()](IterableCoalesce::get_tx_aggr_max_bytes)\n- [.get_tx_aggr_max_frames()](IterableCoalesce::get_tx_aggr_max_frames)\n- [.get_tx_aggr_time_usecs()](IterableCoalesce::get_tx_aggr_time_usecs)\n- [.get_rx_profile()](IterableCoalesce::get_rx_profile)\n- [.get_tx_profile()](IterableCoalesce::get_tx_profile)\n"]
+    #[doc = "Get coalesce params.\n\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n\nReply attributes:\n- [.get_header()](IterableCoalesce::get_header)\n- [.get_rx_usecs()](IterableCoalesce::get_rx_usecs)\n- [.get_rx_max_frames()](IterableCoalesce::get_rx_max_frames)\n- [.get_rx_usecs_irq()](IterableCoalesce::get_rx_usecs_irq)\n- [.get_rx_max_frames_irq()](IterableCoalesce::get_rx_max_frames_irq)\n- [.get_tx_usecs()](IterableCoalesce::get_tx_usecs)\n- [.get_tx_max_frames()](IterableCoalesce::get_tx_max_frames)\n- [.get_tx_usecs_irq()](IterableCoalesce::get_tx_usecs_irq)\n- [.get_tx_max_frames_irq()](IterableCoalesce::get_tx_max_frames_irq)\n- [.get_stats_block_usecs()](IterableCoalesce::get_stats_block_usecs)\n- [.get_use_adaptive_rx()](IterableCoalesce::get_use_adaptive_rx)\n- [.get_use_adaptive_tx()](IterableCoalesce::get_use_adaptive_tx)\n- [.get_pkt_rate_low()](IterableCoalesce::get_pkt_rate_low)\n- [.get_rx_usecs_low()](IterableCoalesce::get_rx_usecs_low)\n- [.get_rx_max_frames_low()](IterableCoalesce::get_rx_max_frames_low)\n- [.get_tx_usecs_low()](IterableCoalesce::get_tx_usecs_low)\n- [.get_tx_max_frames_low()](IterableCoalesce::get_tx_max_frames_low)\n- [.get_pkt_rate_high()](IterableCoalesce::get_pkt_rate_high)\n- [.get_rx_usecs_high()](IterableCoalesce::get_rx_usecs_high)\n- [.get_rx_max_frames_high()](IterableCoalesce::get_rx_max_frames_high)\n- [.get_tx_usecs_high()](IterableCoalesce::get_tx_usecs_high)\n- [.get_tx_max_frames_high()](IterableCoalesce::get_tx_max_frames_high)\n- [.get_rate_sample_interval()](IterableCoalesce::get_rate_sample_interval)\n- [.get_use_cqe_mode_tx()](IterableCoalesce::get_use_cqe_mode_tx)\n- [.get_use_cqe_mode_rx()](IterableCoalesce::get_use_cqe_mode_rx)\n- [.get_tx_aggr_max_bytes()](IterableCoalesce::get_tx_aggr_max_bytes)\n- [.get_tx_aggr_max_frames()](IterableCoalesce::get_tx_aggr_max_frames)\n- [.get_tx_aggr_time_usecs()](IterableCoalesce::get_tx_aggr_time_usecs)\n- [.get_rx_profile()](IterableCoalesce::get_rx_profile)\n- [.get_tx_profile()](IterableCoalesce::get_tx_profile)\n- [.get_rx_cqe_frames()](IterableCoalesce::get_rx_cqe_frames)\n- [.get_rx_cqe_nsecs()](IterableCoalesce::get_rx_cqe_nsecs)\n\n"]
     pub fn op_coalesce_get_do(self) -> OpCoalesceGetDo<'buf> {
         let mut res = OpCoalesceGetDo::new(self);
         res.request.do_writeback(
@@ -26281,7 +26472,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set coalesce params\\.\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n- [.push_rx_usecs()](PushCoalesce::push_rx_usecs)\n- [.push_rx_max_frames()](PushCoalesce::push_rx_max_frames)\n- [.push_rx_usecs_irq()](PushCoalesce::push_rx_usecs_irq)\n- [.push_rx_max_frames_irq()](PushCoalesce::push_rx_max_frames_irq)\n- [.push_tx_usecs()](PushCoalesce::push_tx_usecs)\n- [.push_tx_max_frames()](PushCoalesce::push_tx_max_frames)\n- [.push_tx_usecs_irq()](PushCoalesce::push_tx_usecs_irq)\n- [.push_tx_max_frames_irq()](PushCoalesce::push_tx_max_frames_irq)\n- [.push_stats_block_usecs()](PushCoalesce::push_stats_block_usecs)\n- [.push_use_adaptive_rx()](PushCoalesce::push_use_adaptive_rx)\n- [.push_use_adaptive_tx()](PushCoalesce::push_use_adaptive_tx)\n- [.push_pkt_rate_low()](PushCoalesce::push_pkt_rate_low)\n- [.push_rx_usecs_low()](PushCoalesce::push_rx_usecs_low)\n- [.push_rx_max_frames_low()](PushCoalesce::push_rx_max_frames_low)\n- [.push_tx_usecs_low()](PushCoalesce::push_tx_usecs_low)\n- [.push_tx_max_frames_low()](PushCoalesce::push_tx_max_frames_low)\n- [.push_pkt_rate_high()](PushCoalesce::push_pkt_rate_high)\n- [.push_rx_usecs_high()](PushCoalesce::push_rx_usecs_high)\n- [.push_rx_max_frames_high()](PushCoalesce::push_rx_max_frames_high)\n- [.push_tx_usecs_high()](PushCoalesce::push_tx_usecs_high)\n- [.push_tx_max_frames_high()](PushCoalesce::push_tx_max_frames_high)\n- [.push_rate_sample_interval()](PushCoalesce::push_rate_sample_interval)\n- [.push_use_cqe_mode_tx()](PushCoalesce::push_use_cqe_mode_tx)\n- [.push_use_cqe_mode_rx()](PushCoalesce::push_use_cqe_mode_rx)\n- [.push_tx_aggr_max_bytes()](PushCoalesce::push_tx_aggr_max_bytes)\n- [.push_tx_aggr_max_frames()](PushCoalesce::push_tx_aggr_max_frames)\n- [.push_tx_aggr_time_usecs()](PushCoalesce::push_tx_aggr_time_usecs)\n- [.nested_rx_profile()](PushCoalesce::nested_rx_profile)\n- [.nested_tx_profile()](PushCoalesce::nested_tx_profile)\n"]
+    #[doc = "Set coalesce params.\n\nRequest attributes:\n- [.nested_header()](PushCoalesce::nested_header)\n- [.push_rx_usecs()](PushCoalesce::push_rx_usecs)\n- [.push_rx_max_frames()](PushCoalesce::push_rx_max_frames)\n- [.push_rx_usecs_irq()](PushCoalesce::push_rx_usecs_irq)\n- [.push_rx_max_frames_irq()](PushCoalesce::push_rx_max_frames_irq)\n- [.push_tx_usecs()](PushCoalesce::push_tx_usecs)\n- [.push_tx_max_frames()](PushCoalesce::push_tx_max_frames)\n- [.push_tx_usecs_irq()](PushCoalesce::push_tx_usecs_irq)\n- [.push_tx_max_frames_irq()](PushCoalesce::push_tx_max_frames_irq)\n- [.push_stats_block_usecs()](PushCoalesce::push_stats_block_usecs)\n- [.push_use_adaptive_rx()](PushCoalesce::push_use_adaptive_rx)\n- [.push_use_adaptive_tx()](PushCoalesce::push_use_adaptive_tx)\n- [.push_pkt_rate_low()](PushCoalesce::push_pkt_rate_low)\n- [.push_rx_usecs_low()](PushCoalesce::push_rx_usecs_low)\n- [.push_rx_max_frames_low()](PushCoalesce::push_rx_max_frames_low)\n- [.push_tx_usecs_low()](PushCoalesce::push_tx_usecs_low)\n- [.push_tx_max_frames_low()](PushCoalesce::push_tx_max_frames_low)\n- [.push_pkt_rate_high()](PushCoalesce::push_pkt_rate_high)\n- [.push_rx_usecs_high()](PushCoalesce::push_rx_usecs_high)\n- [.push_rx_max_frames_high()](PushCoalesce::push_rx_max_frames_high)\n- [.push_tx_usecs_high()](PushCoalesce::push_tx_usecs_high)\n- [.push_tx_max_frames_high()](PushCoalesce::push_tx_max_frames_high)\n- [.push_rate_sample_interval()](PushCoalesce::push_rate_sample_interval)\n- [.push_use_cqe_mode_tx()](PushCoalesce::push_use_cqe_mode_tx)\n- [.push_use_cqe_mode_rx()](PushCoalesce::push_use_cqe_mode_rx)\n- [.push_tx_aggr_max_bytes()](PushCoalesce::push_tx_aggr_max_bytes)\n- [.push_tx_aggr_max_frames()](PushCoalesce::push_tx_aggr_max_frames)\n- [.push_tx_aggr_time_usecs()](PushCoalesce::push_tx_aggr_time_usecs)\n- [.nested_rx_profile()](PushCoalesce::nested_rx_profile)\n- [.nested_tx_profile()](PushCoalesce::nested_tx_profile)\n- [.push_rx_cqe_frames()](PushCoalesce::push_rx_cqe_frames)\n- [.push_rx_cqe_nsecs()](PushCoalesce::push_rx_cqe_nsecs)\n\n"]
     pub fn op_coalesce_set_do(self) -> OpCoalesceSetDo<'buf> {
         let mut res = OpCoalesceSetDo::new(self);
         res.request.do_writeback(
@@ -26291,49 +26482,49 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get pause params\\.\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePause::get_header)\n- [.get_autoneg()](IterablePause::get_autoneg)\n- [.get_rx()](IterablePause::get_rx)\n- [.get_tx()](IterablePause::get_tx)\n- [.get_stats()](IterablePause::get_stats)\n- [.get_stats_src()](IterablePause::get_stats_src)\n"]
+    #[doc = "Get pause params.\n\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePause::get_header)\n- [.get_autoneg()](IterablePause::get_autoneg)\n- [.get_rx()](IterablePause::get_rx)\n- [.get_tx()](IterablePause::get_tx)\n- [.get_stats()](IterablePause::get_stats)\n- [.get_stats_src()](IterablePause::get_stats_src)\n\n"]
     pub fn op_pause_get_dump(self) -> OpPauseGetDump<'buf> {
         let mut res = OpPauseGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-pause-get-dump", OpPauseGetDump::lookup);
         res
     }
-    #[doc = "Get pause params\\.\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePause::get_header)\n- [.get_autoneg()](IterablePause::get_autoneg)\n- [.get_rx()](IterablePause::get_rx)\n- [.get_tx()](IterablePause::get_tx)\n- [.get_stats()](IterablePause::get_stats)\n- [.get_stats_src()](IterablePause::get_stats_src)\n"]
+    #[doc = "Get pause params.\n\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePause::get_header)\n- [.get_autoneg()](IterablePause::get_autoneg)\n- [.get_rx()](IterablePause::get_rx)\n- [.get_tx()](IterablePause::get_tx)\n- [.get_stats()](IterablePause::get_stats)\n- [.get_stats_src()](IterablePause::get_stats_src)\n\n"]
     pub fn op_pause_get_do(self) -> OpPauseGetDo<'buf> {
         let mut res = OpPauseGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-pause-get-do", OpPauseGetDo::lookup);
         res
     }
-    #[doc = "Set pause params\\.\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n- [.push_autoneg()](PushPause::push_autoneg)\n- [.push_rx()](PushPause::push_rx)\n- [.push_tx()](PushPause::push_tx)\n- [.nested_stats()](PushPause::nested_stats)\n- [.push_stats_src()](PushPause::push_stats_src)\n"]
+    #[doc = "Set pause params.\n\nRequest attributes:\n- [.nested_header()](PushPause::nested_header)\n- [.push_autoneg()](PushPause::push_autoneg)\n- [.push_rx()](PushPause::push_rx)\n- [.push_tx()](PushPause::push_tx)\n- [.nested_stats()](PushPause::nested_stats)\n- [.push_stats_src()](PushPause::push_stats_src)\n\n"]
     pub fn op_pause_set_do(self) -> OpPauseSetDo<'buf> {
         let mut res = OpPauseSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-pause-set-do", OpPauseSetDo::lookup);
         res
     }
-    #[doc = "Get eee params\\.\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n\nReply attributes:\n- [.get_header()](IterableEee::get_header)\n- [.get_modes_ours()](IterableEee::get_modes_ours)\n- [.get_modes_peer()](IterableEee::get_modes_peer)\n- [.get_active()](IterableEee::get_active)\n- [.get_enabled()](IterableEee::get_enabled)\n- [.get_tx_lpi_enabled()](IterableEee::get_tx_lpi_enabled)\n- [.get_tx_lpi_timer()](IterableEee::get_tx_lpi_timer)\n"]
+    #[doc = "Get eee params.\n\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n\nReply attributes:\n- [.get_header()](IterableEee::get_header)\n- [.get_modes_ours()](IterableEee::get_modes_ours)\n- [.get_modes_peer()](IterableEee::get_modes_peer)\n- [.get_active()](IterableEee::get_active)\n- [.get_enabled()](IterableEee::get_enabled)\n- [.get_tx_lpi_enabled()](IterableEee::get_tx_lpi_enabled)\n- [.get_tx_lpi_timer()](IterableEee::get_tx_lpi_timer)\n\n"]
     pub fn op_eee_get_dump(self) -> OpEeeGetDump<'buf> {
         let mut res = OpEeeGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-eee-get-dump", OpEeeGetDump::lookup);
         res
     }
-    #[doc = "Get eee params\\.\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n\nReply attributes:\n- [.get_header()](IterableEee::get_header)\n- [.get_modes_ours()](IterableEee::get_modes_ours)\n- [.get_modes_peer()](IterableEee::get_modes_peer)\n- [.get_active()](IterableEee::get_active)\n- [.get_enabled()](IterableEee::get_enabled)\n- [.get_tx_lpi_enabled()](IterableEee::get_tx_lpi_enabled)\n- [.get_tx_lpi_timer()](IterableEee::get_tx_lpi_timer)\n"]
+    #[doc = "Get eee params.\n\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n\nReply attributes:\n- [.get_header()](IterableEee::get_header)\n- [.get_modes_ours()](IterableEee::get_modes_ours)\n- [.get_modes_peer()](IterableEee::get_modes_peer)\n- [.get_active()](IterableEee::get_active)\n- [.get_enabled()](IterableEee::get_enabled)\n- [.get_tx_lpi_enabled()](IterableEee::get_tx_lpi_enabled)\n- [.get_tx_lpi_timer()](IterableEee::get_tx_lpi_timer)\n\n"]
     pub fn op_eee_get_do(self) -> OpEeeGetDo<'buf> {
         let mut res = OpEeeGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-eee-get-do", OpEeeGetDo::lookup);
         res
     }
-    #[doc = "Set eee params\\.\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n- [.nested_modes_ours()](PushEee::nested_modes_ours)\n- [.nested_modes_peer()](PushEee::nested_modes_peer)\n- [.push_active()](PushEee::push_active)\n- [.push_enabled()](PushEee::push_enabled)\n- [.push_tx_lpi_enabled()](PushEee::push_tx_lpi_enabled)\n- [.push_tx_lpi_timer()](PushEee::push_tx_lpi_timer)\n"]
+    #[doc = "Set eee params.\n\nRequest attributes:\n- [.nested_header()](PushEee::nested_header)\n- [.nested_modes_ours()](PushEee::nested_modes_ours)\n- [.nested_modes_peer()](PushEee::nested_modes_peer)\n- [.push_active()](PushEee::push_active)\n- [.push_enabled()](PushEee::push_enabled)\n- [.push_tx_lpi_enabled()](PushEee::push_tx_lpi_enabled)\n- [.push_tx_lpi_timer()](PushEee::push_tx_lpi_timer)\n\n"]
     pub fn op_eee_set_do(self) -> OpEeeSetDo<'buf> {
         let mut res = OpEeeSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-eee-set-do", OpEeeSetDo::lookup);
         res
     }
-    #[doc = "Get tsinfo params\\.\nRequest attributes:\n- [.nested_header()](PushTsinfo::nested_header)\n- [.nested_hwtstamp_provider()](PushTsinfo::nested_hwtstamp_provider)\n\nReply attributes:\n- [.get_header()](IterableTsinfo::get_header)\n- [.get_timestamping()](IterableTsinfo::get_timestamping)\n- [.get_tx_types()](IterableTsinfo::get_tx_types)\n- [.get_rx_filters()](IterableTsinfo::get_rx_filters)\n- [.get_phc_index()](IterableTsinfo::get_phc_index)\n- [.get_stats()](IterableTsinfo::get_stats)\n- [.get_hwtstamp_provider()](IterableTsinfo::get_hwtstamp_provider)\n- [.get_hwtstamp_source()](IterableTsinfo::get_hwtstamp_source)\n- [.get_hwtstamp_phyindex()](IterableTsinfo::get_hwtstamp_phyindex)\n"]
+    #[doc = "Get tsinfo params.\n\nRequest attributes:\n- [.nested_header()](PushTsinfo::nested_header)\n- [.nested_hwtstamp_provider()](PushTsinfo::nested_hwtstamp_provider)\n\nReply attributes:\n- [.get_header()](IterableTsinfo::get_header)\n- [.get_timestamping()](IterableTsinfo::get_timestamping)\n- [.get_tx_types()](IterableTsinfo::get_tx_types)\n- [.get_rx_filters()](IterableTsinfo::get_rx_filters)\n- [.get_phc_index()](IterableTsinfo::get_phc_index)\n- [.get_stats()](IterableTsinfo::get_stats)\n- [.get_hwtstamp_provider()](IterableTsinfo::get_hwtstamp_provider)\n- [.get_hwtstamp_source()](IterableTsinfo::get_hwtstamp_source)\n- [.get_hwtstamp_phyindex()](IterableTsinfo::get_hwtstamp_phyindex)\n\n"]
     pub fn op_tsinfo_get_dump(self) -> OpTsinfoGetDump<'buf> {
         let mut res = OpTsinfoGetDump::new(self);
         res.request.do_writeback(
@@ -26343,14 +26534,14 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get tsinfo params\\.\nRequest attributes:\n- [.nested_header()](PushTsinfo::nested_header)\n- [.nested_hwtstamp_provider()](PushTsinfo::nested_hwtstamp_provider)\n\nReply attributes:\n- [.get_header()](IterableTsinfo::get_header)\n- [.get_timestamping()](IterableTsinfo::get_timestamping)\n- [.get_tx_types()](IterableTsinfo::get_tx_types)\n- [.get_rx_filters()](IterableTsinfo::get_rx_filters)\n- [.get_phc_index()](IterableTsinfo::get_phc_index)\n- [.get_stats()](IterableTsinfo::get_stats)\n- [.get_hwtstamp_provider()](IterableTsinfo::get_hwtstamp_provider)\n- [.get_hwtstamp_source()](IterableTsinfo::get_hwtstamp_source)\n- [.get_hwtstamp_phyindex()](IterableTsinfo::get_hwtstamp_phyindex)\n"]
+    #[doc = "Get tsinfo params.\n\nRequest attributes:\n- [.nested_header()](PushTsinfo::nested_header)\n- [.nested_hwtstamp_provider()](PushTsinfo::nested_hwtstamp_provider)\n\nReply attributes:\n- [.get_header()](IterableTsinfo::get_header)\n- [.get_timestamping()](IterableTsinfo::get_timestamping)\n- [.get_tx_types()](IterableTsinfo::get_tx_types)\n- [.get_rx_filters()](IterableTsinfo::get_rx_filters)\n- [.get_phc_index()](IterableTsinfo::get_phc_index)\n- [.get_stats()](IterableTsinfo::get_stats)\n- [.get_hwtstamp_provider()](IterableTsinfo::get_hwtstamp_provider)\n- [.get_hwtstamp_source()](IterableTsinfo::get_hwtstamp_source)\n- [.get_hwtstamp_phyindex()](IterableTsinfo::get_hwtstamp_phyindex)\n\n"]
     pub fn op_tsinfo_get_do(self) -> OpTsinfoGetDo<'buf> {
         let mut res = OpTsinfoGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-tsinfo-get-do", OpTsinfoGetDo::lookup);
         res
     }
-    #[doc = "Cable test\\.\nRequest attributes:\n- [.nested_header()](PushCableTest::nested_header)\n"]
+    #[doc = "Cable test.\n\nRequest attributes:\n- [.nested_header()](PushCableTest::nested_header)\n\n"]
     pub fn op_cable_test_act_do(self) -> OpCableTestActDo<'buf> {
         let mut res = OpCableTestActDo::new(self);
         res.request.do_writeback(
@@ -26360,7 +26551,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Cable test TDR\\.\nRequest attributes:\n- [.nested_header()](PushCableTestTdr::nested_header)\n"]
+    #[doc = "Cable test TDR.\n\nRequest attributes:\n- [.nested_header()](PushCableTestTdr::nested_header)\n\n"]
     pub fn op_cable_test_tdr_act_do(self) -> OpCableTestTdrActDo<'buf> {
         let mut res = OpCableTestTdrActDo::new(self);
         res.request.do_writeback(
@@ -26370,7 +26561,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get tsinfo params\\.\nRequest attributes:\n- [.nested_header()](PushTunnelInfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTunnelInfo::get_header)\n- [.get_udp_ports()](IterableTunnelInfo::get_udp_ports)\n"]
+    #[doc = "Get tsinfo params.\n\nRequest attributes:\n- [.nested_header()](PushTunnelInfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTunnelInfo::get_header)\n- [.get_udp_ports()](IterableTunnelInfo::get_udp_ports)\n\n"]
     pub fn op_tunnel_info_get_dump(self) -> OpTunnelInfoGetDump<'buf> {
         let mut res = OpTunnelInfoGetDump::new(self);
         res.request.do_writeback(
@@ -26380,7 +26571,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get tsinfo params\\.\nRequest attributes:\n- [.nested_header()](PushTunnelInfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTunnelInfo::get_header)\n- [.get_udp_ports()](IterableTunnelInfo::get_udp_ports)\n"]
+    #[doc = "Get tsinfo params.\n\nRequest attributes:\n- [.nested_header()](PushTunnelInfo::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTunnelInfo::get_header)\n- [.get_udp_ports()](IterableTunnelInfo::get_udp_ports)\n\n"]
     pub fn op_tunnel_info_get_do(self) -> OpTunnelInfoGetDo<'buf> {
         let mut res = OpTunnelInfoGetDo::new(self);
         res.request.do_writeback(
@@ -26390,28 +26581,28 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get FEC params\\.\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFec::get_header)\n- [.get_modes()](IterableFec::get_modes)\n- [.get_auto()](IterableFec::get_auto)\n- [.get_active()](IterableFec::get_active)\n- [.get_stats()](IterableFec::get_stats)\n"]
+    #[doc = "Get FEC params.\n\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFec::get_header)\n- [.get_modes()](IterableFec::get_modes)\n- [.get_auto()](IterableFec::get_auto)\n- [.get_active()](IterableFec::get_active)\n- [.get_stats()](IterableFec::get_stats)\n\n"]
     pub fn op_fec_get_dump(self) -> OpFecGetDump<'buf> {
         let mut res = OpFecGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-fec-get-dump", OpFecGetDump::lookup);
         res
     }
-    #[doc = "Get FEC params\\.\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFec::get_header)\n- [.get_modes()](IterableFec::get_modes)\n- [.get_auto()](IterableFec::get_auto)\n- [.get_active()](IterableFec::get_active)\n- [.get_stats()](IterableFec::get_stats)\n"]
+    #[doc = "Get FEC params.\n\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n\nReply attributes:\n- [.get_header()](IterableFec::get_header)\n- [.get_modes()](IterableFec::get_modes)\n- [.get_auto()](IterableFec::get_auto)\n- [.get_active()](IterableFec::get_active)\n- [.get_stats()](IterableFec::get_stats)\n\n"]
     pub fn op_fec_get_do(self) -> OpFecGetDo<'buf> {
         let mut res = OpFecGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-fec-get-do", OpFecGetDo::lookup);
         res
     }
-    #[doc = "Set FEC params\\.\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n- [.nested_modes()](PushFec::nested_modes)\n- [.push_auto()](PushFec::push_auto)\n- [.push_active()](PushFec::push_active)\n- [.nested_stats()](PushFec::nested_stats)\n"]
+    #[doc = "Set FEC params.\n\nRequest attributes:\n- [.nested_header()](PushFec::nested_header)\n- [.nested_modes()](PushFec::nested_modes)\n- [.push_auto()](PushFec::push_auto)\n- [.push_active()](PushFec::push_active)\n- [.nested_stats()](PushFec::nested_stats)\n\n"]
     pub fn op_fec_set_do(self) -> OpFecSetDo<'buf> {
         let mut res = OpFecSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-fec-set-do", OpFecSetDo::lookup);
         res
     }
-    #[doc = "Get module EEPROM params\\.\nRequest attributes:\n- [.nested_header()](PushModuleEeprom::nested_header)\n- [.push_offset()](PushModuleEeprom::push_offset)\n- [.push_length()](PushModuleEeprom::push_length)\n- [.push_page()](PushModuleEeprom::push_page)\n- [.push_bank()](PushModuleEeprom::push_bank)\n- [.push_i2c_address()](PushModuleEeprom::push_i2c_address)\n\nReply attributes:\n- [.get_header()](IterableModuleEeprom::get_header)\n- [.get_data()](IterableModuleEeprom::get_data)\n"]
+    #[doc = "Get module EEPROM params.\n\nRequest attributes:\n- [.nested_header()](PushModuleEeprom::nested_header)\n- [.push_offset()](PushModuleEeprom::push_offset)\n- [.push_length()](PushModuleEeprom::push_length)\n- [.push_page()](PushModuleEeprom::push_page)\n- [.push_bank()](PushModuleEeprom::push_bank)\n- [.push_i2c_address()](PushModuleEeprom::push_i2c_address)\n\nReply attributes:\n- [.get_header()](IterableModuleEeprom::get_header)\n- [.get_data()](IterableModuleEeprom::get_data)\n\n"]
     pub fn op_module_eeprom_get_dump(self) -> OpModuleEepromGetDump<'buf> {
         let mut res = OpModuleEepromGetDump::new(self);
         res.request.do_writeback(
@@ -26421,7 +26612,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get module EEPROM params\\.\nRequest attributes:\n- [.nested_header()](PushModuleEeprom::nested_header)\n- [.push_offset()](PushModuleEeprom::push_offset)\n- [.push_length()](PushModuleEeprom::push_length)\n- [.push_page()](PushModuleEeprom::push_page)\n- [.push_bank()](PushModuleEeprom::push_bank)\n- [.push_i2c_address()](PushModuleEeprom::push_i2c_address)\n\nReply attributes:\n- [.get_header()](IterableModuleEeprom::get_header)\n- [.get_data()](IterableModuleEeprom::get_data)\n"]
+    #[doc = "Get module EEPROM params.\n\nRequest attributes:\n- [.nested_header()](PushModuleEeprom::nested_header)\n- [.push_offset()](PushModuleEeprom::push_offset)\n- [.push_length()](PushModuleEeprom::push_length)\n- [.push_page()](PushModuleEeprom::push_page)\n- [.push_bank()](PushModuleEeprom::push_bank)\n- [.push_i2c_address()](PushModuleEeprom::push_i2c_address)\n\nReply attributes:\n- [.get_header()](IterableModuleEeprom::get_header)\n- [.get_data()](IterableModuleEeprom::get_data)\n\n"]
     pub fn op_module_eeprom_get_do(self) -> OpModuleEepromGetDo<'buf> {
         let mut res = OpModuleEepromGetDo::new(self);
         res.request.do_writeback(
@@ -26431,21 +26622,21 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get statistics\\.\nRequest attributes:\n- [.nested_header()](PushStats::nested_header)\n- [.nested_groups()](PushStats::nested_groups)\n\nReply attributes:\n- [.get_header()](IterableStats::get_header)\n- [.get_groups()](IterableStats::get_groups)\n- [.get_grp()](IterableStats::get_grp)\n- [.get_src()](IterableStats::get_src)\n"]
+    #[doc = "Get statistics.\n\nRequest attributes:\n- [.nested_header()](PushStats::nested_header)\n- [.nested_groups()](PushStats::nested_groups)\n\nReply attributes:\n- [.get_header()](IterableStats::get_header)\n- [.get_groups()](IterableStats::get_groups)\n- [.get_grp()](IterableStats::get_grp)\n- [.get_src()](IterableStats::get_src)\n\n"]
     pub fn op_stats_get_dump(self) -> OpStatsGetDump<'buf> {
         let mut res = OpStatsGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-stats-get-dump", OpStatsGetDump::lookup);
         res
     }
-    #[doc = "Get statistics\\.\nRequest attributes:\n- [.nested_header()](PushStats::nested_header)\n- [.nested_groups()](PushStats::nested_groups)\n\nReply attributes:\n- [.get_header()](IterableStats::get_header)\n- [.get_groups()](IterableStats::get_groups)\n- [.get_grp()](IterableStats::get_grp)\n- [.get_src()](IterableStats::get_src)\n"]
+    #[doc = "Get statistics.\n\nRequest attributes:\n- [.nested_header()](PushStats::nested_header)\n- [.nested_groups()](PushStats::nested_groups)\n\nReply attributes:\n- [.get_header()](IterableStats::get_header)\n- [.get_groups()](IterableStats::get_groups)\n- [.get_grp()](IterableStats::get_grp)\n- [.get_src()](IterableStats::get_src)\n\n"]
     pub fn op_stats_get_do(self) -> OpStatsGetDo<'buf> {
         let mut res = OpStatsGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-stats-get-do", OpStatsGetDo::lookup);
         res
     }
-    #[doc = "Get PHC VCLOCKs\\.\nRequest attributes:\n- [.nested_header()](PushPhcVclocks::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhcVclocks::get_header)\n- [.get_num()](IterablePhcVclocks::get_num)\n"]
+    #[doc = "Get PHC VCLOCKs.\n\nRequest attributes:\n- [.nested_header()](PushPhcVclocks::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhcVclocks::get_header)\n- [.get_num()](IterablePhcVclocks::get_num)\n\n"]
     pub fn op_phc_vclocks_get_dump(self) -> OpPhcVclocksGetDump<'buf> {
         let mut res = OpPhcVclocksGetDump::new(self);
         res.request.do_writeback(
@@ -26455,7 +26646,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get PHC VCLOCKs\\.\nRequest attributes:\n- [.nested_header()](PushPhcVclocks::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhcVclocks::get_header)\n- [.get_num()](IterablePhcVclocks::get_num)\n"]
+    #[doc = "Get PHC VCLOCKs.\n\nRequest attributes:\n- [.nested_header()](PushPhcVclocks::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhcVclocks::get_header)\n- [.get_num()](IterablePhcVclocks::get_num)\n\n"]
     pub fn op_phc_vclocks_get_do(self) -> OpPhcVclocksGetDo<'buf> {
         let mut res = OpPhcVclocksGetDo::new(self);
         res.request.do_writeback(
@@ -26465,7 +26656,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get module params\\.\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n\nReply attributes:\n- [.get_header()](IterableModule::get_header)\n- [.get_power_mode_policy()](IterableModule::get_power_mode_policy)\n- [.get_power_mode()](IterableModule::get_power_mode)\n"]
+    #[doc = "Get module params.\n\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n\nReply attributes:\n- [.get_header()](IterableModule::get_header)\n- [.get_power_mode_policy()](IterableModule::get_power_mode_policy)\n- [.get_power_mode()](IterableModule::get_power_mode)\n\n"]
     pub fn op_module_get_dump(self) -> OpModuleGetDump<'buf> {
         let mut res = OpModuleGetDump::new(self);
         res.request.do_writeback(
@@ -26475,56 +26666,56 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get module params\\.\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n\nReply attributes:\n- [.get_header()](IterableModule::get_header)\n- [.get_power_mode_policy()](IterableModule::get_power_mode_policy)\n- [.get_power_mode()](IterableModule::get_power_mode)\n"]
+    #[doc = "Get module params.\n\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n\nReply attributes:\n- [.get_header()](IterableModule::get_header)\n- [.get_power_mode_policy()](IterableModule::get_power_mode_policy)\n- [.get_power_mode()](IterableModule::get_power_mode)\n\n"]
     pub fn op_module_get_do(self) -> OpModuleGetDo<'buf> {
         let mut res = OpModuleGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-module-get-do", OpModuleGetDo::lookup);
         res
     }
-    #[doc = "Set module params\\.\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n- [.push_power_mode_policy()](PushModule::push_power_mode_policy)\n- [.push_power_mode()](PushModule::push_power_mode)\n"]
+    #[doc = "Set module params.\n\nRequest attributes:\n- [.nested_header()](PushModule::nested_header)\n- [.push_power_mode_policy()](PushModule::push_power_mode_policy)\n- [.push_power_mode()](PushModule::push_power_mode)\n\n"]
     pub fn op_module_set_do(self) -> OpModuleSetDo<'buf> {
         let mut res = OpModuleSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-module-set-do", OpModuleSetDo::lookup);
         res
     }
-    #[doc = "Get Power Sourcing Equipment params\\.\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePse::get_header)\n- [.get_podl_pse_admin_state()](IterablePse::get_podl_pse_admin_state)\n- [.get_podl_pse_admin_control()](IterablePse::get_podl_pse_admin_control)\n- [.get_podl_pse_pw_d_status()](IterablePse::get_podl_pse_pw_d_status)\n- [.get_c33_pse_admin_state()](IterablePse::get_c33_pse_admin_state)\n- [.get_c33_pse_admin_control()](IterablePse::get_c33_pse_admin_control)\n- [.get_c33_pse_pw_d_status()](IterablePse::get_c33_pse_pw_d_status)\n- [.get_c33_pse_pw_class()](IterablePse::get_c33_pse_pw_class)\n- [.get_c33_pse_actual_pw()](IterablePse::get_c33_pse_actual_pw)\n- [.get_c33_pse_ext_state()](IterablePse::get_c33_pse_ext_state)\n- [.get_c33_pse_ext_substate()](IterablePse::get_c33_pse_ext_substate)\n- [.get_c33_pse_avail_pw_limit()](IterablePse::get_c33_pse_avail_pw_limit)\n- [.get_c33_pse_pw_limit_ranges()](IterablePse::get_c33_pse_pw_limit_ranges)\n- [.get_pse_pw_d_id()](IterablePse::get_pse_pw_d_id)\n- [.get_pse_prio_max()](IterablePse::get_pse_prio_max)\n- [.get_pse_prio()](IterablePse::get_pse_prio)\n"]
+    #[doc = "Get Power Sourcing Equipment params.\n\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePse::get_header)\n- [.get_podl_pse_admin_state()](IterablePse::get_podl_pse_admin_state)\n- [.get_podl_pse_admin_control()](IterablePse::get_podl_pse_admin_control)\n- [.get_podl_pse_pw_d_status()](IterablePse::get_podl_pse_pw_d_status)\n- [.get_c33_pse_admin_state()](IterablePse::get_c33_pse_admin_state)\n- [.get_c33_pse_admin_control()](IterablePse::get_c33_pse_admin_control)\n- [.get_c33_pse_pw_d_status()](IterablePse::get_c33_pse_pw_d_status)\n- [.get_c33_pse_pw_class()](IterablePse::get_c33_pse_pw_class)\n- [.get_c33_pse_actual_pw()](IterablePse::get_c33_pse_actual_pw)\n- [.get_c33_pse_ext_state()](IterablePse::get_c33_pse_ext_state)\n- [.get_c33_pse_ext_substate()](IterablePse::get_c33_pse_ext_substate)\n- [.get_c33_pse_avail_pw_limit()](IterablePse::get_c33_pse_avail_pw_limit)\n- [.get_c33_pse_pw_limit_ranges()](IterablePse::get_c33_pse_pw_limit_ranges)\n- [.get_pse_pw_d_id()](IterablePse::get_pse_pw_d_id)\n- [.get_pse_prio_max()](IterablePse::get_pse_prio_max)\n- [.get_pse_prio()](IterablePse::get_pse_prio)\n\n"]
     pub fn op_pse_get_dump(self) -> OpPseGetDump<'buf> {
         let mut res = OpPseGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-pse-get-dump", OpPseGetDump::lookup);
         res
     }
-    #[doc = "Get Power Sourcing Equipment params\\.\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePse::get_header)\n- [.get_podl_pse_admin_state()](IterablePse::get_podl_pse_admin_state)\n- [.get_podl_pse_admin_control()](IterablePse::get_podl_pse_admin_control)\n- [.get_podl_pse_pw_d_status()](IterablePse::get_podl_pse_pw_d_status)\n- [.get_c33_pse_admin_state()](IterablePse::get_c33_pse_admin_state)\n- [.get_c33_pse_admin_control()](IterablePse::get_c33_pse_admin_control)\n- [.get_c33_pse_pw_d_status()](IterablePse::get_c33_pse_pw_d_status)\n- [.get_c33_pse_pw_class()](IterablePse::get_c33_pse_pw_class)\n- [.get_c33_pse_actual_pw()](IterablePse::get_c33_pse_actual_pw)\n- [.get_c33_pse_ext_state()](IterablePse::get_c33_pse_ext_state)\n- [.get_c33_pse_ext_substate()](IterablePse::get_c33_pse_ext_substate)\n- [.get_c33_pse_avail_pw_limit()](IterablePse::get_c33_pse_avail_pw_limit)\n- [.get_c33_pse_pw_limit_ranges()](IterablePse::get_c33_pse_pw_limit_ranges)\n- [.get_pse_pw_d_id()](IterablePse::get_pse_pw_d_id)\n- [.get_pse_prio_max()](IterablePse::get_pse_prio_max)\n- [.get_pse_prio()](IterablePse::get_pse_prio)\n"]
+    #[doc = "Get Power Sourcing Equipment params.\n\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePse::get_header)\n- [.get_podl_pse_admin_state()](IterablePse::get_podl_pse_admin_state)\n- [.get_podl_pse_admin_control()](IterablePse::get_podl_pse_admin_control)\n- [.get_podl_pse_pw_d_status()](IterablePse::get_podl_pse_pw_d_status)\n- [.get_c33_pse_admin_state()](IterablePse::get_c33_pse_admin_state)\n- [.get_c33_pse_admin_control()](IterablePse::get_c33_pse_admin_control)\n- [.get_c33_pse_pw_d_status()](IterablePse::get_c33_pse_pw_d_status)\n- [.get_c33_pse_pw_class()](IterablePse::get_c33_pse_pw_class)\n- [.get_c33_pse_actual_pw()](IterablePse::get_c33_pse_actual_pw)\n- [.get_c33_pse_ext_state()](IterablePse::get_c33_pse_ext_state)\n- [.get_c33_pse_ext_substate()](IterablePse::get_c33_pse_ext_substate)\n- [.get_c33_pse_avail_pw_limit()](IterablePse::get_c33_pse_avail_pw_limit)\n- [.get_c33_pse_pw_limit_ranges()](IterablePse::get_c33_pse_pw_limit_ranges)\n- [.get_pse_pw_d_id()](IterablePse::get_pse_pw_d_id)\n- [.get_pse_prio_max()](IterablePse::get_pse_prio_max)\n- [.get_pse_prio()](IterablePse::get_pse_prio)\n\n"]
     pub fn op_pse_get_do(self) -> OpPseGetDo<'buf> {
         let mut res = OpPseGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-pse-get-do", OpPseGetDo::lookup);
         res
     }
-    #[doc = "Set Power Sourcing Equipment params\\.\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n- [.push_podl_pse_admin_control()](PushPse::push_podl_pse_admin_control)\n- [.push_c33_pse_admin_control()](PushPse::push_c33_pse_admin_control)\n- [.push_c33_pse_avail_pw_limit()](PushPse::push_c33_pse_avail_pw_limit)\n- [.push_pse_prio()](PushPse::push_pse_prio)\n"]
+    #[doc = "Set Power Sourcing Equipment params.\n\nRequest attributes:\n- [.nested_header()](PushPse::nested_header)\n- [.push_podl_pse_admin_control()](PushPse::push_podl_pse_admin_control)\n- [.push_c33_pse_admin_control()](PushPse::push_c33_pse_admin_control)\n- [.push_c33_pse_avail_pw_limit()](PushPse::push_c33_pse_avail_pw_limit)\n- [.push_pse_prio()](PushPse::push_pse_prio)\n\n"]
     pub fn op_pse_set_do(self) -> OpPseSetDo<'buf> {
         let mut res = OpPseSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-pse-set-do", OpPseSetDo::lookup);
         res
     }
-    #[doc = "Get RSS params\\.\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_start_context()](PushRss::push_start_context)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n- [.get_flow_hash()](IterableRss::get_flow_hash)\n"]
+    #[doc = "Get RSS params.\n\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_start_context()](PushRss::push_start_context)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n- [.get_flow_hash()](IterableRss::get_flow_hash)\n\n"]
     pub fn op_rss_get_dump(self) -> OpRssGetDump<'buf> {
         let mut res = OpRssGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rss-get-dump", OpRssGetDump::lookup);
         res
     }
-    #[doc = "Get RSS params\\.\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n- [.get_flow_hash()](IterableRss::get_flow_hash)\n"]
+    #[doc = "Get RSS params.\n\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n- [.get_flow_hash()](IterableRss::get_flow_hash)\n\n"]
     pub fn op_rss_get_do(self) -> OpRssGetDo<'buf> {
         let mut res = OpRssGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rss-get-do", OpRssGetDo::lookup);
         res
     }
-    #[doc = "Get PLCA params\\.\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n"]
+    #[doc = "Get PLCA params.\n\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n\n"]
     pub fn op_plca_get_cfg_dump(self) -> OpPlcaGetCfgDump<'buf> {
         let mut res = OpPlcaGetCfgDump::new(self);
         res.request.do_writeback(
@@ -26534,21 +26725,21 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get PLCA params\\.\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n"]
+    #[doc = "Get PLCA params.\n\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n\n"]
     pub fn op_plca_get_cfg_do(self) -> OpPlcaGetCfgDo<'buf> {
         let mut res = OpPlcaGetCfgDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-plca-get-cfg-do", OpPlcaGetCfgDo::lookup);
         res
     }
-    #[doc = "Set PLCA params\\.\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n- [.push_version()](PushPlca::push_version)\n- [.push_enabled()](PushPlca::push_enabled)\n- [.push_status()](PushPlca::push_status)\n- [.push_node_cnt()](PushPlca::push_node_cnt)\n- [.push_node_id()](PushPlca::push_node_id)\n- [.push_to_tmr()](PushPlca::push_to_tmr)\n- [.push_burst_cnt()](PushPlca::push_burst_cnt)\n- [.push_burst_tmr()](PushPlca::push_burst_tmr)\n"]
+    #[doc = "Set PLCA params.\n\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n- [.push_version()](PushPlca::push_version)\n- [.push_enabled()](PushPlca::push_enabled)\n- [.push_status()](PushPlca::push_status)\n- [.push_node_cnt()](PushPlca::push_node_cnt)\n- [.push_node_id()](PushPlca::push_node_id)\n- [.push_to_tmr()](PushPlca::push_to_tmr)\n- [.push_burst_cnt()](PushPlca::push_burst_cnt)\n- [.push_burst_tmr()](PushPlca::push_burst_tmr)\n\n"]
     pub fn op_plca_set_cfg_do(self) -> OpPlcaSetCfgDo<'buf> {
         let mut res = OpPlcaSetCfgDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-plca-set-cfg-do", OpPlcaSetCfgDo::lookup);
         res
     }
-    #[doc = "Get PLCA status params\\.\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n"]
+    #[doc = "Get PLCA status params.\n\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n\n"]
     pub fn op_plca_get_status_dump(self) -> OpPlcaGetStatusDump<'buf> {
         let mut res = OpPlcaGetStatusDump::new(self);
         res.request.do_writeback(
@@ -26558,7 +26749,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get PLCA status params\\.\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n"]
+    #[doc = "Get PLCA status params.\n\nRequest attributes:\n- [.nested_header()](PushPlca::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePlca::get_header)\n- [.get_version()](IterablePlca::get_version)\n- [.get_enabled()](IterablePlca::get_enabled)\n- [.get_status()](IterablePlca::get_status)\n- [.get_node_cnt()](IterablePlca::get_node_cnt)\n- [.get_node_id()](IterablePlca::get_node_id)\n- [.get_to_tmr()](IterablePlca::get_to_tmr)\n- [.get_burst_cnt()](IterablePlca::get_burst_cnt)\n- [.get_burst_tmr()](IterablePlca::get_burst_tmr)\n\n"]
     pub fn op_plca_get_status_do(self) -> OpPlcaGetStatusDo<'buf> {
         let mut res = OpPlcaGetStatusDo::new(self);
         res.request.do_writeback(
@@ -26568,28 +26759,28 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get MAC Merge configuration and state\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMm::get_header)\n- [.get_pmac_enabled()](IterableMm::get_pmac_enabled)\n- [.get_tx_enabled()](IterableMm::get_tx_enabled)\n- [.get_tx_active()](IterableMm::get_tx_active)\n- [.get_tx_min_frag_size()](IterableMm::get_tx_min_frag_size)\n- [.get_rx_min_frag_size()](IterableMm::get_rx_min_frag_size)\n- [.get_verify_enabled()](IterableMm::get_verify_enabled)\n- [.get_verify_time()](IterableMm::get_verify_time)\n- [.get_max_verify_time()](IterableMm::get_max_verify_time)\n- [.get_stats()](IterableMm::get_stats)\n"]
+    #[doc = "Get MAC Merge configuration and state\n\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMm::get_header)\n- [.get_pmac_enabled()](IterableMm::get_pmac_enabled)\n- [.get_tx_enabled()](IterableMm::get_tx_enabled)\n- [.get_tx_active()](IterableMm::get_tx_active)\n- [.get_tx_min_frag_size()](IterableMm::get_tx_min_frag_size)\n- [.get_rx_min_frag_size()](IterableMm::get_rx_min_frag_size)\n- [.get_verify_enabled()](IterableMm::get_verify_enabled)\n- [.get_verify_time()](IterableMm::get_verify_time)\n- [.get_max_verify_time()](IterableMm::get_max_verify_time)\n- [.get_stats()](IterableMm::get_stats)\n\n"]
     pub fn op_mm_get_dump(self) -> OpMmGetDump<'buf> {
         let mut res = OpMmGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-mm-get-dump", OpMmGetDump::lookup);
         res
     }
-    #[doc = "Get MAC Merge configuration and state\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMm::get_header)\n- [.get_pmac_enabled()](IterableMm::get_pmac_enabled)\n- [.get_tx_enabled()](IterableMm::get_tx_enabled)\n- [.get_tx_active()](IterableMm::get_tx_active)\n- [.get_tx_min_frag_size()](IterableMm::get_tx_min_frag_size)\n- [.get_rx_min_frag_size()](IterableMm::get_rx_min_frag_size)\n- [.get_verify_enabled()](IterableMm::get_verify_enabled)\n- [.get_verify_time()](IterableMm::get_verify_time)\n- [.get_max_verify_time()](IterableMm::get_max_verify_time)\n- [.get_stats()](IterableMm::get_stats)\n"]
+    #[doc = "Get MAC Merge configuration and state\n\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMm::get_header)\n- [.get_pmac_enabled()](IterableMm::get_pmac_enabled)\n- [.get_tx_enabled()](IterableMm::get_tx_enabled)\n- [.get_tx_active()](IterableMm::get_tx_active)\n- [.get_tx_min_frag_size()](IterableMm::get_tx_min_frag_size)\n- [.get_rx_min_frag_size()](IterableMm::get_rx_min_frag_size)\n- [.get_verify_enabled()](IterableMm::get_verify_enabled)\n- [.get_verify_time()](IterableMm::get_verify_time)\n- [.get_max_verify_time()](IterableMm::get_max_verify_time)\n- [.get_stats()](IterableMm::get_stats)\n\n"]
     pub fn op_mm_get_do(self) -> OpMmGetDo<'buf> {
         let mut res = OpMmGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-mm-get-do", OpMmGetDo::lookup);
         res
     }
-    #[doc = "Set MAC Merge configuration\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n- [.push_pmac_enabled()](PushMm::push_pmac_enabled)\n- [.push_tx_enabled()](PushMm::push_tx_enabled)\n- [.push_tx_min_frag_size()](PushMm::push_tx_min_frag_size)\n- [.push_verify_enabled()](PushMm::push_verify_enabled)\n- [.push_verify_time()](PushMm::push_verify_time)\n"]
+    #[doc = "Set MAC Merge configuration\n\nRequest attributes:\n- [.nested_header()](PushMm::nested_header)\n- [.push_pmac_enabled()](PushMm::push_pmac_enabled)\n- [.push_tx_enabled()](PushMm::push_tx_enabled)\n- [.push_tx_min_frag_size()](PushMm::push_tx_min_frag_size)\n- [.push_verify_enabled()](PushMm::push_verify_enabled)\n- [.push_verify_time()](PushMm::push_verify_time)\n\n"]
     pub fn op_mm_set_do(self) -> OpMmSetDo<'buf> {
         let mut res = OpMmSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-mm-set-do", OpMmSetDo::lookup);
         res
     }
-    #[doc = "Flash transceiver module firmware\\.\nRequest attributes:\n- [.nested_header()](PushModuleFwFlash::nested_header)\n- [.push_file_name()](PushModuleFwFlash::push_file_name)\n- [.push_password()](PushModuleFwFlash::push_password)\n"]
+    #[doc = "Flash transceiver module firmware.\n\nRequest attributes:\n- [.nested_header()](PushModuleFwFlash::nested_header)\n- [.push_file_name()](PushModuleFwFlash::push_file_name)\n- [.push_password()](PushModuleFwFlash::push_password)\n\n"]
     pub fn op_module_fw_flash_act_do(self) -> OpModuleFwFlashActDo<'buf> {
         let mut res = OpModuleFwFlashActDo::new(self);
         res.request.do_writeback(
@@ -26599,21 +26790,21 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get PHY devices attached to an interface\nRequest attributes:\n- [.nested_header()](PushPhy::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhy::get_header)\n- [.get_index()](IterablePhy::get_index)\n- [.get_drvname()](IterablePhy::get_drvname)\n- [.get_name()](IterablePhy::get_name)\n- [.get_upstream_type()](IterablePhy::get_upstream_type)\n- [.get_upstream_index()](IterablePhy::get_upstream_index)\n- [.get_upstream_sfp_name()](IterablePhy::get_upstream_sfp_name)\n- [.get_downstream_sfp_name()](IterablePhy::get_downstream_sfp_name)\n"]
+    #[doc = "Get PHY devices attached to an interface\n\nRequest attributes:\n- [.nested_header()](PushPhy::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhy::get_header)\n- [.get_index()](IterablePhy::get_index)\n- [.get_drvname()](IterablePhy::get_drvname)\n- [.get_name()](IterablePhy::get_name)\n- [.get_upstream_type()](IterablePhy::get_upstream_type)\n- [.get_upstream_index()](IterablePhy::get_upstream_index)\n- [.get_upstream_sfp_name()](IterablePhy::get_upstream_sfp_name)\n- [.get_downstream_sfp_name()](IterablePhy::get_downstream_sfp_name)\n\n"]
     pub fn op_phy_get_dump(self) -> OpPhyGetDump<'buf> {
         let mut res = OpPhyGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-phy-get-dump", OpPhyGetDump::lookup);
         res
     }
-    #[doc = "Get PHY devices attached to an interface\nRequest attributes:\n- [.nested_header()](PushPhy::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhy::get_header)\n- [.get_index()](IterablePhy::get_index)\n- [.get_drvname()](IterablePhy::get_drvname)\n- [.get_name()](IterablePhy::get_name)\n- [.get_upstream_type()](IterablePhy::get_upstream_type)\n- [.get_upstream_index()](IterablePhy::get_upstream_index)\n- [.get_upstream_sfp_name()](IterablePhy::get_upstream_sfp_name)\n- [.get_downstream_sfp_name()](IterablePhy::get_downstream_sfp_name)\n"]
+    #[doc = "Get PHY devices attached to an interface\n\nRequest attributes:\n- [.nested_header()](PushPhy::nested_header)\n\nReply attributes:\n- [.get_header()](IterablePhy::get_header)\n- [.get_index()](IterablePhy::get_index)\n- [.get_drvname()](IterablePhy::get_drvname)\n- [.get_name()](IterablePhy::get_name)\n- [.get_upstream_type()](IterablePhy::get_upstream_type)\n- [.get_upstream_index()](IterablePhy::get_upstream_index)\n- [.get_upstream_sfp_name()](IterablePhy::get_upstream_sfp_name)\n- [.get_downstream_sfp_name()](IterablePhy::get_downstream_sfp_name)\n\n"]
     pub fn op_phy_get_do(self) -> OpPhyGetDo<'buf> {
         let mut res = OpPhyGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-phy-get-do", OpPhyGetDo::lookup);
         res
     }
-    #[doc = "Get hwtstamp config\\.\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n"]
+    #[doc = "Get hwtstamp config.\n\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n\n"]
     pub fn op_tsconfig_get_dump(self) -> OpTsconfigGetDump<'buf> {
         let mut res = OpTsconfigGetDump::new(self);
         res.request.do_writeback(
@@ -26623,7 +26814,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get hwtstamp config\\.\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n"]
+    #[doc = "Get hwtstamp config.\n\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n\n"]
     pub fn op_tsconfig_get_do(self) -> OpTsconfigGetDo<'buf> {
         let mut res = OpTsconfigGetDo::new(self);
         res.request.do_writeback(
@@ -26633,7 +26824,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set hwtstamp config\\.\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n- [.nested_hwtstamp_provider()](PushTsconfig::nested_hwtstamp_provider)\n- [.nested_tx_types()](PushTsconfig::nested_tx_types)\n- [.nested_rx_filters()](PushTsconfig::nested_rx_filters)\n- [.nested_hwtstamp_flags()](PushTsconfig::nested_hwtstamp_flags)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n"]
+    #[doc = "Set hwtstamp config.\n\nRequest attributes:\n- [.nested_header()](PushTsconfig::nested_header)\n- [.nested_hwtstamp_provider()](PushTsconfig::nested_hwtstamp_provider)\n- [.nested_tx_types()](PushTsconfig::nested_tx_types)\n- [.nested_rx_filters()](PushTsconfig::nested_rx_filters)\n- [.nested_hwtstamp_flags()](PushTsconfig::nested_hwtstamp_flags)\n\nReply attributes:\n- [.get_header()](IterableTsconfig::get_header)\n- [.get_hwtstamp_provider()](IterableTsconfig::get_hwtstamp_provider)\n- [.get_tx_types()](IterableTsconfig::get_tx_types)\n- [.get_rx_filters()](IterableTsconfig::get_rx_filters)\n- [.get_hwtstamp_flags()](IterableTsconfig::get_hwtstamp_flags)\n\n"]
     pub fn op_tsconfig_set_do(self) -> OpTsconfigSetDo<'buf> {
         let mut res = OpTsconfigSetDo::new(self);
         res.request.do_writeback(
@@ -26643,14 +26834,14 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set RSS params\\.\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n- [.push_hfunc()](PushRss::push_hfunc)\n- [.push_indir()](PushRss::push_indir)\n- [.push_hkey()](PushRss::push_hkey)\n- [.push_input_xfrm()](PushRss::push_input_xfrm)\n- [.nested_flow_hash()](PushRss::nested_flow_hash)\n"]
+    #[doc = "Set RSS params.\n\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n- [.push_hfunc()](PushRss::push_hfunc)\n- [.push_indir()](PushRss::push_indir)\n- [.push_hkey()](PushRss::push_hkey)\n- [.push_input_xfrm()](PushRss::push_input_xfrm)\n- [.nested_flow_hash()](PushRss::nested_flow_hash)\n\n"]
     pub fn op_rss_set_do(self) -> OpRssSetDo<'buf> {
         let mut res = OpRssSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rss-set-do", OpRssSetDo::lookup);
         res
     }
-    #[doc = "Create an RSS context\\.\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n- [.push_hfunc()](PushRss::push_hfunc)\n- [.push_indir()](PushRss::push_indir)\n- [.push_hkey()](PushRss::push_hkey)\n- [.push_input_xfrm()](PushRss::push_input_xfrm)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n"]
+    #[doc = "Create an RSS context.\n\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n- [.push_hfunc()](PushRss::push_hfunc)\n- [.push_indir()](PushRss::push_indir)\n- [.push_hkey()](PushRss::push_hkey)\n- [.push_input_xfrm()](PushRss::push_input_xfrm)\n\nReply attributes:\n- [.get_header()](IterableRss::get_header)\n- [.get_context()](IterableRss::get_context)\n- [.get_hfunc()](IterableRss::get_hfunc)\n- [.get_indir()](IterableRss::get_indir)\n- [.get_hkey()](IterableRss::get_hkey)\n- [.get_input_xfrm()](IterableRss::get_input_xfrm)\n\n"]
     pub fn op_rss_create_act_do(self) -> OpRssCreateActDo<'buf> {
         let mut res = OpRssCreateActDo::new(self);
         res.request.do_writeback(
@@ -26660,7 +26851,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Delete an RSS context\\.\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n"]
+    #[doc = "Delete an RSS context.\n\nRequest attributes:\n- [.nested_header()](PushRss::nested_header)\n- [.push_context()](PushRss::push_context)\n\n"]
     pub fn op_rss_delete_act_do(self) -> OpRssDeleteActDo<'buf> {
         let mut res = OpRssDeleteActDo::new(self);
         res.request.do_writeback(
@@ -26670,14 +26861,14 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get PHY MSE measurement data and capabilities\\.\nRequest attributes:\n- [.nested_header()](PushMse::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMse::get_header)\n- [.get_capabilities()](IterableMse::get_capabilities)\n- [.get_channel_a()](IterableMse::get_channel_a)\n- [.get_channel_b()](IterableMse::get_channel_b)\n- [.get_channel_c()](IterableMse::get_channel_c)\n- [.get_channel_d()](IterableMse::get_channel_d)\n- [.get_worst_channel()](IterableMse::get_worst_channel)\n- [.get_link()](IterableMse::get_link)\n"]
+    #[doc = "Get PHY MSE measurement data and capabilities.\n\nRequest attributes:\n- [.nested_header()](PushMse::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMse::get_header)\n- [.get_capabilities()](IterableMse::get_capabilities)\n- [.get_channel_a()](IterableMse::get_channel_a)\n- [.get_channel_b()](IterableMse::get_channel_b)\n- [.get_channel_c()](IterableMse::get_channel_c)\n- [.get_channel_d()](IterableMse::get_channel_d)\n- [.get_worst_channel()](IterableMse::get_worst_channel)\n- [.get_link()](IterableMse::get_link)\n\n"]
     pub fn op_mse_get_dump(self) -> OpMseGetDump<'buf> {
         let mut res = OpMseGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-mse-get-dump", OpMseGetDump::lookup);
         res
     }
-    #[doc = "Get PHY MSE measurement data and capabilities\\.\nRequest attributes:\n- [.nested_header()](PushMse::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMse::get_header)\n- [.get_capabilities()](IterableMse::get_capabilities)\n- [.get_channel_a()](IterableMse::get_channel_a)\n- [.get_channel_b()](IterableMse::get_channel_b)\n- [.get_channel_c()](IterableMse::get_channel_c)\n- [.get_channel_d()](IterableMse::get_channel_d)\n- [.get_worst_channel()](IterableMse::get_worst_channel)\n- [.get_link()](IterableMse::get_link)\n"]
+    #[doc = "Get PHY MSE measurement data and capabilities.\n\nRequest attributes:\n- [.nested_header()](PushMse::nested_header)\n\nReply attributes:\n- [.get_header()](IterableMse::get_header)\n- [.get_capabilities()](IterableMse::get_capabilities)\n- [.get_channel_a()](IterableMse::get_channel_a)\n- [.get_channel_b()](IterableMse::get_channel_b)\n- [.get_channel_c()](IterableMse::get_channel_c)\n- [.get_channel_d()](IterableMse::get_channel_d)\n- [.get_worst_channel()](IterableMse::get_worst_channel)\n- [.get_link()](IterableMse::get_link)\n\n"]
     pub fn op_mse_get_do(self) -> OpMseGetDo<'buf> {
         let mut res = OpMseGetDo::new(self);
         res.request
@@ -26703,6 +26894,8 @@ mod generated_tests {
         let _ = IterableCoalesce::get_pkt_rate_high;
         let _ = IterableCoalesce::get_pkt_rate_low;
         let _ = IterableCoalesce::get_rate_sample_interval;
+        let _ = IterableCoalesce::get_rx_cqe_frames;
+        let _ = IterableCoalesce::get_rx_cqe_nsecs;
         let _ = IterableCoalesce::get_rx_max_frames;
         let _ = IterableCoalesce::get_rx_max_frames_high;
         let _ = IterableCoalesce::get_rx_max_frames_irq;
@@ -26904,6 +27097,8 @@ mod generated_tests {
         let _ = PushCoalesce::<&mut Vec<u8>>::push_pkt_rate_high;
         let _ = PushCoalesce::<&mut Vec<u8>>::push_pkt_rate_low;
         let _ = PushCoalesce::<&mut Vec<u8>>::push_rate_sample_interval;
+        let _ = PushCoalesce::<&mut Vec<u8>>::push_rx_cqe_frames;
+        let _ = PushCoalesce::<&mut Vec<u8>>::push_rx_cqe_nsecs;
         let _ = PushCoalesce::<&mut Vec<u8>>::push_rx_max_frames;
         let _ = PushCoalesce::<&mut Vec<u8>>::push_rx_max_frames_high;
         let _ = PushCoalesce::<&mut Vec<u8>>::push_rx_max_frames_irq;

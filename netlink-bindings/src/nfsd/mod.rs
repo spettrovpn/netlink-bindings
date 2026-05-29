@@ -1,4 +1,4 @@
-#![doc = "NFSD configuration over generic netlink\\."]
+#![doc = "NFSD configuration over generic netlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -38,7 +38,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Xid(val) = attr? {
+            if let Ok(RpcStatus::Xid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -53,7 +53,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Flags(val) = attr? {
+            if let Ok(RpcStatus::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -68,7 +68,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Prog(val) = attr? {
+            if let Ok(RpcStatus::Prog(val)) = attr {
                 return Ok(val);
             }
         }
@@ -83,7 +83,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Version(val) = attr? {
+            if let Ok(RpcStatus::Version(val)) = attr {
                 return Ok(val);
             }
         }
@@ -98,7 +98,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Proc(val) = attr? {
+            if let Ok(RpcStatus::Proc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -113,7 +113,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::ServiceTime(val) = attr? {
+            if let Ok(RpcStatus::ServiceTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -128,7 +128,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Pad(val) = attr? {
+            if let Ok(RpcStatus::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -143,7 +143,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Saddr4(val) = attr? {
+            if let Ok(RpcStatus::Saddr4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -158,7 +158,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Daddr4(val) = attr? {
+            if let Ok(RpcStatus::Daddr4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -173,7 +173,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Saddr6(val) = attr? {
+            if let Ok(RpcStatus::Saddr6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -188,7 +188,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Daddr6(val) = attr? {
+            if let Ok(RpcStatus::Daddr6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -203,7 +203,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Sport(val) = attr? {
+            if let Ok(RpcStatus::Sport(val)) = attr {
                 return Ok(val);
             }
         }
@@ -218,7 +218,7 @@ impl<'a> IterableRpcStatus<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RpcStatus::Dport(val) = attr? {
+            if let Ok(RpcStatus::Dport(val)) = attr {
                 return Ok(val);
             }
         }
@@ -286,14 +286,16 @@ impl<'a> IterableRpcStatus<'a> {
 impl<'a> Iterator for IterableRpcStatus<'a> {
     type Item = Result<RpcStatus<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -539,6 +541,7 @@ pub enum Server<'a> {
     Leasetime(u32),
     Scope(&'a CStr),
     MinThreads(u32),
+    FhKey(&'a [u8]),
 }
 impl<'a> IterableServer<'a> {
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
@@ -555,7 +558,7 @@ impl<'a> IterableServer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Server::Gracetime(val) = attr? {
+            if let Ok(Server::Gracetime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -570,7 +573,7 @@ impl<'a> IterableServer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Server::Leasetime(val) = attr? {
+            if let Ok(Server::Leasetime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -585,7 +588,7 @@ impl<'a> IterableServer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Server::Scope(val) = attr? {
+            if let Ok(Server::Scope(val)) = attr {
                 return Ok(val);
             }
         }
@@ -600,13 +603,28 @@ impl<'a> IterableServer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Server::MinThreads(val) = attr? {
+            if let Ok(Server::MinThreads(val)) = attr {
                 return Ok(val);
             }
         }
         Err(ErrorContext::new_missing(
             "Server",
             "MinThreads",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    pub fn get_fh_key(&self) -> Result<&'a [u8], ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Server::FhKey(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Server",
+            "FhKey",
             self.orig_loc,
             self.buf.as_ptr() as usize,
         ))
@@ -623,6 +641,7 @@ impl Server<'_> {
             3u16 => "Leasetime",
             4u16 => "Scope",
             5u16 => "MinThreads",
+            6u16 => "FhKey",
             _ => return None,
         };
         Some(res)
@@ -649,14 +668,16 @@ impl<'a> IterableServer<'a> {
 impl<'a> Iterator for IterableServer<'a> {
     type Item = Result<Server<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -683,6 +704,11 @@ impl<'a> Iterator for IterableServer<'a> {
                 }),
                 5u16 => Server::MinThreads({
                     let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                6u16 => Server::FhKey({
+                    let res = Some(next);
                     let Some(val) = res else { break };
                     val
                 }),
@@ -718,6 +744,7 @@ impl<'a> std::fmt::Debug for IterableServer<'_> {
                 Server::Leasetime(val) => fmt.field("Leasetime", &val),
                 Server::Scope(val) => fmt.field("Scope", &val),
                 Server::MinThreads(val) => fmt.field("MinThreads", &val),
+                Server::FhKey(val) => fmt.field("FhKey", &val),
             };
         }
         fmt.finish()
@@ -773,6 +800,12 @@ impl IterableServer<'_> {
                         break;
                     }
                 }
+                Server::FhKey(val) => {
+                    if last_off == offset {
+                        stack.push(("FhKey", last_off));
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -794,7 +827,7 @@ impl<'a> IterableVersion<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Version::Major(val) = attr? {
+            if let Ok(Version::Major(val)) = attr {
                 return Ok(val);
             }
         }
@@ -809,7 +842,7 @@ impl<'a> IterableVersion<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Version::Minor(val) = attr? {
+            if let Ok(Version::Minor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -824,7 +857,7 @@ impl<'a> IterableVersion<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Version::Enabled(val) = attr? {
+            if let Ok(Version::Enabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -871,14 +904,16 @@ impl<'a> IterableVersion<'a> {
 impl<'a> Iterator for IterableVersion<'a> {
     type Item = Result<Version, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1027,14 +1062,16 @@ impl<'a> IterableServerProto<'a> {
 impl<'a> Iterator for IterableServerProto<'a> {
     type Item = Result<ServerProto<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1127,7 +1164,7 @@ impl<'a> IterableSock<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Sock::Addr(val) = attr? {
+            if let Ok(Sock::Addr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1142,7 +1179,7 @@ impl<'a> IterableSock<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Sock::TransportName(val) = attr? {
+            if let Ok(Sock::TransportName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1188,14 +1225,16 @@ impl<'a> IterableSock<'a> {
 impl<'a> Iterator for IterableSock<'a> {
     type Item = Result<Sock<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1336,14 +1375,16 @@ impl<'a> IterableServerSock<'a> {
 impl<'a> Iterator for IterableServerSock<'a> {
     type Item = Result<ServerSock<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1436,7 +1477,7 @@ impl<'a> IterablePoolMode<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoolMode::Mode(val) = attr? {
+            if let Ok(PoolMode::Mode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1451,7 +1492,7 @@ impl<'a> IterablePoolMode<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoolMode::Npools(val) = attr? {
+            if let Ok(PoolMode::Npools(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1497,14 +1538,16 @@ impl<'a> IterablePoolMode<'a> {
 impl<'a> Iterator for IterablePoolMode<'a> {
     type Item = Result<PoolMode<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1767,6 +1810,11 @@ impl<Prev: Rec> PushServer<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
+    pub fn push_fh_key(mut self, value: &[u8]) -> Self {
+        push_header(self.as_rec_mut(), 6u16, value.len() as u16);
+        self.as_rec_mut().extend(value);
+        self
+    }
 }
 impl<Prev: Rec> Drop for PushServer<Prev> {
     fn drop(&mut self) {
@@ -2027,7 +2075,7 @@ impl<Prev: Rec> Drop for PushPoolMode<Prev> {
         }
     }
 }
-#[doc = "dump pending nfsd rpc\n\nReply attributes:\n- [.get_xid()](IterableRpcStatus::get_xid)\n- [.get_flags()](IterableRpcStatus::get_flags)\n- [.get_prog()](IterableRpcStatus::get_prog)\n- [.get_version()](IterableRpcStatus::get_version)\n- [.get_proc()](IterableRpcStatus::get_proc)\n- [.get_service_time()](IterableRpcStatus::get_service_time)\n- [.get_saddr4()](IterableRpcStatus::get_saddr4)\n- [.get_daddr4()](IterableRpcStatus::get_daddr4)\n- [.get_saddr6()](IterableRpcStatus::get_saddr6)\n- [.get_daddr6()](IterableRpcStatus::get_daddr6)\n- [.get_sport()](IterableRpcStatus::get_sport)\n- [.get_dport()](IterableRpcStatus::get_dport)\n- [.get_compound_ops()](IterableRpcStatus::get_compound_ops)\n"]
+#[doc = "dump pending nfsd rpc\n\nReply attributes:\n- [.get_xid()](IterableRpcStatus::get_xid)\n- [.get_flags()](IterableRpcStatus::get_flags)\n- [.get_prog()](IterableRpcStatus::get_prog)\n- [.get_version()](IterableRpcStatus::get_version)\n- [.get_proc()](IterableRpcStatus::get_proc)\n- [.get_service_time()](IterableRpcStatus::get_service_time)\n- [.get_saddr4()](IterableRpcStatus::get_saddr4)\n- [.get_daddr4()](IterableRpcStatus::get_daddr4)\n- [.get_saddr6()](IterableRpcStatus::get_saddr6)\n- [.get_daddr6()](IterableRpcStatus::get_daddr6)\n- [.get_sport()](IterableRpcStatus::get_sport)\n- [.get_dport()](IterableRpcStatus::get_dport)\n- [.get_compound_ops()](IterableRpcStatus::get_compound_ops)\n\n"]
 #[derive(Debug)]
 pub struct OpRpcStatusGetDump<'r> {
     request: Request<'r>,
@@ -2082,7 +2130,7 @@ impl NetlinkRequest for OpRpcStatusGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "set the maximum number of running threads\nFlags: admin-perm\nRequest attributes:\n- [.push_threads()](PushServer::push_threads)\n- [.push_gracetime()](PushServer::push_gracetime)\n- [.push_leasetime()](PushServer::push_leasetime)\n- [.push_scope()](PushServer::push_scope)\n- [.push_min_threads()](PushServer::push_min_threads)\n"]
+#[doc = "set the maximum number of running threads\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_threads()](PushServer::push_threads)\n- [.push_gracetime()](PushServer::push_gracetime)\n- [.push_leasetime()](PushServer::push_leasetime)\n- [.push_scope()](PushServer::push_scope)\n- [.push_min_threads()](PushServer::push_min_threads)\n- [.push_fh_key()](PushServer::push_fh_key)\n\n"]
 #[derive(Debug)]
 pub struct OpThreadsSetDo<'r> {
     request: Request<'r>,
@@ -2135,7 +2183,7 @@ impl NetlinkRequest for OpThreadsSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "get the maximum number of running threads\n\nReply attributes:\n- [.get_threads()](IterableServer::get_threads)\n- [.get_gracetime()](IterableServer::get_gracetime)\n- [.get_leasetime()](IterableServer::get_leasetime)\n- [.get_scope()](IterableServer::get_scope)\n- [.get_min_threads()](IterableServer::get_min_threads)\n"]
+#[doc = "get the maximum number of running threads\n\nReply attributes:\n- [.get_threads()](IterableServer::get_threads)\n- [.get_gracetime()](IterableServer::get_gracetime)\n- [.get_leasetime()](IterableServer::get_leasetime)\n- [.get_scope()](IterableServer::get_scope)\n- [.get_min_threads()](IterableServer::get_min_threads)\n\n"]
 #[derive(Debug)]
 pub struct OpThreadsGetDo<'r> {
     request: Request<'r>,
@@ -2188,7 +2236,7 @@ impl NetlinkRequest for OpThreadsGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "set nfs enabled versions\nFlags: admin-perm\nRequest attributes:\n- [.nested_version()](PushServerProto::nested_version)\n"]
+#[doc = "set nfs enabled versions\n\nFlags: admin-perm\n\nRequest attributes:\n- [.nested_version()](PushServerProto::nested_version)\n\n"]
 #[derive(Debug)]
 pub struct OpVersionSetDo<'r> {
     request: Request<'r>,
@@ -2241,7 +2289,7 @@ impl NetlinkRequest for OpVersionSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "get nfs enabled versions\n\nReply attributes:\n- [.get_version()](IterableServerProto::get_version)\n"]
+#[doc = "get nfs enabled versions\n\nReply attributes:\n- [.get_version()](IterableServerProto::get_version)\n\n"]
 #[derive(Debug)]
 pub struct OpVersionGetDo<'r> {
     request: Request<'r>,
@@ -2294,7 +2342,7 @@ impl NetlinkRequest for OpVersionGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "set nfs running sockets\nFlags: admin-perm\nRequest attributes:\n- [.nested_addr()](PushServerSock::nested_addr)\n"]
+#[doc = "set nfs running sockets\n\nFlags: admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushServerSock::nested_addr)\n\n"]
 #[derive(Debug)]
 pub struct OpListenerSetDo<'r> {
     request: Request<'r>,
@@ -2347,7 +2395,7 @@ impl NetlinkRequest for OpListenerSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "get nfs running listeners\n\nReply attributes:\n- [.get_addr()](IterableServerSock::get_addr)\n"]
+#[doc = "get nfs running listeners\n\nReply attributes:\n- [.get_addr()](IterableServerSock::get_addr)\n\n"]
 #[derive(Debug)]
 pub struct OpListenerGetDo<'r> {
     request: Request<'r>,
@@ -2400,7 +2448,7 @@ impl NetlinkRequest for OpListenerGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "set the current server pool\\-mode\nFlags: admin-perm\nRequest attributes:\n- [.push_mode()](PushPoolMode::push_mode)\n"]
+#[doc = "set the current server pool-mode\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_mode()](PushPoolMode::push_mode)\n\n"]
 #[derive(Debug)]
 pub struct OpPoolModeSetDo<'r> {
     request: Request<'r>,
@@ -2453,7 +2501,7 @@ impl NetlinkRequest for OpPoolModeSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "get info about server pool\\-mode\n\nReply attributes:\n- [.get_mode()](IterablePoolMode::get_mode)\n- [.get_npools()](IterablePoolMode::get_npools)\n"]
+#[doc = "get info about server pool-mode\n\nReply attributes:\n- [.get_mode()](IterablePoolMode::get_mode)\n- [.get_npools()](IterablePoolMode::get_npools)\n\n"]
 #[derive(Debug)]
 pub struct OpPoolModeGetDo<'r> {
     request: Request<'r>,
@@ -2608,7 +2656,7 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "dump pending nfsd rpc\n\nReply attributes:\n- [.get_xid()](IterableRpcStatus::get_xid)\n- [.get_flags()](IterableRpcStatus::get_flags)\n- [.get_prog()](IterableRpcStatus::get_prog)\n- [.get_version()](IterableRpcStatus::get_version)\n- [.get_proc()](IterableRpcStatus::get_proc)\n- [.get_service_time()](IterableRpcStatus::get_service_time)\n- [.get_saddr4()](IterableRpcStatus::get_saddr4)\n- [.get_daddr4()](IterableRpcStatus::get_daddr4)\n- [.get_saddr6()](IterableRpcStatus::get_saddr6)\n- [.get_daddr6()](IterableRpcStatus::get_daddr6)\n- [.get_sport()](IterableRpcStatus::get_sport)\n- [.get_dport()](IterableRpcStatus::get_dport)\n- [.get_compound_ops()](IterableRpcStatus::get_compound_ops)\n"]
+    #[doc = "dump pending nfsd rpc\n\nReply attributes:\n- [.get_xid()](IterableRpcStatus::get_xid)\n- [.get_flags()](IterableRpcStatus::get_flags)\n- [.get_prog()](IterableRpcStatus::get_prog)\n- [.get_version()](IterableRpcStatus::get_version)\n- [.get_proc()](IterableRpcStatus::get_proc)\n- [.get_service_time()](IterableRpcStatus::get_service_time)\n- [.get_saddr4()](IterableRpcStatus::get_saddr4)\n- [.get_daddr4()](IterableRpcStatus::get_daddr4)\n- [.get_saddr6()](IterableRpcStatus::get_saddr6)\n- [.get_daddr6()](IterableRpcStatus::get_daddr6)\n- [.get_sport()](IterableRpcStatus::get_sport)\n- [.get_dport()](IterableRpcStatus::get_dport)\n- [.get_compound_ops()](IterableRpcStatus::get_compound_ops)\n\n"]
     pub fn op_rpc_status_get_dump(self) -> OpRpcStatusGetDump<'buf> {
         let mut res = OpRpcStatusGetDump::new(self);
         res.request.do_writeback(
@@ -2618,35 +2666,35 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "set the maximum number of running threads\nFlags: admin-perm\nRequest attributes:\n- [.push_threads()](PushServer::push_threads)\n- [.push_gracetime()](PushServer::push_gracetime)\n- [.push_leasetime()](PushServer::push_leasetime)\n- [.push_scope()](PushServer::push_scope)\n- [.push_min_threads()](PushServer::push_min_threads)\n"]
+    #[doc = "set the maximum number of running threads\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_threads()](PushServer::push_threads)\n- [.push_gracetime()](PushServer::push_gracetime)\n- [.push_leasetime()](PushServer::push_leasetime)\n- [.push_scope()](PushServer::push_scope)\n- [.push_min_threads()](PushServer::push_min_threads)\n- [.push_fh_key()](PushServer::push_fh_key)\n\n"]
     pub fn op_threads_set_do(self) -> OpThreadsSetDo<'buf> {
         let mut res = OpThreadsSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-threads-set-do", OpThreadsSetDo::lookup);
         res
     }
-    #[doc = "get the maximum number of running threads\n\nReply attributes:\n- [.get_threads()](IterableServer::get_threads)\n- [.get_gracetime()](IterableServer::get_gracetime)\n- [.get_leasetime()](IterableServer::get_leasetime)\n- [.get_scope()](IterableServer::get_scope)\n- [.get_min_threads()](IterableServer::get_min_threads)\n"]
+    #[doc = "get the maximum number of running threads\n\nReply attributes:\n- [.get_threads()](IterableServer::get_threads)\n- [.get_gracetime()](IterableServer::get_gracetime)\n- [.get_leasetime()](IterableServer::get_leasetime)\n- [.get_scope()](IterableServer::get_scope)\n- [.get_min_threads()](IterableServer::get_min_threads)\n\n"]
     pub fn op_threads_get_do(self) -> OpThreadsGetDo<'buf> {
         let mut res = OpThreadsGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-threads-get-do", OpThreadsGetDo::lookup);
         res
     }
-    #[doc = "set nfs enabled versions\nFlags: admin-perm\nRequest attributes:\n- [.nested_version()](PushServerProto::nested_version)\n"]
+    #[doc = "set nfs enabled versions\n\nFlags: admin-perm\n\nRequest attributes:\n- [.nested_version()](PushServerProto::nested_version)\n\n"]
     pub fn op_version_set_do(self) -> OpVersionSetDo<'buf> {
         let mut res = OpVersionSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-version-set-do", OpVersionSetDo::lookup);
         res
     }
-    #[doc = "get nfs enabled versions\n\nReply attributes:\n- [.get_version()](IterableServerProto::get_version)\n"]
+    #[doc = "get nfs enabled versions\n\nReply attributes:\n- [.get_version()](IterableServerProto::get_version)\n\n"]
     pub fn op_version_get_do(self) -> OpVersionGetDo<'buf> {
         let mut res = OpVersionGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-version-get-do", OpVersionGetDo::lookup);
         res
     }
-    #[doc = "set nfs running sockets\nFlags: admin-perm\nRequest attributes:\n- [.nested_addr()](PushServerSock::nested_addr)\n"]
+    #[doc = "set nfs running sockets\n\nFlags: admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushServerSock::nested_addr)\n\n"]
     pub fn op_listener_set_do(self) -> OpListenerSetDo<'buf> {
         let mut res = OpListenerSetDo::new(self);
         res.request.do_writeback(
@@ -2656,7 +2704,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "get nfs running listeners\n\nReply attributes:\n- [.get_addr()](IterableServerSock::get_addr)\n"]
+    #[doc = "get nfs running listeners\n\nReply attributes:\n- [.get_addr()](IterableServerSock::get_addr)\n\n"]
     pub fn op_listener_get_do(self) -> OpListenerGetDo<'buf> {
         let mut res = OpListenerGetDo::new(self);
         res.request.do_writeback(
@@ -2666,7 +2714,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "set the current server pool\\-mode\nFlags: admin-perm\nRequest attributes:\n- [.push_mode()](PushPoolMode::push_mode)\n"]
+    #[doc = "set the current server pool-mode\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_mode()](PushPoolMode::push_mode)\n\n"]
     pub fn op_pool_mode_set_do(self) -> OpPoolModeSetDo<'buf> {
         let mut res = OpPoolModeSetDo::new(self);
         res.request.do_writeback(
@@ -2676,7 +2724,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "get info about server pool\\-mode\n\nReply attributes:\n- [.get_mode()](IterablePoolMode::get_mode)\n- [.get_npools()](IterablePoolMode::get_npools)\n"]
+    #[doc = "get info about server pool-mode\n\nReply attributes:\n- [.get_mode()](IterablePoolMode::get_mode)\n- [.get_npools()](IterablePoolMode::get_npools)\n\n"]
     pub fn op_pool_mode_get_do(self) -> OpPoolModeGetDo<'buf> {
         let mut res = OpPoolModeGetDo::new(self);
         res.request.do_writeback(
@@ -2715,6 +2763,7 @@ mod generated_tests {
         let _ = IterableServerProto::get_version;
         let _ = IterableServerSock::get_addr;
         let _ = PushPoolMode::<&mut Vec<u8>>::push_mode;
+        let _ = PushServer::<&mut Vec<u8>>::push_fh_key;
         let _ = PushServer::<&mut Vec<u8>>::push_gracetime;
         let _ = PushServer::<&mut Vec<u8>>::push_leasetime;
         let _ = PushServer::<&mut Vec<u8>>::push_min_threads;

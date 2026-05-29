@@ -33,6 +33,11 @@ pub mod devlink;
 #[cfg_attr(docsrs, doc(cfg(feature = "dpll")))]
 pub mod dpll;
 
+#[cfg(feature = "drm-ras")]
+#[cfg_attr(docsrs, doc(cfg(feature = "drm-ras")))]
+#[path = "drm-ras/mod.rs"]
+pub mod drm_ras;
+
 #[cfg(feature = "ethtool")]
 #[cfg_attr(docsrs, doc(cfg(feature = "ethtool")))]
 pub mod ethtool;
@@ -94,6 +99,10 @@ pub mod ovs_datapath;
 #[cfg(feature = "ovs_flow")]
 #[cfg_attr(docsrs, doc(cfg(feature = "ovs_flow")))]
 pub mod ovs_flow;
+
+#[cfg(feature = "ovs_packet")]
+#[cfg_attr(docsrs, doc(cfg(feature = "ovs_packet")))]
+pub mod ovs_packet;
 
 #[cfg(feature = "ovs_vport")]
 #[cfg_attr(docsrs, doc(cfg(feature = "ovs_vport")))]

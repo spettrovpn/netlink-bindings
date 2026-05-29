@@ -1,4 +1,4 @@
-#![doc = "OVS flow configuration over generic netlink\\."]
+#![doc = "OVS flow configuration over generic netlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -15,15 +15,14 @@ use crate::{
 };
 pub const PROTONAME: &str = "ovs_flow";
 pub const PROTONAME_CSTR: &CStr = c"ovs_flow";
-#[doc = "Header for OVS Generic Netlink messages\\.\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum OvsFragType {
-    #[doc = "Packet is not a fragment\\."]
+    #[doc = "Packet is not a fragment.\n"]
     None = 0,
-    #[doc = "Packet is a fragment with offset 0\\."]
+    #[doc = "Packet is a fragment with offset 0.\n"]
     First = 1,
-    #[doc = "Packet is a fragment with nonzero offset\\."]
+    #[doc = "Packet is a fragment with nonzero offset.\n"]
     Later = 2,
     Any = 255,
 }
@@ -55,7 +54,7 @@ impl OvsUfidFlags {
         })
     }
 }
-#[doc = "Data path hash algorithm for computing Datapath hash\\. The algorithm type\nonly specifies the fields in a flow will be used as part of the hash\\. Each\ndatapath is free to use its own hash algorithm\\. The hash value will be\nopaque to the user space daemon\\.\n"]
+#[doc = "Data path hash algorithm for computing Datapath hash. The algorithm type\nonly specifies the fields in a flow will be used as part of the hash.\nEach datapath is free to use its own hash algorithm. The hash value will\nbe opaque to the user space daemon.\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum OvsHashAlg {
@@ -72,21 +71,21 @@ impl OvsHashAlg {
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum CtStateFlags {
-    #[doc = "Beginning of a new connection\\."]
+    #[doc = "Beginning of a new connection.\n"]
     New = 1 << 0,
-    #[doc = "Part of an existing connenction"]
+    #[doc = "Part of an existing connenction\n"]
     Established = 1 << 1,
-    #[doc = "Related to an existing connection\\."]
+    #[doc = "Related to an existing connection.\n"]
     Related = 1 << 2,
-    #[doc = "Flow is in the reply direction\\."]
+    #[doc = "Flow is in the reply direction.\n"]
     ReplyDir = 1 << 3,
-    #[doc = "Could not track the connection\\."]
+    #[doc = "Could not track the connection.\n"]
     Invalid = 1 << 4,
-    #[doc = "Conntrack has occurred\\."]
+    #[doc = "Conntrack has occurred.\n"]
     Tracked = 1 << 5,
-    #[doc = "Packet's source address/port was mangled by NAT\\."]
+    #[doc = "Packet\\'s source address/port was mangled by NAT.\n"]
     SrcNat = 1 << 6,
-    #[doc = "Packet's destination address/port was mangled by NAT\\."]
+    #[doc = "Packet\\'s destination address/port was mangled by NAT.\n"]
     DstNat = 1 << 7,
 }
 impl CtStateFlags {
@@ -105,9 +104,10 @@ impl CtStateFlags {
     }
 }
 #[derive(Debug)]
+#[doc = "Header for OVS Generic Netlink messages.\n"]
 #[repr(C, packed(4))]
 pub struct OvsHeader {
-    #[doc = "ifindex of local port for datapath (0 to make a request not specific\nto a datapath)\\.\n"]
+    #[doc = "ifindex of local port for datapath (0 to make a request not specific to\na datapath).\n"]
     pub dp_ifindex: u32,
 }
 impl Clone for OvsHeader {
@@ -173,9 +173,9 @@ impl OvsHeader {
 }
 #[repr(C, packed(4))]
 pub struct OvsFlowStats {
-    #[doc = "Number of matched packets\\."]
+    #[doc = "Number of matched packets.\n"]
     pub n_packets: u64,
-    #[doc = "Number of matched bytes\\."]
+    #[doc = "Number of matched bytes.\n"]
     pub n_bytes: u64,
 }
 impl Clone for OvsFlowStats {
@@ -1245,9 +1245,9 @@ impl std::fmt::Debug for OvsKeyCtTupleIpv4 {
 }
 #[repr(C, packed(4))]
 pub struct OvsActionPushVlan {
-    #[doc = "Tag protocol identifier (TPID) to push\\."]
+    #[doc = "Tag protocol identifier (TPID) to push.\n"]
     pub _vlan_tpid_be: u16,
-    #[doc = "Tag control identifier (TCI) to push\\."]
+    #[doc = "Tag control identifier (TCI) to push.\n"]
     pub _vlan_tci_be: u16,
 }
 impl Clone for OvsActionPushVlan {
@@ -1310,19 +1310,19 @@ impl OvsActionPushVlan {
         const _: () = assert!(std::mem::size_of::<OvsActionPushVlan>() == 4usize);
         4usize
     }
-    #[doc = "Tag protocol identifier (TPID) to push\\."]
+    #[doc = "Tag protocol identifier (TPID) to push.\n"]
     pub fn vlan_tpid(&self) -> u16 {
         u16::from_be(self._vlan_tpid_be)
     }
-    #[doc = "Tag protocol identifier (TPID) to push\\."]
+    #[doc = "Tag protocol identifier (TPID) to push.\n"]
     pub fn set_vlan_tpid(&mut self, value: u16) {
         self._vlan_tpid_be = value.to_be();
     }
-    #[doc = "Tag control identifier (TCI) to push\\."]
+    #[doc = "Tag control identifier (TCI) to push.\n"]
     pub fn vlan_tci(&self) -> u16 {
         u16::from_be(self._vlan_tci_be)
     }
-    #[doc = "Tag control identifier (TCI) to push\\."]
+    #[doc = "Tag control identifier (TCI) to push.\n"]
     pub fn set_vlan_tci(&mut self, value: u16) {
         self._vlan_tci_be = value.to_be();
     }
@@ -1338,9 +1338,9 @@ impl std::fmt::Debug for OvsActionPushVlan {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct OvsActionHash {
-    #[doc = "Algorithm used to compute hash prior to recirculation\\."]
+    #[doc = "Algorithm used to compute hash prior to recirculation.\n"]
     pub hash_alg: u32,
-    #[doc = "Basis used for computing hash\\."]
+    #[doc = "Basis used for computing hash.\n"]
     pub hash_basis: u32,
 }
 impl Clone for OvsActionHash {
@@ -1408,7 +1408,7 @@ impl OvsActionHash {
 pub struct OvsActionPushMpls {
     #[doc = "MPLS label stack entry to push\n"]
     pub _mpls_lse_be: u32,
-    #[doc = "Ethertype to set in the encapsulating ethernet frame\\.  The only values\nethertype should ever be given are ETH\\_P\\_MPLS\\_UC and ETH\\_P\\_MPLS\\_MC,\nindicating MPLS unicast or multicast\\. Other are rejected\\.\n"]
+    #[doc = "Ethertype to set in the encapsulating ethernet frame. The only values\nethertype should ever be given are ETH_P_MPLS_UC and ETH_P_MPLS_MC,\nindicating MPLS unicast or multicast. Other are rejected.\n"]
     pub _mpls_ethertype_be: u32,
 }
 impl Clone for OvsActionPushMpls {
@@ -1479,11 +1479,11 @@ impl OvsActionPushMpls {
     pub fn set_mpls_lse(&mut self, value: u32) {
         self._mpls_lse_be = value.to_be();
     }
-    #[doc = "Ethertype to set in the encapsulating ethernet frame\\.  The only values\nethertype should ever be given are ETH\\_P\\_MPLS\\_UC and ETH\\_P\\_MPLS\\_MC,\nindicating MPLS unicast or multicast\\. Other are rejected\\.\n"]
+    #[doc = "Ethertype to set in the encapsulating ethernet frame. The only values\nethertype should ever be given are ETH_P_MPLS_UC and ETH_P_MPLS_MC,\nindicating MPLS unicast or multicast. Other are rejected.\n"]
     pub fn mpls_ethertype(&self) -> u32 {
         u32::from_be(self._mpls_ethertype_be)
     }
-    #[doc = "Ethertype to set in the encapsulating ethernet frame\\.  The only values\nethertype should ever be given are ETH\\_P\\_MPLS\\_UC and ETH\\_P\\_MPLS\\_MC,\nindicating MPLS unicast or multicast\\. Other are rejected\\.\n"]
+    #[doc = "Ethertype to set in the encapsulating ethernet frame. The only values\nethertype should ever be given are ETH_P_MPLS_UC and ETH_P_MPLS_MC,\nindicating MPLS unicast or multicast. Other are rejected.\n"]
     pub fn set_mpls_ethertype(&mut self, value: u32) {
         self._mpls_ethertype_be = value.to_be();
     }
@@ -1500,9 +1500,9 @@ impl std::fmt::Debug for OvsActionPushMpls {
 pub struct OvsActionAddMpls {
     #[doc = "MPLS label stack entry to push\n"]
     pub _mpls_lse_be: u32,
-    #[doc = "Ethertype to set in the encapsulating ethernet frame\\.  The only values\nethertype should ever be given are ETH\\_P\\_MPLS\\_UC and ETH\\_P\\_MPLS\\_MC,\nindicating MPLS unicast or multicast\\. Other are rejected\\.\n"]
+    #[doc = "Ethertype to set in the encapsulating ethernet frame. The only values\nethertype should ever be given are ETH_P_MPLS_UC and ETH_P_MPLS_MC,\nindicating MPLS unicast or multicast. Other are rejected.\n"]
     pub _mpls_ethertype_be: u32,
-    #[doc = "MPLS tunnel attributes\\.\n"]
+    #[doc = "MPLS tunnel attributes.\n"]
     pub tun_flags: u16,
     pub _pad_10: [u8; 2usize],
 }
@@ -1574,11 +1574,11 @@ impl OvsActionAddMpls {
     pub fn set_mpls_lse(&mut self, value: u32) {
         self._mpls_lse_be = value.to_be();
     }
-    #[doc = "Ethertype to set in the encapsulating ethernet frame\\.  The only values\nethertype should ever be given are ETH\\_P\\_MPLS\\_UC and ETH\\_P\\_MPLS\\_MC,\nindicating MPLS unicast or multicast\\. Other are rejected\\.\n"]
+    #[doc = "Ethertype to set in the encapsulating ethernet frame. The only values\nethertype should ever be given are ETH_P_MPLS_UC and ETH_P_MPLS_MC,\nindicating MPLS unicast or multicast. Other are rejected.\n"]
     pub fn mpls_ethertype(&self) -> u32 {
         u32::from_be(self._mpls_ethertype_be)
     }
-    #[doc = "Ethertype to set in the encapsulating ethernet frame\\.  The only values\nethertype should ever be given are ETH\\_P\\_MPLS\\_UC and ETH\\_P\\_MPLS\\_MC,\nindicating MPLS unicast or multicast\\. Other are rejected\\.\n"]
+    #[doc = "Ethertype to set in the encapsulating ethernet frame. The only values\nethertype should ever be given are ETH_P_MPLS_UC and ETH_P_MPLS_MC,\nindicating MPLS unicast or multicast. Other are rejected.\n"]
     pub fn set_mpls_ethertype(&mut self, value: u32) {
         self._mpls_ethertype_be = value.to_be();
     }
@@ -1594,35 +1594,35 @@ impl std::fmt::Debug for OvsActionAddMpls {
 }
 #[derive(Clone)]
 pub enum FlowAttrs<'a> {
-    #[doc = "Nested attributes specifying the flow key\\. Always present in\nnotifications\\. Required for all requests (except dumps)\\.\n"]
+    #[doc = "Nested attributes specifying the flow key. Always present in\nnotifications. Required for all requests (except dumps).\n"]
     Key(IterableKeyAttrs<'a>),
-    #[doc = "Nested attributes specifying the actions to take for packets that\nmatch the key\\. Always present in notifications\\. Required for\nOVS\\_FLOW\\_CMD\\_NEW requests, optional for OVS\\_FLOW\\_CMD\\_SET requests\\.  An\nOVS\\_FLOW\\_CMD\\_SET without OVS\\_FLOW\\_ATTR\\_ACTIONS will not modify the\nactions\\.  To clear the actions, an OVS\\_FLOW\\_ATTR\\_ACTIONS without any\nnested attributes must be given\\.\n"]
+    #[doc = "Nested attributes specifying the actions to take for packets that match\nthe key. Always present in notifications. Required for OVS_FLOW_CMD_NEW\nrequests, optional for OVS_FLOW_CMD_SET requests. An OVS_FLOW_CMD_SET\nwithout OVS_FLOW_ATTR_ACTIONS will not modify the actions. To clear the\nactions, an OVS_FLOW_ATTR_ACTIONS without any nested attributes must be\ngiven.\n"]
     Actions(IterableActionAttrs<'a>),
-    #[doc = "Statistics for this flow\\. Present in notifications if the stats would\nbe nonzero\\. Ignored in requests\\.\n"]
+    #[doc = "Statistics for this flow. Present in notifications if the stats would be\nnonzero. Ignored in requests.\n"]
     Stats(OvsFlowStats),
-    #[doc = "An 8\\-bit value giving the ORed value of all of the TCP flags seen on\npackets in this flow\\. Only present in notifications for TCP flows, and\nonly if it would be nonzero\\. Ignored in requests\\.\n"]
+    #[doc = "An 8-bit value giving the ORed value of all of the TCP flags seen on\npackets in this flow. Only present in notifications for TCP flows, and\nonly if it would be nonzero. Ignored in requests.\n"]
     TcpFlags(u8),
-    #[doc = "A 64\\-bit integer giving the time, in milliseconds on the system\nmonotonic clock, at which a packet was last processed for this\nflow\\. Only present in notifications if a packet has been processed for\nthis flow\\. Ignored in requests\\.\n"]
+    #[doc = "A 64-bit integer giving the time, in milliseconds on the system\nmonotonic clock, at which a packet was last processed for this flow.\nOnly present in notifications if a packet has been processed for this\nflow. Ignored in requests.\n"]
     Used(u64),
-    #[doc = "If present in a OVS\\_FLOW\\_CMD\\_SET request, clears the last\\-used time,\naccumulated TCP flags, and statistics for this flow\\.  Otherwise\nignored in requests\\. Never present in notifications\\.\n"]
+    #[doc = "If present in a OVS_FLOW_CMD_SET request, clears the last-used time,\naccumulated TCP flags, and statistics for this flow. Otherwise ignored\nin requests. Never present in notifications.\n"]
     Clear(()),
-    #[doc = "Nested attributes specifying the mask bits for wildcarded flow\nmatch\\. Mask bit value '1' specifies exact match with corresponding\nflow key bit, while mask bit value '0' specifies a wildcarded\nmatch\\. Omitting attribute is treated as wildcarding all corresponding\nfields\\. Optional for all requests\\. If not present, all flow key bits\nare exact match bits\\.\n"]
+    #[doc = "Nested attributes specifying the mask bits for wildcarded flow match.\nMask bit value \\'1\\' specifies exact match with corresponding flow key\nbit, while mask bit value \\'0\\' specifies a wildcarded match. Omitting\nattribute is treated as wildcarding all corresponding fields. Optional\nfor all requests. If not present, all flow key bits are exact match\nbits.\n"]
     Mask(IterableKeyAttrs<'a>),
-    #[doc = "Flow operation is a feature probe, error logging should be suppressed\\.\n"]
+    #[doc = "Flow operation is a feature probe, error logging should be suppressed.\n"]
     Probe(&'a [u8]),
-    #[doc = "A value between 1\\-16 octets specifying a unique identifier for the\nflow\\. Causes the flow to be indexed by this value rather than the\nvalue of the OVS\\_FLOW\\_ATTR\\_KEY attribute\\. Optional for all\nrequests\\. Present in notifications if the flow was created with this\nattribute\\.\n"]
+    #[doc = "A value between 1-16 octets specifying a unique identifier for the flow.\nCauses the flow to be indexed by this value rather than the value of the\nOVS_FLOW_ATTR_KEY attribute. Optional for all requests. Present in\nnotifications if the flow was created with this attribute.\n"]
     Ufid(&'a [u8]),
-    #[doc = "A 32\\-bit value of ORed flags that provide alternative semantics for\nflow installation and retrieval\\. Optional for all requests\\.\n\nAssociated type: [`OvsUfidFlags`] (enum)"]
+    #[doc = "A 32-bit value of ORed flags that provide alternative semantics for flow\ninstallation and retrieval. Optional for all requests.\n\nAssociated type: [`OvsUfidFlags`] (enum)"]
     UfidFlags(u32),
     Pad(&'a [u8]),
 }
 impl<'a> IterableFlowAttrs<'a> {
-    #[doc = "Nested attributes specifying the flow key\\. Always present in\nnotifications\\. Required for all requests (except dumps)\\.\n"]
+    #[doc = "Nested attributes specifying the flow key. Always present in\nnotifications. Required for all requests (except dumps).\n"]
     pub fn get_key(&self) -> Result<IterableKeyAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Key(val) = attr? {
+            if let Ok(FlowAttrs::Key(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1633,12 +1633,12 @@ impl<'a> IterableFlowAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Nested attributes specifying the actions to take for packets that\nmatch the key\\. Always present in notifications\\. Required for\nOVS\\_FLOW\\_CMD\\_NEW requests, optional for OVS\\_FLOW\\_CMD\\_SET requests\\.  An\nOVS\\_FLOW\\_CMD\\_SET without OVS\\_FLOW\\_ATTR\\_ACTIONS will not modify the\nactions\\.  To clear the actions, an OVS\\_FLOW\\_ATTR\\_ACTIONS without any\nnested attributes must be given\\.\n"]
+    #[doc = "Nested attributes specifying the actions to take for packets that match\nthe key. Always present in notifications. Required for OVS_FLOW_CMD_NEW\nrequests, optional for OVS_FLOW_CMD_SET requests. An OVS_FLOW_CMD_SET\nwithout OVS_FLOW_ATTR_ACTIONS will not modify the actions. To clear the\nactions, an OVS_FLOW_ATTR_ACTIONS without any nested attributes must be\ngiven.\n"]
     pub fn get_actions(&self) -> Result<IterableActionAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Actions(val) = attr? {
+            if let Ok(FlowAttrs::Actions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1649,12 +1649,12 @@ impl<'a> IterableFlowAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Statistics for this flow\\. Present in notifications if the stats would\nbe nonzero\\. Ignored in requests\\.\n"]
+    #[doc = "Statistics for this flow. Present in notifications if the stats would be\nnonzero. Ignored in requests.\n"]
     pub fn get_stats(&self) -> Result<OvsFlowStats, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Stats(val) = attr? {
+            if let Ok(FlowAttrs::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1665,12 +1665,12 @@ impl<'a> IterableFlowAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "An 8\\-bit value giving the ORed value of all of the TCP flags seen on\npackets in this flow\\. Only present in notifications for TCP flows, and\nonly if it would be nonzero\\. Ignored in requests\\.\n"]
+    #[doc = "An 8-bit value giving the ORed value of all of the TCP flags seen on\npackets in this flow. Only present in notifications for TCP flows, and\nonly if it would be nonzero. Ignored in requests.\n"]
     pub fn get_tcp_flags(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::TcpFlags(val) = attr? {
+            if let Ok(FlowAttrs::TcpFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1681,12 +1681,12 @@ impl<'a> IterableFlowAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "A 64\\-bit integer giving the time, in milliseconds on the system\nmonotonic clock, at which a packet was last processed for this\nflow\\. Only present in notifications if a packet has been processed for\nthis flow\\. Ignored in requests\\.\n"]
+    #[doc = "A 64-bit integer giving the time, in milliseconds on the system\nmonotonic clock, at which a packet was last processed for this flow.\nOnly present in notifications if a packet has been processed for this\nflow. Ignored in requests.\n"]
     pub fn get_used(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Used(val) = attr? {
+            if let Ok(FlowAttrs::Used(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1697,12 +1697,12 @@ impl<'a> IterableFlowAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "If present in a OVS\\_FLOW\\_CMD\\_SET request, clears the last\\-used time,\naccumulated TCP flags, and statistics for this flow\\.  Otherwise\nignored in requests\\. Never present in notifications\\.\n"]
+    #[doc = "If present in a OVS_FLOW_CMD_SET request, clears the last-used time,\naccumulated TCP flags, and statistics for this flow. Otherwise ignored\nin requests. Never present in notifications.\n"]
     pub fn get_clear(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Clear(val) = attr? {
+            if let Ok(FlowAttrs::Clear(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1713,12 +1713,12 @@ impl<'a> IterableFlowAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Nested attributes specifying the mask bits for wildcarded flow\nmatch\\. Mask bit value '1' specifies exact match with corresponding\nflow key bit, while mask bit value '0' specifies a wildcarded\nmatch\\. Omitting attribute is treated as wildcarding all corresponding\nfields\\. Optional for all requests\\. If not present, all flow key bits\nare exact match bits\\.\n"]
+    #[doc = "Nested attributes specifying the mask bits for wildcarded flow match.\nMask bit value \\'1\\' specifies exact match with corresponding flow key\nbit, while mask bit value \\'0\\' specifies a wildcarded match. Omitting\nattribute is treated as wildcarding all corresponding fields. Optional\nfor all requests. If not present, all flow key bits are exact match\nbits.\n"]
     pub fn get_mask(&self) -> Result<IterableKeyAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Mask(val) = attr? {
+            if let Ok(FlowAttrs::Mask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1729,12 +1729,12 @@ impl<'a> IterableFlowAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Flow operation is a feature probe, error logging should be suppressed\\.\n"]
+    #[doc = "Flow operation is a feature probe, error logging should be suppressed.\n"]
     pub fn get_probe(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Probe(val) = attr? {
+            if let Ok(FlowAttrs::Probe(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1745,12 +1745,12 @@ impl<'a> IterableFlowAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "A value between 1\\-16 octets specifying a unique identifier for the\nflow\\. Causes the flow to be indexed by this value rather than the\nvalue of the OVS\\_FLOW\\_ATTR\\_KEY attribute\\. Optional for all\nrequests\\. Present in notifications if the flow was created with this\nattribute\\.\n"]
+    #[doc = "A value between 1-16 octets specifying a unique identifier for the flow.\nCauses the flow to be indexed by this value rather than the value of the\nOVS_FLOW_ATTR_KEY attribute. Optional for all requests. Present in\nnotifications if the flow was created with this attribute.\n"]
     pub fn get_ufid(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Ufid(val) = attr? {
+            if let Ok(FlowAttrs::Ufid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1761,12 +1761,12 @@ impl<'a> IterableFlowAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "A 32\\-bit value of ORed flags that provide alternative semantics for\nflow installation and retrieval\\. Optional for all requests\\.\n\nAssociated type: [`OvsUfidFlags`] (enum)"]
+    #[doc = "A 32-bit value of ORed flags that provide alternative semantics for flow\ninstallation and retrieval. Optional for all requests.\n\nAssociated type: [`OvsUfidFlags`] (enum)"]
     pub fn get_ufid_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::UfidFlags(val) = attr? {
+            if let Ok(FlowAttrs::UfidFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1781,7 +1781,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Pad(val) = attr? {
+            if let Ok(FlowAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1836,14 +1836,16 @@ impl<'a> IterableFlowAttrs<'a> {
 impl<'a> Iterator for IterableFlowAttrs<'a> {
     type Item = Result<FlowAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2050,48 +2052,48 @@ pub enum KeyAttrs<'a> {
     Encap(IterableKeyAttrs<'a>),
     Priority(u32),
     InPort(u32),
-    #[doc = "struct ovs\\_key\\_ethernet"]
+    #[doc = "struct ovs_key_ethernet\n"]
     Ethernet(OvsKeyEthernet),
     Vlan(u16),
     Ethertype(u16),
     Ipv4(OvsKeyIpv4),
-    #[doc = "struct ovs\\_key\\_ipv6"]
+    #[doc = "struct ovs_key_ipv6\n"]
     Ipv6(OvsKeyIpv6),
     Tcp(OvsKeyTcp),
     Udp(OvsKeyUdp),
     Icmp(OvsKeyIcmp),
     Icmpv6(OvsKeyIcmp),
-    #[doc = "struct ovs\\_key\\_arp"]
+    #[doc = "struct ovs_key_arp\n"]
     Arp(OvsKeyArp),
-    #[doc = "struct ovs\\_key\\_nd"]
+    #[doc = "struct ovs_key_nd\n"]
     Nd(OvsKeyNd),
     SkbMark(u32),
     Tunnel(IterableTunnelKeyAttrs<'a>),
     Sctp(OvsKeySctp),
     TcpFlags(u16),
-    #[doc = "Value 0 indicates the hash is not computed by the datapath\\."]
+    #[doc = "Value 0 indicates the hash is not computed by the datapath.\n"]
     DpHash(u32),
     RecircId(u32),
     Mpls(OvsKeyMpls),
     #[doc = "Associated type: [`CtStateFlags`] (1 bit per enumeration)"]
     CtState(u32),
-    #[doc = "connection tracking zone"]
+    #[doc = "connection tracking zone\n"]
     CtZone(u16),
-    #[doc = "connection tracking mark"]
+    #[doc = "connection tracking mark\n"]
     CtMark(u32),
-    #[doc = "16\\-octet connection tracking label"]
+    #[doc = "16-octet connection tracking label\n"]
     CtLabels(&'a [u8]),
     CtOrigTupleIpv4(OvsKeyCtTupleIpv4),
-    #[doc = "struct ovs\\_key\\_ct\\_tuple\\_ipv6"]
+    #[doc = "struct ovs_key_ct_tuple_ipv6\n"]
     CtOrigTupleIpv6(&'a [u8]),
     Nsh(IterableOvsNshKeyAttrs<'a>),
-    #[doc = "Should not be sent to the kernel"]
+    #[doc = "Should not be sent to the kernel\n"]
     PacketType(u32),
-    #[doc = "Should not be sent to the kernel"]
+    #[doc = "Should not be sent to the kernel\n"]
     NdExtensions(&'a [u8]),
-    #[doc = "struct ip\\_tunnel\\_info"]
+    #[doc = "struct ip_tunnel_info\n"]
     TunnelInfo(&'a [u8]),
-    #[doc = "struct ovs\\_key\\_ipv6\\_exthdr"]
+    #[doc = "struct ovs_key_ipv6_exthdr\n"]
     Ipv6Exthdrs(OvsKeyIpv6Exthdrs),
 }
 impl<'a> IterableKeyAttrs<'a> {
@@ -2099,7 +2101,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Encap(val) = attr? {
+            if let Ok(KeyAttrs::Encap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2114,7 +2116,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Priority(val) = attr? {
+            if let Ok(KeyAttrs::Priority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2129,7 +2131,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::InPort(val) = attr? {
+            if let Ok(KeyAttrs::InPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2140,12 +2142,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct ovs\\_key\\_ethernet"]
+    #[doc = "struct ovs_key_ethernet\n"]
     pub fn get_ethernet(&self) -> Result<OvsKeyEthernet, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Ethernet(val) = attr? {
+            if let Ok(KeyAttrs::Ethernet(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2160,7 +2162,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Vlan(val) = attr? {
+            if let Ok(KeyAttrs::Vlan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2175,7 +2177,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Ethertype(val) = attr? {
+            if let Ok(KeyAttrs::Ethertype(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2190,7 +2192,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Ipv4(val) = attr? {
+            if let Ok(KeyAttrs::Ipv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2201,12 +2203,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct ovs\\_key\\_ipv6"]
+    #[doc = "struct ovs_key_ipv6\n"]
     pub fn get_ipv6(&self) -> Result<OvsKeyIpv6, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Ipv6(val) = attr? {
+            if let Ok(KeyAttrs::Ipv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2221,7 +2223,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Tcp(val) = attr? {
+            if let Ok(KeyAttrs::Tcp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2236,7 +2238,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Udp(val) = attr? {
+            if let Ok(KeyAttrs::Udp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2251,7 +2253,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Icmp(val) = attr? {
+            if let Ok(KeyAttrs::Icmp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2266,7 +2268,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Icmpv6(val) = attr? {
+            if let Ok(KeyAttrs::Icmpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2277,12 +2279,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct ovs\\_key\\_arp"]
+    #[doc = "struct ovs_key_arp\n"]
     pub fn get_arp(&self) -> Result<OvsKeyArp, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Arp(val) = attr? {
+            if let Ok(KeyAttrs::Arp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2293,12 +2295,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct ovs\\_key\\_nd"]
+    #[doc = "struct ovs_key_nd\n"]
     pub fn get_nd(&self) -> Result<OvsKeyNd, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Nd(val) = attr? {
+            if let Ok(KeyAttrs::Nd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2313,7 +2315,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::SkbMark(val) = attr? {
+            if let Ok(KeyAttrs::SkbMark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2328,7 +2330,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Tunnel(val) = attr? {
+            if let Ok(KeyAttrs::Tunnel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2343,7 +2345,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Sctp(val) = attr? {
+            if let Ok(KeyAttrs::Sctp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2358,7 +2360,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::TcpFlags(val) = attr? {
+            if let Ok(KeyAttrs::TcpFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2369,12 +2371,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Value 0 indicates the hash is not computed by the datapath\\."]
+    #[doc = "Value 0 indicates the hash is not computed by the datapath.\n"]
     pub fn get_dp_hash(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::DpHash(val) = attr? {
+            if let Ok(KeyAttrs::DpHash(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2389,7 +2391,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::RecircId(val) = attr? {
+            if let Ok(KeyAttrs::RecircId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2404,7 +2406,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Mpls(val) = attr? {
+            if let Ok(KeyAttrs::Mpls(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2420,7 +2422,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::CtState(val) = attr? {
+            if let Ok(KeyAttrs::CtState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2431,12 +2433,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "connection tracking zone"]
+    #[doc = "connection tracking zone\n"]
     pub fn get_ct_zone(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::CtZone(val) = attr? {
+            if let Ok(KeyAttrs::CtZone(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2447,12 +2449,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "connection tracking mark"]
+    #[doc = "connection tracking mark\n"]
     pub fn get_ct_mark(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::CtMark(val) = attr? {
+            if let Ok(KeyAttrs::CtMark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2463,12 +2465,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "16\\-octet connection tracking label"]
+    #[doc = "16-octet connection tracking label\n"]
     pub fn get_ct_labels(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::CtLabels(val) = attr? {
+            if let Ok(KeyAttrs::CtLabels(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2483,7 +2485,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::CtOrigTupleIpv4(val) = attr? {
+            if let Ok(KeyAttrs::CtOrigTupleIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2494,12 +2496,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct ovs\\_key\\_ct\\_tuple\\_ipv6"]
+    #[doc = "struct ovs_key_ct_tuple_ipv6\n"]
     pub fn get_ct_orig_tuple_ipv6(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::CtOrigTupleIpv6(val) = attr? {
+            if let Ok(KeyAttrs::CtOrigTupleIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2514,7 +2516,7 @@ impl<'a> IterableKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Nsh(val) = attr? {
+            if let Ok(KeyAttrs::Nsh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2525,12 +2527,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Should not be sent to the kernel"]
+    #[doc = "Should not be sent to the kernel\n"]
     pub fn get_packet_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::PacketType(val) = attr? {
+            if let Ok(KeyAttrs::PacketType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2541,12 +2543,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Should not be sent to the kernel"]
+    #[doc = "Should not be sent to the kernel\n"]
     pub fn get_nd_extensions(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::NdExtensions(val) = attr? {
+            if let Ok(KeyAttrs::NdExtensions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2557,12 +2559,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct ip\\_tunnel\\_info"]
+    #[doc = "struct ip_tunnel_info\n"]
     pub fn get_tunnel_info(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::TunnelInfo(val) = attr? {
+            if let Ok(KeyAttrs::TunnelInfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2573,12 +2575,12 @@ impl<'a> IterableKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct ovs\\_key\\_ipv6\\_exthdr"]
+    #[doc = "struct ovs_key_ipv6_exthdr\n"]
     pub fn get_ipv6_exthdrs(&self) -> Result<OvsKeyIpv6Exthdrs, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyAttrs::Ipv6Exthdrs(val) = attr? {
+            if let Ok(KeyAttrs::Ipv6Exthdrs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2654,14 +2656,16 @@ impl<'a> IterableKeyAttrs<'a> {
 impl<'a> Iterator for IterableKeyAttrs<'a> {
     type Item = Result<KeyAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3121,57 +3125,57 @@ impl IterableKeyAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum ActionAttrs<'a> {
-    #[doc = "ovs port number in datapath"]
+    #[doc = "ovs port number in datapath\n"]
     Output(u32),
     Userspace(IterableUserspaceAttrs<'a>),
-    #[doc = "Replaces the contents of an existing header\\. The single nested\nattribute specifies a header to modify and its value\\.\n"]
+    #[doc = "Replaces the contents of an existing header. The single nested attribute\nspecifies a header to modify and its value.\n"]
     Set(IterableKeyAttrs<'a>),
-    #[doc = "Push a new outermost 802\\.1Q or 802\\.1ad header onto the packet\\."]
+    #[doc = "Push a new outermost 802.1Q or 802.1ad header onto the packet.\n"]
     PushVlan(OvsActionPushVlan),
-    #[doc = "Pop the outermost 802\\.1Q or 802\\.1ad header from the packet\\."]
+    #[doc = "Pop the outermost 802.1Q or 802.1ad header from the packet.\n"]
     PopVlan(()),
-    #[doc = "Probabilistically executes actions, as specified in the nested\nattributes\\.\n"]
+    #[doc = "Probabilistically executes actions, as specified in the nested\nattributes.\n"]
     Sample(IterableSampleAttrs<'a>),
-    #[doc = "recirc id"]
+    #[doc = "recirc id\n"]
     Recirc(u32),
     Hash(OvsActionHash),
-    #[doc = "Push a new MPLS label stack entry onto the top of the packets MPLS\nlabel stack\\. Set the ethertype of the encapsulating frame to either\nETH\\_P\\_MPLS\\_UC or ETH\\_P\\_MPLS\\_MC to indicate the new packet contents\\.\n"]
+    #[doc = "Push a new MPLS label stack entry onto the top of the packets MPLS label\nstack. Set the ethertype of the encapsulating frame to either\nETH_P_MPLS_UC or ETH_P_MPLS_MC to indicate the new packet contents.\n"]
     PushMpls(OvsActionPushMpls),
-    #[doc = "ethertype"]
+    #[doc = "ethertype\n"]
     PopMpls(u16),
-    #[doc = "Replaces the contents of an existing header\\. A nested attribute\nspecifies a header to modify, its value, and a mask\\. For every bit set\nin the mask, the corresponding bit value is copied from the value to\nthe packet header field, rest of the bits are left unchanged\\. The\nnon\\-masked value bits must be passed in as zeroes\\. Masking is not\nsupported for the OVS\\_KEY\\_ATTR\\_TUNNEL attribute\\.\n"]
+    #[doc = "Replaces the contents of an existing header. A nested attribute\nspecifies a header to modify, its value, and a mask. For every bit set\nin the mask, the corresponding bit value is copied from the value to the\npacket header field, rest of the bits are left unchanged. The non-masked\nvalue bits must be passed in as zeroes. Masking is not supported for the\nOVS_KEY_ATTR_TUNNEL attribute.\n"]
     SetMasked(IterableKeyAttrs<'a>),
-    #[doc = "Track the connection\\. Populate the conntrack\\-related entries\nin the flow key\\.\n"]
+    #[doc = "Track the connection. Populate the conntrack-related entries in the flow\nkey.\n"]
     Ct(IterableCtAttrs<'a>),
-    #[doc = "struct ovs\\_action\\_trunc is a u32 max length"]
+    #[doc = "struct ovs_action_trunc is a u32 max length\n"]
     Trunc(u32),
-    #[doc = "struct ovs\\_action\\_push\\_eth"]
+    #[doc = "struct ovs_action_push_eth\n"]
     PushEth(&'a [u8]),
     PopEth(()),
     CtClear(()),
-    #[doc = "Push NSH header to the packet\\.\n"]
+    #[doc = "Push NSH header to the packet.\n"]
     PushNsh(IterableOvsNshKeyAttrs<'a>),
-    #[doc = "Pop the outermost NSH header off the packet\\.\n"]
+    #[doc = "Pop the outermost NSH header off the packet.\n"]
     PopNsh(()),
-    #[doc = "Run packet through a meter, which may drop the packet, or modify the\npacket (e\\.g\\., change the DSCP field)\n"]
+    #[doc = "Run packet through a meter, which may drop the packet, or modify the\npacket (e.g., change the DSCP field)\n"]
     Meter(u32),
-    #[doc = "Make a copy of the packet and execute a list of actions without\naffecting the original packet and key\\.\n"]
+    #[doc = "Make a copy of the packet and execute a list of actions without\naffecting the original packet and key.\n"]
     Clone(IterableActionAttrs<'a>),
-    #[doc = "Check the packet length and execute a set of actions if greater than\nthe specified packet length, else execute another set of actions\\.\n"]
+    #[doc = "Check the packet length and execute a set of actions if greater than the\nspecified packet length, else execute another set of actions.\n"]
     CheckPktLen(IterableCheckPktLenAttrs<'a>),
-    #[doc = "Push a new MPLS label stack entry at the start of the packet or at the\nstart of the l3 header depending on the value of l3 tunnel flag in the\ntun\\_flags field of this OVS\\_ACTION\\_ATTR\\_ADD\\_MPLS argument\\.\n"]
+    #[doc = "Push a new MPLS label stack entry at the start of the packet or at the\nstart of the l3 header depending on the value of l3 tunnel flag in the\ntun_flags field of this OVS_ACTION_ATTR_ADD_MPLS argument.\n"]
     AddMpls(OvsActionAddMpls),
     DecTtl(IterableDecTtlAttrs<'a>),
-    #[doc = "Sends a packet sample to psample for external observation\\.\n"]
+    #[doc = "Sends a packet sample to psample for external observation.\n"]
     Psample(IterablePsampleAttrs<'a>),
 }
 impl<'a> IterableActionAttrs<'a> {
-    #[doc = "ovs port number in datapath"]
+    #[doc = "ovs port number in datapath\n"]
     pub fn get_output(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Output(val) = attr? {
+            if let Ok(ActionAttrs::Output(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3186,7 +3190,7 @@ impl<'a> IterableActionAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Userspace(val) = attr? {
+            if let Ok(ActionAttrs::Userspace(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3197,12 +3201,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Replaces the contents of an existing header\\. The single nested\nattribute specifies a header to modify and its value\\.\n"]
+    #[doc = "Replaces the contents of an existing header. The single nested attribute\nspecifies a header to modify and its value.\n"]
     pub fn get_set(&self) -> Result<IterableKeyAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Set(val) = attr? {
+            if let Ok(ActionAttrs::Set(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3213,12 +3217,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Push a new outermost 802\\.1Q or 802\\.1ad header onto the packet\\."]
+    #[doc = "Push a new outermost 802.1Q or 802.1ad header onto the packet.\n"]
     pub fn get_push_vlan(&self) -> Result<OvsActionPushVlan, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::PushVlan(val) = attr? {
+            if let Ok(ActionAttrs::PushVlan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3229,12 +3233,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Pop the outermost 802\\.1Q or 802\\.1ad header from the packet\\."]
+    #[doc = "Pop the outermost 802.1Q or 802.1ad header from the packet.\n"]
     pub fn get_pop_vlan(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::PopVlan(val) = attr? {
+            if let Ok(ActionAttrs::PopVlan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3245,12 +3249,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Probabilistically executes actions, as specified in the nested\nattributes\\.\n"]
+    #[doc = "Probabilistically executes actions, as specified in the nested\nattributes.\n"]
     pub fn get_sample(&self) -> Result<IterableSampleAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Sample(val) = attr? {
+            if let Ok(ActionAttrs::Sample(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3261,12 +3265,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "recirc id"]
+    #[doc = "recirc id\n"]
     pub fn get_recirc(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Recirc(val) = attr? {
+            if let Ok(ActionAttrs::Recirc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3281,7 +3285,7 @@ impl<'a> IterableActionAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Hash(val) = attr? {
+            if let Ok(ActionAttrs::Hash(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3292,12 +3296,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Push a new MPLS label stack entry onto the top of the packets MPLS\nlabel stack\\. Set the ethertype of the encapsulating frame to either\nETH\\_P\\_MPLS\\_UC or ETH\\_P\\_MPLS\\_MC to indicate the new packet contents\\.\n"]
+    #[doc = "Push a new MPLS label stack entry onto the top of the packets MPLS label\nstack. Set the ethertype of the encapsulating frame to either\nETH_P_MPLS_UC or ETH_P_MPLS_MC to indicate the new packet contents.\n"]
     pub fn get_push_mpls(&self) -> Result<OvsActionPushMpls, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::PushMpls(val) = attr? {
+            if let Ok(ActionAttrs::PushMpls(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3308,12 +3312,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ethertype"]
+    #[doc = "ethertype\n"]
     pub fn get_pop_mpls(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::PopMpls(val) = attr? {
+            if let Ok(ActionAttrs::PopMpls(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3324,12 +3328,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Replaces the contents of an existing header\\. A nested attribute\nspecifies a header to modify, its value, and a mask\\. For every bit set\nin the mask, the corresponding bit value is copied from the value to\nthe packet header field, rest of the bits are left unchanged\\. The\nnon\\-masked value bits must be passed in as zeroes\\. Masking is not\nsupported for the OVS\\_KEY\\_ATTR\\_TUNNEL attribute\\.\n"]
+    #[doc = "Replaces the contents of an existing header. A nested attribute\nspecifies a header to modify, its value, and a mask. For every bit set\nin the mask, the corresponding bit value is copied from the value to the\npacket header field, rest of the bits are left unchanged. The non-masked\nvalue bits must be passed in as zeroes. Masking is not supported for the\nOVS_KEY_ATTR_TUNNEL attribute.\n"]
     pub fn get_set_masked(&self) -> Result<IterableKeyAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::SetMasked(val) = attr? {
+            if let Ok(ActionAttrs::SetMasked(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3340,12 +3344,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Track the connection\\. Populate the conntrack\\-related entries\nin the flow key\\.\n"]
+    #[doc = "Track the connection. Populate the conntrack-related entries in the flow\nkey.\n"]
     pub fn get_ct(&self) -> Result<IterableCtAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Ct(val) = attr? {
+            if let Ok(ActionAttrs::Ct(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3356,12 +3360,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct ovs\\_action\\_trunc is a u32 max length"]
+    #[doc = "struct ovs_action_trunc is a u32 max length\n"]
     pub fn get_trunc(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Trunc(val) = attr? {
+            if let Ok(ActionAttrs::Trunc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3372,12 +3376,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct ovs\\_action\\_push\\_eth"]
+    #[doc = "struct ovs_action_push_eth\n"]
     pub fn get_push_eth(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::PushEth(val) = attr? {
+            if let Ok(ActionAttrs::PushEth(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3392,7 +3396,7 @@ impl<'a> IterableActionAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::PopEth(val) = attr? {
+            if let Ok(ActionAttrs::PopEth(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3407,7 +3411,7 @@ impl<'a> IterableActionAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::CtClear(val) = attr? {
+            if let Ok(ActionAttrs::CtClear(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3418,12 +3422,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Push NSH header to the packet\\.\n"]
+    #[doc = "Push NSH header to the packet.\n"]
     pub fn get_push_nsh(&self) -> Result<IterableOvsNshKeyAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::PushNsh(val) = attr? {
+            if let Ok(ActionAttrs::PushNsh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3434,12 +3438,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Pop the outermost NSH header off the packet\\.\n"]
+    #[doc = "Pop the outermost NSH header off the packet.\n"]
     pub fn get_pop_nsh(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::PopNsh(val) = attr? {
+            if let Ok(ActionAttrs::PopNsh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3450,12 +3454,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Run packet through a meter, which may drop the packet, or modify the\npacket (e\\.g\\., change the DSCP field)\n"]
+    #[doc = "Run packet through a meter, which may drop the packet, or modify the\npacket (e.g., change the DSCP field)\n"]
     pub fn get_meter(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Meter(val) = attr? {
+            if let Ok(ActionAttrs::Meter(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3466,12 +3470,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Make a copy of the packet and execute a list of actions without\naffecting the original packet and key\\.\n"]
+    #[doc = "Make a copy of the packet and execute a list of actions without\naffecting the original packet and key.\n"]
     pub fn get_clone(&self) -> Result<IterableActionAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Clone(val) = attr? {
+            if let Ok(ActionAttrs::Clone(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3482,12 +3486,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Check the packet length and execute a set of actions if greater than\nthe specified packet length, else execute another set of actions\\.\n"]
+    #[doc = "Check the packet length and execute a set of actions if greater than the\nspecified packet length, else execute another set of actions.\n"]
     pub fn get_check_pkt_len(&self) -> Result<IterableCheckPktLenAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::CheckPktLen(val) = attr? {
+            if let Ok(ActionAttrs::CheckPktLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3498,12 +3502,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Push a new MPLS label stack entry at the start of the packet or at the\nstart of the l3 header depending on the value of l3 tunnel flag in the\ntun\\_flags field of this OVS\\_ACTION\\_ATTR\\_ADD\\_MPLS argument\\.\n"]
+    #[doc = "Push a new MPLS label stack entry at the start of the packet or at the\nstart of the l3 header depending on the value of l3 tunnel flag in the\ntun_flags field of this OVS_ACTION_ATTR_ADD_MPLS argument.\n"]
     pub fn get_add_mpls(&self) -> Result<OvsActionAddMpls, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::AddMpls(val) = attr? {
+            if let Ok(ActionAttrs::AddMpls(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3518,7 +3522,7 @@ impl<'a> IterableActionAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::DecTtl(val) = attr? {
+            if let Ok(ActionAttrs::DecTtl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3529,12 +3533,12 @@ impl<'a> IterableActionAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Sends a packet sample to psample for external observation\\.\n"]
+    #[doc = "Sends a packet sample to psample for external observation.\n"]
     pub fn get_psample(&self) -> Result<IterablePsampleAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActionAttrs::Psample(val) = attr? {
+            if let Ok(ActionAttrs::Psample(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3602,14 +3606,16 @@ impl<'a> IterableActionAttrs<'a> {
 impl<'a> Iterator for IterableActionAttrs<'a> {
     type Item = Result<ActionAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3966,12 +3972,12 @@ pub enum TunnelKeyAttrs<'a> {
     TpSrc(u16),
     TpDst(u16),
     VxlanOpts(IterableVxlanExtAttrs<'a>),
-    #[doc = "struct in6\\_addr source IPv6 address\n"]
+    #[doc = "struct in6_addr source IPv6 address\n"]
     Ipv6Src(&'a [u8]),
-    #[doc = "struct in6\\_addr destination IPv6 address\n"]
+    #[doc = "struct in6_addr destination IPv6 address\n"]
     Ipv6Dst(&'a [u8]),
     Pad(&'a [u8]),
-    #[doc = "struct erspan\\_metadata\n"]
+    #[doc = "struct erspan_metadata\n"]
     ErspanOpts(&'a [u8]),
     Ipv4InfoBridge(()),
 }
@@ -3980,7 +3986,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Id(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3995,7 +4001,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Ipv4Src(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Ipv4Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4010,7 +4016,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Ipv4Dst(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Ipv4Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4025,7 +4031,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Tos(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Tos(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4040,7 +4046,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Ttl(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Ttl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4055,7 +4061,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::DontFragment(val) = attr? {
+            if let Ok(TunnelKeyAttrs::DontFragment(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4070,7 +4076,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Csum(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Csum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4085,7 +4091,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Oam(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Oam(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4100,7 +4106,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::GeneveOpts(val) = attr? {
+            if let Ok(TunnelKeyAttrs::GeneveOpts(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4115,7 +4121,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::TpSrc(val) = attr? {
+            if let Ok(TunnelKeyAttrs::TpSrc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4130,7 +4136,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::TpDst(val) = attr? {
+            if let Ok(TunnelKeyAttrs::TpDst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4145,7 +4151,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::VxlanOpts(val) = attr? {
+            if let Ok(TunnelKeyAttrs::VxlanOpts(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4156,12 +4162,12 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct in6\\_addr source IPv6 address\n"]
+    #[doc = "struct in6_addr source IPv6 address\n"]
     pub fn get_ipv6_src(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Ipv6Src(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Ipv6Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4172,12 +4178,12 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct in6\\_addr destination IPv6 address\n"]
+    #[doc = "struct in6_addr destination IPv6 address\n"]
     pub fn get_ipv6_dst(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Ipv6Dst(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Ipv6Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4192,7 +4198,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Pad(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4203,12 +4209,12 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "struct erspan\\_metadata\n"]
+    #[doc = "struct erspan_metadata\n"]
     pub fn get_erspan_opts(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::ErspanOpts(val) = attr? {
+            if let Ok(TunnelKeyAttrs::ErspanOpts(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4223,7 +4229,7 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TunnelKeyAttrs::Ipv4InfoBridge(val) = attr? {
+            if let Ok(TunnelKeyAttrs::Ipv4InfoBridge(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4284,14 +4290,16 @@ impl<'a> IterableTunnelKeyAttrs<'a> {
 impl<'a> Iterator for IterableTunnelKeyAttrs<'a> {
     type Item = Result<TunnelKeyAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4561,7 +4569,7 @@ impl<'a> IterableCheckPktLenAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CheckPktLenAttrs::PktLen(val) = attr? {
+            if let Ok(CheckPktLenAttrs::PktLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4576,7 +4584,7 @@ impl<'a> IterableCheckPktLenAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CheckPktLenAttrs::ActionsIfGreater(val) = attr? {
+            if let Ok(CheckPktLenAttrs::ActionsIfGreater(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4591,7 +4599,7 @@ impl<'a> IterableCheckPktLenAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CheckPktLenAttrs::ActionsIfLessEqual(val) = attr? {
+            if let Ok(CheckPktLenAttrs::ActionsIfLessEqual(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4638,14 +4646,16 @@ impl<'a> IterableCheckPktLenAttrs<'a> {
 impl<'a> Iterator for IterableCheckPktLenAttrs<'a> {
     type Item = Result<CheckPktLenAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4762,7 +4772,7 @@ impl<'a> IterableSampleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SampleAttrs::Probability(val) = attr? {
+            if let Ok(SampleAttrs::Probability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4777,7 +4787,7 @@ impl<'a> IterableSampleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SampleAttrs::Actions(val) = attr? {
+            if let Ok(SampleAttrs::Actions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4823,14 +4833,16 @@ impl<'a> IterableSampleAttrs<'a> {
 impl<'a> Iterator for IterableSampleAttrs<'a> {
     type Item = Result<SampleAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4937,7 +4949,7 @@ impl<'a> IterableUserspaceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UserspaceAttrs::Pid(val) = attr? {
+            if let Ok(UserspaceAttrs::Pid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4952,7 +4964,7 @@ impl<'a> IterableUserspaceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UserspaceAttrs::Userdata(val) = attr? {
+            if let Ok(UserspaceAttrs::Userdata(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4967,7 +4979,7 @@ impl<'a> IterableUserspaceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UserspaceAttrs::EgressTunPort(val) = attr? {
+            if let Ok(UserspaceAttrs::EgressTunPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4982,7 +4994,7 @@ impl<'a> IterableUserspaceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UserspaceAttrs::Actions(val) = attr? {
+            if let Ok(UserspaceAttrs::Actions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5030,14 +5042,16 @@ impl<'a> IterableUserspaceAttrs<'a> {
 impl<'a> Iterator for IterableUserspaceAttrs<'a> {
     type Item = Result<UserspaceAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5162,7 +5176,7 @@ impl<'a> IterableOvsNshKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvsNshKeyAttrs::Base(val) = attr? {
+            if let Ok(OvsNshKeyAttrs::Base(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5177,7 +5191,7 @@ impl<'a> IterableOvsNshKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvsNshKeyAttrs::Md1(val) = attr? {
+            if let Ok(OvsNshKeyAttrs::Md1(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5192,7 +5206,7 @@ impl<'a> IterableOvsNshKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvsNshKeyAttrs::Md2(val) = attr? {
+            if let Ok(OvsNshKeyAttrs::Md2(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5239,14 +5253,16 @@ impl<'a> IterableOvsNshKeyAttrs<'a> {
 impl<'a> Iterator for IterableOvsNshKeyAttrs<'a> {
     type Item = Result<OvsNshKeyAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5369,7 +5385,7 @@ impl<'a> IterableCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtAttrs::Commit(val) = attr? {
+            if let Ok(CtAttrs::Commit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5384,7 +5400,7 @@ impl<'a> IterableCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtAttrs::Zone(val) = attr? {
+            if let Ok(CtAttrs::Zone(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5399,7 +5415,7 @@ impl<'a> IterableCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtAttrs::Mark(val) = attr? {
+            if let Ok(CtAttrs::Mark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5414,7 +5430,7 @@ impl<'a> IterableCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtAttrs::Labels(val) = attr? {
+            if let Ok(CtAttrs::Labels(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5429,7 +5445,7 @@ impl<'a> IterableCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtAttrs::Helper(val) = attr? {
+            if let Ok(CtAttrs::Helper(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5444,7 +5460,7 @@ impl<'a> IterableCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtAttrs::Nat(val) = attr? {
+            if let Ok(CtAttrs::Nat(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5459,7 +5475,7 @@ impl<'a> IterableCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtAttrs::ForceCommit(val) = attr? {
+            if let Ok(CtAttrs::ForceCommit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5474,7 +5490,7 @@ impl<'a> IterableCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtAttrs::Eventmask(val) = attr? {
+            if let Ok(CtAttrs::Eventmask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5489,7 +5505,7 @@ impl<'a> IterableCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtAttrs::Timeout(val) = attr? {
+            if let Ok(CtAttrs::Timeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5542,14 +5558,16 @@ impl<'a> IterableCtAttrs<'a> {
 impl<'a> Iterator for IterableCtAttrs<'a> {
     type Item = Result<CtAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5734,7 +5752,7 @@ impl<'a> IterableNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NatAttrs::Src(val) = attr? {
+            if let Ok(NatAttrs::Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5749,7 +5767,7 @@ impl<'a> IterableNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NatAttrs::Dst(val) = attr? {
+            if let Ok(NatAttrs::Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5764,7 +5782,7 @@ impl<'a> IterableNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NatAttrs::IpMin(val) = attr? {
+            if let Ok(NatAttrs::IpMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5779,7 +5797,7 @@ impl<'a> IterableNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NatAttrs::IpMax(val) = attr? {
+            if let Ok(NatAttrs::IpMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5794,7 +5812,7 @@ impl<'a> IterableNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NatAttrs::ProtoMin(val) = attr? {
+            if let Ok(NatAttrs::ProtoMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5809,7 +5827,7 @@ impl<'a> IterableNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NatAttrs::ProtoMax(val) = attr? {
+            if let Ok(NatAttrs::ProtoMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5824,7 +5842,7 @@ impl<'a> IterableNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NatAttrs::Persistent(val) = attr? {
+            if let Ok(NatAttrs::Persistent(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5839,7 +5857,7 @@ impl<'a> IterableNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NatAttrs::ProtoHash(val) = attr? {
+            if let Ok(NatAttrs::ProtoHash(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5854,7 +5872,7 @@ impl<'a> IterableNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NatAttrs::ProtoRandom(val) = attr? {
+            if let Ok(NatAttrs::ProtoRandom(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5907,14 +5925,16 @@ impl<'a> IterableNatAttrs<'a> {
 impl<'a> Iterator for IterableNatAttrs<'a> {
     type Item = Result<NatAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6081,7 +6101,7 @@ impl<'a> IterableDecTtlAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DecTtlAttrs::Action(val) = attr? {
+            if let Ok(DecTtlAttrs::Action(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6126,14 +6146,16 @@ impl<'a> IterableDecTtlAttrs<'a> {
 impl<'a> Iterator for IterableDecTtlAttrs<'a> {
     type Item = Result<DecTtlAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6225,7 +6247,7 @@ impl<'a> IterableVxlanExtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let VxlanExtAttrs::Gbp(val) = attr? {
+            if let Ok(VxlanExtAttrs::Gbp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6270,14 +6292,16 @@ impl<'a> IterableVxlanExtAttrs<'a> {
 impl<'a> Iterator for IterableVxlanExtAttrs<'a> {
     type Item = Result<VxlanExtAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6369,7 +6393,7 @@ impl<'a> IterablePsampleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PsampleAttrs::Group(val) = attr? {
+            if let Ok(PsampleAttrs::Group(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6384,7 +6408,7 @@ impl<'a> IterablePsampleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PsampleAttrs::Cookie(val) = attr? {
+            if let Ok(PsampleAttrs::Cookie(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6430,14 +6454,16 @@ impl<'a> IterablePsampleAttrs<'a> {
 impl<'a> Iterator for IterablePsampleAttrs<'a> {
     type Item = Result<PsampleAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6557,7 +6583,7 @@ impl<Prev: Rec> PushFlowAttrs<Prev> {
         }
         prev
     }
-    #[doc = "Nested attributes specifying the flow key\\. Always present in\nnotifications\\. Required for all requests (except dumps)\\.\n"]
+    #[doc = "Nested attributes specifying the flow key. Always present in\nnotifications. Required for all requests (except dumps).\n"]
     pub fn nested_key(mut self) -> PushKeyAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 1u16);
         PushKeyAttrs {
@@ -6565,7 +6591,7 @@ impl<Prev: Rec> PushFlowAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Nested attributes specifying the actions to take for packets that\nmatch the key\\. Always present in notifications\\. Required for\nOVS\\_FLOW\\_CMD\\_NEW requests, optional for OVS\\_FLOW\\_CMD\\_SET requests\\.  An\nOVS\\_FLOW\\_CMD\\_SET without OVS\\_FLOW\\_ATTR\\_ACTIONS will not modify the\nactions\\.  To clear the actions, an OVS\\_FLOW\\_ATTR\\_ACTIONS without any\nnested attributes must be given\\.\n"]
+    #[doc = "Nested attributes specifying the actions to take for packets that match\nthe key. Always present in notifications. Required for OVS_FLOW_CMD_NEW\nrequests, optional for OVS_FLOW_CMD_SET requests. An OVS_FLOW_CMD_SET\nwithout OVS_FLOW_ATTR_ACTIONS will not modify the actions. To clear the\nactions, an OVS_FLOW_ATTR_ACTIONS without any nested attributes must be\ngiven.\n"]
     pub fn nested_actions(mut self) -> PushActionAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
         PushActionAttrs {
@@ -6573,30 +6599,30 @@ impl<Prev: Rec> PushFlowAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Statistics for this flow\\. Present in notifications if the stats would\nbe nonzero\\. Ignored in requests\\.\n"]
+    #[doc = "Statistics for this flow. Present in notifications if the stats would be\nnonzero. Ignored in requests.\n"]
     pub fn push_stats(mut self, value: OvsFlowStats) -> Self {
         push_header(self.as_rec_mut(), 3u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "An 8\\-bit value giving the ORed value of all of the TCP flags seen on\npackets in this flow\\. Only present in notifications for TCP flows, and\nonly if it would be nonzero\\. Ignored in requests\\.\n"]
+    #[doc = "An 8-bit value giving the ORed value of all of the TCP flags seen on\npackets in this flow. Only present in notifications for TCP flows, and\nonly if it would be nonzero. Ignored in requests.\n"]
     pub fn push_tcp_flags(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 4u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "A 64\\-bit integer giving the time, in milliseconds on the system\nmonotonic clock, at which a packet was last processed for this\nflow\\. Only present in notifications if a packet has been processed for\nthis flow\\. Ignored in requests\\.\n"]
+    #[doc = "A 64-bit integer giving the time, in milliseconds on the system\nmonotonic clock, at which a packet was last processed for this flow.\nOnly present in notifications if a packet has been processed for this\nflow. Ignored in requests.\n"]
     pub fn push_used(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 5u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "If present in a OVS\\_FLOW\\_CMD\\_SET request, clears the last\\-used time,\naccumulated TCP flags, and statistics for this flow\\.  Otherwise\nignored in requests\\. Never present in notifications\\.\n"]
+    #[doc = "If present in a OVS_FLOW_CMD_SET request, clears the last-used time,\naccumulated TCP flags, and statistics for this flow. Otherwise ignored\nin requests. Never present in notifications.\n"]
     pub fn push_clear(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 6u16, 0 as u16);
         self
     }
-    #[doc = "Nested attributes specifying the mask bits for wildcarded flow\nmatch\\. Mask bit value '1' specifies exact match with corresponding\nflow key bit, while mask bit value '0' specifies a wildcarded\nmatch\\. Omitting attribute is treated as wildcarding all corresponding\nfields\\. Optional for all requests\\. If not present, all flow key bits\nare exact match bits\\.\n"]
+    #[doc = "Nested attributes specifying the mask bits for wildcarded flow match.\nMask bit value \\'1\\' specifies exact match with corresponding flow key\nbit, while mask bit value \\'0\\' specifies a wildcarded match. Omitting\nattribute is treated as wildcarding all corresponding fields. Optional\nfor all requests. If not present, all flow key bits are exact match\nbits.\n"]
     pub fn nested_mask(mut self) -> PushKeyAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 7u16);
         PushKeyAttrs {
@@ -6604,19 +6630,19 @@ impl<Prev: Rec> PushFlowAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Flow operation is a feature probe, error logging should be suppressed\\.\n"]
+    #[doc = "Flow operation is a feature probe, error logging should be suppressed.\n"]
     pub fn push_probe(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 8u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "A value between 1\\-16 octets specifying a unique identifier for the\nflow\\. Causes the flow to be indexed by this value rather than the\nvalue of the OVS\\_FLOW\\_ATTR\\_KEY attribute\\. Optional for all\nrequests\\. Present in notifications if the flow was created with this\nattribute\\.\n"]
+    #[doc = "A value between 1-16 octets specifying a unique identifier for the flow.\nCauses the flow to be indexed by this value rather than the value of the\nOVS_FLOW_ATTR_KEY attribute. Optional for all requests. Present in\nnotifications if the flow was created with this attribute.\n"]
     pub fn push_ufid(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 9u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "A 32\\-bit value of ORed flags that provide alternative semantics for\nflow installation and retrieval\\. Optional for all requests\\.\n\nAssociated type: [`OvsUfidFlags`] (enum)"]
+    #[doc = "A 32-bit value of ORed flags that provide alternative semantics for flow\ninstallation and retrieval. Optional for all requests.\n\nAssociated type: [`OvsUfidFlags`] (enum)"]
     pub fn push_ufid_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -6680,7 +6706,7 @@ impl<Prev: Rec> PushKeyAttrs<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "struct ovs\\_key\\_ethernet"]
+    #[doc = "struct ovs_key_ethernet\n"]
     pub fn push_ethernet(mut self, value: OvsKeyEthernet) -> Self {
         push_header(self.as_rec_mut(), 4u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
@@ -6701,7 +6727,7 @@ impl<Prev: Rec> PushKeyAttrs<Prev> {
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "struct ovs\\_key\\_ipv6"]
+    #[doc = "struct ovs_key_ipv6\n"]
     pub fn push_ipv6(mut self, value: OvsKeyIpv6) -> Self {
         push_header(self.as_rec_mut(), 8u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
@@ -6727,13 +6753,13 @@ impl<Prev: Rec> PushKeyAttrs<Prev> {
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "struct ovs\\_key\\_arp"]
+    #[doc = "struct ovs_key_arp\n"]
     pub fn push_arp(mut self, value: OvsKeyArp) -> Self {
         push_header(self.as_rec_mut(), 13u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "struct ovs\\_key\\_nd"]
+    #[doc = "struct ovs_key_nd\n"]
     pub fn push_nd(mut self, value: OvsKeyNd) -> Self {
         push_header(self.as_rec_mut(), 14u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
@@ -6761,7 +6787,7 @@ impl<Prev: Rec> PushKeyAttrs<Prev> {
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "Value 0 indicates the hash is not computed by the datapath\\."]
+    #[doc = "Value 0 indicates the hash is not computed by the datapath.\n"]
     pub fn push_dp_hash(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 19u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -6783,19 +6809,19 @@ impl<Prev: Rec> PushKeyAttrs<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "connection tracking zone"]
+    #[doc = "connection tracking zone\n"]
     pub fn push_ct_zone(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 23u16, 2 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "connection tracking mark"]
+    #[doc = "connection tracking mark\n"]
     pub fn push_ct_mark(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 24u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "16\\-octet connection tracking label"]
+    #[doc = "16-octet connection tracking label\n"]
     pub fn push_ct_labels(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 25u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -6806,7 +6832,7 @@ impl<Prev: Rec> PushKeyAttrs<Prev> {
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "struct ovs\\_key\\_ct\\_tuple\\_ipv6"]
+    #[doc = "struct ovs_key_ct_tuple_ipv6\n"]
     pub fn push_ct_orig_tuple_ipv6(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 27u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -6819,25 +6845,25 @@ impl<Prev: Rec> PushKeyAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Should not be sent to the kernel"]
+    #[doc = "Should not be sent to the kernel\n"]
     pub fn push_packet_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 29u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "Should not be sent to the kernel"]
+    #[doc = "Should not be sent to the kernel\n"]
     pub fn push_nd_extensions(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 30u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "struct ip\\_tunnel\\_info"]
+    #[doc = "struct ip_tunnel_info\n"]
     pub fn push_tunnel_info(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 31u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "struct ovs\\_key\\_ipv6\\_exthdr"]
+    #[doc = "struct ovs_key_ipv6_exthdr\n"]
     pub fn push_ipv6_exthdrs(mut self, value: OvsKeyIpv6Exthdrs) -> Self {
         push_header(self.as_rec_mut(), 32u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
@@ -6879,7 +6905,7 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
         }
         prev
     }
-    #[doc = "ovs port number in datapath"]
+    #[doc = "ovs port number in datapath\n"]
     pub fn push_output(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -6892,7 +6918,7 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Replaces the contents of an existing header\\. The single nested\nattribute specifies a header to modify and its value\\.\n"]
+    #[doc = "Replaces the contents of an existing header. The single nested attribute\nspecifies a header to modify and its value.\n"]
     pub fn nested_set(mut self) -> PushKeyAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
         PushKeyAttrs {
@@ -6900,18 +6926,18 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Push a new outermost 802\\.1Q or 802\\.1ad header onto the packet\\."]
+    #[doc = "Push a new outermost 802.1Q or 802.1ad header onto the packet.\n"]
     pub fn push_push_vlan(mut self, value: OvsActionPushVlan) -> Self {
         push_header(self.as_rec_mut(), 4u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "Pop the outermost 802\\.1Q or 802\\.1ad header from the packet\\."]
+    #[doc = "Pop the outermost 802.1Q or 802.1ad header from the packet.\n"]
     pub fn push_pop_vlan(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 5u16, 0 as u16);
         self
     }
-    #[doc = "Probabilistically executes actions, as specified in the nested\nattributes\\.\n"]
+    #[doc = "Probabilistically executes actions, as specified in the nested\nattributes.\n"]
     pub fn nested_sample(mut self) -> PushSampleAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 6u16);
         PushSampleAttrs {
@@ -6919,7 +6945,7 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "recirc id"]
+    #[doc = "recirc id\n"]
     pub fn push_recirc(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -6930,19 +6956,19 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "Push a new MPLS label stack entry onto the top of the packets MPLS\nlabel stack\\. Set the ethertype of the encapsulating frame to either\nETH\\_P\\_MPLS\\_UC or ETH\\_P\\_MPLS\\_MC to indicate the new packet contents\\.\n"]
+    #[doc = "Push a new MPLS label stack entry onto the top of the packets MPLS label\nstack. Set the ethertype of the encapsulating frame to either\nETH_P_MPLS_UC or ETH_P_MPLS_MC to indicate the new packet contents.\n"]
     pub fn push_push_mpls(mut self, value: OvsActionPushMpls) -> Self {
         push_header(self.as_rec_mut(), 9u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "ethertype"]
+    #[doc = "ethertype\n"]
     pub fn push_pop_mpls(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 10u16, 2 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "Replaces the contents of an existing header\\. A nested attribute\nspecifies a header to modify, its value, and a mask\\. For every bit set\nin the mask, the corresponding bit value is copied from the value to\nthe packet header field, rest of the bits are left unchanged\\. The\nnon\\-masked value bits must be passed in as zeroes\\. Masking is not\nsupported for the OVS\\_KEY\\_ATTR\\_TUNNEL attribute\\.\n"]
+    #[doc = "Replaces the contents of an existing header. A nested attribute\nspecifies a header to modify, its value, and a mask. For every bit set\nin the mask, the corresponding bit value is copied from the value to the\npacket header field, rest of the bits are left unchanged. The non-masked\nvalue bits must be passed in as zeroes. Masking is not supported for the\nOVS_KEY_ATTR_TUNNEL attribute.\n"]
     pub fn nested_set_masked(mut self) -> PushKeyAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 11u16);
         PushKeyAttrs {
@@ -6950,7 +6976,7 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Track the connection\\. Populate the conntrack\\-related entries\nin the flow key\\.\n"]
+    #[doc = "Track the connection. Populate the conntrack-related entries in the flow\nkey.\n"]
     pub fn nested_ct(mut self) -> PushCtAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 12u16);
         PushCtAttrs {
@@ -6958,13 +6984,13 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "struct ovs\\_action\\_trunc is a u32 max length"]
+    #[doc = "struct ovs_action_trunc is a u32 max length\n"]
     pub fn push_trunc(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 13u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "struct ovs\\_action\\_push\\_eth"]
+    #[doc = "struct ovs_action_push_eth\n"]
     pub fn push_push_eth(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 14u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -6978,7 +7004,7 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
         push_header(self.as_rec_mut(), 16u16, 0 as u16);
         self
     }
-    #[doc = "Push NSH header to the packet\\.\n"]
+    #[doc = "Push NSH header to the packet.\n"]
     pub fn nested_push_nsh(mut self) -> PushOvsNshKeyAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 17u16);
         PushOvsNshKeyAttrs {
@@ -6986,18 +7012,18 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Pop the outermost NSH header off the packet\\.\n"]
+    #[doc = "Pop the outermost NSH header off the packet.\n"]
     pub fn push_pop_nsh(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 18u16, 0 as u16);
         self
     }
-    #[doc = "Run packet through a meter, which may drop the packet, or modify the\npacket (e\\.g\\., change the DSCP field)\n"]
+    #[doc = "Run packet through a meter, which may drop the packet, or modify the\npacket (e.g., change the DSCP field)\n"]
     pub fn push_meter(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 19u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Make a copy of the packet and execute a list of actions without\naffecting the original packet and key\\.\n"]
+    #[doc = "Make a copy of the packet and execute a list of actions without\naffecting the original packet and key.\n"]
     pub fn nested_clone(mut self) -> PushActionAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 20u16);
         PushActionAttrs {
@@ -7005,7 +7031,7 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Check the packet length and execute a set of actions if greater than\nthe specified packet length, else execute another set of actions\\.\n"]
+    #[doc = "Check the packet length and execute a set of actions if greater than the\nspecified packet length, else execute another set of actions.\n"]
     pub fn nested_check_pkt_len(mut self) -> PushCheckPktLenAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 21u16);
         PushCheckPktLenAttrs {
@@ -7013,7 +7039,7 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Push a new MPLS label stack entry at the start of the packet or at the\nstart of the l3 header depending on the value of l3 tunnel flag in the\ntun\\_flags field of this OVS\\_ACTION\\_ATTR\\_ADD\\_MPLS argument\\.\n"]
+    #[doc = "Push a new MPLS label stack entry at the start of the packet or at the\nstart of the l3 header depending on the value of l3 tunnel flag in the\ntun_flags field of this OVS_ACTION_ATTR_ADD_MPLS argument.\n"]
     pub fn push_add_mpls(mut self, value: OvsActionAddMpls) -> Self {
         push_header(self.as_rec_mut(), 22u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
@@ -7026,7 +7052,7 @@ impl<Prev: Rec> PushActionAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Sends a packet sample to psample for external observation\\.\n"]
+    #[doc = "Sends a packet sample to psample for external observation.\n"]
     pub fn nested_psample(mut self) -> PushPsampleAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 24u16);
         PushPsampleAttrs {
@@ -7129,13 +7155,13 @@ impl<Prev: Rec> PushTunnelKeyAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "struct in6\\_addr source IPv6 address\n"]
+    #[doc = "struct in6_addr source IPv6 address\n"]
     pub fn push_ipv6_src(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 12u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "struct in6\\_addr destination IPv6 address\n"]
+    #[doc = "struct in6_addr destination IPv6 address\n"]
     pub fn push_ipv6_dst(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 13u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -7146,7 +7172,7 @@ impl<Prev: Rec> PushTunnelKeyAttrs<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "struct erspan\\_metadata\n"]
+    #[doc = "struct erspan_metadata\n"]
     pub fn push_erspan_opts(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 15u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -7687,7 +7713,7 @@ impl NotifGroup {
     pub const OVS_FLOW: &str = "ovs_flow";
     pub const OVS_FLOW_CSTR: &CStr = c"ovs_flow";
 }
-#[doc = "Get / dump OVS flow configuration and state\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n- [.push_ufid_flags()](PushFlowAttrs::push_ufid_flags)\n\nReply attributes:\n- [.get_key()](IterableFlowAttrs::get_key)\n- [.get_actions()](IterableFlowAttrs::get_actions)\n- [.get_stats()](IterableFlowAttrs::get_stats)\n- [.get_mask()](IterableFlowAttrs::get_mask)\n- [.get_ufid()](IterableFlowAttrs::get_ufid)\n"]
+#[doc = "Get / dump OVS flow configuration and state\n\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n- [.push_ufid_flags()](PushFlowAttrs::push_ufid_flags)\n\nReply attributes:\n- [.get_key()](IterableFlowAttrs::get_key)\n- [.get_actions()](IterableFlowAttrs::get_actions)\n- [.get_stats()](IterableFlowAttrs::get_stats)\n- [.get_mask()](IterableFlowAttrs::get_mask)\n- [.get_ufid()](IterableFlowAttrs::get_ufid)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDump<'r> {
     request: Request<'r>,
@@ -7747,7 +7773,7 @@ impl NetlinkRequest for OpGetDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump OVS flow configuration and state\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n- [.push_ufid_flags()](PushFlowAttrs::push_ufid_flags)\n\nReply attributes:\n- [.get_key()](IterableFlowAttrs::get_key)\n- [.get_actions()](IterableFlowAttrs::get_actions)\n- [.get_stats()](IterableFlowAttrs::get_stats)\n- [.get_mask()](IterableFlowAttrs::get_mask)\n- [.get_ufid()](IterableFlowAttrs::get_ufid)\n"]
+#[doc = "Get / dump OVS flow configuration and state\n\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n- [.push_ufid_flags()](PushFlowAttrs::push_ufid_flags)\n\nReply attributes:\n- [.get_key()](IterableFlowAttrs::get_key)\n- [.get_actions()](IterableFlowAttrs::get_actions)\n- [.get_stats()](IterableFlowAttrs::get_stats)\n- [.get_mask()](IterableFlowAttrs::get_mask)\n- [.get_ufid()](IterableFlowAttrs::get_ufid)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDo<'r> {
     request: Request<'r>,
@@ -7805,7 +7831,7 @@ impl NetlinkRequest for OpGetDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create OVS flow configuration in a data path\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.nested_actions()](PushFlowAttrs::nested_actions)\n- [.nested_mask()](PushFlowAttrs::nested_mask)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n"]
+#[doc = "Create OVS flow configuration in a data path\n\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.nested_actions()](PushFlowAttrs::nested_actions)\n- [.nested_mask()](PushFlowAttrs::nested_mask)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n\n"]
 #[derive(Debug)]
 pub struct OpNewDo<'r> {
     request: Request<'r>,
@@ -7965,21 +7991,21 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get / dump OVS flow configuration and state\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n- [.push_ufid_flags()](PushFlowAttrs::push_ufid_flags)\n\nReply attributes:\n- [.get_key()](IterableFlowAttrs::get_key)\n- [.get_actions()](IterableFlowAttrs::get_actions)\n- [.get_stats()](IterableFlowAttrs::get_stats)\n- [.get_mask()](IterableFlowAttrs::get_mask)\n- [.get_ufid()](IterableFlowAttrs::get_ufid)\n"]
+    #[doc = "Get / dump OVS flow configuration and state\n\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n- [.push_ufid_flags()](PushFlowAttrs::push_ufid_flags)\n\nReply attributes:\n- [.get_key()](IterableFlowAttrs::get_key)\n- [.get_actions()](IterableFlowAttrs::get_actions)\n- [.get_stats()](IterableFlowAttrs::get_stats)\n- [.get_mask()](IterableFlowAttrs::get_mask)\n- [.get_ufid()](IterableFlowAttrs::get_ufid)\n\n"]
     pub fn op_get_dump(self, header: &OvsHeader) -> OpGetDump<'buf> {
         let mut res = OpGetDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-get-dump", OpGetDump::lookup);
         res
     }
-    #[doc = "Get / dump OVS flow configuration and state\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n- [.push_ufid_flags()](PushFlowAttrs::push_ufid_flags)\n\nReply attributes:\n- [.get_key()](IterableFlowAttrs::get_key)\n- [.get_actions()](IterableFlowAttrs::get_actions)\n- [.get_stats()](IterableFlowAttrs::get_stats)\n- [.get_mask()](IterableFlowAttrs::get_mask)\n- [.get_ufid()](IterableFlowAttrs::get_ufid)\n"]
+    #[doc = "Get / dump OVS flow configuration and state\n\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n- [.push_ufid_flags()](PushFlowAttrs::push_ufid_flags)\n\nReply attributes:\n- [.get_key()](IterableFlowAttrs::get_key)\n- [.get_actions()](IterableFlowAttrs::get_actions)\n- [.get_stats()](IterableFlowAttrs::get_stats)\n- [.get_mask()](IterableFlowAttrs::get_mask)\n- [.get_ufid()](IterableFlowAttrs::get_ufid)\n\n"]
     pub fn op_get_do(self, header: &OvsHeader) -> OpGetDo<'buf> {
         let mut res = OpGetDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-get-do", OpGetDo::lookup);
         res
     }
-    #[doc = "Create OVS flow configuration in a data path\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.nested_actions()](PushFlowAttrs::nested_actions)\n- [.nested_mask()](PushFlowAttrs::nested_mask)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n"]
+    #[doc = "Create OVS flow configuration in a data path\n\nRequest attributes:\n- [.nested_key()](PushFlowAttrs::nested_key)\n- [.nested_actions()](PushFlowAttrs::nested_actions)\n- [.nested_mask()](PushFlowAttrs::nested_mask)\n- [.push_ufid()](PushFlowAttrs::push_ufid)\n\n"]
     pub fn op_new_do(self, header: &OvsHeader) -> OpNewDo<'buf> {
         let mut res = OpNewDo::new(self, header);
         res.request

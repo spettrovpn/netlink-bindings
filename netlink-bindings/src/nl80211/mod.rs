@@ -1,4 +1,4 @@
-#![doc = "Netlink API for 802\\.11 wireless devices"]
+#![doc = "Netlink API for 802.11 wireless devices\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -857,7 +857,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Wiphy(val) = attr? {
+            if let Ok(Nl80211Attrs::Wiphy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -872,7 +872,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyName(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -887,7 +887,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Ifindex(val) = attr? {
+            if let Ok(Nl80211Attrs::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -902,7 +902,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Ifname(val) = attr? {
+            if let Ok(Nl80211Attrs::Ifname(val)) = attr {
                 return Ok(val);
             }
         }
@@ -917,7 +917,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Iftype(val) = attr? {
+            if let Ok(Nl80211Attrs::Iftype(val)) = attr {
                 return Ok(val);
             }
         }
@@ -932,7 +932,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Mac(val) = attr? {
+            if let Ok(Nl80211Attrs::Mac(val)) = attr {
                 return Ok(val);
             }
         }
@@ -947,7 +947,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::KeyData(val) = attr? {
+            if let Ok(Nl80211Attrs::KeyData(val)) = attr {
                 return Ok(val);
             }
         }
@@ -962,7 +962,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::KeyIdx(val) = attr? {
+            if let Ok(Nl80211Attrs::KeyIdx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -977,7 +977,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::KeyCipher(val) = attr? {
+            if let Ok(Nl80211Attrs::KeyCipher(val)) = attr {
                 return Ok(val);
             }
         }
@@ -992,7 +992,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::KeySeq(val) = attr? {
+            if let Ok(Nl80211Attrs::KeySeq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1007,7 +1007,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::KeyDefault(val) = attr? {
+            if let Ok(Nl80211Attrs::KeyDefault(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1022,7 +1022,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BeaconInterval(val) = attr? {
+            if let Ok(Nl80211Attrs::BeaconInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1037,7 +1037,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::DtimPeriod(val) = attr? {
+            if let Ok(Nl80211Attrs::DtimPeriod(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1052,7 +1052,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BeaconHead(val) = attr? {
+            if let Ok(Nl80211Attrs::BeaconHead(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1067,7 +1067,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BeaconTail(val) = attr? {
+            if let Ok(Nl80211Attrs::BeaconTail(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1082,7 +1082,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaAid(val) = attr? {
+            if let Ok(Nl80211Attrs::StaAid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1097,7 +1097,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaFlags(val) = attr? {
+            if let Ok(Nl80211Attrs::StaFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1112,7 +1112,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaListenInterval(val) = attr? {
+            if let Ok(Nl80211Attrs::StaListenInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1127,7 +1127,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaSupportedRates(val) = attr? {
+            if let Ok(Nl80211Attrs::StaSupportedRates(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1142,7 +1142,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaVlan(val) = attr? {
+            if let Ok(Nl80211Attrs::StaVlan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1157,7 +1157,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaInfo(val) = attr? {
+            if let Ok(Nl80211Attrs::StaInfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1172,7 +1172,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyBands(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyBands(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1187,7 +1187,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MntrFlags(val) = attr? {
+            if let Ok(Nl80211Attrs::MntrFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1202,7 +1202,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MeshId(val) = attr? {
+            if let Ok(Nl80211Attrs::MeshId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1217,7 +1217,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaPlinkAction(val) = attr? {
+            if let Ok(Nl80211Attrs::StaPlinkAction(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1232,7 +1232,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MpathNextHop(val) = attr? {
+            if let Ok(Nl80211Attrs::MpathNextHop(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1247,7 +1247,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MpathInfo(val) = attr? {
+            if let Ok(Nl80211Attrs::MpathInfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1262,7 +1262,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BssCtsProt(val) = attr? {
+            if let Ok(Nl80211Attrs::BssCtsProt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1277,7 +1277,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BssShortPreamble(val) = attr? {
+            if let Ok(Nl80211Attrs::BssShortPreamble(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1292,7 +1292,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BssShortSlotTime(val) = attr? {
+            if let Ok(Nl80211Attrs::BssShortSlotTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1307,7 +1307,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::HtCapability(val) = attr? {
+            if let Ok(Nl80211Attrs::HtCapability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1322,7 +1322,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SupportedIftypes(val) = attr? {
+            if let Ok(Nl80211Attrs::SupportedIftypes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1337,7 +1337,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RegAlpha2(val) = attr? {
+            if let Ok(Nl80211Attrs::RegAlpha2(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1352,7 +1352,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RegRules(val) = attr? {
+            if let Ok(Nl80211Attrs::RegRules(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1367,7 +1367,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MeshConfig(val) = attr? {
+            if let Ok(Nl80211Attrs::MeshConfig(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1382,7 +1382,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BssBasicRates(val) = attr? {
+            if let Ok(Nl80211Attrs::BssBasicRates(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1397,7 +1397,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyTxqParams(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyTxqParams(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1412,7 +1412,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyFreq(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyFreq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1428,7 +1428,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyChannelType(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyChannelType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1443,7 +1443,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::KeyDefaultMgmt(val) = attr? {
+            if let Ok(Nl80211Attrs::KeyDefaultMgmt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1458,7 +1458,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MgmtSubtype(val) = attr? {
+            if let Ok(Nl80211Attrs::MgmtSubtype(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1473,7 +1473,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Ie(val) = attr? {
+            if let Ok(Nl80211Attrs::Ie(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1488,7 +1488,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxNumScanSsids(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxNumScanSsids(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1503,7 +1503,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ScanFrequencies(val) = attr? {
+            if let Ok(Nl80211Attrs::ScanFrequencies(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1518,7 +1518,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ScanSsids(val) = attr? {
+            if let Ok(Nl80211Attrs::ScanSsids(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1533,7 +1533,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Generation(val) = attr? {
+            if let Ok(Nl80211Attrs::Generation(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1548,7 +1548,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Bss(val) = attr? {
+            if let Ok(Nl80211Attrs::Bss(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1563,7 +1563,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RegInitiator(val) = attr? {
+            if let Ok(Nl80211Attrs::RegInitiator(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1578,7 +1578,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RegType(val) = attr? {
+            if let Ok(Nl80211Attrs::RegType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1594,7 +1594,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayU32<'a>, u32>, ErrorContext> {
         for attr in self.clone() {
-            if let Nl80211Attrs::SupportedCommands(val) = attr? {
+            if let Ok(Nl80211Attrs::SupportedCommands(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -1609,7 +1609,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Frame(val) = attr? {
+            if let Ok(Nl80211Attrs::Frame(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1624,7 +1624,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Ssid(val) = attr? {
+            if let Ok(Nl80211Attrs::Ssid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1639,7 +1639,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::AuthType(val) = attr? {
+            if let Ok(Nl80211Attrs::AuthType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1654,7 +1654,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ReasonCode(val) = attr? {
+            if let Ok(Nl80211Attrs::ReasonCode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1669,7 +1669,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::KeyType(val) = attr? {
+            if let Ok(Nl80211Attrs::KeyType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1684,7 +1684,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxScanIeLen(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxScanIeLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1699,7 +1699,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CipherSuites(val) = attr? {
+            if let Ok(Nl80211Attrs::CipherSuites(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1714,7 +1714,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FreqBefore(val) = attr? {
+            if let Ok(Nl80211Attrs::FreqBefore(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1729,7 +1729,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FreqAfter(val) = attr? {
+            if let Ok(Nl80211Attrs::FreqAfter(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1744,7 +1744,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FreqFixed(val) = attr? {
+            if let Ok(Nl80211Attrs::FreqFixed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1759,7 +1759,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyRetryShort(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyRetryShort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1774,7 +1774,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyRetryLong(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyRetryLong(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1789,7 +1789,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyFragThreshold(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyFragThreshold(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1804,7 +1804,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyRtsThreshold(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyRtsThreshold(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1819,7 +1819,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TimedOut(val) = attr? {
+            if let Ok(Nl80211Attrs::TimedOut(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1834,7 +1834,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::UseMfp(val) = attr? {
+            if let Ok(Nl80211Attrs::UseMfp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1849,7 +1849,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaFlags2(val) = attr? {
+            if let Ok(Nl80211Attrs::StaFlags2(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1864,7 +1864,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ControlPort(val) = attr? {
+            if let Ok(Nl80211Attrs::ControlPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1879,7 +1879,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Testdata(val) = attr? {
+            if let Ok(Nl80211Attrs::Testdata(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1894,7 +1894,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Privacy(val) = attr? {
+            if let Ok(Nl80211Attrs::Privacy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1909,7 +1909,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::DisconnectedByAp(val) = attr? {
+            if let Ok(Nl80211Attrs::DisconnectedByAp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1924,7 +1924,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StatusCode(val) = attr? {
+            if let Ok(Nl80211Attrs::StatusCode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1939,7 +1939,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CipherSuitesPairwise(val) = attr? {
+            if let Ok(Nl80211Attrs::CipherSuitesPairwise(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1954,7 +1954,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CipherSuiteGroup(val) = attr? {
+            if let Ok(Nl80211Attrs::CipherSuiteGroup(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1969,7 +1969,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WpaVersions(val) = attr? {
+            if let Ok(Nl80211Attrs::WpaVersions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1984,7 +1984,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::AkmSuites(val) = attr? {
+            if let Ok(Nl80211Attrs::AkmSuites(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1999,7 +1999,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ReqIe(val) = attr? {
+            if let Ok(Nl80211Attrs::ReqIe(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2014,7 +2014,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RespIe(val) = attr? {
+            if let Ok(Nl80211Attrs::RespIe(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2029,7 +2029,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::PrevBssid(val) = attr? {
+            if let Ok(Nl80211Attrs::PrevBssid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2044,7 +2044,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Key(val) = attr? {
+            if let Ok(Nl80211Attrs::Key(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2059,7 +2059,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Keys(val) = attr? {
+            if let Ok(Nl80211Attrs::Keys(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2074,7 +2074,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Pid(val) = attr? {
+            if let Ok(Nl80211Attrs::Pid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2089,7 +2089,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::_4addr(val) = attr? {
+            if let Ok(Nl80211Attrs::_4addr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2104,7 +2104,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SurveyInfo(val) = attr? {
+            if let Ok(Nl80211Attrs::SurveyInfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2119,7 +2119,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Pmkid(val) = attr? {
+            if let Ok(Nl80211Attrs::Pmkid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2134,7 +2134,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxNumPmkids(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxNumPmkids(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2149,7 +2149,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Duration(val) = attr? {
+            if let Ok(Nl80211Attrs::Duration(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2164,7 +2164,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Cookie(val) = attr? {
+            if let Ok(Nl80211Attrs::Cookie(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2179,7 +2179,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyCoverageClass(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyCoverageClass(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2194,7 +2194,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TxRates(val) = attr? {
+            if let Ok(Nl80211Attrs::TxRates(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2209,7 +2209,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FrameMatch(val) = attr? {
+            if let Ok(Nl80211Attrs::FrameMatch(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2224,7 +2224,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Ack(val) = attr? {
+            if let Ok(Nl80211Attrs::Ack(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2239,7 +2239,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::PsState(val) = attr? {
+            if let Ok(Nl80211Attrs::PsState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2254,7 +2254,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Cqm(val) = attr? {
+            if let Ok(Nl80211Attrs::Cqm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2269,7 +2269,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::LocalStateChange(val) = attr? {
+            if let Ok(Nl80211Attrs::LocalStateChange(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2284,7 +2284,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ApIsolate(val) = attr? {
+            if let Ok(Nl80211Attrs::ApIsolate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2299,7 +2299,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyTxPowerSetting(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyTxPowerSetting(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2314,7 +2314,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyTxPowerLevel(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyTxPowerLevel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2329,7 +2329,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TxFrameTypes(val) = attr? {
+            if let Ok(Nl80211Attrs::TxFrameTypes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2344,7 +2344,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RxFrameTypes(val) = attr? {
+            if let Ok(Nl80211Attrs::RxFrameTypes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2359,7 +2359,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FrameType(val) = attr? {
+            if let Ok(Nl80211Attrs::FrameType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2374,7 +2374,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ControlPortEthertype(val) = attr? {
+            if let Ok(Nl80211Attrs::ControlPortEthertype(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2389,7 +2389,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ControlPortNoEncrypt(val) = attr? {
+            if let Ok(Nl80211Attrs::ControlPortNoEncrypt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2404,7 +2404,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SupportIbssRsn(val) = attr? {
+            if let Ok(Nl80211Attrs::SupportIbssRsn(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2419,7 +2419,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyAntennaTx(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyAntennaTx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2434,7 +2434,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyAntennaRx(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyAntennaRx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2449,7 +2449,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::McastRate(val) = attr? {
+            if let Ok(Nl80211Attrs::McastRate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2464,7 +2464,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::OffchannelTxOk(val) = attr? {
+            if let Ok(Nl80211Attrs::OffchannelTxOk(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2479,7 +2479,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BssHtOpmode(val) = attr? {
+            if let Ok(Nl80211Attrs::BssHtOpmode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2494,7 +2494,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::KeyDefaultTypes(val) = attr? {
+            if let Ok(Nl80211Attrs::KeyDefaultTypes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2509,7 +2509,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxRemainOnChannelDuration(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxRemainOnChannelDuration(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2524,7 +2524,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MeshSetup(val) = attr? {
+            if let Ok(Nl80211Attrs::MeshSetup(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2539,7 +2539,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyAntennaAvailTx(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyAntennaAvailTx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2554,7 +2554,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyAntennaAvailRx(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyAntennaAvailRx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2569,7 +2569,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SupportMeshAuth(val) = attr? {
+            if let Ok(Nl80211Attrs::SupportMeshAuth(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2584,7 +2584,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaPlinkState(val) = attr? {
+            if let Ok(Nl80211Attrs::StaPlinkState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2599,7 +2599,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WowlanTriggers(val) = attr? {
+            if let Ok(Nl80211Attrs::WowlanTriggers(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2616,7 +2616,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WowlanTriggersSupported(val) = attr? {
+            if let Ok(Nl80211Attrs::WowlanTriggersSupported(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2631,7 +2631,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SchedScanInterval(val) = attr? {
+            if let Ok(Nl80211Attrs::SchedScanInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2652,7 +2652,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         ErrorContext,
     > {
         for attr in self.clone() {
-            if let Nl80211Attrs::InterfaceCombinations(val) = attr? {
+            if let Ok(Nl80211Attrs::InterfaceCombinations(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -2667,7 +2667,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SoftwareIftypes(val) = attr? {
+            if let Ok(Nl80211Attrs::SoftwareIftypes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2682,7 +2682,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RekeyData(val) = attr? {
+            if let Ok(Nl80211Attrs::RekeyData(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2697,7 +2697,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxNumSchedScanSsids(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxNumSchedScanSsids(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2712,7 +2712,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxSchedScanIeLen(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxSchedScanIeLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2727,7 +2727,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ScanSuppRates(val) = attr? {
+            if let Ok(Nl80211Attrs::ScanSuppRates(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2742,7 +2742,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::HiddenSsid(val) = attr? {
+            if let Ok(Nl80211Attrs::HiddenSsid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2757,7 +2757,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::IeProbeResp(val) = attr? {
+            if let Ok(Nl80211Attrs::IeProbeResp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2772,7 +2772,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::IeAssocResp(val) = attr? {
+            if let Ok(Nl80211Attrs::IeAssocResp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2787,7 +2787,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaWme(val) = attr? {
+            if let Ok(Nl80211Attrs::StaWme(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2802,7 +2802,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SupportApUapsd(val) = attr? {
+            if let Ok(Nl80211Attrs::SupportApUapsd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2817,7 +2817,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RoamSupport(val) = attr? {
+            if let Ok(Nl80211Attrs::RoamSupport(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2832,7 +2832,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SchedScanMatch(val) = attr? {
+            if let Ok(Nl80211Attrs::SchedScanMatch(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2847,7 +2847,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxMatchSets(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxMatchSets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2862,7 +2862,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::PmksaCandidate(val) = attr? {
+            if let Ok(Nl80211Attrs::PmksaCandidate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2877,7 +2877,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TxNoCckRate(val) = attr? {
+            if let Ok(Nl80211Attrs::TxNoCckRate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2892,7 +2892,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TdlsAction(val) = attr? {
+            if let Ok(Nl80211Attrs::TdlsAction(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2907,7 +2907,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TdlsDialogToken(val) = attr? {
+            if let Ok(Nl80211Attrs::TdlsDialogToken(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2922,7 +2922,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TdlsOperation(val) = attr? {
+            if let Ok(Nl80211Attrs::TdlsOperation(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2937,7 +2937,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TdlsSupport(val) = attr? {
+            if let Ok(Nl80211Attrs::TdlsSupport(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2952,7 +2952,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TdlsExternalSetup(val) = attr? {
+            if let Ok(Nl80211Attrs::TdlsExternalSetup(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2967,7 +2967,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::DeviceApSme(val) = attr? {
+            if let Ok(Nl80211Attrs::DeviceApSme(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2982,7 +2982,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::DontWaitForAck(val) = attr? {
+            if let Ok(Nl80211Attrs::DontWaitForAck(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2998,7 +2998,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FeatureFlags(val) = attr? {
+            if let Ok(Nl80211Attrs::FeatureFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3013,7 +3013,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ProbeRespOffload(val) = attr? {
+            if let Ok(Nl80211Attrs::ProbeRespOffload(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3028,7 +3028,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ProbeResp(val) = attr? {
+            if let Ok(Nl80211Attrs::ProbeResp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3043,7 +3043,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::DfsRegion(val) = attr? {
+            if let Ok(Nl80211Attrs::DfsRegion(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3058,7 +3058,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::DisableHt(val) = attr? {
+            if let Ok(Nl80211Attrs::DisableHt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3073,7 +3073,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::HtCapabilityMask(val) = attr? {
+            if let Ok(Nl80211Attrs::HtCapabilityMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3088,7 +3088,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::NoackMap(val) = attr? {
+            if let Ok(Nl80211Attrs::NoackMap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3103,7 +3103,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::InactivityTimeout(val) = attr? {
+            if let Ok(Nl80211Attrs::InactivityTimeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3118,7 +3118,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RxSignalDbm(val) = attr? {
+            if let Ok(Nl80211Attrs::RxSignalDbm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3133,7 +3133,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BgScanPeriod(val) = attr? {
+            if let Ok(Nl80211Attrs::BgScanPeriod(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3148,7 +3148,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Wdev(val) = attr? {
+            if let Ok(Nl80211Attrs::Wdev(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3163,7 +3163,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::UserRegHintType(val) = attr? {
+            if let Ok(Nl80211Attrs::UserRegHintType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3178,7 +3178,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ConnFailedReason(val) = attr? {
+            if let Ok(Nl80211Attrs::ConnFailedReason(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3193,7 +3193,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::AuthData(val) = attr? {
+            if let Ok(Nl80211Attrs::AuthData(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3208,7 +3208,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::VhtCapability(val) = attr? {
+            if let Ok(Nl80211Attrs::VhtCapability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3223,7 +3223,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ScanFlags(val) = attr? {
+            if let Ok(Nl80211Attrs::ScanFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3238,7 +3238,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ChannelWidth(val) = attr? {
+            if let Ok(Nl80211Attrs::ChannelWidth(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3253,7 +3253,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CenterFreq1(val) = attr? {
+            if let Ok(Nl80211Attrs::CenterFreq1(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3268,7 +3268,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CenterFreq2(val) = attr? {
+            if let Ok(Nl80211Attrs::CenterFreq2(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3283,7 +3283,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::P2pCtwindow(val) = attr? {
+            if let Ok(Nl80211Attrs::P2pCtwindow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3298,7 +3298,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::P2pOppps(val) = attr? {
+            if let Ok(Nl80211Attrs::P2pOppps(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3313,7 +3313,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::LocalMeshPowerMode(val) = attr? {
+            if let Ok(Nl80211Attrs::LocalMeshPowerMode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3328,7 +3328,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::AclPolicy(val) = attr? {
+            if let Ok(Nl80211Attrs::AclPolicy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3343,7 +3343,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MacAddrs(val) = attr? {
+            if let Ok(Nl80211Attrs::MacAddrs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3358,7 +3358,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MacAclMax(val) = attr? {
+            if let Ok(Nl80211Attrs::MacAclMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3373,7 +3373,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RadarEvent(val) = attr? {
+            if let Ok(Nl80211Attrs::RadarEvent(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3388,7 +3388,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ExtCapa(val) = attr? {
+            if let Ok(Nl80211Attrs::ExtCapa(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3403,7 +3403,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ExtCapaMask(val) = attr? {
+            if let Ok(Nl80211Attrs::ExtCapaMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3418,7 +3418,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaCapability(val) = attr? {
+            if let Ok(Nl80211Attrs::StaCapability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3433,7 +3433,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaExtCapability(val) = attr? {
+            if let Ok(Nl80211Attrs::StaExtCapability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3449,7 +3449,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ProtocolFeatures(val) = attr? {
+            if let Ok(Nl80211Attrs::ProtocolFeatures(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3464,7 +3464,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SplitWiphyDump(val) = attr? {
+            if let Ok(Nl80211Attrs::SplitWiphyDump(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3479,7 +3479,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::DisableVht(val) = attr? {
+            if let Ok(Nl80211Attrs::DisableVht(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3494,7 +3494,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::VhtCapabilityMask(val) = attr? {
+            if let Ok(Nl80211Attrs::VhtCapabilityMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3509,7 +3509,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Mdid(val) = attr? {
+            if let Ok(Nl80211Attrs::Mdid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3524,7 +3524,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::IeRic(val) = attr? {
+            if let Ok(Nl80211Attrs::IeRic(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3539,7 +3539,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CritProtId(val) = attr? {
+            if let Ok(Nl80211Attrs::CritProtId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3554,7 +3554,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxCritProtDuration(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxCritProtDuration(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3569,7 +3569,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::PeerAid(val) = attr? {
+            if let Ok(Nl80211Attrs::PeerAid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3584,7 +3584,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CoalesceRule(val) = attr? {
+            if let Ok(Nl80211Attrs::CoalesceRule(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3599,7 +3599,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ChSwitchCount(val) = attr? {
+            if let Ok(Nl80211Attrs::ChSwitchCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3614,7 +3614,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ChSwitchBlockTx(val) = attr? {
+            if let Ok(Nl80211Attrs::ChSwitchBlockTx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3629,7 +3629,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CsaIes(val) = attr? {
+            if let Ok(Nl80211Attrs::CsaIes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3644,7 +3644,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CntdwnOffsBeacon(val) = attr? {
+            if let Ok(Nl80211Attrs::CntdwnOffsBeacon(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3659,7 +3659,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CntdwnOffsPresp(val) = attr? {
+            if let Ok(Nl80211Attrs::CntdwnOffsPresp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3674,7 +3674,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RxmgmtFlags(val) = attr? {
+            if let Ok(Nl80211Attrs::RxmgmtFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3689,7 +3689,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaSupportedChannels(val) = attr? {
+            if let Ok(Nl80211Attrs::StaSupportedChannels(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3704,7 +3704,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaSupportedOperClasses(val) = attr? {
+            if let Ok(Nl80211Attrs::StaSupportedOperClasses(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3719,7 +3719,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::HandleDfs(val) = attr? {
+            if let Ok(Nl80211Attrs::HandleDfs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3734,7 +3734,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Support5Mhz(val) = attr? {
+            if let Ok(Nl80211Attrs::Support5Mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3749,7 +3749,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Support10Mhz(val) = attr? {
+            if let Ok(Nl80211Attrs::Support10Mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3764,7 +3764,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::OpmodeNotif(val) = attr? {
+            if let Ok(Nl80211Attrs::OpmodeNotif(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3779,7 +3779,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::VendorId(val) = attr? {
+            if let Ok(Nl80211Attrs::VendorId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3794,7 +3794,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::VendorSubcmd(val) = attr? {
+            if let Ok(Nl80211Attrs::VendorSubcmd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3809,7 +3809,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::VendorData(val) = attr? {
+            if let Ok(Nl80211Attrs::VendorData(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3824,7 +3824,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::VendorEvents(val) = attr? {
+            if let Ok(Nl80211Attrs::VendorEvents(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3839,7 +3839,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::QosMap(val) = attr? {
+            if let Ok(Nl80211Attrs::QosMap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3854,7 +3854,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MacHint(val) = attr? {
+            if let Ok(Nl80211Attrs::MacHint(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3869,7 +3869,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyFreqHint(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyFreqHint(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3884,7 +3884,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxApAssocSta(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxApAssocSta(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3899,7 +3899,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TdlsPeerCapability(val) = attr? {
+            if let Ok(Nl80211Attrs::TdlsPeerCapability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3914,7 +3914,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SocketOwner(val) = attr? {
+            if let Ok(Nl80211Attrs::SocketOwner(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3929,7 +3929,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CsaCOffsetsTx(val) = attr? {
+            if let Ok(Nl80211Attrs::CsaCOffsetsTx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3944,7 +3944,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxCsaCounters(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxCsaCounters(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3959,7 +3959,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TdlsInitiator(val) = attr? {
+            if let Ok(Nl80211Attrs::TdlsInitiator(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3974,7 +3974,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::UseRrm(val) = attr? {
+            if let Ok(Nl80211Attrs::UseRrm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3989,7 +3989,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyDynAck(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyDynAck(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4004,7 +4004,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Tsid(val) = attr? {
+            if let Ok(Nl80211Attrs::Tsid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4019,7 +4019,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::UserPrio(val) = attr? {
+            if let Ok(Nl80211Attrs::UserPrio(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4034,7 +4034,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::AdmittedTime(val) = attr? {
+            if let Ok(Nl80211Attrs::AdmittedTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4049,7 +4049,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SmpsMode(val) = attr? {
+            if let Ok(Nl80211Attrs::SmpsMode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4064,7 +4064,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::OperClass(val) = attr? {
+            if let Ok(Nl80211Attrs::OperClass(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4079,7 +4079,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MacMask(val) = attr? {
+            if let Ok(Nl80211Attrs::MacMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4094,7 +4094,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphySelfManagedReg(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphySelfManagedReg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4109,7 +4109,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ExtFeatures(val) = attr? {
+            if let Ok(Nl80211Attrs::ExtFeatures(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4124,7 +4124,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SurveyRadioStats(val) = attr? {
+            if let Ok(Nl80211Attrs::SurveyRadioStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4139,7 +4139,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::NetnsFd(val) = attr? {
+            if let Ok(Nl80211Attrs::NetnsFd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4154,7 +4154,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SchedScanDelay(val) = attr? {
+            if let Ok(Nl80211Attrs::SchedScanDelay(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4169,7 +4169,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RegIndoor(val) = attr? {
+            if let Ok(Nl80211Attrs::RegIndoor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4184,7 +4184,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxNumSchedScanPlans(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxNumSchedScanPlans(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4199,7 +4199,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxScanPlanInterval(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxScanPlanInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4214,7 +4214,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxScanPlanIterations(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxScanPlanIterations(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4229,7 +4229,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SchedScanPlans(val) = attr? {
+            if let Ok(Nl80211Attrs::SchedScanPlans(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4244,7 +4244,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Pbss(val) = attr? {
+            if let Ok(Nl80211Attrs::Pbss(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4259,7 +4259,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BssSelect(val) = attr? {
+            if let Ok(Nl80211Attrs::BssSelect(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4274,7 +4274,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaSupportP2pPs(val) = attr? {
+            if let Ok(Nl80211Attrs::StaSupportP2pPs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4289,7 +4289,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Pad(val) = attr? {
+            if let Ok(Nl80211Attrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4304,7 +4304,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::IftypeExtCapa(val) = attr? {
+            if let Ok(Nl80211Attrs::IftypeExtCapa(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4319,7 +4319,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MuMimoGroupData(val) = attr? {
+            if let Ok(Nl80211Attrs::MuMimoGroupData(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4334,7 +4334,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MuMimoFollowMacAddr(val) = attr? {
+            if let Ok(Nl80211Attrs::MuMimoFollowMacAddr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4349,7 +4349,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ScanStartTimeTsf(val) = attr? {
+            if let Ok(Nl80211Attrs::ScanStartTimeTsf(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4364,7 +4364,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ScanStartTimeTsfBssid(val) = attr? {
+            if let Ok(Nl80211Attrs::ScanStartTimeTsfBssid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4379,7 +4379,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MeasurementDuration(val) = attr? {
+            if let Ok(Nl80211Attrs::MeasurementDuration(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4394,7 +4394,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MeasurementDurationMandatory(val) = attr? {
+            if let Ok(Nl80211Attrs::MeasurementDurationMandatory(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4409,7 +4409,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MeshPeerAid(val) = attr? {
+            if let Ok(Nl80211Attrs::MeshPeerAid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4424,7 +4424,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::NanMasterPref(val) = attr? {
+            if let Ok(Nl80211Attrs::NanMasterPref(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4439,7 +4439,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Bands(val) = attr? {
+            if let Ok(Nl80211Attrs::Bands(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4454,7 +4454,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::NanFunc(val) = attr? {
+            if let Ok(Nl80211Attrs::NanFunc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4469,7 +4469,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::NanMatch(val) = attr? {
+            if let Ok(Nl80211Attrs::NanMatch(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4484,7 +4484,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FilsKek(val) = attr? {
+            if let Ok(Nl80211Attrs::FilsKek(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4499,7 +4499,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FilsNonces(val) = attr? {
+            if let Ok(Nl80211Attrs::FilsNonces(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4514,7 +4514,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MulticastToUnicastEnabled(val) = attr? {
+            if let Ok(Nl80211Attrs::MulticastToUnicastEnabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4529,7 +4529,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Bssid(val) = attr? {
+            if let Ok(Nl80211Attrs::Bssid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4544,7 +4544,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SchedScanRelativeRssi(val) = attr? {
+            if let Ok(Nl80211Attrs::SchedScanRelativeRssi(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4559,7 +4559,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SchedScanRssiAdjust(val) = attr? {
+            if let Ok(Nl80211Attrs::SchedScanRssiAdjust(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4574,7 +4574,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TimeoutReason(val) = attr? {
+            if let Ok(Nl80211Attrs::TimeoutReason(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4589,7 +4589,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FilsErpUsername(val) = attr? {
+            if let Ok(Nl80211Attrs::FilsErpUsername(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4604,7 +4604,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FilsErpRealm(val) = attr? {
+            if let Ok(Nl80211Attrs::FilsErpRealm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4619,7 +4619,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FilsErpNextSeqNum(val) = attr? {
+            if let Ok(Nl80211Attrs::FilsErpNextSeqNum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4634,7 +4634,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FilsErpRrk(val) = attr? {
+            if let Ok(Nl80211Attrs::FilsErpRrk(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4649,7 +4649,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FilsCacheId(val) = attr? {
+            if let Ok(Nl80211Attrs::FilsCacheId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4664,7 +4664,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Pmk(val) = attr? {
+            if let Ok(Nl80211Attrs::Pmk(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4679,7 +4679,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SchedScanMulti(val) = attr? {
+            if let Ok(Nl80211Attrs::SchedScanMulti(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4694,7 +4694,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SchedScanMaxReqs(val) = attr? {
+            if let Ok(Nl80211Attrs::SchedScanMaxReqs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4709,7 +4709,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Want1x4wayHs(val) = attr? {
+            if let Ok(Nl80211Attrs::Want1x4wayHs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4724,7 +4724,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Pmkr0Name(val) = attr? {
+            if let Ok(Nl80211Attrs::Pmkr0Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4739,7 +4739,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::PortAuthorized(val) = attr? {
+            if let Ok(Nl80211Attrs::PortAuthorized(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4754,7 +4754,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ExternalAuthAction(val) = attr? {
+            if let Ok(Nl80211Attrs::ExternalAuthAction(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4769,7 +4769,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ExternalAuthSupport(val) = attr? {
+            if let Ok(Nl80211Attrs::ExternalAuthSupport(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4784,7 +4784,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Nss(val) = attr? {
+            if let Ok(Nl80211Attrs::Nss(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4799,7 +4799,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::AckSignal(val) = attr? {
+            if let Ok(Nl80211Attrs::AckSignal(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4814,7 +4814,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ControlPortOverNl80211(val) = attr? {
+            if let Ok(Nl80211Attrs::ControlPortOverNl80211(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4829,7 +4829,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TxqStats(val) = attr? {
+            if let Ok(Nl80211Attrs::TxqStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4844,7 +4844,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TxqLimit(val) = attr? {
+            if let Ok(Nl80211Attrs::TxqLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4859,7 +4859,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TxqMemoryLimit(val) = attr? {
+            if let Ok(Nl80211Attrs::TxqMemoryLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4874,7 +4874,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TxqQuantum(val) = attr? {
+            if let Ok(Nl80211Attrs::TxqQuantum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4889,7 +4889,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::HeCapability(val) = attr? {
+            if let Ok(Nl80211Attrs::HeCapability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4904,7 +4904,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FtmResponder(val) = attr? {
+            if let Ok(Nl80211Attrs::FtmResponder(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4919,7 +4919,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FtmResponderStats(val) = attr? {
+            if let Ok(Nl80211Attrs::FtmResponderStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4934,7 +4934,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::Timeout(val) = attr? {
+            if let Ok(Nl80211Attrs::Timeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4949,7 +4949,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::PeerMeasurements(val) = attr? {
+            if let Ok(Nl80211Attrs::PeerMeasurements(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4964,7 +4964,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::AirtimeWeight(val) = attr? {
+            if let Ok(Nl80211Attrs::AirtimeWeight(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4979,7 +4979,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaTxPowerSetting(val) = attr? {
+            if let Ok(Nl80211Attrs::StaTxPowerSetting(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4994,7 +4994,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::StaTxPower(val) = attr? {
+            if let Ok(Nl80211Attrs::StaTxPower(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5009,7 +5009,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SaePassword(val) = attr? {
+            if let Ok(Nl80211Attrs::SaePassword(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5024,7 +5024,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TwtResponder(val) = attr? {
+            if let Ok(Nl80211Attrs::TwtResponder(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5039,7 +5039,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::HeObssPd(val) = attr? {
+            if let Ok(Nl80211Attrs::HeObssPd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5054,7 +5054,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyEdmgChannels(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyEdmgChannels(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5069,7 +5069,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyEdmgBwConfig(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyEdmgBwConfig(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5084,7 +5084,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::VlanId(val) = attr? {
+            if let Ok(Nl80211Attrs::VlanId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5099,7 +5099,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::HeBssColor(val) = attr? {
+            if let Ok(Nl80211Attrs::HeBssColor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5114,7 +5114,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::IftypeAkmSuites(val) = attr? {
+            if let Ok(Nl80211Attrs::IftypeAkmSuites(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5129,7 +5129,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TidConfig(val) = attr? {
+            if let Ok(Nl80211Attrs::TidConfig(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5144,7 +5144,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ControlPortNoPreauth(val) = attr? {
+            if let Ok(Nl80211Attrs::ControlPortNoPreauth(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5159,7 +5159,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::PmkLifetime(val) = attr? {
+            if let Ok(Nl80211Attrs::PmkLifetime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5174,7 +5174,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::PmkReauthThreshold(val) = attr? {
+            if let Ok(Nl80211Attrs::PmkReauthThreshold(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5189,7 +5189,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ReceiveMulticast(val) = attr? {
+            if let Ok(Nl80211Attrs::ReceiveMulticast(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5204,7 +5204,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyFreqOffset(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyFreqOffset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5219,7 +5219,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::CenterFreq1Offset(val) = attr? {
+            if let Ok(Nl80211Attrs::CenterFreq1Offset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5234,7 +5234,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ScanFreqKhz(val) = attr? {
+            if let Ok(Nl80211Attrs::ScanFreqKhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5249,7 +5249,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::He6ghzCapability(val) = attr? {
+            if let Ok(Nl80211Attrs::He6ghzCapability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5264,7 +5264,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::FilsDiscovery(val) = attr? {
+            if let Ok(Nl80211Attrs::FilsDiscovery(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5279,7 +5279,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::UnsolBcastProbeResp(val) = attr? {
+            if let Ok(Nl80211Attrs::UnsolBcastProbeResp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5294,7 +5294,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::S1gCapability(val) = attr? {
+            if let Ok(Nl80211Attrs::S1gCapability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5309,7 +5309,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::S1gCapabilityMask(val) = attr? {
+            if let Ok(Nl80211Attrs::S1gCapabilityMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5324,7 +5324,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SaePwe(val) = attr? {
+            if let Ok(Nl80211Attrs::SaePwe(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5339,7 +5339,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ReconnectRequested(val) = attr? {
+            if let Ok(Nl80211Attrs::ReconnectRequested(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5354,7 +5354,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::SarSpec(val) = attr? {
+            if let Ok(Nl80211Attrs::SarSpec(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5369,7 +5369,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::DisableHe(val) = attr? {
+            if let Ok(Nl80211Attrs::DisableHe(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5384,7 +5384,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ObssColorBitmap(val) = attr? {
+            if let Ok(Nl80211Attrs::ObssColorBitmap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5399,7 +5399,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ColorChangeCount(val) = attr? {
+            if let Ok(Nl80211Attrs::ColorChangeCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5414,7 +5414,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ColorChangeColor(val) = attr? {
+            if let Ok(Nl80211Attrs::ColorChangeColor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5429,7 +5429,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ColorChangeElems(val) = attr? {
+            if let Ok(Nl80211Attrs::ColorChangeElems(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5444,7 +5444,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MbssidConfig(val) = attr? {
+            if let Ok(Nl80211Attrs::MbssidConfig(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5459,7 +5459,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MbssidElems(val) = attr? {
+            if let Ok(Nl80211Attrs::MbssidElems(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5474,7 +5474,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RadarBackground(val) = attr? {
+            if let Ok(Nl80211Attrs::RadarBackground(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5489,7 +5489,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::ApSettingsFlags(val) = attr? {
+            if let Ok(Nl80211Attrs::ApSettingsFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5504,7 +5504,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::EhtCapability(val) = attr? {
+            if let Ok(Nl80211Attrs::EhtCapability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5519,7 +5519,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::DisableEht(val) = attr? {
+            if let Ok(Nl80211Attrs::DisableEht(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5534,7 +5534,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MloLinks(val) = attr? {
+            if let Ok(Nl80211Attrs::MloLinks(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5549,7 +5549,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MloLinkId(val) = attr? {
+            if let Ok(Nl80211Attrs::MloLinkId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5564,7 +5564,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MldAddr(val) = attr? {
+            if let Ok(Nl80211Attrs::MldAddr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5579,7 +5579,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MloSupport(val) = attr? {
+            if let Ok(Nl80211Attrs::MloSupport(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5594,7 +5594,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxNumAkmSuites(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxNumAkmSuites(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5609,7 +5609,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::EmlCapability(val) = attr? {
+            if let Ok(Nl80211Attrs::EmlCapability(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5624,7 +5624,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MldCapaAndOps(val) = attr? {
+            if let Ok(Nl80211Attrs::MldCapaAndOps(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5639,7 +5639,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TxHwTimestamp(val) = attr? {
+            if let Ok(Nl80211Attrs::TxHwTimestamp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5654,7 +5654,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::RxHwTimestamp(val) = attr? {
+            if let Ok(Nl80211Attrs::RxHwTimestamp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5669,7 +5669,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::TdBitmap(val) = attr? {
+            if let Ok(Nl80211Attrs::TdBitmap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5684,7 +5684,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::PunctBitmap(val) = attr? {
+            if let Ok(Nl80211Attrs::PunctBitmap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5699,7 +5699,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MaxHwTimestampPeers(val) = attr? {
+            if let Ok(Nl80211Attrs::MaxHwTimestampPeers(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5714,7 +5714,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::HwTimestampEnabled(val) = attr? {
+            if let Ok(Nl80211Attrs::HwTimestampEnabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5729,7 +5729,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::EmaRnrElems(val) = attr? {
+            if let Ok(Nl80211Attrs::EmaRnrElems(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5744,7 +5744,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MloLinkDisabled(val) = attr? {
+            if let Ok(Nl80211Attrs::MloLinkDisabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5759,7 +5759,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::BssDumpIncludeUseData(val) = attr? {
+            if let Ok(Nl80211Attrs::BssDumpIncludeUseData(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5774,7 +5774,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MloTtlmDlink(val) = attr? {
+            if let Ok(Nl80211Attrs::MloTtlmDlink(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5789,7 +5789,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::MloTtlmUlink(val) = attr? {
+            if let Ok(Nl80211Attrs::MloTtlmUlink(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5804,7 +5804,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::AssocSppAmsdu(val) = attr? {
+            if let Ok(Nl80211Attrs::AssocSppAmsdu(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5819,7 +5819,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyRadios(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyRadios(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5834,7 +5834,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::WiphyInterfaceCombinations(val) = attr? {
+            if let Ok(Nl80211Attrs::WiphyInterfaceCombinations(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5849,7 +5849,7 @@ impl<'a> IterableNl80211Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Nl80211Attrs::VifRadioMask(val) = attr? {
+            if let Ok(Nl80211Attrs::VifRadioMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5891,11 +5891,13 @@ impl<'a> Iterator for IterableArrayU32<'a> {
                 return Some(Ok(res));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "u32",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -5936,11 +5938,13 @@ impl<'a> Iterator for IterableArrayIfCombinationAttributes<'a> {
                 )));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "IfCombinationAttributes",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -6309,14 +6313,16 @@ impl<'a> IterableNl80211Attrs<'a> {
 impl<'a> Iterator for IterableNl80211Attrs<'a> {
     type Item = Result<Nl80211Attrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10250,7 +10256,7 @@ impl<'a> IterableFrameTypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrameTypeAttrs::FrameType(val) = attr? {
+            if let Ok(FrameTypeAttrs::FrameType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10291,14 +10297,16 @@ impl<'a> IterableFrameTypeAttrs<'a> {
 impl<'a> Iterator for IterableFrameTypeAttrs<'a> {
     type Item = Result<FrameTypeAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10382,23 +10390,23 @@ impl IterableFrameTypeAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum WiphyBands<'a> {
-    #[doc = "2\\.4 GHz ISM band"]
+    #[doc = "2.4 GHz ISM band\n"]
     _2ghz(IterableBandAttrs<'a>),
-    #[doc = "around 5 GHz band (4\\.9 \\- 5\\.7 GHz)"]
+    #[doc = "around 5 GHz band (4.9 - 5.7 GHz)\n"]
     _5ghz(IterableBandAttrs<'a>),
-    #[doc = "around 60 GHz band (58\\.32 \\- 69\\.12 GHz)"]
+    #[doc = "around 60 GHz band (58.32 - 69.12 GHz)\n"]
     _60ghz(IterableBandAttrs<'a>),
     _6ghz(IterableBandAttrs<'a>),
     S1ghz(IterableBandAttrs<'a>),
     Lc(IterableBandAttrs<'a>),
 }
 impl<'a> IterableWiphyBands<'a> {
-    #[doc = "2\\.4 GHz ISM band"]
+    #[doc = "2.4 GHz ISM band\n"]
     pub fn get_2ghz(&self) -> Result<IterableBandAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WiphyBands::_2ghz(val) = attr? {
+            if let Ok(WiphyBands::_2ghz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10409,12 +10417,12 @@ impl<'a> IterableWiphyBands<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "around 5 GHz band (4\\.9 \\- 5\\.7 GHz)"]
+    #[doc = "around 5 GHz band (4.9 - 5.7 GHz)\n"]
     pub fn get_5ghz(&self) -> Result<IterableBandAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WiphyBands::_5ghz(val) = attr? {
+            if let Ok(WiphyBands::_5ghz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10425,12 +10433,12 @@ impl<'a> IterableWiphyBands<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "around 60 GHz band (58\\.32 \\- 69\\.12 GHz)"]
+    #[doc = "around 60 GHz band (58.32 - 69.12 GHz)\n"]
     pub fn get_60ghz(&self) -> Result<IterableBandAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WiphyBands::_60ghz(val) = attr? {
+            if let Ok(WiphyBands::_60ghz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10445,7 +10453,7 @@ impl<'a> IterableWiphyBands<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WiphyBands::_6ghz(val) = attr? {
+            if let Ok(WiphyBands::_6ghz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10460,7 +10468,7 @@ impl<'a> IterableWiphyBands<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WiphyBands::S1ghz(val) = attr? {
+            if let Ok(WiphyBands::S1ghz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10475,7 +10483,7 @@ impl<'a> IterableWiphyBands<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WiphyBands::Lc(val) = attr? {
+            if let Ok(WiphyBands::Lc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10525,14 +10533,16 @@ impl<'a> IterableWiphyBands<'a> {
 impl<'a> Iterator for IterableWiphyBands<'a> {
     type Item = Result<WiphyBands<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10699,7 +10709,7 @@ impl<'a> IterableBandAttrs<'a> {
         ErrorContext,
     > {
         for attr in self.clone() {
-            if let BandAttrs::Freqs(val) = attr? {
+            if let Ok(BandAttrs::Freqs(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -10715,7 +10725,7 @@ impl<'a> IterableBandAttrs<'a> {
     ) -> Result<ArrayIterable<IterableArrayBitrateAttrs<'a>, IterableBitrateAttrs<'a>>, ErrorContext>
     {
         for attr in self.clone() {
-            if let BandAttrs::Rates(val) = attr? {
+            if let Ok(BandAttrs::Rates(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -10730,7 +10740,7 @@ impl<'a> IterableBandAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BandAttrs::HtMcsSet(val) = attr? {
+            if let Ok(BandAttrs::HtMcsSet(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10745,7 +10755,7 @@ impl<'a> IterableBandAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BandAttrs::HtCapa(val) = attr? {
+            if let Ok(BandAttrs::HtCapa(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10760,7 +10770,7 @@ impl<'a> IterableBandAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BandAttrs::HtAmpduFactor(val) = attr? {
+            if let Ok(BandAttrs::HtAmpduFactor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10775,7 +10785,7 @@ impl<'a> IterableBandAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BandAttrs::HtAmpduDensity(val) = attr? {
+            if let Ok(BandAttrs::HtAmpduDensity(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10790,7 +10800,7 @@ impl<'a> IterableBandAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BandAttrs::VhtMcsSet(val) = attr? {
+            if let Ok(BandAttrs::VhtMcsSet(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10805,7 +10815,7 @@ impl<'a> IterableBandAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BandAttrs::VhtCapa(val) = attr? {
+            if let Ok(BandAttrs::VhtCapa(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10823,7 +10833,7 @@ impl<'a> IterableBandAttrs<'a> {
         ErrorContext,
     > {
         for attr in self.clone() {
-            if let BandAttrs::IftypeData(val) = attr? {
+            if let Ok(BandAttrs::IftypeData(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -10838,7 +10848,7 @@ impl<'a> IterableBandAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BandAttrs::EdmgChannels(val) = attr? {
+            if let Ok(BandAttrs::EdmgChannels(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10853,7 +10863,7 @@ impl<'a> IterableBandAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BandAttrs::EdmgBwConfig(val) = attr? {
+            if let Ok(BandAttrs::EdmgBwConfig(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10868,7 +10878,7 @@ impl<'a> IterableBandAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BandAttrs::S1gMcsNssSet(val) = attr? {
+            if let Ok(BandAttrs::S1gMcsNssSet(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10883,7 +10893,7 @@ impl<'a> IterableBandAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BandAttrs::S1gCapa(val) = attr? {
+            if let Ok(BandAttrs::S1gCapa(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10929,11 +10939,13 @@ impl<'a> Iterator for IterableArrayFrequencyAttrs<'a> {
                 return Some(Ok(IterableFrequencyAttrs::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "FrequencyAttrs",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -10971,11 +10983,13 @@ impl<'a> Iterator for IterableArrayBitrateAttrs<'a> {
                 return Some(Ok(IterableBitrateAttrs::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "BitrateAttrs",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -11013,11 +11027,13 @@ impl<'a> Iterator for IterableArrayIftypeDataAttrs<'a> {
                 return Some(Ok(IterableIftypeDataAttrs::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "IftypeDataAttrs",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -11066,14 +11082,16 @@ impl<'a> IterableBandAttrs<'a> {
 impl<'a> Iterator for IterableBandAttrs<'a> {
     type Item = Result<BandAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11352,7 +11370,7 @@ impl<'a> IterableBitrateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BitrateAttrs::Rate(val) = attr? {
+            if let Ok(BitrateAttrs::Rate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11367,7 +11385,7 @@ impl<'a> IterableBitrateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BitrateAttrs::_2ghzShortpreamble(val) = attr? {
+            if let Ok(BitrateAttrs::_2ghzShortpreamble(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11413,14 +11431,16 @@ impl<'a> IterableBitrateAttrs<'a> {
 impl<'a> Iterator for IterableBitrateAttrs<'a> {
     type Item = Result<BitrateAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11551,7 +11571,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::Freq(val) = attr? {
+            if let Ok(FrequencyAttrs::Freq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11566,7 +11586,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::Disabled(val) = attr? {
+            if let Ok(FrequencyAttrs::Disabled(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11581,7 +11601,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::NoIr(val) = attr? {
+            if let Ok(FrequencyAttrs::NoIr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11596,7 +11616,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::NoIbss(val) = attr? {
+            if let Ok(FrequencyAttrs::NoIbss(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11611,7 +11631,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::Radar(val) = attr? {
+            if let Ok(FrequencyAttrs::Radar(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11626,7 +11646,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::MaxTxPower(val) = attr? {
+            if let Ok(FrequencyAttrs::MaxTxPower(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11641,7 +11661,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::DfsState(val) = attr? {
+            if let Ok(FrequencyAttrs::DfsState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11656,7 +11676,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::DfsTime(val) = attr? {
+            if let Ok(FrequencyAttrs::DfsTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11671,7 +11691,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::NoHt40Minus(val) = attr? {
+            if let Ok(FrequencyAttrs::NoHt40Minus(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11686,7 +11706,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::NoHt40Plus(val) = attr? {
+            if let Ok(FrequencyAttrs::NoHt40Plus(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11701,7 +11721,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::No80mhz(val) = attr? {
+            if let Ok(FrequencyAttrs::No80mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11716,7 +11736,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::No160mhz(val) = attr? {
+            if let Ok(FrequencyAttrs::No160mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11731,7 +11751,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::DfsCacTime(val) = attr? {
+            if let Ok(FrequencyAttrs::DfsCacTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11746,7 +11766,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::IndoorOnly(val) = attr? {
+            if let Ok(FrequencyAttrs::IndoorOnly(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11761,7 +11781,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::IrConcurrent(val) = attr? {
+            if let Ok(FrequencyAttrs::IrConcurrent(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11776,7 +11796,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::No20mhz(val) = attr? {
+            if let Ok(FrequencyAttrs::No20mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11791,7 +11811,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::No10mhz(val) = attr? {
+            if let Ok(FrequencyAttrs::No10mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11806,7 +11826,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayWmmAttrs<'a>, IterableWmmAttrs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let FrequencyAttrs::Wmm(val) = attr? {
+            if let Ok(FrequencyAttrs::Wmm(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -11821,7 +11841,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::NoHe(val) = attr? {
+            if let Ok(FrequencyAttrs::NoHe(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11836,7 +11856,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::Offset(val) = attr? {
+            if let Ok(FrequencyAttrs::Offset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11851,7 +11871,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::_1mhz(val) = attr? {
+            if let Ok(FrequencyAttrs::_1mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11866,7 +11886,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::_2mhz(val) = attr? {
+            if let Ok(FrequencyAttrs::_2mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11881,7 +11901,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::_4mhz(val) = attr? {
+            if let Ok(FrequencyAttrs::_4mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11896,7 +11916,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::_8mhz(val) = attr? {
+            if let Ok(FrequencyAttrs::_8mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11911,7 +11931,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::_16mhz(val) = attr? {
+            if let Ok(FrequencyAttrs::_16mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11926,7 +11946,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::No320mhz(val) = attr? {
+            if let Ok(FrequencyAttrs::No320mhz(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11941,7 +11961,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::NoEht(val) = attr? {
+            if let Ok(FrequencyAttrs::NoEht(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11956,7 +11976,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::Psd(val) = attr? {
+            if let Ok(FrequencyAttrs::Psd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11971,7 +11991,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::DfsConcurrent(val) = attr? {
+            if let Ok(FrequencyAttrs::DfsConcurrent(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11986,7 +12006,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::No6ghzVlpClient(val) = attr? {
+            if let Ok(FrequencyAttrs::No6ghzVlpClient(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12001,7 +12021,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::No6ghzAfcClient(val) = attr? {
+            if let Ok(FrequencyAttrs::No6ghzAfcClient(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12016,7 +12036,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::CanMonitor(val) = attr? {
+            if let Ok(FrequencyAttrs::CanMonitor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12031,7 +12051,7 @@ impl<'a> IterableFrequencyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyAttrs::Allow6ghzVlpAp(val) = attr? {
+            if let Ok(FrequencyAttrs::Allow6ghzVlpAp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12077,11 +12097,13 @@ impl<'a> Iterator for IterableArrayWmmAttrs<'a> {
                 return Some(Ok(IterableWmmAttrs::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "WmmAttrs",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -12150,14 +12172,16 @@ impl<'a> IterableFrequencyAttrs<'a> {
 impl<'a> Iterator for IterableFrequencyAttrs<'a> {
     type Item = Result<FrequencyAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12640,7 +12664,7 @@ impl<'a> IterableIfCombinationAttributes<'a> {
         ErrorContext,
     > {
         for attr in self.clone() {
-            if let IfCombinationAttributes::Limits(val) = attr? {
+            if let Ok(IfCombinationAttributes::Limits(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -12655,7 +12679,7 @@ impl<'a> IterableIfCombinationAttributes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IfCombinationAttributes::Maxnum(val) = attr? {
+            if let Ok(IfCombinationAttributes::Maxnum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12670,7 +12694,7 @@ impl<'a> IterableIfCombinationAttributes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IfCombinationAttributes::StaApBiMatch(val) = attr? {
+            if let Ok(IfCombinationAttributes::StaApBiMatch(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12685,7 +12709,7 @@ impl<'a> IterableIfCombinationAttributes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IfCombinationAttributes::NumChannels(val) = attr? {
+            if let Ok(IfCombinationAttributes::NumChannels(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12700,7 +12724,7 @@ impl<'a> IterableIfCombinationAttributes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IfCombinationAttributes::RadarDetectWidths(val) = attr? {
+            if let Ok(IfCombinationAttributes::RadarDetectWidths(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12715,7 +12739,7 @@ impl<'a> IterableIfCombinationAttributes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IfCombinationAttributes::RadarDetectRegions(val) = attr? {
+            if let Ok(IfCombinationAttributes::RadarDetectRegions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12730,7 +12754,7 @@ impl<'a> IterableIfCombinationAttributes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IfCombinationAttributes::BiMinGcd(val) = attr? {
+            if let Ok(IfCombinationAttributes::BiMinGcd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12779,11 +12803,13 @@ impl<'a> Iterator for IterableArrayIfaceLimitAttributes<'a> {
                 )));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "IfaceLimitAttributes",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -12826,14 +12852,16 @@ impl<'a> IterableIfCombinationAttributes<'a> {
 impl<'a> Iterator for IterableIfCombinationAttributes<'a> {
     type Item = Result<IfCombinationAttributes<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -13015,7 +13043,7 @@ impl<'a> IterableIfaceLimitAttributes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IfaceLimitAttributes::Max(val) = attr? {
+            if let Ok(IfaceLimitAttributes::Max(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13030,7 +13058,7 @@ impl<'a> IterableIfaceLimitAttributes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IfaceLimitAttributes::Types(val) = attr? {
+            if let Ok(IfaceLimitAttributes::Types(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13076,14 +13104,16 @@ impl<'a> IterableIfaceLimitAttributes<'a> {
 impl<'a> Iterator for IterableIfaceLimitAttributes<'a> {
     type Item = Result<IfaceLimitAttributes<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -13197,7 +13227,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::Iftypes(val) = attr? {
+            if let Ok(IftypeDataAttrs::Iftypes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13212,7 +13242,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::HeCapMac(val) = attr? {
+            if let Ok(IftypeDataAttrs::HeCapMac(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13227,7 +13257,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::HeCapPhy(val) = attr? {
+            if let Ok(IftypeDataAttrs::HeCapPhy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13242,7 +13272,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::HeCapMcsSet(val) = attr? {
+            if let Ok(IftypeDataAttrs::HeCapMcsSet(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13257,7 +13287,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::HeCapPpe(val) = attr? {
+            if let Ok(IftypeDataAttrs::HeCapPpe(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13272,7 +13302,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::He6ghzCapa(val) = attr? {
+            if let Ok(IftypeDataAttrs::He6ghzCapa(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13287,7 +13317,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::VendorElems(val) = attr? {
+            if let Ok(IftypeDataAttrs::VendorElems(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13302,7 +13332,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::EhtCapMac(val) = attr? {
+            if let Ok(IftypeDataAttrs::EhtCapMac(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13317,7 +13347,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::EhtCapPhy(val) = attr? {
+            if let Ok(IftypeDataAttrs::EhtCapPhy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13332,7 +13362,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::EhtCapMcsSet(val) = attr? {
+            if let Ok(IftypeDataAttrs::EhtCapMcsSet(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13347,7 +13377,7 @@ impl<'a> IterableIftypeDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeDataAttrs::EhtCapPpe(val) = attr? {
+            if let Ok(IftypeDataAttrs::EhtCapPpe(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13402,14 +13432,16 @@ impl<'a> IterableIftypeDataAttrs<'a> {
 impl<'a> Iterator for IterableIftypeDataAttrs<'a> {
     type Item = Result<IftypeDataAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -13632,7 +13664,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::Unspecified(val) = attr? {
+            if let Ok(IftypeAttrs::Unspecified(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13647,7 +13679,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::Adhoc(val) = attr? {
+            if let Ok(IftypeAttrs::Adhoc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13662,7 +13694,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::Station(val) = attr? {
+            if let Ok(IftypeAttrs::Station(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13677,7 +13709,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::Ap(val) = attr? {
+            if let Ok(IftypeAttrs::Ap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13692,7 +13724,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::ApVlan(val) = attr? {
+            if let Ok(IftypeAttrs::ApVlan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13707,7 +13739,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::Wds(val) = attr? {
+            if let Ok(IftypeAttrs::Wds(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13722,7 +13754,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::Monitor(val) = attr? {
+            if let Ok(IftypeAttrs::Monitor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13737,7 +13769,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::MeshPoint(val) = attr? {
+            if let Ok(IftypeAttrs::MeshPoint(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13752,7 +13784,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::P2pClient(val) = attr? {
+            if let Ok(IftypeAttrs::P2pClient(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13767,7 +13799,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::P2pGo(val) = attr? {
+            if let Ok(IftypeAttrs::P2pGo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13782,7 +13814,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::P2pDevice(val) = attr? {
+            if let Ok(IftypeAttrs::P2pDevice(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13797,7 +13829,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::Ocb(val) = attr? {
+            if let Ok(IftypeAttrs::Ocb(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13812,7 +13844,7 @@ impl<'a> IterableIftypeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let IftypeAttrs::Nan(val) = attr? {
+            if let Ok(IftypeAttrs::Nan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13869,14 +13901,16 @@ impl<'a> IterableIftypeAttrs<'a> {
 impl<'a> Iterator for IterableIftypeAttrs<'a> {
     type Item = Result<IftypeAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -14113,7 +14147,7 @@ impl<'a> IterableSarAttributes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SarAttributes::Type(val) = attr? {
+            if let Ok(SarAttributes::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14128,7 +14162,7 @@ impl<'a> IterableSarAttributes<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArraySarSpecs<'a>, IterableSarSpecs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let SarAttributes::Specs(val) = attr? {
+            if let Ok(SarAttributes::Specs(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -14174,11 +14208,13 @@ impl<'a> Iterator for IterableArraySarSpecs<'a> {
                 return Some(Ok(IterableSarSpecs::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "SarSpecs",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -14216,14 +14252,16 @@ impl<'a> IterableSarAttributes<'a> {
 impl<'a> Iterator for IterableSarAttributes<'a> {
     type Item = Result<SarAttributes<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -14344,7 +14382,7 @@ impl<'a> IterableSarSpecs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SarSpecs::Power(val) = attr? {
+            if let Ok(SarSpecs::Power(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14359,7 +14397,7 @@ impl<'a> IterableSarSpecs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SarSpecs::RangeIndex(val) = attr? {
+            if let Ok(SarSpecs::RangeIndex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14374,7 +14412,7 @@ impl<'a> IterableSarSpecs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SarSpecs::StartFreq(val) = attr? {
+            if let Ok(SarSpecs::StartFreq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14389,7 +14427,7 @@ impl<'a> IterableSarSpecs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SarSpecs::EndFreq(val) = attr? {
+            if let Ok(SarSpecs::EndFreq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14437,14 +14475,16 @@ impl<'a> IterableSarSpecs<'a> {
 impl<'a> Iterator for IterableSarSpecs<'a> {
     type Item = Result<SarSpecs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -14582,7 +14622,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::Adhoc(val) = attr? {
+            if let Ok(SupportedIftypes::Adhoc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14597,7 +14637,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::Station(val) = attr? {
+            if let Ok(SupportedIftypes::Station(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14612,7 +14652,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::Ap(val) = attr? {
+            if let Ok(SupportedIftypes::Ap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14627,7 +14667,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::ApVlan(val) = attr? {
+            if let Ok(SupportedIftypes::ApVlan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14642,7 +14682,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::Wds(val) = attr? {
+            if let Ok(SupportedIftypes::Wds(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14657,7 +14697,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::Monitor(val) = attr? {
+            if let Ok(SupportedIftypes::Monitor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14672,7 +14712,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::MeshPoint(val) = attr? {
+            if let Ok(SupportedIftypes::MeshPoint(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14687,7 +14727,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::P2pClient(val) = attr? {
+            if let Ok(SupportedIftypes::P2pClient(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14702,7 +14742,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::P2pGo(val) = attr? {
+            if let Ok(SupportedIftypes::P2pGo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14717,7 +14757,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::P2pDevice(val) = attr? {
+            if let Ok(SupportedIftypes::P2pDevice(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14732,7 +14772,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::Ocb(val) = attr? {
+            if let Ok(SupportedIftypes::Ocb(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14747,7 +14787,7 @@ impl<'a> IterableSupportedIftypes<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SupportedIftypes::Nan(val) = attr? {
+            if let Ok(SupportedIftypes::Nan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14803,14 +14843,16 @@ impl<'a> IterableSupportedIftypes<'a> {
 impl<'a> Iterator for IterableSupportedIftypes<'a> {
     type Item = Result<SupportedIftypes, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -14995,7 +15037,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::BacklogBytes(val) = attr? {
+            if let Ok(TxqStatsAttrs::BacklogBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15010,7 +15052,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::BacklogPackets(val) = attr? {
+            if let Ok(TxqStatsAttrs::BacklogPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15025,7 +15067,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::Flows(val) = attr? {
+            if let Ok(TxqStatsAttrs::Flows(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15040,7 +15082,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::Drops(val) = attr? {
+            if let Ok(TxqStatsAttrs::Drops(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15055,7 +15097,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::EcnMarks(val) = attr? {
+            if let Ok(TxqStatsAttrs::EcnMarks(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15070,7 +15112,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::Overlimit(val) = attr? {
+            if let Ok(TxqStatsAttrs::Overlimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15085,7 +15127,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::Overmemory(val) = attr? {
+            if let Ok(TxqStatsAttrs::Overmemory(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15100,7 +15142,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::Collisions(val) = attr? {
+            if let Ok(TxqStatsAttrs::Collisions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15115,7 +15157,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::TxBytes(val) = attr? {
+            if let Ok(TxqStatsAttrs::TxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15130,7 +15172,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::TxPackets(val) = attr? {
+            if let Ok(TxqStatsAttrs::TxPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15145,7 +15187,7 @@ impl<'a> IterableTxqStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TxqStatsAttrs::MaxFlows(val) = attr? {
+            if let Ok(TxqStatsAttrs::MaxFlows(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15200,14 +15242,16 @@ impl<'a> IterableTxqStatsAttrs<'a> {
 impl<'a> Iterator for IterableTxqStatsAttrs<'a> {
     type Item = Result<TxqStatsAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -15421,7 +15465,7 @@ impl<'a> IterableWmmAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WmmAttrs::CwMin(val) = attr? {
+            if let Ok(WmmAttrs::CwMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15436,7 +15480,7 @@ impl<'a> IterableWmmAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WmmAttrs::CwMax(val) = attr? {
+            if let Ok(WmmAttrs::CwMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15451,7 +15495,7 @@ impl<'a> IterableWmmAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WmmAttrs::Aifsn(val) = attr? {
+            if let Ok(WmmAttrs::Aifsn(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15466,7 +15510,7 @@ impl<'a> IterableWmmAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WmmAttrs::Txop(val) = attr? {
+            if let Ok(WmmAttrs::Txop(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15514,14 +15558,16 @@ impl<'a> IterableWmmAttrs<'a> {
 impl<'a> Iterator for IterableWmmAttrs<'a> {
     type Item = Result<WmmAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -15667,7 +15713,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::Any(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::Any(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15682,7 +15728,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::Disconnect(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::Disconnect(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15697,7 +15743,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::MagicPkt(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::MagicPkt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15712,7 +15758,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::PktPattern(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::PktPattern(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15727,7 +15773,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::GtkRekeySupported(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::GtkRekeySupported(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15742,7 +15788,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::GtkRekeyFailure(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::GtkRekeyFailure(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15757,7 +15803,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::EapIdentRequest(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::EapIdentRequest(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15772,7 +15818,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::_4wayHandshake(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::_4wayHandshake(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15787,7 +15833,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::RfkillRelease(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::RfkillRelease(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15802,7 +15848,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::WakeupPkt80211(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::WakeupPkt80211(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15817,7 +15863,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::WakeupPkt80211Len(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::WakeupPkt80211Len(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15832,7 +15878,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::WakeupPkt8023(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::WakeupPkt8023(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15847,7 +15893,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::WakeupPkt8023Len(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::WakeupPkt8023Len(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15862,7 +15908,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::TcpConnection(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::TcpConnection(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15877,7 +15923,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::WakeupTcpMatch(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::WakeupTcpMatch(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15892,7 +15938,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::WakeupTcpConnlost(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::WakeupTcpConnlost(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15907,7 +15953,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::WakeupTcpNomoretokens(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::WakeupTcpNomoretokens(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15922,7 +15968,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::NetDetect(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::NetDetect(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15937,7 +15983,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::NetDetectResults(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::NetDetectResults(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15952,7 +15998,7 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let WowlanTriggersAttrs::UnprotectedDeauthDisassoc(val) = attr? {
+            if let Ok(WowlanTriggersAttrs::UnprotectedDeauthDisassoc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16016,14 +16062,16 @@ impl<'a> IterableWowlanTriggersAttrs<'a> {
 impl<'a> Iterator for IterableWowlanTriggersAttrs<'a> {
     type Item = Result<WowlanTriggersAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -18112,7 +18160,7 @@ impl<Prev: Rec> PushWiphyBands<Prev> {
         }
         prev
     }
-    #[doc = "2\\.4 GHz ISM band"]
+    #[doc = "2.4 GHz ISM band\n"]
     pub fn nested_2ghz(mut self) -> PushBandAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 0u16);
         PushBandAttrs {
@@ -18120,7 +18168,7 @@ impl<Prev: Rec> PushWiphyBands<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "around 5 GHz band (4\\.9 \\- 5\\.7 GHz)"]
+    #[doc = "around 5 GHz band (4.9 - 5.7 GHz)\n"]
     pub fn nested_5ghz(mut self) -> PushBandAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 1u16);
         PushBandAttrs {
@@ -18128,7 +18176,7 @@ impl<Prev: Rec> PushWiphyBands<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "around 60 GHz band (58\\.32 \\- 69\\.12 GHz)"]
+    #[doc = "around 60 GHz band (58.32 - 69.12 GHz)\n"]
     pub fn nested_60ghz(mut self) -> PushBandAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
         PushBandAttrs {
@@ -19612,7 +19660,7 @@ impl NotifGroup {
     pub const TESTMODE: &str = "testmode";
     pub const TESTMODE_CSTR: &CStr = c"testmode";
 }
-#[doc = "Get information about a wiphy or dump a list of all wiphys\\. Requests to\ndump get\\-wiphy should unconditionally include the split\\-wiphy\\-dump flag\nin the request\\.\n\nRequest attributes:\n- [.push_wiphy()](PushNl80211Attrs::push_wiphy)\n- [.push_ifindex()](PushNl80211Attrs::push_ifindex)\n- [.push_wdev()](PushNl80211Attrs::push_wdev)\n- [.push_split_wiphy_dump()](PushNl80211Attrs::push_split_wiphy_dump)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_wiphy_name()](IterableNl80211Attrs::get_wiphy_name)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_wiphy_bands()](IterableNl80211Attrs::get_wiphy_bands)\n- [.get_supported_iftypes()](IterableNl80211Attrs::get_supported_iftypes)\n- [.get_max_num_scan_ssids()](IterableNl80211Attrs::get_max_num_scan_ssids)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_supported_commands()](IterableNl80211Attrs::get_supported_commands)\n- [.get_max_scan_ie_len()](IterableNl80211Attrs::get_max_scan_ie_len)\n- [.get_cipher_suites()](IterableNl80211Attrs::get_cipher_suites)\n- [.get_wiphy_retry_short()](IterableNl80211Attrs::get_wiphy_retry_short)\n- [.get_wiphy_retry_long()](IterableNl80211Attrs::get_wiphy_retry_long)\n- [.get_wiphy_frag_threshold()](IterableNl80211Attrs::get_wiphy_frag_threshold)\n- [.get_wiphy_rts_threshold()](IterableNl80211Attrs::get_wiphy_rts_threshold)\n- [.get_max_num_pmkids()](IterableNl80211Attrs::get_max_num_pmkids)\n- [.get_wiphy_coverage_class()](IterableNl80211Attrs::get_wiphy_coverage_class)\n- [.get_tx_frame_types()](IterableNl80211Attrs::get_tx_frame_types)\n- [.get_rx_frame_types()](IterableNl80211Attrs::get_rx_frame_types)\n- [.get_control_port_ethertype()](IterableNl80211Attrs::get_control_port_ethertype)\n- [.get_wiphy_antenna_tx()](IterableNl80211Attrs::get_wiphy_antenna_tx)\n- [.get_wiphy_antenna_rx()](IterableNl80211Attrs::get_wiphy_antenna_rx)\n- [.get_offchannel_tx_ok()](IterableNl80211Attrs::get_offchannel_tx_ok)\n- [.get_max_remain_on_channel_duration()](IterableNl80211Attrs::get_max_remain_on_channel_duration)\n- [.get_wiphy_antenna_avail_tx()](IterableNl80211Attrs::get_wiphy_antenna_avail_tx)\n- [.get_wiphy_antenna_avail_rx()](IterableNl80211Attrs::get_wiphy_antenna_avail_rx)\n- [.get_wowlan_triggers_supported()](IterableNl80211Attrs::get_wowlan_triggers_supported)\n- [.get_interface_combinations()](IterableNl80211Attrs::get_interface_combinations)\n- [.get_software_iftypes()](IterableNl80211Attrs::get_software_iftypes)\n- [.get_max_num_sched_scan_ssids()](IterableNl80211Attrs::get_max_num_sched_scan_ssids)\n- [.get_max_sched_scan_ie_len()](IterableNl80211Attrs::get_max_sched_scan_ie_len)\n- [.get_support_ap_uapsd()](IterableNl80211Attrs::get_support_ap_uapsd)\n- [.get_max_match_sets()](IterableNl80211Attrs::get_max_match_sets)\n- [.get_tdls_support()](IterableNl80211Attrs::get_tdls_support)\n- [.get_tdls_external_setup()](IterableNl80211Attrs::get_tdls_external_setup)\n- [.get_feature_flags()](IterableNl80211Attrs::get_feature_flags)\n- [.get_ht_capability_mask()](IterableNl80211Attrs::get_ht_capability_mask)\n- [.get_ext_capa()](IterableNl80211Attrs::get_ext_capa)\n- [.get_ext_capa_mask()](IterableNl80211Attrs::get_ext_capa_mask)\n- [.get_vht_capability_mask()](IterableNl80211Attrs::get_vht_capability_mask)\n- [.get_max_csa_counters()](IterableNl80211Attrs::get_max_csa_counters)\n- [.get_ext_features()](IterableNl80211Attrs::get_ext_features)\n- [.get_max_num_sched_scan_plans()](IterableNl80211Attrs::get_max_num_sched_scan_plans)\n- [.get_max_scan_plan_interval()](IterableNl80211Attrs::get_max_scan_plan_interval)\n- [.get_max_scan_plan_iterations()](IterableNl80211Attrs::get_max_scan_plan_iterations)\n- [.get_bands()](IterableNl80211Attrs::get_bands)\n- [.get_sched_scan_max_reqs()](IterableNl80211Attrs::get_sched_scan_max_reqs)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n- [.get_txq_limit()](IterableNl80211Attrs::get_txq_limit)\n- [.get_txq_memory_limit()](IterableNl80211Attrs::get_txq_memory_limit)\n- [.get_txq_quantum()](IterableNl80211Attrs::get_txq_quantum)\n- [.get_sar_spec()](IterableNl80211Attrs::get_sar_spec)\n- [.get_max_num_akm_suites()](IterableNl80211Attrs::get_max_num_akm_suites)\n"]
+#[doc = "Get information about a wiphy or dump a list of all wiphys. Requests to\ndump get-wiphy should unconditionally include the split-wiphy-dump flag\nin the request.\n\nRequest attributes:\n- [.push_wiphy()](PushNl80211Attrs::push_wiphy)\n- [.push_ifindex()](PushNl80211Attrs::push_ifindex)\n- [.push_wdev()](PushNl80211Attrs::push_wdev)\n- [.push_split_wiphy_dump()](PushNl80211Attrs::push_split_wiphy_dump)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_wiphy_name()](IterableNl80211Attrs::get_wiphy_name)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_wiphy_bands()](IterableNl80211Attrs::get_wiphy_bands)\n- [.get_supported_iftypes()](IterableNl80211Attrs::get_supported_iftypes)\n- [.get_max_num_scan_ssids()](IterableNl80211Attrs::get_max_num_scan_ssids)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_supported_commands()](IterableNl80211Attrs::get_supported_commands)\n- [.get_max_scan_ie_len()](IterableNl80211Attrs::get_max_scan_ie_len)\n- [.get_cipher_suites()](IterableNl80211Attrs::get_cipher_suites)\n- [.get_wiphy_retry_short()](IterableNl80211Attrs::get_wiphy_retry_short)\n- [.get_wiphy_retry_long()](IterableNl80211Attrs::get_wiphy_retry_long)\n- [.get_wiphy_frag_threshold()](IterableNl80211Attrs::get_wiphy_frag_threshold)\n- [.get_wiphy_rts_threshold()](IterableNl80211Attrs::get_wiphy_rts_threshold)\n- [.get_max_num_pmkids()](IterableNl80211Attrs::get_max_num_pmkids)\n- [.get_wiphy_coverage_class()](IterableNl80211Attrs::get_wiphy_coverage_class)\n- [.get_tx_frame_types()](IterableNl80211Attrs::get_tx_frame_types)\n- [.get_rx_frame_types()](IterableNl80211Attrs::get_rx_frame_types)\n- [.get_control_port_ethertype()](IterableNl80211Attrs::get_control_port_ethertype)\n- [.get_wiphy_antenna_tx()](IterableNl80211Attrs::get_wiphy_antenna_tx)\n- [.get_wiphy_antenna_rx()](IterableNl80211Attrs::get_wiphy_antenna_rx)\n- [.get_offchannel_tx_ok()](IterableNl80211Attrs::get_offchannel_tx_ok)\n- [.get_max_remain_on_channel_duration()](IterableNl80211Attrs::get_max_remain_on_channel_duration)\n- [.get_wiphy_antenna_avail_tx()](IterableNl80211Attrs::get_wiphy_antenna_avail_tx)\n- [.get_wiphy_antenna_avail_rx()](IterableNl80211Attrs::get_wiphy_antenna_avail_rx)\n- [.get_wowlan_triggers_supported()](IterableNl80211Attrs::get_wowlan_triggers_supported)\n- [.get_interface_combinations()](IterableNl80211Attrs::get_interface_combinations)\n- [.get_software_iftypes()](IterableNl80211Attrs::get_software_iftypes)\n- [.get_max_num_sched_scan_ssids()](IterableNl80211Attrs::get_max_num_sched_scan_ssids)\n- [.get_max_sched_scan_ie_len()](IterableNl80211Attrs::get_max_sched_scan_ie_len)\n- [.get_support_ap_uapsd()](IterableNl80211Attrs::get_support_ap_uapsd)\n- [.get_max_match_sets()](IterableNl80211Attrs::get_max_match_sets)\n- [.get_tdls_support()](IterableNl80211Attrs::get_tdls_support)\n- [.get_tdls_external_setup()](IterableNl80211Attrs::get_tdls_external_setup)\n- [.get_feature_flags()](IterableNl80211Attrs::get_feature_flags)\n- [.get_ht_capability_mask()](IterableNl80211Attrs::get_ht_capability_mask)\n- [.get_ext_capa()](IterableNl80211Attrs::get_ext_capa)\n- [.get_ext_capa_mask()](IterableNl80211Attrs::get_ext_capa_mask)\n- [.get_vht_capability_mask()](IterableNl80211Attrs::get_vht_capability_mask)\n- [.get_max_csa_counters()](IterableNl80211Attrs::get_max_csa_counters)\n- [.get_ext_features()](IterableNl80211Attrs::get_ext_features)\n- [.get_max_num_sched_scan_plans()](IterableNl80211Attrs::get_max_num_sched_scan_plans)\n- [.get_max_scan_plan_interval()](IterableNl80211Attrs::get_max_scan_plan_interval)\n- [.get_max_scan_plan_iterations()](IterableNl80211Attrs::get_max_scan_plan_iterations)\n- [.get_bands()](IterableNl80211Attrs::get_bands)\n- [.get_sched_scan_max_reqs()](IterableNl80211Attrs::get_sched_scan_max_reqs)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n- [.get_txq_limit()](IterableNl80211Attrs::get_txq_limit)\n- [.get_txq_memory_limit()](IterableNl80211Attrs::get_txq_memory_limit)\n- [.get_txq_quantum()](IterableNl80211Attrs::get_txq_quantum)\n- [.get_sar_spec()](IterableNl80211Attrs::get_sar_spec)\n- [.get_max_num_akm_suites()](IterableNl80211Attrs::get_max_num_akm_suites)\n\n"]
 #[derive(Debug)]
 pub struct OpGetWiphyDump<'r> {
     request: Request<'r>,
@@ -19667,7 +19715,7 @@ impl NetlinkRequest for OpGetWiphyDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get information about a wiphy or dump a list of all wiphys\\. Requests to\ndump get\\-wiphy should unconditionally include the split\\-wiphy\\-dump flag\nin the request\\.\n\nRequest attributes:\n- [.push_wiphy()](PushNl80211Attrs::push_wiphy)\n- [.push_ifindex()](PushNl80211Attrs::push_ifindex)\n- [.push_wdev()](PushNl80211Attrs::push_wdev)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_wiphy_name()](IterableNl80211Attrs::get_wiphy_name)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_wiphy_bands()](IterableNl80211Attrs::get_wiphy_bands)\n- [.get_supported_iftypes()](IterableNl80211Attrs::get_supported_iftypes)\n- [.get_max_num_scan_ssids()](IterableNl80211Attrs::get_max_num_scan_ssids)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_supported_commands()](IterableNl80211Attrs::get_supported_commands)\n- [.get_max_scan_ie_len()](IterableNl80211Attrs::get_max_scan_ie_len)\n- [.get_cipher_suites()](IterableNl80211Attrs::get_cipher_suites)\n- [.get_wiphy_retry_short()](IterableNl80211Attrs::get_wiphy_retry_short)\n- [.get_wiphy_retry_long()](IterableNl80211Attrs::get_wiphy_retry_long)\n- [.get_wiphy_frag_threshold()](IterableNl80211Attrs::get_wiphy_frag_threshold)\n- [.get_wiphy_rts_threshold()](IterableNl80211Attrs::get_wiphy_rts_threshold)\n- [.get_max_num_pmkids()](IterableNl80211Attrs::get_max_num_pmkids)\n- [.get_wiphy_coverage_class()](IterableNl80211Attrs::get_wiphy_coverage_class)\n- [.get_tx_frame_types()](IterableNl80211Attrs::get_tx_frame_types)\n- [.get_rx_frame_types()](IterableNl80211Attrs::get_rx_frame_types)\n- [.get_control_port_ethertype()](IterableNl80211Attrs::get_control_port_ethertype)\n- [.get_wiphy_antenna_tx()](IterableNl80211Attrs::get_wiphy_antenna_tx)\n- [.get_wiphy_antenna_rx()](IterableNl80211Attrs::get_wiphy_antenna_rx)\n- [.get_offchannel_tx_ok()](IterableNl80211Attrs::get_offchannel_tx_ok)\n- [.get_max_remain_on_channel_duration()](IterableNl80211Attrs::get_max_remain_on_channel_duration)\n- [.get_wiphy_antenna_avail_tx()](IterableNl80211Attrs::get_wiphy_antenna_avail_tx)\n- [.get_wiphy_antenna_avail_rx()](IterableNl80211Attrs::get_wiphy_antenna_avail_rx)\n- [.get_wowlan_triggers_supported()](IterableNl80211Attrs::get_wowlan_triggers_supported)\n- [.get_interface_combinations()](IterableNl80211Attrs::get_interface_combinations)\n- [.get_software_iftypes()](IterableNl80211Attrs::get_software_iftypes)\n- [.get_max_num_sched_scan_ssids()](IterableNl80211Attrs::get_max_num_sched_scan_ssids)\n- [.get_max_sched_scan_ie_len()](IterableNl80211Attrs::get_max_sched_scan_ie_len)\n- [.get_support_ap_uapsd()](IterableNl80211Attrs::get_support_ap_uapsd)\n- [.get_max_match_sets()](IterableNl80211Attrs::get_max_match_sets)\n- [.get_tdls_support()](IterableNl80211Attrs::get_tdls_support)\n- [.get_tdls_external_setup()](IterableNl80211Attrs::get_tdls_external_setup)\n- [.get_feature_flags()](IterableNl80211Attrs::get_feature_flags)\n- [.get_ht_capability_mask()](IterableNl80211Attrs::get_ht_capability_mask)\n- [.get_ext_capa()](IterableNl80211Attrs::get_ext_capa)\n- [.get_ext_capa_mask()](IterableNl80211Attrs::get_ext_capa_mask)\n- [.get_vht_capability_mask()](IterableNl80211Attrs::get_vht_capability_mask)\n- [.get_max_csa_counters()](IterableNl80211Attrs::get_max_csa_counters)\n- [.get_ext_features()](IterableNl80211Attrs::get_ext_features)\n- [.get_max_num_sched_scan_plans()](IterableNl80211Attrs::get_max_num_sched_scan_plans)\n- [.get_max_scan_plan_interval()](IterableNl80211Attrs::get_max_scan_plan_interval)\n- [.get_max_scan_plan_iterations()](IterableNl80211Attrs::get_max_scan_plan_iterations)\n- [.get_bands()](IterableNl80211Attrs::get_bands)\n- [.get_sched_scan_max_reqs()](IterableNl80211Attrs::get_sched_scan_max_reqs)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n- [.get_txq_limit()](IterableNl80211Attrs::get_txq_limit)\n- [.get_txq_memory_limit()](IterableNl80211Attrs::get_txq_memory_limit)\n- [.get_txq_quantum()](IterableNl80211Attrs::get_txq_quantum)\n- [.get_sar_spec()](IterableNl80211Attrs::get_sar_spec)\n- [.get_max_num_akm_suites()](IterableNl80211Attrs::get_max_num_akm_suites)\n"]
+#[doc = "Get information about a wiphy or dump a list of all wiphys. Requests to\ndump get-wiphy should unconditionally include the split-wiphy-dump flag\nin the request.\n\nRequest attributes:\n- [.push_wiphy()](PushNl80211Attrs::push_wiphy)\n- [.push_ifindex()](PushNl80211Attrs::push_ifindex)\n- [.push_wdev()](PushNl80211Attrs::push_wdev)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_wiphy_name()](IterableNl80211Attrs::get_wiphy_name)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_wiphy_bands()](IterableNl80211Attrs::get_wiphy_bands)\n- [.get_supported_iftypes()](IterableNl80211Attrs::get_supported_iftypes)\n- [.get_max_num_scan_ssids()](IterableNl80211Attrs::get_max_num_scan_ssids)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_supported_commands()](IterableNl80211Attrs::get_supported_commands)\n- [.get_max_scan_ie_len()](IterableNl80211Attrs::get_max_scan_ie_len)\n- [.get_cipher_suites()](IterableNl80211Attrs::get_cipher_suites)\n- [.get_wiphy_retry_short()](IterableNl80211Attrs::get_wiphy_retry_short)\n- [.get_wiphy_retry_long()](IterableNl80211Attrs::get_wiphy_retry_long)\n- [.get_wiphy_frag_threshold()](IterableNl80211Attrs::get_wiphy_frag_threshold)\n- [.get_wiphy_rts_threshold()](IterableNl80211Attrs::get_wiphy_rts_threshold)\n- [.get_max_num_pmkids()](IterableNl80211Attrs::get_max_num_pmkids)\n- [.get_wiphy_coverage_class()](IterableNl80211Attrs::get_wiphy_coverage_class)\n- [.get_tx_frame_types()](IterableNl80211Attrs::get_tx_frame_types)\n- [.get_rx_frame_types()](IterableNl80211Attrs::get_rx_frame_types)\n- [.get_control_port_ethertype()](IterableNl80211Attrs::get_control_port_ethertype)\n- [.get_wiphy_antenna_tx()](IterableNl80211Attrs::get_wiphy_antenna_tx)\n- [.get_wiphy_antenna_rx()](IterableNl80211Attrs::get_wiphy_antenna_rx)\n- [.get_offchannel_tx_ok()](IterableNl80211Attrs::get_offchannel_tx_ok)\n- [.get_max_remain_on_channel_duration()](IterableNl80211Attrs::get_max_remain_on_channel_duration)\n- [.get_wiphy_antenna_avail_tx()](IterableNl80211Attrs::get_wiphy_antenna_avail_tx)\n- [.get_wiphy_antenna_avail_rx()](IterableNl80211Attrs::get_wiphy_antenna_avail_rx)\n- [.get_wowlan_triggers_supported()](IterableNl80211Attrs::get_wowlan_triggers_supported)\n- [.get_interface_combinations()](IterableNl80211Attrs::get_interface_combinations)\n- [.get_software_iftypes()](IterableNl80211Attrs::get_software_iftypes)\n- [.get_max_num_sched_scan_ssids()](IterableNl80211Attrs::get_max_num_sched_scan_ssids)\n- [.get_max_sched_scan_ie_len()](IterableNl80211Attrs::get_max_sched_scan_ie_len)\n- [.get_support_ap_uapsd()](IterableNl80211Attrs::get_support_ap_uapsd)\n- [.get_max_match_sets()](IterableNl80211Attrs::get_max_match_sets)\n- [.get_tdls_support()](IterableNl80211Attrs::get_tdls_support)\n- [.get_tdls_external_setup()](IterableNl80211Attrs::get_tdls_external_setup)\n- [.get_feature_flags()](IterableNl80211Attrs::get_feature_flags)\n- [.get_ht_capability_mask()](IterableNl80211Attrs::get_ht_capability_mask)\n- [.get_ext_capa()](IterableNl80211Attrs::get_ext_capa)\n- [.get_ext_capa_mask()](IterableNl80211Attrs::get_ext_capa_mask)\n- [.get_vht_capability_mask()](IterableNl80211Attrs::get_vht_capability_mask)\n- [.get_max_csa_counters()](IterableNl80211Attrs::get_max_csa_counters)\n- [.get_ext_features()](IterableNl80211Attrs::get_ext_features)\n- [.get_max_num_sched_scan_plans()](IterableNl80211Attrs::get_max_num_sched_scan_plans)\n- [.get_max_scan_plan_interval()](IterableNl80211Attrs::get_max_scan_plan_interval)\n- [.get_max_scan_plan_iterations()](IterableNl80211Attrs::get_max_scan_plan_iterations)\n- [.get_bands()](IterableNl80211Attrs::get_bands)\n- [.get_sched_scan_max_reqs()](IterableNl80211Attrs::get_sched_scan_max_reqs)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n- [.get_txq_limit()](IterableNl80211Attrs::get_txq_limit)\n- [.get_txq_memory_limit()](IterableNl80211Attrs::get_txq_memory_limit)\n- [.get_txq_quantum()](IterableNl80211Attrs::get_txq_quantum)\n- [.get_sar_spec()](IterableNl80211Attrs::get_sar_spec)\n- [.get_max_num_akm_suites()](IterableNl80211Attrs::get_max_num_akm_suites)\n\n"]
 #[derive(Debug)]
 pub struct OpGetWiphyDo<'r> {
     request: Request<'r>,
@@ -19720,7 +19768,7 @@ impl NetlinkRequest for OpGetWiphyDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get information about an interface or dump a list of all interfaces\nRequest attributes:\n- [.push_ifname()](PushNl80211Attrs::push_ifname)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_ifindex()](IterableNl80211Attrs::get_ifindex)\n- [.get_ifname()](IterableNl80211Attrs::get_ifname)\n- [.get_iftype()](IterableNl80211Attrs::get_iftype)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_4addr()](IterableNl80211Attrs::get_4addr)\n- [.get_wdev()](IterableNl80211Attrs::get_wdev)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n"]
+#[doc = "Get information about an interface or dump a list of all interfaces\n\nRequest attributes:\n- [.push_ifname()](PushNl80211Attrs::push_ifname)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_ifindex()](IterableNl80211Attrs::get_ifindex)\n- [.get_ifname()](IterableNl80211Attrs::get_ifname)\n- [.get_iftype()](IterableNl80211Attrs::get_iftype)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_4addr()](IterableNl80211Attrs::get_4addr)\n- [.get_wdev()](IterableNl80211Attrs::get_wdev)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n\n"]
 #[derive(Debug)]
 pub struct OpGetInterfaceDump<'r> {
     request: Request<'r>,
@@ -19775,7 +19823,7 @@ impl NetlinkRequest for OpGetInterfaceDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get information about an interface or dump a list of all interfaces\nRequest attributes:\n- [.push_ifname()](PushNl80211Attrs::push_ifname)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_ifindex()](IterableNl80211Attrs::get_ifindex)\n- [.get_ifname()](IterableNl80211Attrs::get_ifname)\n- [.get_iftype()](IterableNl80211Attrs::get_iftype)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_4addr()](IterableNl80211Attrs::get_4addr)\n- [.get_wdev()](IterableNl80211Attrs::get_wdev)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n"]
+#[doc = "Get information about an interface or dump a list of all interfaces\n\nRequest attributes:\n- [.push_ifname()](PushNl80211Attrs::push_ifname)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_ifindex()](IterableNl80211Attrs::get_ifindex)\n- [.get_ifname()](IterableNl80211Attrs::get_ifname)\n- [.get_iftype()](IterableNl80211Attrs::get_iftype)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_4addr()](IterableNl80211Attrs::get_4addr)\n- [.get_wdev()](IterableNl80211Attrs::get_wdev)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n\n"]
 #[derive(Debug)]
 pub struct OpGetInterfaceDo<'r> {
     request: Request<'r>,
@@ -19828,7 +19876,7 @@ impl NetlinkRequest for OpGetInterfaceDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get information about supported protocol features\nRequest attributes:\n- [.push_protocol_features()](PushNl80211Attrs::push_protocol_features)\n\nReply attributes:\n- [.get_protocol_features()](IterableNl80211Attrs::get_protocol_features)\n"]
+#[doc = "Get information about supported protocol features\n\nRequest attributes:\n- [.push_protocol_features()](PushNl80211Attrs::push_protocol_features)\n\nReply attributes:\n- [.get_protocol_features()](IterableNl80211Attrs::get_protocol_features)\n\n"]
 #[derive(Debug)]
 pub struct OpGetProtocolFeaturesDo<'r> {
     request: Request<'r>,
@@ -20097,21 +20145,21 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get information about a wiphy or dump a list of all wiphys\\. Requests to\ndump get\\-wiphy should unconditionally include the split\\-wiphy\\-dump flag\nin the request\\.\n\nRequest attributes:\n- [.push_wiphy()](PushNl80211Attrs::push_wiphy)\n- [.push_ifindex()](PushNl80211Attrs::push_ifindex)\n- [.push_wdev()](PushNl80211Attrs::push_wdev)\n- [.push_split_wiphy_dump()](PushNl80211Attrs::push_split_wiphy_dump)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_wiphy_name()](IterableNl80211Attrs::get_wiphy_name)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_wiphy_bands()](IterableNl80211Attrs::get_wiphy_bands)\n- [.get_supported_iftypes()](IterableNl80211Attrs::get_supported_iftypes)\n- [.get_max_num_scan_ssids()](IterableNl80211Attrs::get_max_num_scan_ssids)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_supported_commands()](IterableNl80211Attrs::get_supported_commands)\n- [.get_max_scan_ie_len()](IterableNl80211Attrs::get_max_scan_ie_len)\n- [.get_cipher_suites()](IterableNl80211Attrs::get_cipher_suites)\n- [.get_wiphy_retry_short()](IterableNl80211Attrs::get_wiphy_retry_short)\n- [.get_wiphy_retry_long()](IterableNl80211Attrs::get_wiphy_retry_long)\n- [.get_wiphy_frag_threshold()](IterableNl80211Attrs::get_wiphy_frag_threshold)\n- [.get_wiphy_rts_threshold()](IterableNl80211Attrs::get_wiphy_rts_threshold)\n- [.get_max_num_pmkids()](IterableNl80211Attrs::get_max_num_pmkids)\n- [.get_wiphy_coverage_class()](IterableNl80211Attrs::get_wiphy_coverage_class)\n- [.get_tx_frame_types()](IterableNl80211Attrs::get_tx_frame_types)\n- [.get_rx_frame_types()](IterableNl80211Attrs::get_rx_frame_types)\n- [.get_control_port_ethertype()](IterableNl80211Attrs::get_control_port_ethertype)\n- [.get_wiphy_antenna_tx()](IterableNl80211Attrs::get_wiphy_antenna_tx)\n- [.get_wiphy_antenna_rx()](IterableNl80211Attrs::get_wiphy_antenna_rx)\n- [.get_offchannel_tx_ok()](IterableNl80211Attrs::get_offchannel_tx_ok)\n- [.get_max_remain_on_channel_duration()](IterableNl80211Attrs::get_max_remain_on_channel_duration)\n- [.get_wiphy_antenna_avail_tx()](IterableNl80211Attrs::get_wiphy_antenna_avail_tx)\n- [.get_wiphy_antenna_avail_rx()](IterableNl80211Attrs::get_wiphy_antenna_avail_rx)\n- [.get_wowlan_triggers_supported()](IterableNl80211Attrs::get_wowlan_triggers_supported)\n- [.get_interface_combinations()](IterableNl80211Attrs::get_interface_combinations)\n- [.get_software_iftypes()](IterableNl80211Attrs::get_software_iftypes)\n- [.get_max_num_sched_scan_ssids()](IterableNl80211Attrs::get_max_num_sched_scan_ssids)\n- [.get_max_sched_scan_ie_len()](IterableNl80211Attrs::get_max_sched_scan_ie_len)\n- [.get_support_ap_uapsd()](IterableNl80211Attrs::get_support_ap_uapsd)\n- [.get_max_match_sets()](IterableNl80211Attrs::get_max_match_sets)\n- [.get_tdls_support()](IterableNl80211Attrs::get_tdls_support)\n- [.get_tdls_external_setup()](IterableNl80211Attrs::get_tdls_external_setup)\n- [.get_feature_flags()](IterableNl80211Attrs::get_feature_flags)\n- [.get_ht_capability_mask()](IterableNl80211Attrs::get_ht_capability_mask)\n- [.get_ext_capa()](IterableNl80211Attrs::get_ext_capa)\n- [.get_ext_capa_mask()](IterableNl80211Attrs::get_ext_capa_mask)\n- [.get_vht_capability_mask()](IterableNl80211Attrs::get_vht_capability_mask)\n- [.get_max_csa_counters()](IterableNl80211Attrs::get_max_csa_counters)\n- [.get_ext_features()](IterableNl80211Attrs::get_ext_features)\n- [.get_max_num_sched_scan_plans()](IterableNl80211Attrs::get_max_num_sched_scan_plans)\n- [.get_max_scan_plan_interval()](IterableNl80211Attrs::get_max_scan_plan_interval)\n- [.get_max_scan_plan_iterations()](IterableNl80211Attrs::get_max_scan_plan_iterations)\n- [.get_bands()](IterableNl80211Attrs::get_bands)\n- [.get_sched_scan_max_reqs()](IterableNl80211Attrs::get_sched_scan_max_reqs)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n- [.get_txq_limit()](IterableNl80211Attrs::get_txq_limit)\n- [.get_txq_memory_limit()](IterableNl80211Attrs::get_txq_memory_limit)\n- [.get_txq_quantum()](IterableNl80211Attrs::get_txq_quantum)\n- [.get_sar_spec()](IterableNl80211Attrs::get_sar_spec)\n- [.get_max_num_akm_suites()](IterableNl80211Attrs::get_max_num_akm_suites)\n"]
+    #[doc = "Get information about a wiphy or dump a list of all wiphys. Requests to\ndump get-wiphy should unconditionally include the split-wiphy-dump flag\nin the request.\n\nRequest attributes:\n- [.push_wiphy()](PushNl80211Attrs::push_wiphy)\n- [.push_ifindex()](PushNl80211Attrs::push_ifindex)\n- [.push_wdev()](PushNl80211Attrs::push_wdev)\n- [.push_split_wiphy_dump()](PushNl80211Attrs::push_split_wiphy_dump)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_wiphy_name()](IterableNl80211Attrs::get_wiphy_name)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_wiphy_bands()](IterableNl80211Attrs::get_wiphy_bands)\n- [.get_supported_iftypes()](IterableNl80211Attrs::get_supported_iftypes)\n- [.get_max_num_scan_ssids()](IterableNl80211Attrs::get_max_num_scan_ssids)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_supported_commands()](IterableNl80211Attrs::get_supported_commands)\n- [.get_max_scan_ie_len()](IterableNl80211Attrs::get_max_scan_ie_len)\n- [.get_cipher_suites()](IterableNl80211Attrs::get_cipher_suites)\n- [.get_wiphy_retry_short()](IterableNl80211Attrs::get_wiphy_retry_short)\n- [.get_wiphy_retry_long()](IterableNl80211Attrs::get_wiphy_retry_long)\n- [.get_wiphy_frag_threshold()](IterableNl80211Attrs::get_wiphy_frag_threshold)\n- [.get_wiphy_rts_threshold()](IterableNl80211Attrs::get_wiphy_rts_threshold)\n- [.get_max_num_pmkids()](IterableNl80211Attrs::get_max_num_pmkids)\n- [.get_wiphy_coverage_class()](IterableNl80211Attrs::get_wiphy_coverage_class)\n- [.get_tx_frame_types()](IterableNl80211Attrs::get_tx_frame_types)\n- [.get_rx_frame_types()](IterableNl80211Attrs::get_rx_frame_types)\n- [.get_control_port_ethertype()](IterableNl80211Attrs::get_control_port_ethertype)\n- [.get_wiphy_antenna_tx()](IterableNl80211Attrs::get_wiphy_antenna_tx)\n- [.get_wiphy_antenna_rx()](IterableNl80211Attrs::get_wiphy_antenna_rx)\n- [.get_offchannel_tx_ok()](IterableNl80211Attrs::get_offchannel_tx_ok)\n- [.get_max_remain_on_channel_duration()](IterableNl80211Attrs::get_max_remain_on_channel_duration)\n- [.get_wiphy_antenna_avail_tx()](IterableNl80211Attrs::get_wiphy_antenna_avail_tx)\n- [.get_wiphy_antenna_avail_rx()](IterableNl80211Attrs::get_wiphy_antenna_avail_rx)\n- [.get_wowlan_triggers_supported()](IterableNl80211Attrs::get_wowlan_triggers_supported)\n- [.get_interface_combinations()](IterableNl80211Attrs::get_interface_combinations)\n- [.get_software_iftypes()](IterableNl80211Attrs::get_software_iftypes)\n- [.get_max_num_sched_scan_ssids()](IterableNl80211Attrs::get_max_num_sched_scan_ssids)\n- [.get_max_sched_scan_ie_len()](IterableNl80211Attrs::get_max_sched_scan_ie_len)\n- [.get_support_ap_uapsd()](IterableNl80211Attrs::get_support_ap_uapsd)\n- [.get_max_match_sets()](IterableNl80211Attrs::get_max_match_sets)\n- [.get_tdls_support()](IterableNl80211Attrs::get_tdls_support)\n- [.get_tdls_external_setup()](IterableNl80211Attrs::get_tdls_external_setup)\n- [.get_feature_flags()](IterableNl80211Attrs::get_feature_flags)\n- [.get_ht_capability_mask()](IterableNl80211Attrs::get_ht_capability_mask)\n- [.get_ext_capa()](IterableNl80211Attrs::get_ext_capa)\n- [.get_ext_capa_mask()](IterableNl80211Attrs::get_ext_capa_mask)\n- [.get_vht_capability_mask()](IterableNl80211Attrs::get_vht_capability_mask)\n- [.get_max_csa_counters()](IterableNl80211Attrs::get_max_csa_counters)\n- [.get_ext_features()](IterableNl80211Attrs::get_ext_features)\n- [.get_max_num_sched_scan_plans()](IterableNl80211Attrs::get_max_num_sched_scan_plans)\n- [.get_max_scan_plan_interval()](IterableNl80211Attrs::get_max_scan_plan_interval)\n- [.get_max_scan_plan_iterations()](IterableNl80211Attrs::get_max_scan_plan_iterations)\n- [.get_bands()](IterableNl80211Attrs::get_bands)\n- [.get_sched_scan_max_reqs()](IterableNl80211Attrs::get_sched_scan_max_reqs)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n- [.get_txq_limit()](IterableNl80211Attrs::get_txq_limit)\n- [.get_txq_memory_limit()](IterableNl80211Attrs::get_txq_memory_limit)\n- [.get_txq_quantum()](IterableNl80211Attrs::get_txq_quantum)\n- [.get_sar_spec()](IterableNl80211Attrs::get_sar_spec)\n- [.get_max_num_akm_suites()](IterableNl80211Attrs::get_max_num_akm_suites)\n\n"]
     pub fn op_get_wiphy_dump(self) -> OpGetWiphyDump<'buf> {
         let mut res = OpGetWiphyDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-wiphy-dump", OpGetWiphyDump::lookup);
         res
     }
-    #[doc = "Get information about a wiphy or dump a list of all wiphys\\. Requests to\ndump get\\-wiphy should unconditionally include the split\\-wiphy\\-dump flag\nin the request\\.\n\nRequest attributes:\n- [.push_wiphy()](PushNl80211Attrs::push_wiphy)\n- [.push_ifindex()](PushNl80211Attrs::push_ifindex)\n- [.push_wdev()](PushNl80211Attrs::push_wdev)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_wiphy_name()](IterableNl80211Attrs::get_wiphy_name)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_wiphy_bands()](IterableNl80211Attrs::get_wiphy_bands)\n- [.get_supported_iftypes()](IterableNl80211Attrs::get_supported_iftypes)\n- [.get_max_num_scan_ssids()](IterableNl80211Attrs::get_max_num_scan_ssids)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_supported_commands()](IterableNl80211Attrs::get_supported_commands)\n- [.get_max_scan_ie_len()](IterableNl80211Attrs::get_max_scan_ie_len)\n- [.get_cipher_suites()](IterableNl80211Attrs::get_cipher_suites)\n- [.get_wiphy_retry_short()](IterableNl80211Attrs::get_wiphy_retry_short)\n- [.get_wiphy_retry_long()](IterableNl80211Attrs::get_wiphy_retry_long)\n- [.get_wiphy_frag_threshold()](IterableNl80211Attrs::get_wiphy_frag_threshold)\n- [.get_wiphy_rts_threshold()](IterableNl80211Attrs::get_wiphy_rts_threshold)\n- [.get_max_num_pmkids()](IterableNl80211Attrs::get_max_num_pmkids)\n- [.get_wiphy_coverage_class()](IterableNl80211Attrs::get_wiphy_coverage_class)\n- [.get_tx_frame_types()](IterableNl80211Attrs::get_tx_frame_types)\n- [.get_rx_frame_types()](IterableNl80211Attrs::get_rx_frame_types)\n- [.get_control_port_ethertype()](IterableNl80211Attrs::get_control_port_ethertype)\n- [.get_wiphy_antenna_tx()](IterableNl80211Attrs::get_wiphy_antenna_tx)\n- [.get_wiphy_antenna_rx()](IterableNl80211Attrs::get_wiphy_antenna_rx)\n- [.get_offchannel_tx_ok()](IterableNl80211Attrs::get_offchannel_tx_ok)\n- [.get_max_remain_on_channel_duration()](IterableNl80211Attrs::get_max_remain_on_channel_duration)\n- [.get_wiphy_antenna_avail_tx()](IterableNl80211Attrs::get_wiphy_antenna_avail_tx)\n- [.get_wiphy_antenna_avail_rx()](IterableNl80211Attrs::get_wiphy_antenna_avail_rx)\n- [.get_wowlan_triggers_supported()](IterableNl80211Attrs::get_wowlan_triggers_supported)\n- [.get_interface_combinations()](IterableNl80211Attrs::get_interface_combinations)\n- [.get_software_iftypes()](IterableNl80211Attrs::get_software_iftypes)\n- [.get_max_num_sched_scan_ssids()](IterableNl80211Attrs::get_max_num_sched_scan_ssids)\n- [.get_max_sched_scan_ie_len()](IterableNl80211Attrs::get_max_sched_scan_ie_len)\n- [.get_support_ap_uapsd()](IterableNl80211Attrs::get_support_ap_uapsd)\n- [.get_max_match_sets()](IterableNl80211Attrs::get_max_match_sets)\n- [.get_tdls_support()](IterableNl80211Attrs::get_tdls_support)\n- [.get_tdls_external_setup()](IterableNl80211Attrs::get_tdls_external_setup)\n- [.get_feature_flags()](IterableNl80211Attrs::get_feature_flags)\n- [.get_ht_capability_mask()](IterableNl80211Attrs::get_ht_capability_mask)\n- [.get_ext_capa()](IterableNl80211Attrs::get_ext_capa)\n- [.get_ext_capa_mask()](IterableNl80211Attrs::get_ext_capa_mask)\n- [.get_vht_capability_mask()](IterableNl80211Attrs::get_vht_capability_mask)\n- [.get_max_csa_counters()](IterableNl80211Attrs::get_max_csa_counters)\n- [.get_ext_features()](IterableNl80211Attrs::get_ext_features)\n- [.get_max_num_sched_scan_plans()](IterableNl80211Attrs::get_max_num_sched_scan_plans)\n- [.get_max_scan_plan_interval()](IterableNl80211Attrs::get_max_scan_plan_interval)\n- [.get_max_scan_plan_iterations()](IterableNl80211Attrs::get_max_scan_plan_iterations)\n- [.get_bands()](IterableNl80211Attrs::get_bands)\n- [.get_sched_scan_max_reqs()](IterableNl80211Attrs::get_sched_scan_max_reqs)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n- [.get_txq_limit()](IterableNl80211Attrs::get_txq_limit)\n- [.get_txq_memory_limit()](IterableNl80211Attrs::get_txq_memory_limit)\n- [.get_txq_quantum()](IterableNl80211Attrs::get_txq_quantum)\n- [.get_sar_spec()](IterableNl80211Attrs::get_sar_spec)\n- [.get_max_num_akm_suites()](IterableNl80211Attrs::get_max_num_akm_suites)\n"]
+    #[doc = "Get information about a wiphy or dump a list of all wiphys. Requests to\ndump get-wiphy should unconditionally include the split-wiphy-dump flag\nin the request.\n\nRequest attributes:\n- [.push_wiphy()](PushNl80211Attrs::push_wiphy)\n- [.push_ifindex()](PushNl80211Attrs::push_ifindex)\n- [.push_wdev()](PushNl80211Attrs::push_wdev)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_wiphy_name()](IterableNl80211Attrs::get_wiphy_name)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_wiphy_bands()](IterableNl80211Attrs::get_wiphy_bands)\n- [.get_supported_iftypes()](IterableNl80211Attrs::get_supported_iftypes)\n- [.get_max_num_scan_ssids()](IterableNl80211Attrs::get_max_num_scan_ssids)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_supported_commands()](IterableNl80211Attrs::get_supported_commands)\n- [.get_max_scan_ie_len()](IterableNl80211Attrs::get_max_scan_ie_len)\n- [.get_cipher_suites()](IterableNl80211Attrs::get_cipher_suites)\n- [.get_wiphy_retry_short()](IterableNl80211Attrs::get_wiphy_retry_short)\n- [.get_wiphy_retry_long()](IterableNl80211Attrs::get_wiphy_retry_long)\n- [.get_wiphy_frag_threshold()](IterableNl80211Attrs::get_wiphy_frag_threshold)\n- [.get_wiphy_rts_threshold()](IterableNl80211Attrs::get_wiphy_rts_threshold)\n- [.get_max_num_pmkids()](IterableNl80211Attrs::get_max_num_pmkids)\n- [.get_wiphy_coverage_class()](IterableNl80211Attrs::get_wiphy_coverage_class)\n- [.get_tx_frame_types()](IterableNl80211Attrs::get_tx_frame_types)\n- [.get_rx_frame_types()](IterableNl80211Attrs::get_rx_frame_types)\n- [.get_control_port_ethertype()](IterableNl80211Attrs::get_control_port_ethertype)\n- [.get_wiphy_antenna_tx()](IterableNl80211Attrs::get_wiphy_antenna_tx)\n- [.get_wiphy_antenna_rx()](IterableNl80211Attrs::get_wiphy_antenna_rx)\n- [.get_offchannel_tx_ok()](IterableNl80211Attrs::get_offchannel_tx_ok)\n- [.get_max_remain_on_channel_duration()](IterableNl80211Attrs::get_max_remain_on_channel_duration)\n- [.get_wiphy_antenna_avail_tx()](IterableNl80211Attrs::get_wiphy_antenna_avail_tx)\n- [.get_wiphy_antenna_avail_rx()](IterableNl80211Attrs::get_wiphy_antenna_avail_rx)\n- [.get_wowlan_triggers_supported()](IterableNl80211Attrs::get_wowlan_triggers_supported)\n- [.get_interface_combinations()](IterableNl80211Attrs::get_interface_combinations)\n- [.get_software_iftypes()](IterableNl80211Attrs::get_software_iftypes)\n- [.get_max_num_sched_scan_ssids()](IterableNl80211Attrs::get_max_num_sched_scan_ssids)\n- [.get_max_sched_scan_ie_len()](IterableNl80211Attrs::get_max_sched_scan_ie_len)\n- [.get_support_ap_uapsd()](IterableNl80211Attrs::get_support_ap_uapsd)\n- [.get_max_match_sets()](IterableNl80211Attrs::get_max_match_sets)\n- [.get_tdls_support()](IterableNl80211Attrs::get_tdls_support)\n- [.get_tdls_external_setup()](IterableNl80211Attrs::get_tdls_external_setup)\n- [.get_feature_flags()](IterableNl80211Attrs::get_feature_flags)\n- [.get_ht_capability_mask()](IterableNl80211Attrs::get_ht_capability_mask)\n- [.get_ext_capa()](IterableNl80211Attrs::get_ext_capa)\n- [.get_ext_capa_mask()](IterableNl80211Attrs::get_ext_capa_mask)\n- [.get_vht_capability_mask()](IterableNl80211Attrs::get_vht_capability_mask)\n- [.get_max_csa_counters()](IterableNl80211Attrs::get_max_csa_counters)\n- [.get_ext_features()](IterableNl80211Attrs::get_ext_features)\n- [.get_max_num_sched_scan_plans()](IterableNl80211Attrs::get_max_num_sched_scan_plans)\n- [.get_max_scan_plan_interval()](IterableNl80211Attrs::get_max_scan_plan_interval)\n- [.get_max_scan_plan_iterations()](IterableNl80211Attrs::get_max_scan_plan_iterations)\n- [.get_bands()](IterableNl80211Attrs::get_bands)\n- [.get_sched_scan_max_reqs()](IterableNl80211Attrs::get_sched_scan_max_reqs)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n- [.get_txq_limit()](IterableNl80211Attrs::get_txq_limit)\n- [.get_txq_memory_limit()](IterableNl80211Attrs::get_txq_memory_limit)\n- [.get_txq_quantum()](IterableNl80211Attrs::get_txq_quantum)\n- [.get_sar_spec()](IterableNl80211Attrs::get_sar_spec)\n- [.get_max_num_akm_suites()](IterableNl80211Attrs::get_max_num_akm_suites)\n\n"]
     pub fn op_get_wiphy_do(self) -> OpGetWiphyDo<'buf> {
         let mut res = OpGetWiphyDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-wiphy-do", OpGetWiphyDo::lookup);
         res
     }
-    #[doc = "Get information about an interface or dump a list of all interfaces\nRequest attributes:\n- [.push_ifname()](PushNl80211Attrs::push_ifname)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_ifindex()](IterableNl80211Attrs::get_ifindex)\n- [.get_ifname()](IterableNl80211Attrs::get_ifname)\n- [.get_iftype()](IterableNl80211Attrs::get_iftype)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_4addr()](IterableNl80211Attrs::get_4addr)\n- [.get_wdev()](IterableNl80211Attrs::get_wdev)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n"]
+    #[doc = "Get information about an interface or dump a list of all interfaces\n\nRequest attributes:\n- [.push_ifname()](PushNl80211Attrs::push_ifname)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_ifindex()](IterableNl80211Attrs::get_ifindex)\n- [.get_ifname()](IterableNl80211Attrs::get_ifname)\n- [.get_iftype()](IterableNl80211Attrs::get_iftype)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_4addr()](IterableNl80211Attrs::get_4addr)\n- [.get_wdev()](IterableNl80211Attrs::get_wdev)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n\n"]
     pub fn op_get_interface_dump(self) -> OpGetInterfaceDump<'buf> {
         let mut res = OpGetInterfaceDump::new(self);
         res.request.do_writeback(
@@ -20121,7 +20169,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get information about an interface or dump a list of all interfaces\nRequest attributes:\n- [.push_ifname()](PushNl80211Attrs::push_ifname)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_ifindex()](IterableNl80211Attrs::get_ifindex)\n- [.get_ifname()](IterableNl80211Attrs::get_ifname)\n- [.get_iftype()](IterableNl80211Attrs::get_iftype)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_4addr()](IterableNl80211Attrs::get_4addr)\n- [.get_wdev()](IterableNl80211Attrs::get_wdev)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n"]
+    #[doc = "Get information about an interface or dump a list of all interfaces\n\nRequest attributes:\n- [.push_ifname()](PushNl80211Attrs::push_ifname)\n\nReply attributes:\n- [.get_wiphy()](IterableNl80211Attrs::get_wiphy)\n- [.get_ifindex()](IterableNl80211Attrs::get_ifindex)\n- [.get_ifname()](IterableNl80211Attrs::get_ifname)\n- [.get_iftype()](IterableNl80211Attrs::get_iftype)\n- [.get_mac()](IterableNl80211Attrs::get_mac)\n- [.get_generation()](IterableNl80211Attrs::get_generation)\n- [.get_4addr()](IterableNl80211Attrs::get_4addr)\n- [.get_wdev()](IterableNl80211Attrs::get_wdev)\n- [.get_txq_stats()](IterableNl80211Attrs::get_txq_stats)\n\n"]
     pub fn op_get_interface_do(self) -> OpGetInterfaceDo<'buf> {
         let mut res = OpGetInterfaceDo::new(self);
         res.request.do_writeback(
@@ -20131,7 +20179,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get information about supported protocol features\nRequest attributes:\n- [.push_protocol_features()](PushNl80211Attrs::push_protocol_features)\n\nReply attributes:\n- [.get_protocol_features()](IterableNl80211Attrs::get_protocol_features)\n"]
+    #[doc = "Get information about supported protocol features\n\nRequest attributes:\n- [.push_protocol_features()](PushNl80211Attrs::push_protocol_features)\n\nReply attributes:\n- [.get_protocol_features()](IterableNl80211Attrs::get_protocol_features)\n\n"]
     pub fn op_get_protocol_features_do(self) -> OpGetProtocolFeaturesDo<'buf> {
         let mut res = OpGetProtocolFeaturesDo::new(self);
         res.request.do_writeback(

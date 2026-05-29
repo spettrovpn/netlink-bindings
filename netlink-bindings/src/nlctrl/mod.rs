@@ -1,4 +1,4 @@
-#![doc = "genetlink meta\\-family that exposes information about all genetlink\nfamilies registered in the kernel (including itself)\\.\n"]
+#![doc = "genetlink meta-family that exposes information about all genetlink\nfamilies registered in the kernel (including itself).\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -102,7 +102,7 @@ impl<'a> IterableCtrlAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtrlAttrs::FamilyId(val) = attr? {
+            if let Ok(CtrlAttrs::FamilyId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -117,7 +117,7 @@ impl<'a> IterableCtrlAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtrlAttrs::FamilyName(val) = attr? {
+            if let Ok(CtrlAttrs::FamilyName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -132,7 +132,7 @@ impl<'a> IterableCtrlAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtrlAttrs::Version(val) = attr? {
+            if let Ok(CtrlAttrs::Version(val)) = attr {
                 return Ok(val);
             }
         }
@@ -147,7 +147,7 @@ impl<'a> IterableCtrlAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtrlAttrs::Hdrsize(val) = attr? {
+            if let Ok(CtrlAttrs::Hdrsize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -162,7 +162,7 @@ impl<'a> IterableCtrlAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtrlAttrs::Maxattr(val) = attr? {
+            if let Ok(CtrlAttrs::Maxattr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -177,7 +177,7 @@ impl<'a> IterableCtrlAttrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayOpAttrs<'a>, IterableOpAttrs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let CtrlAttrs::Ops(val) = attr? {
+            if let Ok(CtrlAttrs::Ops(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -195,7 +195,7 @@ impl<'a> IterableCtrlAttrs<'a> {
         ErrorContext,
     > {
         for attr in self.clone() {
-            if let CtrlAttrs::McastGroups(val) = attr? {
+            if let Ok(CtrlAttrs::McastGroups(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -210,7 +210,7 @@ impl<'a> IterableCtrlAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtrlAttrs::Policy(val) = attr? {
+            if let Ok(CtrlAttrs::Policy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -225,7 +225,7 @@ impl<'a> IterableCtrlAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtrlAttrs::OpPolicy(val) = attr? {
+            if let Ok(CtrlAttrs::OpPolicy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -240,7 +240,7 @@ impl<'a> IterableCtrlAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CtrlAttrs::Op(val) = attr? {
+            if let Ok(CtrlAttrs::Op(val)) = attr {
                 return Ok(val);
             }
         }
@@ -286,11 +286,13 @@ impl<'a> Iterator for IterableArrayOpAttrs<'a> {
                 return Some(Ok(IterableOpAttrs::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "OpAttrs",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -328,11 +330,13 @@ impl<'a> Iterator for IterableArrayMcastGroupAttrs<'a> {
                 return Some(Ok(IterableMcastGroupAttrs::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "McastGroupAttrs",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -378,14 +382,16 @@ impl<'a> IterableCtrlAttrs<'a> {
 impl<'a> Iterator for IterableCtrlAttrs<'a> {
     type Item = Result<CtrlAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -614,7 +620,7 @@ impl<'a> IterableMcastGroupAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let McastGroupAttrs::Name(val) = attr? {
+            if let Ok(McastGroupAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -629,7 +635,7 @@ impl<'a> IterableMcastGroupAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let McastGroupAttrs::Id(val) = attr? {
+            if let Ok(McastGroupAttrs::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -675,14 +681,16 @@ impl<'a> IterableMcastGroupAttrs<'a> {
 impl<'a> Iterator for IterableMcastGroupAttrs<'a> {
     type Item = Result<McastGroupAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -787,7 +795,7 @@ impl<'a> IterableOpAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OpAttrs::Id(val) = attr? {
+            if let Ok(OpAttrs::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -803,7 +811,7 @@ impl<'a> IterableOpAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OpAttrs::Flags(val) = attr? {
+            if let Ok(OpAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -849,14 +857,16 @@ impl<'a> IterableOpAttrs<'a> {
 impl<'a> Iterator for IterableOpAttrs<'a> {
     type Item = Result<OpAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -971,7 +981,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::Type(val) = attr? {
+            if let Ok(PolicyAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -986,7 +996,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::MinValueS(val) = attr? {
+            if let Ok(PolicyAttrs::MinValueS(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1001,7 +1011,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::MaxValueS(val) = attr? {
+            if let Ok(PolicyAttrs::MaxValueS(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1016,7 +1026,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::MinValueU(val) = attr? {
+            if let Ok(PolicyAttrs::MinValueU(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1031,7 +1041,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::MaxValueU(val) = attr? {
+            if let Ok(PolicyAttrs::MaxValueU(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1046,7 +1056,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::MinLength(val) = attr? {
+            if let Ok(PolicyAttrs::MinLength(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1061,7 +1071,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::MaxLength(val) = attr? {
+            if let Ok(PolicyAttrs::MaxLength(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1076,7 +1086,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::PolicyIdx(val) = attr? {
+            if let Ok(PolicyAttrs::PolicyIdx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1091,7 +1101,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::PolicyMaxtype(val) = attr? {
+            if let Ok(PolicyAttrs::PolicyMaxtype(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1106,7 +1116,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::Bitfield32Mask(val) = attr? {
+            if let Ok(PolicyAttrs::Bitfield32Mask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1121,7 +1131,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::Mask(val) = attr? {
+            if let Ok(PolicyAttrs::Mask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1136,7 +1146,7 @@ impl<'a> IterablePolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyAttrs::Pad(val) = attr? {
+            if let Ok(PolicyAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1192,14 +1202,16 @@ impl<'a> IterablePolicyAttrs<'a> {
 impl<'a> Iterator for IterablePolicyAttrs<'a> {
     type Item = Result<PolicyAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1425,7 +1437,7 @@ impl<'a> IterableOpPolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OpPolicyAttrs::Do(val) = attr? {
+            if let Ok(OpPolicyAttrs::Do(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1440,7 +1452,7 @@ impl<'a> IterableOpPolicyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OpPolicyAttrs::Dump(val) = attr? {
+            if let Ok(OpPolicyAttrs::Dump(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1486,14 +1498,16 @@ impl<'a> IterableOpPolicyAttrs<'a> {
 impl<'a> Iterator for IterableOpPolicyAttrs<'a> {
     type Item = Result<OpPolicyAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2033,7 +2047,7 @@ impl<Prev: Rec> Drop for PushOpPolicyAttrs<Prev> {
         }
     }
 }
-#[doc = "Get / dump genetlink families\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_family_name()](IterableCtrlAttrs::get_family_name)\n- [.get_version()](IterableCtrlAttrs::get_version)\n- [.get_hdrsize()](IterableCtrlAttrs::get_hdrsize)\n- [.get_maxattr()](IterableCtrlAttrs::get_maxattr)\n- [.get_ops()](IterableCtrlAttrs::get_ops)\n- [.get_mcast_groups()](IterableCtrlAttrs::get_mcast_groups)\n"]
+#[doc = "Get / dump genetlink families\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_family_name()](IterableCtrlAttrs::get_family_name)\n- [.get_version()](IterableCtrlAttrs::get_version)\n- [.get_hdrsize()](IterableCtrlAttrs::get_hdrsize)\n- [.get_maxattr()](IterableCtrlAttrs::get_maxattr)\n- [.get_ops()](IterableCtrlAttrs::get_ops)\n- [.get_mcast_groups()](IterableCtrlAttrs::get_mcast_groups)\n\n"]
 #[derive(Debug)]
 pub struct OpGetfamilyDump<'r> {
     request: Request<'r>,
@@ -2091,7 +2105,7 @@ impl NetlinkRequest for OpGetfamilyDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump genetlink families\nRequest attributes:\n- [.push_family_name()](PushCtrlAttrs::push_family_name)\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_family_name()](IterableCtrlAttrs::get_family_name)\n- [.get_version()](IterableCtrlAttrs::get_version)\n- [.get_hdrsize()](IterableCtrlAttrs::get_hdrsize)\n- [.get_maxattr()](IterableCtrlAttrs::get_maxattr)\n- [.get_ops()](IterableCtrlAttrs::get_ops)\n- [.get_mcast_groups()](IterableCtrlAttrs::get_mcast_groups)\n"]
+#[doc = "Get / dump genetlink families\n\nRequest attributes:\n- [.push_family_name()](PushCtrlAttrs::push_family_name)\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_family_name()](IterableCtrlAttrs::get_family_name)\n- [.get_version()](IterableCtrlAttrs::get_version)\n- [.get_hdrsize()](IterableCtrlAttrs::get_hdrsize)\n- [.get_maxattr()](IterableCtrlAttrs::get_maxattr)\n- [.get_ops()](IterableCtrlAttrs::get_ops)\n- [.get_mcast_groups()](IterableCtrlAttrs::get_mcast_groups)\n\n"]
 #[derive(Debug)]
 pub struct OpGetfamilyDo<'r> {
     request: Request<'r>,
@@ -2147,7 +2161,7 @@ impl NetlinkRequest for OpGetfamilyDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump genetlink policies\nRequest attributes:\n- [.push_family_id()](PushCtrlAttrs::push_family_id)\n- [.push_family_name()](PushCtrlAttrs::push_family_name)\n- [.push_op()](PushCtrlAttrs::push_op)\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_policy()](IterableCtrlAttrs::get_policy)\n- [.get_op_policy()](IterableCtrlAttrs::get_op_policy)\n"]
+#[doc = "Get / dump genetlink policies\n\nRequest attributes:\n- [.push_family_id()](PushCtrlAttrs::push_family_id)\n- [.push_family_name()](PushCtrlAttrs::push_family_name)\n- [.push_op()](PushCtrlAttrs::push_op)\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_policy()](IterableCtrlAttrs::get_policy)\n- [.get_op_policy()](IterableCtrlAttrs::get_op_policy)\n\n"]
 #[derive(Debug)]
 pub struct OpGetpolicyDump<'r> {
     request: Request<'r>,
@@ -2307,21 +2321,21 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get / dump genetlink families\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_family_name()](IterableCtrlAttrs::get_family_name)\n- [.get_version()](IterableCtrlAttrs::get_version)\n- [.get_hdrsize()](IterableCtrlAttrs::get_hdrsize)\n- [.get_maxattr()](IterableCtrlAttrs::get_maxattr)\n- [.get_ops()](IterableCtrlAttrs::get_ops)\n- [.get_mcast_groups()](IterableCtrlAttrs::get_mcast_groups)\n"]
+    #[doc = "Get / dump genetlink families\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_family_name()](IterableCtrlAttrs::get_family_name)\n- [.get_version()](IterableCtrlAttrs::get_version)\n- [.get_hdrsize()](IterableCtrlAttrs::get_hdrsize)\n- [.get_maxattr()](IterableCtrlAttrs::get_maxattr)\n- [.get_ops()](IterableCtrlAttrs::get_ops)\n- [.get_mcast_groups()](IterableCtrlAttrs::get_mcast_groups)\n\n"]
     pub fn op_getfamily_dump(self) -> OpGetfamilyDump<'buf> {
         let mut res = OpGetfamilyDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-getfamily-dump", OpGetfamilyDump::lookup);
         res
     }
-    #[doc = "Get / dump genetlink families\nRequest attributes:\n- [.push_family_name()](PushCtrlAttrs::push_family_name)\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_family_name()](IterableCtrlAttrs::get_family_name)\n- [.get_version()](IterableCtrlAttrs::get_version)\n- [.get_hdrsize()](IterableCtrlAttrs::get_hdrsize)\n- [.get_maxattr()](IterableCtrlAttrs::get_maxattr)\n- [.get_ops()](IterableCtrlAttrs::get_ops)\n- [.get_mcast_groups()](IterableCtrlAttrs::get_mcast_groups)\n"]
+    #[doc = "Get / dump genetlink families\n\nRequest attributes:\n- [.push_family_name()](PushCtrlAttrs::push_family_name)\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_family_name()](IterableCtrlAttrs::get_family_name)\n- [.get_version()](IterableCtrlAttrs::get_version)\n- [.get_hdrsize()](IterableCtrlAttrs::get_hdrsize)\n- [.get_maxattr()](IterableCtrlAttrs::get_maxattr)\n- [.get_ops()](IterableCtrlAttrs::get_ops)\n- [.get_mcast_groups()](IterableCtrlAttrs::get_mcast_groups)\n\n"]
     pub fn op_getfamily_do(self) -> OpGetfamilyDo<'buf> {
         let mut res = OpGetfamilyDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-getfamily-do", OpGetfamilyDo::lookup);
         res
     }
-    #[doc = "Get / dump genetlink policies\nRequest attributes:\n- [.push_family_id()](PushCtrlAttrs::push_family_id)\n- [.push_family_name()](PushCtrlAttrs::push_family_name)\n- [.push_op()](PushCtrlAttrs::push_op)\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_policy()](IterableCtrlAttrs::get_policy)\n- [.get_op_policy()](IterableCtrlAttrs::get_op_policy)\n"]
+    #[doc = "Get / dump genetlink policies\n\nRequest attributes:\n- [.push_family_id()](PushCtrlAttrs::push_family_id)\n- [.push_family_name()](PushCtrlAttrs::push_family_name)\n- [.push_op()](PushCtrlAttrs::push_op)\n\nReply attributes:\n- [.get_family_id()](IterableCtrlAttrs::get_family_id)\n- [.get_policy()](IterableCtrlAttrs::get_policy)\n- [.get_op_policy()](IterableCtrlAttrs::get_op_policy)\n\n"]
     pub fn op_getpolicy_dump(self) -> OpGetpolicyDump<'buf> {
         let mut res = OpGetpolicyDump::new(self);
         res.request

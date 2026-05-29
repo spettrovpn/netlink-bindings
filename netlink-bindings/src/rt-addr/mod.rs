@@ -1,4 +1,4 @@
-#![doc = "Address configuration over rtnetlink\\."]
+#![doc = "Address configuration over rtnetlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -224,7 +224,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::Address(val) = attr? {
+            if let Ok(AddrAttrs::Address(val)) = attr {
                 return Ok(val);
             }
         }
@@ -239,7 +239,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::Local(val) = attr? {
+            if let Ok(AddrAttrs::Local(val)) = attr {
                 return Ok(val);
             }
         }
@@ -254,7 +254,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::Label(val) = attr? {
+            if let Ok(AddrAttrs::Label(val)) = attr {
                 return Ok(val);
             }
         }
@@ -269,7 +269,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::Broadcast(val) = attr? {
+            if let Ok(AddrAttrs::Broadcast(val)) = attr {
                 return Ok(val);
             }
         }
@@ -284,7 +284,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::Anycast(val) = attr? {
+            if let Ok(AddrAttrs::Anycast(val)) = attr {
                 return Ok(val);
             }
         }
@@ -299,7 +299,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::Cacheinfo(val) = attr? {
+            if let Ok(AddrAttrs::Cacheinfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -314,7 +314,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::Multicast(val) = attr? {
+            if let Ok(AddrAttrs::Multicast(val)) = attr {
                 return Ok(val);
             }
         }
@@ -330,7 +330,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::Flags(val) = attr? {
+            if let Ok(AddrAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -345,7 +345,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::RtPriority(val) = attr? {
+            if let Ok(AddrAttrs::RtPriority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -360,7 +360,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::TargetNetnsid(val) = attr? {
+            if let Ok(AddrAttrs::TargetNetnsid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -375,7 +375,7 @@ impl<'a> IterableAddrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let AddrAttrs::Proto(val) = attr? {
+            if let Ok(AddrAttrs::Proto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -430,14 +430,16 @@ impl<'a> IterableAddrAttrs<'a> {
 impl<'a> Iterator for IterableAddrAttrs<'a> {
     type Item = Result<AddrAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -753,7 +755,7 @@ impl<Prev: Rec> Drop for PushAddrAttrs<Prev> {
         }
     }
 }
-#[doc = "Add new address\nRequest attributes:\n- [.push_address()](PushAddrAttrs::push_address)\n- [.push_local()](PushAddrAttrs::push_local)\n- [.push_label()](PushAddrAttrs::push_label)\n- [.push_cacheinfo()](PushAddrAttrs::push_cacheinfo)\n"]
+#[doc = "Add new address\n\nRequest attributes:\n- [.push_address()](PushAddrAttrs::push_address)\n- [.push_local()](PushAddrAttrs::push_local)\n- [.push_label()](PushAddrAttrs::push_label)\n- [.push_cacheinfo()](PushAddrAttrs::push_cacheinfo)\n\n"]
 #[derive(Debug)]
 pub struct OpNewaddrDo<'r> {
     request: Request<'r>,
@@ -814,7 +816,7 @@ impl NetlinkRequest for OpNewaddrDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Remove address\nRequest attributes:\n- [.push_address()](PushAddrAttrs::push_address)\n- [.push_local()](PushAddrAttrs::push_local)\n"]
+#[doc = "Remove address\n\nRequest attributes:\n- [.push_address()](PushAddrAttrs::push_address)\n- [.push_local()](PushAddrAttrs::push_local)\n\n"]
 #[derive(Debug)]
 pub struct OpDeladdrDo<'r> {
     request: Request<'r>,
@@ -875,7 +877,7 @@ impl NetlinkRequest for OpDeladdrDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Dump address information\\.\n\nReply attributes:\n- [.get_address()](IterableAddrAttrs::get_address)\n- [.get_local()](IterableAddrAttrs::get_local)\n- [.get_label()](IterableAddrAttrs::get_label)\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n"]
+#[doc = "Dump address information.\n\nReply attributes:\n- [.get_address()](IterableAddrAttrs::get_address)\n- [.get_local()](IterableAddrAttrs::get_local)\n- [.get_label()](IterableAddrAttrs::get_label)\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n\n"]
 #[derive(Debug)]
 pub struct OpGetaddrDump<'r> {
     request: Request<'r>,
@@ -938,7 +940,7 @@ impl NetlinkRequest for OpGetaddrDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump IPv4/IPv6 multicast addresses\\.\n\nReply attributes:\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n- [.get_multicast()](IterableAddrAttrs::get_multicast)\n"]
+#[doc = "Get / dump IPv4/IPv6 multicast addresses.\n\nReply attributes:\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n- [.get_multicast()](IterableAddrAttrs::get_multicast)\n\n"]
 #[derive(Debug)]
 pub struct OpGetmulticastDump<'r> {
     request: Request<'r>,
@@ -1001,7 +1003,7 @@ impl NetlinkRequest for OpGetmulticastDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump IPv4/IPv6 multicast addresses\\.\n\nReply attributes:\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n- [.get_multicast()](IterableAddrAttrs::get_multicast)\n"]
+#[doc = "Get / dump IPv4/IPv6 multicast addresses.\n\nReply attributes:\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n- [.get_multicast()](IterableAddrAttrs::get_multicast)\n\n"]
 #[derive(Debug)]
 pub struct OpGetmulticastDo<'r> {
     request: Request<'r>,
@@ -1303,28 +1305,28 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Add new address\nRequest attributes:\n- [.push_address()](PushAddrAttrs::push_address)\n- [.push_local()](PushAddrAttrs::push_local)\n- [.push_label()](PushAddrAttrs::push_label)\n- [.push_cacheinfo()](PushAddrAttrs::push_cacheinfo)\n"]
+    #[doc = "Add new address\n\nRequest attributes:\n- [.push_address()](PushAddrAttrs::push_address)\n- [.push_local()](PushAddrAttrs::push_local)\n- [.push_label()](PushAddrAttrs::push_label)\n- [.push_cacheinfo()](PushAddrAttrs::push_cacheinfo)\n\n"]
     pub fn op_newaddr_do(self, header: &Ifaddrmsg) -> OpNewaddrDo<'buf> {
         let mut res = OpNewaddrDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newaddr-do", OpNewaddrDo::lookup);
         res
     }
-    #[doc = "Remove address\nRequest attributes:\n- [.push_address()](PushAddrAttrs::push_address)\n- [.push_local()](PushAddrAttrs::push_local)\n"]
+    #[doc = "Remove address\n\nRequest attributes:\n- [.push_address()](PushAddrAttrs::push_address)\n- [.push_local()](PushAddrAttrs::push_local)\n\n"]
     pub fn op_deladdr_do(self, header: &Ifaddrmsg) -> OpDeladdrDo<'buf> {
         let mut res = OpDeladdrDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-deladdr-do", OpDeladdrDo::lookup);
         res
     }
-    #[doc = "Dump address information\\.\n\nReply attributes:\n- [.get_address()](IterableAddrAttrs::get_address)\n- [.get_local()](IterableAddrAttrs::get_local)\n- [.get_label()](IterableAddrAttrs::get_label)\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n"]
+    #[doc = "Dump address information.\n\nReply attributes:\n- [.get_address()](IterableAddrAttrs::get_address)\n- [.get_local()](IterableAddrAttrs::get_local)\n- [.get_label()](IterableAddrAttrs::get_label)\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n\n"]
     pub fn op_getaddr_dump(self, header: &Ifaddrmsg) -> OpGetaddrDump<'buf> {
         let mut res = OpGetaddrDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getaddr-dump", OpGetaddrDump::lookup);
         res
     }
-    #[doc = "Get / dump IPv4/IPv6 multicast addresses\\.\n\nReply attributes:\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n- [.get_multicast()](IterableAddrAttrs::get_multicast)\n"]
+    #[doc = "Get / dump IPv4/IPv6 multicast addresses.\n\nReply attributes:\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n- [.get_multicast()](IterableAddrAttrs::get_multicast)\n\n"]
     pub fn op_getmulticast_dump(self, header: &Ifaddrmsg) -> OpGetmulticastDump<'buf> {
         let mut res = OpGetmulticastDump::new(self, header);
         res.request.do_writeback(
@@ -1334,7 +1336,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get / dump IPv4/IPv6 multicast addresses\\.\n\nReply attributes:\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n- [.get_multicast()](IterableAddrAttrs::get_multicast)\n"]
+    #[doc = "Get / dump IPv4/IPv6 multicast addresses.\n\nReply attributes:\n- [.get_cacheinfo()](IterableAddrAttrs::get_cacheinfo)\n- [.get_multicast()](IterableAddrAttrs::get_multicast)\n\n"]
     pub fn op_getmulticast_do(self, header: &Ifaddrmsg) -> OpGetmulticastDo<'buf> {
         let mut res = OpGetmulticastDo::new(self, header);
         res.request.do_writeback(

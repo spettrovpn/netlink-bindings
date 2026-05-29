@@ -1,4 +1,4 @@
-#![doc = "Networking HW rate limiting configuration\\.\n\nThis API allows configuring HW shapers available on the network\ndevices at different levels (queues, network device) and allows\narbitrary manipulation of the scheduling tree of the involved\nshapers\\.\n\nEach @shaper is identified within the given device, by a @handle,\ncomprising both a @scope and an @id\\.\n\nDepending on the @scope value, the shapers are attached to specific\nHW objects (queues, devices) or, for @node scope, represent a\nscheduling group, that can be placed in an arbitrary location of\nthe scheduling tree\\.\n\nShapers can be created with two different operations: the @set\noperation, to create and update a single \"attached\" shaper, and\nthe @group operation, to create and update a scheduling\ngroup\\. Only the @group operation can create @node scope shapers\\.\n\nExisting shapers can be deleted/reset via the @delete operation\\.\n\nThe user can query the running configuration via the @get operation\\.\n\nDifferent devices can provide different feature sets, e\\.g\\. with no\nsupport for complex scheduling hierarchy, or for some shaping\nparameters\\. The user can introspect the HW capabilities via the\n@cap\\-get operation\\.\n"]
+#![doc = "Networking HW rate limiting configuration.\n\nThis API allows configuring HW shapers available on the network devices\nat different levels (queues, network device) and allows arbitrary\nmanipulation of the scheduling tree of the involved shapers.\n\nEach \\@shaper is identified within the given device, by a \\@handle,\ncomprising both a \\@scope and an \\@id.\n\nDepending on the \\@scope value, the shapers are attached to specific HW\nobjects (queues, devices) or, for \\@node scope, represent a scheduling\ngroup, that can be placed in an arbitrary location of the scheduling\ntree.\n\nShapers can be created with two different operations: the \\@set\noperation, to create and update a single \\\"attached\\\" shaper, and the\n\\@group operation, to create and update a scheduling group. Only the\n\\@group operation can create \\@node scope shapers.\n\nExisting shapers can be deleted/reset via the \\@delete operation.\n\nThe user can query the running configuration via the \\@get operation.\n\nDifferent devices can provide different feature sets, e.g. with no\nsupport for complex scheduling hierarchy, or for some shaping\nparameters. The user can introspect the HW capabilities via the\n\\@cap-get operation.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -15,17 +15,17 @@ use crate::{
 };
 pub const PROTONAME: &str = "net-shaper";
 pub const PROTONAME_CSTR: &CStr = c"net-shaper";
-#[doc = "Defines the shaper @id interpretation\\."]
+#[doc = "Defines the shaper \\@id interpretation.\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum Scope {
-    #[doc = "The scope is not specified\\."]
+    #[doc = "The scope is not specified.\n"]
     Unspec = 0,
-    #[doc = "The main shaper for the given network device\\."]
+    #[doc = "The main shaper for the given network device.\n"]
     Netdev = 1,
-    #[doc = "The shaper is attached to the given device queue,\nthe @id represents the queue number\\.\n"]
+    #[doc = "The shaper is attached to the given device queue, the \\@id represents\nthe queue number.\n"]
     Queue = 2,
-    #[doc = "The shaper allows grouping of queues or other\nnode shapers; can be nested in either @netdev\nshapers or other @node shapers, allowing placement\nin any location of the scheduling tree, except\nleaves and root\\.\n"]
+    #[doc = "The shaper allows grouping of queues or other node shapers; can be\nnested in either \\@netdev shapers or other \\@node shapers, allowing\nplacement in any location of the scheduling tree, except leaves and\nroot.\n"]
     Node = 3,
 }
 impl Scope {
@@ -39,13 +39,13 @@ impl Scope {
         })
     }
 }
-#[doc = "Different metric supported by the shaper\\."]
+#[doc = "Different metric supported by the shaper.\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum Metric {
-    #[doc = "Shaper operates on a bits per second basis\\."]
+    #[doc = "Shaper operates on a bits per second basis.\n"]
     Bps = 0,
-    #[doc = "Shaper operates on a packets per second basis\\."]
+    #[doc = "Shaper operates on a packets per second basis.\n"]
     Pps = 1,
 }
 impl Metric {
@@ -59,34 +59,34 @@ impl Metric {
 }
 #[derive(Clone)]
 pub enum NetShaper<'a> {
-    #[doc = "Unique identifier for the given shaper inside the owning device\\."]
+    #[doc = "Unique identifier for the given shaper inside the owning device.\n"]
     Handle(IterableHandle<'a>),
-    #[doc = "Metric used by the given shaper for bw\\-min, bw\\-max and burst\\.\nAssociated type: [`Metric`] (enum)"]
+    #[doc = "Metric used by the given shaper for bw-min, bw-max and burst.\n\nAssociated type: [`Metric`] (enum)"]
     Metric(u32),
-    #[doc = "Guaranteed bandwidth for the given shaper\\."]
+    #[doc = "Guaranteed bandwidth for the given shaper.\n"]
     BwMin(u32),
-    #[doc = "Maximum bandwidth for the given shaper or 0 when unlimited\\."]
+    #[doc = "Maximum bandwidth for the given shaper or 0 when unlimited.\n"]
     BwMax(u32),
-    #[doc = "Maximum burst\\-size for shaping\\. Should not be interpreted\nas a quantum\\.\n"]
+    #[doc = "Maximum burst-size for shaping. Should not be interpreted as a quantum.\n"]
     Burst(u32),
-    #[doc = "Scheduling priority for the given shaper\\. The priority\nscheduling is applied to sibling shapers\\.\n"]
+    #[doc = "Scheduling priority for the given shaper. The priority scheduling is\napplied to sibling shapers.\n"]
     Priority(u32),
-    #[doc = "Relative weight for round robin scheduling of the\ngiven shaper\\.\nThe scheduling is applied to all sibling shapers\nwith the same priority\\.\n"]
+    #[doc = "Relative weight for round robin scheduling of the given shaper. The\nscheduling is applied to all sibling shapers with the same priority.\n"]
     Weight(u32),
-    #[doc = "Interface index owning the specified shaper\\."]
+    #[doc = "Interface index owning the specified shaper.\n"]
     Ifindex(u32),
-    #[doc = "Identifier for the parent of the affected shaper\\.\nOnly needed for @group operation\\.\n"]
+    #[doc = "Identifier for the parent of the affected shaper. Only needed for\n\\@group operation.\n"]
     Parent(IterableHandle<'a>),
-    #[doc = "Describes a set of leaves shapers for a @group operation\\.\n\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "Describes a set of leaves shapers for a \\@group operation.\n\nAttribute may repeat multiple times (treat it as array)"]
     Leaves(IterableLeafInfo<'a>),
 }
 impl<'a> IterableNetShaper<'a> {
-    #[doc = "Unique identifier for the given shaper inside the owning device\\."]
+    #[doc = "Unique identifier for the given shaper inside the owning device.\n"]
     pub fn get_handle(&self) -> Result<IterableHandle<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetShaper::Handle(val) = attr? {
+            if let Ok(NetShaper::Handle(val)) = attr {
                 return Ok(val);
             }
         }
@@ -97,12 +97,12 @@ impl<'a> IterableNetShaper<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Metric used by the given shaper for bw\\-min, bw\\-max and burst\\.\nAssociated type: [`Metric`] (enum)"]
+    #[doc = "Metric used by the given shaper for bw-min, bw-max and burst.\n\nAssociated type: [`Metric`] (enum)"]
     pub fn get_metric(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetShaper::Metric(val) = attr? {
+            if let Ok(NetShaper::Metric(val)) = attr {
                 return Ok(val);
             }
         }
@@ -113,12 +113,12 @@ impl<'a> IterableNetShaper<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Guaranteed bandwidth for the given shaper\\."]
+    #[doc = "Guaranteed bandwidth for the given shaper.\n"]
     pub fn get_bw_min(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetShaper::BwMin(val) = attr? {
+            if let Ok(NetShaper::BwMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -129,12 +129,12 @@ impl<'a> IterableNetShaper<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Maximum bandwidth for the given shaper or 0 when unlimited\\."]
+    #[doc = "Maximum bandwidth for the given shaper or 0 when unlimited.\n"]
     pub fn get_bw_max(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetShaper::BwMax(val) = attr? {
+            if let Ok(NetShaper::BwMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -145,12 +145,12 @@ impl<'a> IterableNetShaper<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Maximum burst\\-size for shaping\\. Should not be interpreted\nas a quantum\\.\n"]
+    #[doc = "Maximum burst-size for shaping. Should not be interpreted as a quantum.\n"]
     pub fn get_burst(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetShaper::Burst(val) = attr? {
+            if let Ok(NetShaper::Burst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -161,12 +161,12 @@ impl<'a> IterableNetShaper<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Scheduling priority for the given shaper\\. The priority\nscheduling is applied to sibling shapers\\.\n"]
+    #[doc = "Scheduling priority for the given shaper. The priority scheduling is\napplied to sibling shapers.\n"]
     pub fn get_priority(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetShaper::Priority(val) = attr? {
+            if let Ok(NetShaper::Priority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -177,12 +177,12 @@ impl<'a> IterableNetShaper<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Relative weight for round robin scheduling of the\ngiven shaper\\.\nThe scheduling is applied to all sibling shapers\nwith the same priority\\.\n"]
+    #[doc = "Relative weight for round robin scheduling of the given shaper. The\nscheduling is applied to all sibling shapers with the same priority.\n"]
     pub fn get_weight(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetShaper::Weight(val) = attr? {
+            if let Ok(NetShaper::Weight(val)) = attr {
                 return Ok(val);
             }
         }
@@ -193,12 +193,12 @@ impl<'a> IterableNetShaper<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Interface index owning the specified shaper\\."]
+    #[doc = "Interface index owning the specified shaper.\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetShaper::Ifindex(val) = attr? {
+            if let Ok(NetShaper::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -209,12 +209,12 @@ impl<'a> IterableNetShaper<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Identifier for the parent of the affected shaper\\.\nOnly needed for @group operation\\.\n"]
+    #[doc = "Identifier for the parent of the affected shaper. Only needed for\n\\@group operation.\n"]
     pub fn get_parent(&self) -> Result<IterableHandle<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetShaper::Parent(val) = attr? {
+            if let Ok(NetShaper::Parent(val)) = attr {
                 return Ok(val);
             }
         }
@@ -225,7 +225,7 @@ impl<'a> IterableNetShaper<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Describes a set of leaves shapers for a @group operation\\.\n\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "Describes a set of leaves shapers for a \\@group operation.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn get_leaves(&self) -> MultiAttrIterable<Self, NetShaper<'a>, IterableLeafInfo<'a>> {
         MultiAttrIterable::new(self.clone(), |variant| {
             if let NetShaper::Leaves(val) = variant {
@@ -278,14 +278,16 @@ impl<'a> IterableNetShaper<'a> {
 impl<'a> Iterator for IterableNetShaper<'a> {
     type Item = Result<NetShaper<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -480,18 +482,18 @@ impl IterableNetShaper<'_> {
 }
 #[derive(Clone)]
 pub enum Handle {
-    #[doc = "Defines the shaper @id interpretation\\.\nAssociated type: [`Scope`] (enum)"]
+    #[doc = "Defines the shaper \\@id interpretation.\n\nAssociated type: [`Scope`] (enum)"]
     Scope(u32),
-    #[doc = "Numeric identifier of a shaper\\. The id semantic depends on\nthe scope\\. For @queue scope it's the queue id and for @node\nscope it's the node identifier\\.\n"]
+    #[doc = "Numeric identifier of a shaper. The id semantic depends on the scope.\nFor \\@queue scope it\\'s the queue id and for \\@node scope it\\'s the node\nidentifier.\n"]
     Id(u32),
 }
 impl<'a> IterableHandle<'a> {
-    #[doc = "Defines the shaper @id interpretation\\.\nAssociated type: [`Scope`] (enum)"]
+    #[doc = "Defines the shaper \\@id interpretation.\n\nAssociated type: [`Scope`] (enum)"]
     pub fn get_scope(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Handle::Scope(val) = attr? {
+            if let Ok(Handle::Scope(val)) = attr {
                 return Ok(val);
             }
         }
@@ -502,12 +504,12 @@ impl<'a> IterableHandle<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Numeric identifier of a shaper\\. The id semantic depends on\nthe scope\\. For @queue scope it's the queue id and for @node\nscope it's the node identifier\\.\n"]
+    #[doc = "Numeric identifier of a shaper. The id semantic depends on the scope.\nFor \\@queue scope it\\'s the queue id and for \\@node scope it\\'s the node\nidentifier.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Handle::Id(val) = attr? {
+            if let Ok(Handle::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -553,14 +555,16 @@ impl<'a> IterableHandle<'a> {
 impl<'a> Iterator for IterableHandle<'a> {
     type Item = Result<Handle, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -655,20 +659,20 @@ impl IterableHandle<'_> {
 }
 #[derive(Clone)]
 pub enum LeafInfo<'a> {
-    #[doc = "Unique identifier for the given shaper inside the owning device\\."]
+    #[doc = "Unique identifier for the given shaper inside the owning device.\n"]
     Handle(IterableHandle<'a>),
-    #[doc = "Scheduling priority for the given shaper\\. The priority\nscheduling is applied to sibling shapers\\.\n"]
+    #[doc = "Scheduling priority for the given shaper. The priority scheduling is\napplied to sibling shapers.\n"]
     Priority(u32),
-    #[doc = "Relative weight for round robin scheduling of the\ngiven shaper\\.\nThe scheduling is applied to all sibling shapers\nwith the same priority\\.\n"]
+    #[doc = "Relative weight for round robin scheduling of the given shaper. The\nscheduling is applied to all sibling shapers with the same priority.\n"]
     Weight(u32),
 }
 impl<'a> IterableLeafInfo<'a> {
-    #[doc = "Unique identifier for the given shaper inside the owning device\\."]
+    #[doc = "Unique identifier for the given shaper inside the owning device.\n"]
     pub fn get_handle(&self) -> Result<IterableHandle<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let LeafInfo::Handle(val) = attr? {
+            if let Ok(LeafInfo::Handle(val)) = attr {
                 return Ok(val);
             }
         }
@@ -679,12 +683,12 @@ impl<'a> IterableLeafInfo<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Scheduling priority for the given shaper\\. The priority\nscheduling is applied to sibling shapers\\.\n"]
+    #[doc = "Scheduling priority for the given shaper. The priority scheduling is\napplied to sibling shapers.\n"]
     pub fn get_priority(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let LeafInfo::Priority(val) = attr? {
+            if let Ok(LeafInfo::Priority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -695,12 +699,12 @@ impl<'a> IterableLeafInfo<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Relative weight for round robin scheduling of the\ngiven shaper\\.\nThe scheduling is applied to all sibling shapers\nwith the same priority\\.\n"]
+    #[doc = "Relative weight for round robin scheduling of the given shaper. The\nscheduling is applied to all sibling shapers with the same priority.\n"]
     pub fn get_weight(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let LeafInfo::Weight(val) = attr? {
+            if let Ok(LeafInfo::Weight(val)) = attr {
                 return Ok(val);
             }
         }
@@ -741,14 +745,16 @@ impl<'a> IterableLeafInfo<'a> {
 impl<'a> Iterator for IterableLeafInfo<'a> {
     type Item = Result<LeafInfo<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -857,34 +863,34 @@ impl IterableLeafInfo<'_> {
 }
 #[derive(Clone)]
 pub enum Caps {
-    #[doc = "Interface index queried for shapers capabilities\\."]
+    #[doc = "Interface index queried for shapers capabilities.\n"]
     Ifindex(u32),
-    #[doc = "The scope to which the queried capabilities apply\\.\nAssociated type: [`Scope`] (enum)"]
+    #[doc = "The scope to which the queried capabilities apply.\n\nAssociated type: [`Scope`] (enum)"]
     Scope(u32),
-    #[doc = "The device accepts 'bps' metric for bw\\-min, bw\\-max and burst\\."]
+    #[doc = "The device accepts \\'bps\\' metric for bw-min, bw-max and burst.\n"]
     SupportMetricBps(()),
-    #[doc = "The device accepts 'pps' metric for bw\\-min, bw\\-max and burst\\."]
+    #[doc = "The device accepts \\'pps\\' metric for bw-min, bw-max and burst.\n"]
     SupportMetricPps(()),
-    #[doc = "The device supports nesting shaper belonging to this scope\nbelow 'node' scoped shapers\\. Only 'queue' and 'node'\nscope can have flag 'support\\-nesting'\\.\n"]
+    #[doc = "The device supports nesting shaper belonging to this scope below\n\\'node\\' scoped shapers. Only \\'queue\\' and \\'node\\' scope can have flag\n\\'support-nesting\\'.\n"]
     SupportNesting(()),
-    #[doc = "The device supports a minimum guaranteed B/W\\."]
+    #[doc = "The device supports a minimum guaranteed B/W.\n"]
     SupportBwMin(()),
-    #[doc = "The device supports maximum B/W shaping\\."]
+    #[doc = "The device supports maximum B/W shaping.\n"]
     SupportBwMax(()),
-    #[doc = "The device supports a maximum burst size\\."]
+    #[doc = "The device supports a maximum burst size.\n"]
     SupportBurst(()),
-    #[doc = "The device supports priority scheduling\\."]
+    #[doc = "The device supports priority scheduling.\n"]
     SupportPriority(()),
-    #[doc = "The device supports weighted round robin scheduling\\."]
+    #[doc = "The device supports weighted round robin scheduling.\n"]
     SupportWeight(()),
 }
 impl<'a> IterableCaps<'a> {
-    #[doc = "Interface index queried for shapers capabilities\\."]
+    #[doc = "Interface index queried for shapers capabilities.\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Caps::Ifindex(val) = attr? {
+            if let Ok(Caps::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -895,12 +901,12 @@ impl<'a> IterableCaps<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The scope to which the queried capabilities apply\\.\nAssociated type: [`Scope`] (enum)"]
+    #[doc = "The scope to which the queried capabilities apply.\n\nAssociated type: [`Scope`] (enum)"]
     pub fn get_scope(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Caps::Scope(val) = attr? {
+            if let Ok(Caps::Scope(val)) = attr {
                 return Ok(val);
             }
         }
@@ -911,12 +917,12 @@ impl<'a> IterableCaps<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The device accepts 'bps' metric for bw\\-min, bw\\-max and burst\\."]
+    #[doc = "The device accepts \\'bps\\' metric for bw-min, bw-max and burst.\n"]
     pub fn get_support_metric_bps(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Caps::SupportMetricBps(val) = attr? {
+            if let Ok(Caps::SupportMetricBps(val)) = attr {
                 return Ok(val);
             }
         }
@@ -927,12 +933,12 @@ impl<'a> IterableCaps<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The device accepts 'pps' metric for bw\\-min, bw\\-max and burst\\."]
+    #[doc = "The device accepts \\'pps\\' metric for bw-min, bw-max and burst.\n"]
     pub fn get_support_metric_pps(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Caps::SupportMetricPps(val) = attr? {
+            if let Ok(Caps::SupportMetricPps(val)) = attr {
                 return Ok(val);
             }
         }
@@ -943,12 +949,12 @@ impl<'a> IterableCaps<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The device supports nesting shaper belonging to this scope\nbelow 'node' scoped shapers\\. Only 'queue' and 'node'\nscope can have flag 'support\\-nesting'\\.\n"]
+    #[doc = "The device supports nesting shaper belonging to this scope below\n\\'node\\' scoped shapers. Only \\'queue\\' and \\'node\\' scope can have flag\n\\'support-nesting\\'.\n"]
     pub fn get_support_nesting(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Caps::SupportNesting(val) = attr? {
+            if let Ok(Caps::SupportNesting(val)) = attr {
                 return Ok(val);
             }
         }
@@ -959,12 +965,12 @@ impl<'a> IterableCaps<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The device supports a minimum guaranteed B/W\\."]
+    #[doc = "The device supports a minimum guaranteed B/W.\n"]
     pub fn get_support_bw_min(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Caps::SupportBwMin(val) = attr? {
+            if let Ok(Caps::SupportBwMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -975,12 +981,12 @@ impl<'a> IterableCaps<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The device supports maximum B/W shaping\\."]
+    #[doc = "The device supports maximum B/W shaping.\n"]
     pub fn get_support_bw_max(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Caps::SupportBwMax(val) = attr? {
+            if let Ok(Caps::SupportBwMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -991,12 +997,12 @@ impl<'a> IterableCaps<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The device supports a maximum burst size\\."]
+    #[doc = "The device supports a maximum burst size.\n"]
     pub fn get_support_burst(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Caps::SupportBurst(val) = attr? {
+            if let Ok(Caps::SupportBurst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1007,12 +1013,12 @@ impl<'a> IterableCaps<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The device supports priority scheduling\\."]
+    #[doc = "The device supports priority scheduling.\n"]
     pub fn get_support_priority(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Caps::SupportPriority(val) = attr? {
+            if let Ok(Caps::SupportPriority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1023,12 +1029,12 @@ impl<'a> IterableCaps<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The device supports weighted round robin scheduling\\."]
+    #[doc = "The device supports weighted round robin scheduling.\n"]
     pub fn get_support_weight(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Caps::SupportWeight(val) = attr? {
+            if let Ok(Caps::SupportWeight(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1082,14 +1088,16 @@ impl<'a> IterableCaps<'a> {
 impl<'a> Iterator for IterableCaps<'a> {
     type Item = Result<Caps, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1270,7 +1278,7 @@ impl<Prev: Rec> PushNetShaper<Prev> {
         }
         prev
     }
-    #[doc = "Unique identifier for the given shaper inside the owning device\\."]
+    #[doc = "Unique identifier for the given shaper inside the owning device.\n"]
     pub fn nested_handle(mut self) -> PushHandle<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 1u16);
         PushHandle {
@@ -1278,49 +1286,49 @@ impl<Prev: Rec> PushNetShaper<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Metric used by the given shaper for bw\\-min, bw\\-max and burst\\.\nAssociated type: [`Metric`] (enum)"]
+    #[doc = "Metric used by the given shaper for bw-min, bw-max and burst.\n\nAssociated type: [`Metric`] (enum)"]
     pub fn push_metric(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Guaranteed bandwidth for the given shaper\\."]
+    #[doc = "Guaranteed bandwidth for the given shaper.\n"]
     pub fn push_bw_min(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Maximum bandwidth for the given shaper or 0 when unlimited\\."]
+    #[doc = "Maximum bandwidth for the given shaper or 0 when unlimited.\n"]
     pub fn push_bw_max(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Maximum burst\\-size for shaping\\. Should not be interpreted\nas a quantum\\.\n"]
+    #[doc = "Maximum burst-size for shaping. Should not be interpreted as a quantum.\n"]
     pub fn push_burst(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Scheduling priority for the given shaper\\. The priority\nscheduling is applied to sibling shapers\\.\n"]
+    #[doc = "Scheduling priority for the given shaper. The priority scheduling is\napplied to sibling shapers.\n"]
     pub fn push_priority(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Relative weight for round robin scheduling of the\ngiven shaper\\.\nThe scheduling is applied to all sibling shapers\nwith the same priority\\.\n"]
+    #[doc = "Relative weight for round robin scheduling of the given shaper. The\nscheduling is applied to all sibling shapers with the same priority.\n"]
     pub fn push_weight(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Interface index owning the specified shaper\\."]
+    #[doc = "Interface index owning the specified shaper.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Identifier for the parent of the affected shaper\\.\nOnly needed for @group operation\\.\n"]
+    #[doc = "Identifier for the parent of the affected shaper. Only needed for\n\\@group operation.\n"]
     pub fn nested_parent(mut self) -> PushHandle<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 9u16);
         PushHandle {
@@ -1328,7 +1336,7 @@ impl<Prev: Rec> PushNetShaper<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Describes a set of leaves shapers for a @group operation\\.\n\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "Describes a set of leaves shapers for a \\@group operation.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn nested_leaves(mut self) -> PushLeafInfo<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 10u16);
         PushLeafInfo {
@@ -1372,13 +1380,13 @@ impl<Prev: Rec> PushHandle<Prev> {
         }
         prev
     }
-    #[doc = "Defines the shaper @id interpretation\\.\nAssociated type: [`Scope`] (enum)"]
+    #[doc = "Defines the shaper \\@id interpretation.\n\nAssociated type: [`Scope`] (enum)"]
     pub fn push_scope(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Numeric identifier of a shaper\\. The id semantic depends on\nthe scope\\. For @queue scope it's the queue id and for @node\nscope it's the node identifier\\.\n"]
+    #[doc = "Numeric identifier of a shaper. The id semantic depends on the scope.\nFor \\@queue scope it\\'s the queue id and for \\@node scope it\\'s the node\nidentifier.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1420,7 +1428,7 @@ impl<Prev: Rec> PushLeafInfo<Prev> {
         }
         prev
     }
-    #[doc = "Unique identifier for the given shaper inside the owning device\\."]
+    #[doc = "Unique identifier for the given shaper inside the owning device.\n"]
     pub fn nested_handle(mut self) -> PushHandle<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 1u16);
         PushHandle {
@@ -1428,13 +1436,13 @@ impl<Prev: Rec> PushLeafInfo<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Scheduling priority for the given shaper\\. The priority\nscheduling is applied to sibling shapers\\.\n"]
+    #[doc = "Scheduling priority for the given shaper. The priority scheduling is\napplied to sibling shapers.\n"]
     pub fn push_priority(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Relative weight for round robin scheduling of the\ngiven shaper\\.\nThe scheduling is applied to all sibling shapers\nwith the same priority\\.\n"]
+    #[doc = "Relative weight for round robin scheduling of the given shaper. The\nscheduling is applied to all sibling shapers with the same priority.\n"]
     pub fn push_weight(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1476,54 +1484,54 @@ impl<Prev: Rec> PushCaps<Prev> {
         }
         prev
     }
-    #[doc = "Interface index queried for shapers capabilities\\."]
+    #[doc = "Interface index queried for shapers capabilities.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The scope to which the queried capabilities apply\\.\nAssociated type: [`Scope`] (enum)"]
+    #[doc = "The scope to which the queried capabilities apply.\n\nAssociated type: [`Scope`] (enum)"]
     pub fn push_scope(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The device accepts 'bps' metric for bw\\-min, bw\\-max and burst\\."]
+    #[doc = "The device accepts \\'bps\\' metric for bw-min, bw-max and burst.\n"]
     pub fn push_support_metric_bps(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 3u16, 0 as u16);
         self
     }
-    #[doc = "The device accepts 'pps' metric for bw\\-min, bw\\-max and burst\\."]
+    #[doc = "The device accepts \\'pps\\' metric for bw-min, bw-max and burst.\n"]
     pub fn push_support_metric_pps(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 4u16, 0 as u16);
         self
     }
-    #[doc = "The device supports nesting shaper belonging to this scope\nbelow 'node' scoped shapers\\. Only 'queue' and 'node'\nscope can have flag 'support\\-nesting'\\.\n"]
+    #[doc = "The device supports nesting shaper belonging to this scope below\n\\'node\\' scoped shapers. Only \\'queue\\' and \\'node\\' scope can have flag\n\\'support-nesting\\'.\n"]
     pub fn push_support_nesting(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 5u16, 0 as u16);
         self
     }
-    #[doc = "The device supports a minimum guaranteed B/W\\."]
+    #[doc = "The device supports a minimum guaranteed B/W.\n"]
     pub fn push_support_bw_min(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 6u16, 0 as u16);
         self
     }
-    #[doc = "The device supports maximum B/W shaping\\."]
+    #[doc = "The device supports maximum B/W shaping.\n"]
     pub fn push_support_bw_max(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 7u16, 0 as u16);
         self
     }
-    #[doc = "The device supports a maximum burst size\\."]
+    #[doc = "The device supports a maximum burst size.\n"]
     pub fn push_support_burst(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 8u16, 0 as u16);
         self
     }
-    #[doc = "The device supports priority scheduling\\."]
+    #[doc = "The device supports priority scheduling.\n"]
     pub fn push_support_priority(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 9u16, 0 as u16);
         self
     }
-    #[doc = "The device supports weighted round robin scheduling\\."]
+    #[doc = "The device supports weighted round robin scheduling.\n"]
     pub fn push_support_weight(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 10u16, 0 as u16);
         self
@@ -1538,7 +1546,7 @@ impl<Prev: Rec> Drop for PushCaps<Prev> {
         }
     }
 }
-#[doc = "Get information about a shaper for a given device\\.\n\nRequest attributes:\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_metric()](IterableNetShaper::get_metric)\n- [.get_bw_min()](IterableNetShaper::get_bw_min)\n- [.get_bw_max()](IterableNetShaper::get_bw_max)\n- [.get_burst()](IterableNetShaper::get_burst)\n- [.get_priority()](IterableNetShaper::get_priority)\n- [.get_weight()](IterableNetShaper::get_weight)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n- [.get_parent()](IterableNetShaper::get_parent)\n"]
+#[doc = "Get information about a shaper for a given device.\n\nRequest attributes:\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_metric()](IterableNetShaper::get_metric)\n- [.get_bw_min()](IterableNetShaper::get_bw_min)\n- [.get_bw_max()](IterableNetShaper::get_bw_max)\n- [.get_burst()](IterableNetShaper::get_burst)\n- [.get_priority()](IterableNetShaper::get_priority)\n- [.get_weight()](IterableNetShaper::get_weight)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n- [.get_parent()](IterableNetShaper::get_parent)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDump<'r> {
     request: Request<'r>,
@@ -1593,7 +1601,7 @@ impl NetlinkRequest for OpGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get information about a shaper for a given device\\.\n\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_metric()](IterableNetShaper::get_metric)\n- [.get_bw_min()](IterableNetShaper::get_bw_min)\n- [.get_bw_max()](IterableNetShaper::get_bw_max)\n- [.get_burst()](IterableNetShaper::get_burst)\n- [.get_priority()](IterableNetShaper::get_priority)\n- [.get_weight()](IterableNetShaper::get_weight)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n- [.get_parent()](IterableNetShaper::get_parent)\n"]
+#[doc = "Get information about a shaper for a given device.\n\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_metric()](IterableNetShaper::get_metric)\n- [.get_bw_min()](IterableNetShaper::get_bw_min)\n- [.get_bw_max()](IterableNetShaper::get_bw_max)\n- [.get_burst()](IterableNetShaper::get_burst)\n- [.get_priority()](IterableNetShaper::get_priority)\n- [.get_weight()](IterableNetShaper::get_weight)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n- [.get_parent()](IterableNetShaper::get_parent)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDo<'r> {
     request: Request<'r>,
@@ -1646,7 +1654,7 @@ impl NetlinkRequest for OpGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create or update the specified shaper\\.\nThe set operation can't be used to create a @node scope shaper,\nuse the @group operation instead\\.\n\nFlags: admin-perm\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_metric()](PushNetShaper::push_metric)\n- [.push_bw_min()](PushNetShaper::push_bw_min)\n- [.push_bw_max()](PushNetShaper::push_bw_max)\n- [.push_burst()](PushNetShaper::push_burst)\n- [.push_priority()](PushNetShaper::push_priority)\n- [.push_weight()](PushNetShaper::push_weight)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n"]
+#[doc = "Create or update the specified shaper. The set operation can\\'t be used\nto create a \\@node scope shaper, use the \\@group operation instead.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_metric()](PushNetShaper::push_metric)\n- [.push_bw_min()](PushNetShaper::push_bw_min)\n- [.push_bw_max()](PushNetShaper::push_bw_max)\n- [.push_burst()](PushNetShaper::push_burst)\n- [.push_priority()](PushNetShaper::push_priority)\n- [.push_weight()](PushNetShaper::push_weight)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\n"]
 #[derive(Debug)]
 pub struct OpSetDo<'r> {
     request: Request<'r>,
@@ -1699,7 +1707,7 @@ impl NetlinkRequest for OpSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Clear (remove) the specified shaper\\. When deleting\na @node shaper, reattach all the node's leaves to the\ndeleted node's parent\\.\nIf, after the removal, the parent shaper has no more\nleaves and the parent shaper scope is @node, the parent\nnode is deleted, recursively\\.\nWhen deleting a @queue shaper or a @netdev shaper,\nthe shaper disappears from the hierarchy, but the\nqueue/device can still send traffic: it has an implicit\nnode with infinite bandwidth\\. The queue's implicit node\nfeeds an implicit RR node at the root of the hierarchy\\.\n\nFlags: admin-perm\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n"]
+#[doc = "Clear (remove) the specified shaper. When deleting a \\@node shaper,\nreattach all the node\\'s leaves to the deleted node\\'s parent. If, after\nthe removal, the parent shaper has no more leaves and the parent shaper\nscope is \\@node, the parent node is deleted, recursively. When deleting\na \\@queue shaper or a \\@netdev shaper, the shaper disappears from the\nhierarchy, but the queue/device can still send traffic: it has an\nimplicit node with infinite bandwidth. The queue\\'s implicit node feeds\nan implicit RR node at the root of the hierarchy.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\n"]
 #[derive(Debug)]
 pub struct OpDeleteDo<'r> {
     request: Request<'r>,
@@ -1752,7 +1760,7 @@ impl NetlinkRequest for OpDeleteDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create or update a scheduling group, attaching the specified\n@leaves shapers under the specified node identified by @handle\\.\nThe @leaves shapers scope must be @queue and the node shaper\nscope must be either @node or @netdev\\.\nWhen the node shaper has @node scope, if the @handle @id is not\nspecified, a new shaper of such scope is created, otherwise the\nspecified node must already exist\\.\nWhen updating an existing node shaper, the specified @leaves are\nadded to the existing node; such node will also retain any preexisting\nleave\\.\nThe @parent handle for a new node shaper defaults to the parent\nof all the leaves, provided all the leaves share the same parent\\.\nOtherwise @parent handle must be specified\\.\nThe user can optionally provide shaping attributes for the node\nshaper\\.\nThe operation is atomic, on failure no change is applied to\nthe device shaping configuration, otherwise the @node shaper\nfull identifier, comprising @binding and @handle, is provided\nas the reply\\.\n\nFlags: admin-perm\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_metric()](PushNetShaper::push_metric)\n- [.push_bw_min()](PushNetShaper::push_bw_min)\n- [.push_bw_max()](PushNetShaper::push_bw_max)\n- [.push_burst()](PushNetShaper::push_burst)\n- [.push_priority()](PushNetShaper::push_priority)\n- [.push_weight()](PushNetShaper::push_weight)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n- [.nested_parent()](PushNetShaper::nested_parent)\n- [.nested_leaves()](PushNetShaper::nested_leaves)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n"]
+#[doc = "Create or update a scheduling group, attaching the specified \\@leaves\nshapers under the specified node identified by \\@handle. The \\@leaves\nshapers scope must be \\@queue and the node shaper scope must be either\n\\@node or \\@netdev. When the node shaper has \\@node scope, if the\n\\@handle \\@id is not specified, a new shaper of such scope is created,\notherwise the specified node must already exist. When updating an\nexisting node shaper, the specified \\@leaves are added to the existing\nnode; such node will also retain any preexisting leave. The \\@parent\nhandle for a new node shaper defaults to the parent of all the leaves,\nprovided all the leaves share the same parent. Otherwise \\@parent handle\nmust be specified. The user can optionally provide shaping attributes\nfor the node shaper. The operation is atomic, on failure no change is\napplied to the device shaping configuration, otherwise the \\@node shaper\nfull identifier, comprising \\@binding and \\@handle, is provided as the\nreply.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_metric()](PushNetShaper::push_metric)\n- [.push_bw_min()](PushNetShaper::push_bw_min)\n- [.push_bw_max()](PushNetShaper::push_bw_max)\n- [.push_burst()](PushNetShaper::push_burst)\n- [.push_priority()](PushNetShaper::push_priority)\n- [.push_weight()](PushNetShaper::push_weight)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n- [.nested_parent()](PushNetShaper::nested_parent)\n- [.nested_leaves()](PushNetShaper::nested_leaves)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n\n"]
 #[derive(Debug)]
 pub struct OpGroupDo<'r> {
     request: Request<'r>,
@@ -1805,7 +1813,7 @@ impl NetlinkRequest for OpGroupDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get the shaper capabilities supported by the given device\nfor the specified scope\\.\n\nRequest attributes:\n- [.push_ifindex()](PushCaps::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableCaps::get_ifindex)\n- [.get_scope()](IterableCaps::get_scope)\n- [.get_support_metric_bps()](IterableCaps::get_support_metric_bps)\n- [.get_support_metric_pps()](IterableCaps::get_support_metric_pps)\n- [.get_support_nesting()](IterableCaps::get_support_nesting)\n- [.get_support_bw_min()](IterableCaps::get_support_bw_min)\n- [.get_support_bw_max()](IterableCaps::get_support_bw_max)\n- [.get_support_burst()](IterableCaps::get_support_burst)\n- [.get_support_priority()](IterableCaps::get_support_priority)\n- [.get_support_weight()](IterableCaps::get_support_weight)\n"]
+#[doc = "Get the shaper capabilities supported by the given device for the\nspecified scope.\n\nRequest attributes:\n- [.push_ifindex()](PushCaps::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableCaps::get_ifindex)\n- [.get_scope()](IterableCaps::get_scope)\n- [.get_support_metric_bps()](IterableCaps::get_support_metric_bps)\n- [.get_support_metric_pps()](IterableCaps::get_support_metric_pps)\n- [.get_support_nesting()](IterableCaps::get_support_nesting)\n- [.get_support_bw_min()](IterableCaps::get_support_bw_min)\n- [.get_support_bw_max()](IterableCaps::get_support_bw_max)\n- [.get_support_burst()](IterableCaps::get_support_burst)\n- [.get_support_priority()](IterableCaps::get_support_priority)\n- [.get_support_weight()](IterableCaps::get_support_weight)\n\n"]
 #[derive(Debug)]
 pub struct OpCapGetDump<'r> {
     request: Request<'r>,
@@ -1860,7 +1868,7 @@ impl NetlinkRequest for OpCapGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get the shaper capabilities supported by the given device\nfor the specified scope\\.\n\nRequest attributes:\n- [.push_ifindex()](PushCaps::push_ifindex)\n- [.push_scope()](PushCaps::push_scope)\n\nReply attributes:\n- [.get_ifindex()](IterableCaps::get_ifindex)\n- [.get_scope()](IterableCaps::get_scope)\n- [.get_support_metric_bps()](IterableCaps::get_support_metric_bps)\n- [.get_support_metric_pps()](IterableCaps::get_support_metric_pps)\n- [.get_support_nesting()](IterableCaps::get_support_nesting)\n- [.get_support_bw_min()](IterableCaps::get_support_bw_min)\n- [.get_support_bw_max()](IterableCaps::get_support_bw_max)\n- [.get_support_burst()](IterableCaps::get_support_burst)\n- [.get_support_priority()](IterableCaps::get_support_priority)\n- [.get_support_weight()](IterableCaps::get_support_weight)\n"]
+#[doc = "Get the shaper capabilities supported by the given device for the\nspecified scope.\n\nRequest attributes:\n- [.push_ifindex()](PushCaps::push_ifindex)\n- [.push_scope()](PushCaps::push_scope)\n\nReply attributes:\n- [.get_ifindex()](IterableCaps::get_ifindex)\n- [.get_scope()](IterableCaps::get_scope)\n- [.get_support_metric_bps()](IterableCaps::get_support_metric_bps)\n- [.get_support_metric_pps()](IterableCaps::get_support_metric_pps)\n- [.get_support_nesting()](IterableCaps::get_support_nesting)\n- [.get_support_bw_min()](IterableCaps::get_support_bw_min)\n- [.get_support_bw_max()](IterableCaps::get_support_bw_max)\n- [.get_support_burst()](IterableCaps::get_support_burst)\n- [.get_support_priority()](IterableCaps::get_support_priority)\n- [.get_support_weight()](IterableCaps::get_support_weight)\n\n"]
 #[derive(Debug)]
 pub struct OpCapGetDo<'r> {
     request: Request<'r>,
@@ -2015,49 +2023,49 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get information about a shaper for a given device\\.\n\nRequest attributes:\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_metric()](IterableNetShaper::get_metric)\n- [.get_bw_min()](IterableNetShaper::get_bw_min)\n- [.get_bw_max()](IterableNetShaper::get_bw_max)\n- [.get_burst()](IterableNetShaper::get_burst)\n- [.get_priority()](IterableNetShaper::get_priority)\n- [.get_weight()](IterableNetShaper::get_weight)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n- [.get_parent()](IterableNetShaper::get_parent)\n"]
+    #[doc = "Get information about a shaper for a given device.\n\nRequest attributes:\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_metric()](IterableNetShaper::get_metric)\n- [.get_bw_min()](IterableNetShaper::get_bw_min)\n- [.get_bw_max()](IterableNetShaper::get_bw_max)\n- [.get_burst()](IterableNetShaper::get_burst)\n- [.get_priority()](IterableNetShaper::get_priority)\n- [.get_weight()](IterableNetShaper::get_weight)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n- [.get_parent()](IterableNetShaper::get_parent)\n\n"]
     pub fn op_get_dump(self) -> OpGetDump<'buf> {
         let mut res = OpGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-dump", OpGetDump::lookup);
         res
     }
-    #[doc = "Get information about a shaper for a given device\\.\n\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_metric()](IterableNetShaper::get_metric)\n- [.get_bw_min()](IterableNetShaper::get_bw_min)\n- [.get_bw_max()](IterableNetShaper::get_bw_max)\n- [.get_burst()](IterableNetShaper::get_burst)\n- [.get_priority()](IterableNetShaper::get_priority)\n- [.get_weight()](IterableNetShaper::get_weight)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n- [.get_parent()](IterableNetShaper::get_parent)\n"]
+    #[doc = "Get information about a shaper for a given device.\n\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_metric()](IterableNetShaper::get_metric)\n- [.get_bw_min()](IterableNetShaper::get_bw_min)\n- [.get_bw_max()](IterableNetShaper::get_bw_max)\n- [.get_burst()](IterableNetShaper::get_burst)\n- [.get_priority()](IterableNetShaper::get_priority)\n- [.get_weight()](IterableNetShaper::get_weight)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n- [.get_parent()](IterableNetShaper::get_parent)\n\n"]
     pub fn op_get_do(self) -> OpGetDo<'buf> {
         let mut res = OpGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-do", OpGetDo::lookup);
         res
     }
-    #[doc = "Create or update the specified shaper\\.\nThe set operation can't be used to create a @node scope shaper,\nuse the @group operation instead\\.\n\nFlags: admin-perm\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_metric()](PushNetShaper::push_metric)\n- [.push_bw_min()](PushNetShaper::push_bw_min)\n- [.push_bw_max()](PushNetShaper::push_bw_max)\n- [.push_burst()](PushNetShaper::push_burst)\n- [.push_priority()](PushNetShaper::push_priority)\n- [.push_weight()](PushNetShaper::push_weight)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n"]
+    #[doc = "Create or update the specified shaper. The set operation can\\'t be used\nto create a \\@node scope shaper, use the \\@group operation instead.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_metric()](PushNetShaper::push_metric)\n- [.push_bw_min()](PushNetShaper::push_bw_min)\n- [.push_bw_max()](PushNetShaper::push_bw_max)\n- [.push_burst()](PushNetShaper::push_burst)\n- [.push_priority()](PushNetShaper::push_priority)\n- [.push_weight()](PushNetShaper::push_weight)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\n"]
     pub fn op_set_do(self) -> OpSetDo<'buf> {
         let mut res = OpSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-set-do", OpSetDo::lookup);
         res
     }
-    #[doc = "Clear (remove) the specified shaper\\. When deleting\na @node shaper, reattach all the node's leaves to the\ndeleted node's parent\\.\nIf, after the removal, the parent shaper has no more\nleaves and the parent shaper scope is @node, the parent\nnode is deleted, recursively\\.\nWhen deleting a @queue shaper or a @netdev shaper,\nthe shaper disappears from the hierarchy, but the\nqueue/device can still send traffic: it has an implicit\nnode with infinite bandwidth\\. The queue's implicit node\nfeeds an implicit RR node at the root of the hierarchy\\.\n\nFlags: admin-perm\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n"]
+    #[doc = "Clear (remove) the specified shaper. When deleting a \\@node shaper,\nreattach all the node\\'s leaves to the deleted node\\'s parent. If, after\nthe removal, the parent shaper has no more leaves and the parent shaper\nscope is \\@node, the parent node is deleted, recursively. When deleting\na \\@queue shaper or a \\@netdev shaper, the shaper disappears from the\nhierarchy, but the queue/device can still send traffic: it has an\nimplicit node with infinite bandwidth. The queue\\'s implicit node feeds\nan implicit RR node at the root of the hierarchy.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n\n"]
     pub fn op_delete_do(self) -> OpDeleteDo<'buf> {
         let mut res = OpDeleteDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-delete-do", OpDeleteDo::lookup);
         res
     }
-    #[doc = "Create or update a scheduling group, attaching the specified\n@leaves shapers under the specified node identified by @handle\\.\nThe @leaves shapers scope must be @queue and the node shaper\nscope must be either @node or @netdev\\.\nWhen the node shaper has @node scope, if the @handle @id is not\nspecified, a new shaper of such scope is created, otherwise the\nspecified node must already exist\\.\nWhen updating an existing node shaper, the specified @leaves are\nadded to the existing node; such node will also retain any preexisting\nleave\\.\nThe @parent handle for a new node shaper defaults to the parent\nof all the leaves, provided all the leaves share the same parent\\.\nOtherwise @parent handle must be specified\\.\nThe user can optionally provide shaping attributes for the node\nshaper\\.\nThe operation is atomic, on failure no change is applied to\nthe device shaping configuration, otherwise the @node shaper\nfull identifier, comprising @binding and @handle, is provided\nas the reply\\.\n\nFlags: admin-perm\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_metric()](PushNetShaper::push_metric)\n- [.push_bw_min()](PushNetShaper::push_bw_min)\n- [.push_bw_max()](PushNetShaper::push_bw_max)\n- [.push_burst()](PushNetShaper::push_burst)\n- [.push_priority()](PushNetShaper::push_priority)\n- [.push_weight()](PushNetShaper::push_weight)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n- [.nested_parent()](PushNetShaper::nested_parent)\n- [.nested_leaves()](PushNetShaper::nested_leaves)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n"]
+    #[doc = "Create or update a scheduling group, attaching the specified \\@leaves\nshapers under the specified node identified by \\@handle. The \\@leaves\nshapers scope must be \\@queue and the node shaper scope must be either\n\\@node or \\@netdev. When the node shaper has \\@node scope, if the\n\\@handle \\@id is not specified, a new shaper of such scope is created,\notherwise the specified node must already exist. When updating an\nexisting node shaper, the specified \\@leaves are added to the existing\nnode; such node will also retain any preexisting leave. The \\@parent\nhandle for a new node shaper defaults to the parent of all the leaves,\nprovided all the leaves share the same parent. Otherwise \\@parent handle\nmust be specified. The user can optionally provide shaping attributes\nfor the node shaper. The operation is atomic, on failure no change is\napplied to the device shaping configuration, otherwise the \\@node shaper\nfull identifier, comprising \\@binding and \\@handle, is provided as the\nreply.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.nested_handle()](PushNetShaper::nested_handle)\n- [.push_metric()](PushNetShaper::push_metric)\n- [.push_bw_min()](PushNetShaper::push_bw_min)\n- [.push_bw_max()](PushNetShaper::push_bw_max)\n- [.push_burst()](PushNetShaper::push_burst)\n- [.push_priority()](PushNetShaper::push_priority)\n- [.push_weight()](PushNetShaper::push_weight)\n- [.push_ifindex()](PushNetShaper::push_ifindex)\n- [.nested_parent()](PushNetShaper::nested_parent)\n- [.nested_leaves()](PushNetShaper::nested_leaves)\n\nReply attributes:\n- [.get_handle()](IterableNetShaper::get_handle)\n- [.get_ifindex()](IterableNetShaper::get_ifindex)\n\n"]
     pub fn op_group_do(self) -> OpGroupDo<'buf> {
         let mut res = OpGroupDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-group-do", OpGroupDo::lookup);
         res
     }
-    #[doc = "Get the shaper capabilities supported by the given device\nfor the specified scope\\.\n\nRequest attributes:\n- [.push_ifindex()](PushCaps::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableCaps::get_ifindex)\n- [.get_scope()](IterableCaps::get_scope)\n- [.get_support_metric_bps()](IterableCaps::get_support_metric_bps)\n- [.get_support_metric_pps()](IterableCaps::get_support_metric_pps)\n- [.get_support_nesting()](IterableCaps::get_support_nesting)\n- [.get_support_bw_min()](IterableCaps::get_support_bw_min)\n- [.get_support_bw_max()](IterableCaps::get_support_bw_max)\n- [.get_support_burst()](IterableCaps::get_support_burst)\n- [.get_support_priority()](IterableCaps::get_support_priority)\n- [.get_support_weight()](IterableCaps::get_support_weight)\n"]
+    #[doc = "Get the shaper capabilities supported by the given device for the\nspecified scope.\n\nRequest attributes:\n- [.push_ifindex()](PushCaps::push_ifindex)\n\nReply attributes:\n- [.get_ifindex()](IterableCaps::get_ifindex)\n- [.get_scope()](IterableCaps::get_scope)\n- [.get_support_metric_bps()](IterableCaps::get_support_metric_bps)\n- [.get_support_metric_pps()](IterableCaps::get_support_metric_pps)\n- [.get_support_nesting()](IterableCaps::get_support_nesting)\n- [.get_support_bw_min()](IterableCaps::get_support_bw_min)\n- [.get_support_bw_max()](IterableCaps::get_support_bw_max)\n- [.get_support_burst()](IterableCaps::get_support_burst)\n- [.get_support_priority()](IterableCaps::get_support_priority)\n- [.get_support_weight()](IterableCaps::get_support_weight)\n\n"]
     pub fn op_cap_get_dump(self) -> OpCapGetDump<'buf> {
         let mut res = OpCapGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-cap-get-dump", OpCapGetDump::lookup);
         res
     }
-    #[doc = "Get the shaper capabilities supported by the given device\nfor the specified scope\\.\n\nRequest attributes:\n- [.push_ifindex()](PushCaps::push_ifindex)\n- [.push_scope()](PushCaps::push_scope)\n\nReply attributes:\n- [.get_ifindex()](IterableCaps::get_ifindex)\n- [.get_scope()](IterableCaps::get_scope)\n- [.get_support_metric_bps()](IterableCaps::get_support_metric_bps)\n- [.get_support_metric_pps()](IterableCaps::get_support_metric_pps)\n- [.get_support_nesting()](IterableCaps::get_support_nesting)\n- [.get_support_bw_min()](IterableCaps::get_support_bw_min)\n- [.get_support_bw_max()](IterableCaps::get_support_bw_max)\n- [.get_support_burst()](IterableCaps::get_support_burst)\n- [.get_support_priority()](IterableCaps::get_support_priority)\n- [.get_support_weight()](IterableCaps::get_support_weight)\n"]
+    #[doc = "Get the shaper capabilities supported by the given device for the\nspecified scope.\n\nRequest attributes:\n- [.push_ifindex()](PushCaps::push_ifindex)\n- [.push_scope()](PushCaps::push_scope)\n\nReply attributes:\n- [.get_ifindex()](IterableCaps::get_ifindex)\n- [.get_scope()](IterableCaps::get_scope)\n- [.get_support_metric_bps()](IterableCaps::get_support_metric_bps)\n- [.get_support_metric_pps()](IterableCaps::get_support_metric_pps)\n- [.get_support_nesting()](IterableCaps::get_support_nesting)\n- [.get_support_bw_min()](IterableCaps::get_support_bw_min)\n- [.get_support_bw_max()](IterableCaps::get_support_bw_max)\n- [.get_support_burst()](IterableCaps::get_support_burst)\n- [.get_support_priority()](IterableCaps::get_support_priority)\n- [.get_support_weight()](IterableCaps::get_support_weight)\n\n"]
     pub fn op_cap_get_do(self) -> OpCapGetDo<'buf> {
         let mut res = OpCapGetDo::new(self);
         res.request

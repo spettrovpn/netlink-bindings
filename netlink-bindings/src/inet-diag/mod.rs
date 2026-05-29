@@ -20,39 +20,35 @@ pub const TCPDIAG_GETSOCK_CONST: u64 = 18u64;
 pub const DCCPDIAG_GETSOCK_CONST: u64 = 19u64;
 pub const GETSOCK_MAX_CONST: u64 = 24u64;
 pub const NOCOOKIE_CONST: u64 = 4294967295u64;
-#[doc = "Socket identity"]
-#[doc = "SOCK\\_RAW sockets require the underlied protocol to be additionally\nspecified so we can use @pad member for this, but we can't rename it\nbecause userspace programs still may depend on this name\\. Instead lets\nuse another structure definition as an alias for struct\n@inet\\_diag\\_req\\_v2\\.\n"]
-#[doc = "Base info structure\\. It contains socket identity (addrs/ports/cookie)\nand, alas, the information shown by netstat\\.\n"]
-#[doc = "Bytecode is sequence of 4 byte commands followed by variable arguments\\.\nAll the commands identified by \"code\" are conditional jumps forward: to\noffset cc\\+\"yes\" (bytes) or to offset cc\\+\"no\" (bytes)\\. \"yes\" is supposed\nto be length of the command and its arguments (in bytes)\\.\n\nTermination condition is to land excactly on a len'th instruction (on\naddress of one after the last one), overshooting means an unsucessfull\ntermination\\.\n\nIf you reading this, for your own sanity, I advice you to first try\nreverse\\-lookup on the \\`ss\\` command with filters you need, and copy\nbytecode from there\\.\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum BytecodeOpCode {
     Nop = 0,
-    #[doc = "unconditional jump\\. \"no\" value is ignored\\."]
+    #[doc = "unconditional jump. \\\"no\\\" value is ignored.\n"]
     Jmp = 1,
-    #[doc = "sock\\.sport >= next\\_instruction\\.no (big endian)"]
+    #[doc = "sock.sport \\>= next_instruction.no (big endian)\n"]
     SportGe = 2,
-    #[doc = "sock\\.sport <= next\\_instruction\\.no (big endian)"]
+    #[doc = "sock.sport \\<= next_instruction.no (big endian)\n"]
     SportLe = 3,
-    #[doc = "sock\\.dport >= next\\_instruction\\.no (big endian)"]
+    #[doc = "sock.dport \\>= next_instruction.no (big endian)\n"]
     DportGe = 4,
-    #[doc = "sock\\.dport <= next\\_instruction\\.no (big endian)"]
+    #[doc = "sock.dport \\<= next_instruction.no (big endian)\n"]
     DportLe = 5,
-    #[doc = "check if sock is NOT bound to a port by user,\ni\\.e\\. !(sk\\->userlocks & SOCK\\_BINDPORT\\_LOCK)\n"]
+    #[doc = "check if sock is NOT bound to a port by user, i.e.\n`!(sk->userlocks & SOCK_BINDPORT_LOCK)`\n"]
     PortAuto = 6,
-    #[doc = "Check aginst source socket addr packed as hostcond struct (hc),\nfollowed by big\\-endian ipv4 or ipv6 address (yes, it's that cursed)\\.\n\nThe check equivalent to the following (in order):\n  no if hc\\.port != \\-1 && hc\\.port != sock\\.sport\n  yes if hc\\.family == AF\\_INET && sock\\.family == AF\\_INET6\n        && &sock\\.saddr\\_u32\\[0\\.\\.3\\] == &\\[0, 0, 0xffff\\.to\\_be()\\]\n        && bits\\_eq(&sock\\.saddr\\_u8\\[12\\.\\.\\], &hc\\.addr\\[\\.\\.\\], hc\\.prefix\\_len)\n  no if hc\\.family != AF\\_UNSPEC && hc\\.family != family\n  yes if hc\\.prefix\\_len == 0\n  yes if bits\\_eq(&sock\\.addr\\[\\.\\.\\], &hc\\.addr\\[\\.\\.\\], hc\\.prefix\\_len)\n  no\n\n  See inet\\_diag\\_bc\\_run() in net/ipv4/inet\\_diag\\.c\n"]
+    #[doc = "Check aginst source socket addr packed as hostcond struct (hc), followed\nby big-endian ipv4 or ipv6 address (yes, it\\'s that cursed).\n\nThe check equivalent to the following (in order):\n\n``` raw\nno if hc.port != -1 && hc.port != sock.sport\nyes if hc.family == AF_INET && sock.family == AF_INET6\n    && &sock.saddr_u32[0..3] == &[0, 0, 0xffff.to_be()]\n    && bits_eq(&sock.saddr_u8[12..], &hc.addr[..], hc.prefix_len)\nno if hc.family != AF_UNSPEC && hc.family != family\nyes if hc.prefix_len == 0\nyes if bits_eq(&sock.addr[..], &hc.addr[..], hc.prefix_len)\nno\n```\n\nSee `inet_diag_bc_run()` in net/ipv4/inet_diag.c\n"]
     SaddrCond = 7,
-    #[doc = "Check aginst source socket addr using hostcond struct\\.\nSame as \\`saddr\\-cond\\`, see its description\\.\n"]
+    #[doc = "Check aginst source socket addr using hostcond struct. Same as\n[saddr-cond]{.title-ref}, see its description.\n"]
     DaddrCond = 8,
-    #[doc = "socket ifindex == next\\_instruction (native endian u32)"]
+    #[doc = "socket ifindex == next_instruction (native endian u32)\n"]
     DevCond = 9,
-    #[doc = "Check check socket mark bits against markcond struct (mc)\\.\nThe check is equivalent to: sock\\.mark & mc\\.mask == mc\\.mark\n"]
+    #[doc = "Check check socket mark bits against markcond struct (mc). The check is\nequivalent to: sock.mark & mc.mask == mc.mark\n"]
     MarkCond = 10,
-    #[doc = "sock\\.sport == next\\_instruction\\.no (big endian)"]
+    #[doc = "sock.sport == next_instruction.no (big endian)\n"]
     SportEq = 11,
-    #[doc = "sock\\.dport == next\\_instruction\\.no (big endian)"]
+    #[doc = "sock.dport == next_instruction.no (big endian)\n"]
     DportEq = 12,
-    #[doc = "sock\\.cgroup\\_id == next\\_2\\_instructions (native endian u64)"]
+    #[doc = "sock.cgroup_id == next_2_instructions (native endian u64)\n"]
     CgroupCond = 13,
 }
 impl BytecodeOpCode {
@@ -76,7 +72,6 @@ impl BytecodeOpCode {
         })
     }
 }
-#[doc = "Host condition to be placed directly into bytecode\\.\nSocket address bytes should be appended right after this struct\\.\n"]
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum SockoptFlag {
@@ -123,10 +118,10 @@ pub enum TcpState {
     CloseWait = 8,
     LastAck = 9,
     Listen = 10,
-    #[doc = "Now a valid state"]
+    #[doc = "Now a valid state\n"]
     Closing = 11,
     NewSynRecv = 12,
-    #[doc = "Pseudo\\-state for inet\\_diag"]
+    #[doc = "Pseudo-state for inet_diag\n"]
     BoundInactive = 13,
 }
 impl TcpState {
@@ -149,6 +144,7 @@ impl TcpState {
         })
     }
 }
+#[doc = "Socket identity\n"]
 #[repr(C, packed(4))]
 pub struct Sockid {
     pub _sport_be: u16,
@@ -245,16 +241,16 @@ impl std::fmt::Debug for Sockid {
 }
 #[repr(C, packed(4))]
 pub struct Req {
-    #[doc = "Family of addresses"]
+    #[doc = "Family of addresses\n"]
     pub family: u8,
     pub src_len: u8,
     pub dst_len: u8,
-    #[doc = "Query extended information"]
+    #[doc = "Query extended information\n"]
     pub ext: u8,
     pub sockid: Sockid,
-    #[doc = "States to dump\nAssociated type: [`TcpState`] (1 bit per enumeration)"]
+    #[doc = "States to dump\n\nAssociated type: [`TcpState`] (1 bit per enumeration)"]
     pub states: u32,
-    #[doc = "Tables to dump (NI)"]
+    #[doc = "Tables to dump (NI)\n"]
     pub dbs: u32,
 }
 impl Clone for Req {
@@ -424,6 +420,7 @@ impl std::fmt::Debug for ReqV2 {
             .finish()
     }
 }
+#[doc = "SOCK_RAW sockets require the underlied protocol to be additionally\nspecified so we can use \\@pad member for this, but we can\\'t rename it\nbecause userspace programs still may depend on this name. Instead lets\nuse another structure definition as an alias for struct\n\\@inet_diag_req_v2.\n"]
 #[repr(C, packed(4))]
 pub struct ReqRaw {
     pub family: u8,
@@ -512,6 +509,7 @@ impl std::fmt::Debug for ReqRaw {
             .finish()
     }
 }
+#[doc = "Base info structure. It contains socket identity (addrs/ports/cookie)\nand, alas, the information shown by netstat.\n"]
 #[repr(C, packed(4))]
 pub struct Msg {
     pub family: u8,
@@ -606,13 +604,14 @@ impl std::fmt::Debug for Msg {
             .finish()
     }
 }
+#[doc = "Bytecode is sequence of 4 byte commands followed by variable arguments.\nAll the commands identified by \\\"code\\\" are conditional jumps forward:\nto offset cc+\\\"yes\\\" (bytes) or to offset cc+\\\"no\\\" (bytes). \\\"yes\\\" is\nsupposed to be length of the command and its arguments (in bytes).\n\nTermination condition is to land excactly on a len\\'th instruction (on\naddress of one after the last one), overshooting means an unsucessfull\ntermination.\n\nIf you reading this, for your own sanity, I advice you to first try\nreverse-lookup on the `ss` command with filters you need, and copy\nbytecode from there.\n"]
 #[repr(C, packed(4))]
 pub struct BytecodeOp {
     #[doc = "Associated type: [`BytecodeOpCode`] (enum)"]
     pub code: u8,
-    #[doc = "offset to jump on match"]
+    #[doc = "offset to jump on match\n"]
     pub yes: u8,
-    #[doc = "offset to jump on non\\-match"]
+    #[doc = "offset to jump on non-match\n"]
     pub no: u16,
 }
 impl Clone for BytecodeOp {
@@ -688,11 +687,12 @@ impl std::fmt::Debug for BytecodeOp {
             .finish()
     }
 }
+#[doc = "Host condition to be placed directly into bytecode. Socket address bytes\nshould be appended right after this struct.\n"]
 #[repr(C, packed(4))]
 pub struct Hostcond {
-    #[doc = "Socket address family"]
+    #[doc = "Socket address family\n"]
     pub family: u8,
-    #[doc = "Number of bits to compare"]
+    #[doc = "Number of bits to compare\n"]
     pub prefix_len: u8,
     pub _pad_2: [u8; 2usize],
     pub port: i32,
@@ -1045,15 +1045,15 @@ impl TcpDctcpInfo {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcpBbrInfo {
-    #[doc = "lower 32 bits of bw"]
+    #[doc = "lower 32 bits of bw\n"]
     pub bw_lo: u32,
-    #[doc = "upper 32 bits of bw"]
+    #[doc = "upper 32 bits of bw\n"]
     pub bw_hi: u32,
-    #[doc = "min\\-filtered RTT in uSec"]
+    #[doc = "min-filtered RTT in uSec\n"]
     pub min_rtt: u32,
-    #[doc = "pacing gain shifted left 8 bits"]
+    #[doc = "pacing gain shifted left 8 bits\n"]
     pub pacing_gain: u32,
-    #[doc = "cwnd gain shifted left 8 bits"]
+    #[doc = "cwnd gain shifted left 8 bits\n"]
     pub cwnd_gain: u32,
 }
 impl Clone for TcpBbrInfo {
@@ -1119,139 +1119,139 @@ impl TcpBbrInfo {
 }
 #[repr(C, packed(4))]
 pub struct TcpInfo {
-    #[doc = "TCP state\nAssociated type: [`TcpState`] (enum)"]
+    #[doc = "TCP state\n\nAssociated type: [`TcpState`] (enum)"]
     pub state: u8,
-    #[doc = "Congestion avoidance state"]
+    #[doc = "Congestion avoidance state\n"]
     pub ca_state: u8,
-    #[doc = "Number of retransmits"]
+    #[doc = "Number of retransmits\n"]
     pub retransmits: u8,
-    #[doc = "Number of probes"]
+    #[doc = "Number of probes\n"]
     pub probes: u8,
-    #[doc = "Backoff count"]
+    #[doc = "Backoff count\n"]
     pub backoff: u8,
-    #[doc = "TCP options"]
+    #[doc = "TCP options\n"]
     pub options: u8,
     pub _bits_snd_wscale: u8,
     pub _bits_delivery_rate_app_limited: u8,
-    #[doc = "Retransmission timeout in microseconds"]
+    #[doc = "Retransmission timeout in microseconds\n"]
     pub rto: u32,
-    #[doc = "Delayed ACK timeout in microseconds"]
+    #[doc = "Delayed ACK timeout in microseconds\n"]
     pub ato: u32,
-    #[doc = "Send maximum segment size"]
+    #[doc = "Send maximum segment size\n"]
     pub snd_mss: u32,
-    #[doc = "Receive maximum segment size"]
+    #[doc = "Receive maximum segment size\n"]
     pub rcv_mss: u32,
-    #[doc = "Number of unacknowledged segments"]
+    #[doc = "Number of unacknowledged segments\n"]
     pub unacked: u32,
-    #[doc = "Number of SACKed segments"]
+    #[doc = "Number of SACKed segments\n"]
     pub sacked: u32,
-    #[doc = "Number of lost segments"]
+    #[doc = "Number of lost segments\n"]
     pub lost: u32,
-    #[doc = "Number of retransmitted segments"]
+    #[doc = "Number of retransmitted segments\n"]
     pub retrans: u32,
-    #[doc = "Forward Acknowledgment count"]
+    #[doc = "Forward Acknowledgment count\n"]
     pub fackets: u32,
-    #[doc = "Time since last data sent (jiffies)"]
+    #[doc = "Time since last data sent (jiffies)\n"]
     pub last_data_sent: u32,
-    #[doc = "Time since last ACK sent (jiffies, Not remembered, sorry\\.)"]
+    #[doc = "Time since last ACK sent (jiffies, Not remembered, sorry.)\n"]
     pub last_ack_sent: u32,
-    #[doc = "Time since last data received (jiffies)"]
+    #[doc = "Time since last data received (jiffies)\n"]
     pub last_data_recv: u32,
-    #[doc = "Time since last ACK received (jiffies)"]
+    #[doc = "Time since last ACK received (jiffies)\n"]
     pub last_ack_recv: u32,
-    #[doc = "Path MTU"]
+    #[doc = "Path MTU\n"]
     pub pmtu: u32,
-    #[doc = "Receive slow start threshold"]
+    #[doc = "Receive slow start threshold\n"]
     pub rcv_ssthresh: u32,
-    #[doc = "Smoothed round trip time in microseconds"]
+    #[doc = "Smoothed round trip time in microseconds\n"]
     pub rtt: u32,
-    #[doc = "Round trip time variation"]
+    #[doc = "Round trip time variation\n"]
     pub rttvar: u32,
-    #[doc = "Send slow start threshold"]
+    #[doc = "Send slow start threshold\n"]
     pub snd_ssthresh: u32,
-    #[doc = "Send congestion window"]
+    #[doc = "Send congestion window\n"]
     pub snd_cwnd: u32,
-    #[doc = "Advertised MSS"]
+    #[doc = "Advertised MSS\n"]
     pub advmss: u32,
-    #[doc = "Reordering threshold"]
+    #[doc = "Reordering threshold\n"]
     pub reordering: u32,
-    #[doc = "Receiver side RTT"]
+    #[doc = "Receiver side RTT\n"]
     pub rcv_rtt: u32,
-    #[doc = "Receiver space"]
+    #[doc = "Receiver space\n"]
     pub rcv_space: u32,
-    #[doc = "Total number of retransmitted segments"]
+    #[doc = "Total number of retransmitted segments\n"]
     pub total_retrans: u32,
-    #[doc = "Pacing rate in bytes per second"]
+    #[doc = "Pacing rate in bytes per second\n"]
     pub pacing_rate: u64,
-    #[doc = "Maximum pacing rate in bytes per second"]
+    #[doc = "Maximum pacing rate in bytes per second\n"]
     pub max_pacing_rate: u64,
-    #[doc = "RFC4898 tcpEStatsAppHCThruOctetsAcked"]
+    #[doc = "RFC4898 tcpEStatsAppHCThruOctetsAcked\n"]
     pub bytes_acked: u64,
-    #[doc = "RFC4898 tcpEStatsAppHCThruOctetsReceived"]
+    #[doc = "RFC4898 tcpEStatsAppHCThruOctetsReceived\n"]
     pub bytes_received: u64,
-    #[doc = "RFC4898 tcpEStatsPerfSegsOut"]
+    #[doc = "RFC4898 tcpEStatsPerfSegsOut\n"]
     pub segs_out: u32,
-    #[doc = "RFC4898 tcpEStatsPerfSegsIn"]
+    #[doc = "RFC4898 tcpEStatsPerfSegsIn\n"]
     pub segs_in: u32,
-    #[doc = "Bytes in write queue not yet sent"]
+    #[doc = "Bytes in write queue not yet sent\n"]
     pub notsent_bytes: u32,
-    #[doc = "Minimum RTT observed in microseconds"]
+    #[doc = "Minimum RTT observed in microseconds\n"]
     pub min_rtt: u32,
-    #[doc = "RFC4898 tcpEStatsDataSegsIn"]
+    #[doc = "RFC4898 tcpEStatsDataSegsIn\n"]
     pub data_segs_in: u32,
-    #[doc = "RFC4898 tcpEStatsDataSegsOut"]
+    #[doc = "RFC4898 tcpEStatsDataSegsOut\n"]
     pub data_segs_out: u32,
-    #[doc = "Delivery rate in bytes per second"]
+    #[doc = "Delivery rate in bytes per second\n"]
     pub delivery_rate: u64,
-    #[doc = "Time (usec) busy sending data"]
+    #[doc = "Time (usec) busy sending data\n"]
     pub busy_time: u64,
-    #[doc = "Time (usec) limited by receive window"]
+    #[doc = "Time (usec) limited by receive window\n"]
     pub rwnd_limited: u64,
-    #[doc = "Time (usec) limited by send buffer"]
+    #[doc = "Time (usec) limited by send buffer\n"]
     pub sndbuf_limited: u64,
-    #[doc = "Packets delivered"]
+    #[doc = "Packets delivered\n"]
     pub delivered: u32,
-    #[doc = "Packets delivered with CE marks"]
+    #[doc = "Packets delivered with CE marks\n"]
     pub delivered_ce: u32,
-    #[doc = "RFC4898 tcpEStatsPerfHCDataOctetsOut"]
+    #[doc = "RFC4898 tcpEStatsPerfHCDataOctetsOut\n"]
     pub bytes_sent: u64,
-    #[doc = "RFC4898 tcpEStatsPerfOctetsRetrans"]
+    #[doc = "RFC4898 tcpEStatsPerfOctetsRetrans\n"]
     pub bytes_retrans: u64,
-    #[doc = "RFC4898 tcpEStatsStackDSACKDups"]
+    #[doc = "RFC4898 tcpEStatsStackDSACKDups\n"]
     pub dsack_dups: u32,
-    #[doc = "Reordering events seen"]
+    #[doc = "Reordering events seen\n"]
     pub reord_seen: u32,
-    #[doc = "Out\\-of\\-order packets received"]
+    #[doc = "Out-of-order packets received\n"]
     pub rcv_ooopack: u32,
-    #[doc = "Peer's advertised receive window after scaling (bytes)"]
+    #[doc = "Peer\\'s advertised receive window after scaling (bytes)\n"]
     pub snd_wnd: u32,
-    #[doc = "Local advertised receive window after scaling (bytes)"]
+    #[doc = "Local advertised receive window after scaling (bytes)\n"]
     pub rcv_wnd: u32,
-    #[doc = "PLB or timeout triggered rehash attempts"]
+    #[doc = "PLB or timeout triggered rehash attempts\n"]
     pub rehash: u32,
-    #[doc = "Total number of RTO timeouts, including SYN/SYN\\-ACK and recurring timeouts"]
+    #[doc = "Total number of RTO timeouts, including SYN/SYN-ACK and recurring\ntimeouts\n"]
     pub total_rto: u16,
-    #[doc = "Total number of RTO recoveries, including any unfinished recovery"]
+    #[doc = "Total number of RTO recoveries, including any unfinished recovery\n"]
     pub total_rto_recoveries: u16,
-    #[doc = "Total time spent in RTO recoveries in milliseconds, including any unfinished recovery"]
+    #[doc = "Total time spent in RTO recoveries in milliseconds, including any\nunfinished recovery\n"]
     pub total_rto_time: u32,
-    #[doc = "Number of CE marks received"]
+    #[doc = "Number of CE marks received\n"]
     pub received_ce: u32,
-    #[doc = "Accurate ECN byte counters for ECT(1)"]
+    #[doc = "Accurate ECN byte counters for ECT(1)\n"]
     pub delivered_e1_bytes: u32,
-    #[doc = "Accurate ECN byte counters for ECT(0)"]
+    #[doc = "Accurate ECN byte counters for ECT(0)\n"]
     pub delivered_e0_bytes: u32,
-    #[doc = "Accurate ECN byte counters for CE"]
+    #[doc = "Accurate ECN byte counters for CE\n"]
     pub delivered_ce_bytes: u32,
-    #[doc = "Received bytes with ECT(1) marks"]
+    #[doc = "Received bytes with ECT(1) marks\n"]
     pub received_e1_bytes: u32,
-    #[doc = "Received bytes with ECT(0) marks"]
+    #[doc = "Received bytes with ECT(0) marks\n"]
     pub received_e0_bytes: u32,
-    #[doc = "Received bytes with CE marks"]
+    #[doc = "Received bytes with CE marks\n"]
     pub received_ce_bytes: u32,
-    #[doc = "ACK ECN failure mode"]
+    #[doc = "ACK ECN failure mode\n"]
     pub accecn_fail_mode: u16,
-    #[doc = "ACK ECN option seen"]
+    #[doc = "ACK ECN option seen\n"]
     pub accecn_opt_seen: u16,
 }
 impl Clone for TcpInfo {
@@ -1314,42 +1314,42 @@ impl TcpInfo {
         const _: () = assert!(std::mem::size_of::<TcpInfo>() == 280usize);
         280usize
     }
-    #[doc = "Send window scale"]
+    #[doc = "Send window scale\n"]
     pub fn snd_wscale(&self) -> u8 {
         (((self._bits_snd_wscale as u32) << 28u32) >> 28u32) as u8
     }
-    #[doc = "Send window scale"]
+    #[doc = "Send window scale\n"]
     pub fn set_snd_wscale(&mut self, value: u8) {
         let mask = (1 << 4usize) - 1;
         self._bits_snd_wscale =
             (self._bits_snd_wscale & (!(mask << 0usize))) | ((value & mask) << 0usize);
     }
-    #[doc = "Receive window scale"]
+    #[doc = "Receive window scale\n"]
     pub fn rcv_wscale(&self) -> u8 {
         (((self._bits_snd_wscale as u32) << 24u32) >> 28u32) as u8
     }
-    #[doc = "Receive window scale"]
+    #[doc = "Receive window scale\n"]
     pub fn set_rcv_wscale(&mut self, value: u8) {
         let mask = (1 << 4usize) - 1;
         self._bits_snd_wscale =
             (self._bits_snd_wscale & (!(mask << 4usize))) | ((value & mask) << 4usize);
     }
-    #[doc = "Delivery rate application limited flag"]
+    #[doc = "Delivery rate application limited flag\n"]
     pub fn delivery_rate_app_limited(&self) -> u8 {
         (((self._bits_delivery_rate_app_limited as u32) << 31u32) >> 31u32) as u8
     }
-    #[doc = "Delivery rate application limited flag"]
+    #[doc = "Delivery rate application limited flag\n"]
     pub fn set_delivery_rate_app_limited(&mut self, value: u8) {
         let mask = (1 << 1usize) - 1;
         self._bits_delivery_rate_app_limited = (self._bits_delivery_rate_app_limited
             & (!(mask << 0usize)))
             | ((value & mask) << 0usize);
     }
-    #[doc = "FastOpen client failure code"]
+    #[doc = "FastOpen client failure code\n"]
     pub fn fastopen_client_fail(&self) -> u8 {
         (((self._bits_delivery_rate_app_limited as u32) << 29u32) >> 30u32) as u8
     }
-    #[doc = "FastOpen client failure code"]
+    #[doc = "FastOpen client failure code\n"]
     pub fn set_fastopen_client_fail(&mut self, value: u8) {
         let mask = (1 << 2usize) - 1;
         self._bits_delivery_rate_app_limited = (self._bits_delivery_rate_app_limited
@@ -1441,20 +1441,20 @@ impl std::fmt::Debug for TcpInfo {
 }
 #[derive(Clone)]
 pub enum UlpInfoAttrs<'a> {
-    #[doc = "ULP name (e\\.g\\., \"tls\", \"mptcp\")"]
+    #[doc = "ULP name (e.g., \\\"tls\\\", \\\"mptcp\\\")\n"]
     Name(&'a CStr),
-    #[doc = "TLS\\-specific information"]
+    #[doc = "TLS-specific information\n"]
     Tls(&'a [u8]),
-    #[doc = "MPTCP\\-specific information"]
+    #[doc = "MPTCP-specific information\n"]
     Mptcp(&'a [u8]),
 }
 impl<'a> IterableUlpInfoAttrs<'a> {
-    #[doc = "ULP name (e\\.g\\., \"tls\", \"mptcp\")"]
+    #[doc = "ULP name (e.g., \\\"tls\\\", \\\"mptcp\\\")\n"]
     pub fn get_name(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UlpInfoAttrs::Name(val) = attr? {
+            if let Ok(UlpInfoAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1465,12 +1465,12 @@ impl<'a> IterableUlpInfoAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "TLS\\-specific information"]
+    #[doc = "TLS-specific information\n"]
     pub fn get_tls(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UlpInfoAttrs::Tls(val) = attr? {
+            if let Ok(UlpInfoAttrs::Tls(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1481,12 +1481,12 @@ impl<'a> IterableUlpInfoAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "MPTCP\\-specific information"]
+    #[doc = "MPTCP-specific information\n"]
     pub fn get_mptcp(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UlpInfoAttrs::Mptcp(val) = attr? {
+            if let Ok(UlpInfoAttrs::Mptcp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1533,14 +1533,16 @@ impl<'a> IterableUlpInfoAttrs<'a> {
 impl<'a> Iterator for IterableUlpInfoAttrs<'a> {
     type Item = Result<UlpInfoAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1648,18 +1650,18 @@ impl IterableUlpInfoAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum RequestAttrs<'a> {
-    #[doc = "See bytecode\\-op"]
+    #[doc = "See bytecode-op\n"]
     Bytecode(&'a [u8]),
     BpfStorages(IterableBpfStorageReq<'a>),
     Protocol(u32),
 }
 impl<'a> IterableRequestAttrs<'a> {
-    #[doc = "See bytecode\\-op"]
+    #[doc = "See bytecode-op\n"]
     pub fn get_bytecode(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RequestAttrs::Bytecode(val) = attr? {
+            if let Ok(RequestAttrs::Bytecode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1674,7 +1676,7 @@ impl<'a> IterableRequestAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RequestAttrs::BpfStorages(val) = attr? {
+            if let Ok(RequestAttrs::BpfStorages(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1689,7 +1691,7 @@ impl<'a> IterableRequestAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RequestAttrs::Protocol(val) = attr? {
+            if let Ok(RequestAttrs::Protocol(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1736,14 +1738,16 @@ impl<'a> IterableRequestAttrs<'a> {
 impl<'a> Iterator for IterableRequestAttrs<'a> {
     type Item = Result<RequestAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1857,56 +1861,56 @@ impl IterableRequestAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum ReplyAttrs<'a> {
-    #[doc = "Memory information extension"]
+    #[doc = "Memory information extension\n"]
     Meminfo(Meminfo),
     TcpInfo(TcpInfo),
-    #[doc = "TCP Vegas information"]
+    #[doc = "TCP Vegas information\n"]
     Vegasinfo(TcpvegasInfo),
-    #[doc = "Congestion control algorithm name"]
+    #[doc = "Congestion control algorithm name\n"]
     Cong(&'a CStr),
-    #[doc = "Type of Service"]
+    #[doc = "Type of Service\n"]
     Tos(u8),
-    #[doc = "Traffic Class"]
+    #[doc = "Traffic Class\n"]
     Tclass(u8),
-    #[doc = "Socket memory information"]
+    #[doc = "Socket memory information\n"]
     Skmeminfo(&'a [u8]),
-    #[doc = "Shutdown state"]
+    #[doc = "Shutdown state\n"]
     Shutdown(u8),
-    #[doc = "TCP DCTCP information (request as INET\\_DIAG\\_VEGASINFO)"]
+    #[doc = "TCP DCTCP information (request as INET_DIAG_VEGASINFO)\n"]
     Dctcpinfo(TcpDctcpInfo),
-    #[doc = "Raw socket protocol (response attribute only)"]
+    #[doc = "Raw socket protocol (response attribute only)\n"]
     Protocol(u8),
-    #[doc = "IPv6\\-only socket flag"]
+    #[doc = "IPv6-only socket flag\n"]
     Skv6only(()),
-    #[doc = "Local addresses\\. SCTP thing\\."]
+    #[doc = "Local addresses. SCTP thing.\n"]
     Locals(&'a [u8]),
-    #[doc = "Peer addresses\\. SCTP thing\\."]
+    #[doc = "Peer addresses. SCTP thing.\n"]
     Peers(&'a [u8]),
     Pad(&'a [u8]),
-    #[doc = "Socket mark (only with CAP\\_NET\\_ADMIN)"]
+    #[doc = "Socket mark (only with CAP_NET_ADMIN)\n"]
     Mark(u32),
-    #[doc = "TCP BBR information (request as INET\\_DIAG\\_VEGASINFO)"]
+    #[doc = "TCP BBR information (request as INET_DIAG_VEGASINFO)\n"]
     Bbritfo(TcpBbrInfo),
-    #[doc = "Class ID (request as INET\\_DIAG\\_TCLASS)"]
+    #[doc = "Class ID (request as INET_DIAG_TCLASS)\n"]
     ClassId(u32),
-    #[doc = "MD5 signature information"]
+    #[doc = "MD5 signature information\n"]
     Md5sig(&'a [u8]),
-    #[doc = "Upper Layer Protocol information"]
+    #[doc = "Upper Layer Protocol information\n"]
     UlpInfo(IterableUlpInfoAttrs<'a>),
-    #[doc = "BPF storage information\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "BPF storage information\n\nAttribute may repeat multiple times (treat it as array)"]
     SkBpfStorages(IterableBpfStorageReply<'a>),
-    #[doc = "Cgroup ID"]
+    #[doc = "Cgroup ID\n"]
     CgroupId(u64),
-    #[doc = "Socket options\nAssociated type: [`SockoptFlag`] (enum)"]
+    #[doc = "Socket options\n\nAssociated type: [`SockoptFlag`] (enum)"]
     SockoptFlags(u16),
 }
 impl<'a> IterableReplyAttrs<'a> {
-    #[doc = "Memory information extension"]
+    #[doc = "Memory information extension\n"]
     pub fn get_meminfo(&self) -> Result<Meminfo, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Meminfo(val) = attr? {
+            if let Ok(ReplyAttrs::Meminfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1921,7 +1925,7 @@ impl<'a> IterableReplyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::TcpInfo(val) = attr? {
+            if let Ok(ReplyAttrs::TcpInfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1932,12 +1936,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "TCP Vegas information"]
+    #[doc = "TCP Vegas information\n"]
     pub fn get_vegasinfo(&self) -> Result<TcpvegasInfo, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Vegasinfo(val) = attr? {
+            if let Ok(ReplyAttrs::Vegasinfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1948,12 +1952,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Congestion control algorithm name"]
+    #[doc = "Congestion control algorithm name\n"]
     pub fn get_cong(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Cong(val) = attr? {
+            if let Ok(ReplyAttrs::Cong(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1964,12 +1968,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Type of Service"]
+    #[doc = "Type of Service\n"]
     pub fn get_tos(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Tos(val) = attr? {
+            if let Ok(ReplyAttrs::Tos(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1980,12 +1984,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Traffic Class"]
+    #[doc = "Traffic Class\n"]
     pub fn get_tclass(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Tclass(val) = attr? {
+            if let Ok(ReplyAttrs::Tclass(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1996,12 +2000,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Socket memory information"]
+    #[doc = "Socket memory information\n"]
     pub fn get_skmeminfo(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Skmeminfo(val) = attr? {
+            if let Ok(ReplyAttrs::Skmeminfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2012,12 +2016,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Shutdown state"]
+    #[doc = "Shutdown state\n"]
     pub fn get_shutdown(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Shutdown(val) = attr? {
+            if let Ok(ReplyAttrs::Shutdown(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2028,12 +2032,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "TCP DCTCP information (request as INET\\_DIAG\\_VEGASINFO)"]
+    #[doc = "TCP DCTCP information (request as INET_DIAG_VEGASINFO)\n"]
     pub fn get_dctcpinfo(&self) -> Result<TcpDctcpInfo, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Dctcpinfo(val) = attr? {
+            if let Ok(ReplyAttrs::Dctcpinfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2044,12 +2048,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Raw socket protocol (response attribute only)"]
+    #[doc = "Raw socket protocol (response attribute only)\n"]
     pub fn get_protocol(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Protocol(val) = attr? {
+            if let Ok(ReplyAttrs::Protocol(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2060,12 +2064,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "IPv6\\-only socket flag"]
+    #[doc = "IPv6-only socket flag\n"]
     pub fn get_skv6only(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Skv6only(val) = attr? {
+            if let Ok(ReplyAttrs::Skv6only(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2076,12 +2080,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Local addresses\\. SCTP thing\\."]
+    #[doc = "Local addresses. SCTP thing.\n"]
     pub fn get_locals(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Locals(val) = attr? {
+            if let Ok(ReplyAttrs::Locals(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2092,12 +2096,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Peer addresses\\. SCTP thing\\."]
+    #[doc = "Peer addresses. SCTP thing.\n"]
     pub fn get_peers(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Peers(val) = attr? {
+            if let Ok(ReplyAttrs::Peers(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2112,7 +2116,7 @@ impl<'a> IterableReplyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Pad(val) = attr? {
+            if let Ok(ReplyAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2123,12 +2127,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Socket mark (only with CAP\\_NET\\_ADMIN)"]
+    #[doc = "Socket mark (only with CAP_NET_ADMIN)\n"]
     pub fn get_mark(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Mark(val) = attr? {
+            if let Ok(ReplyAttrs::Mark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2139,12 +2143,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "TCP BBR information (request as INET\\_DIAG\\_VEGASINFO)"]
+    #[doc = "TCP BBR information (request as INET_DIAG_VEGASINFO)\n"]
     pub fn get_bbritfo(&self) -> Result<TcpBbrInfo, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Bbritfo(val) = attr? {
+            if let Ok(ReplyAttrs::Bbritfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2155,12 +2159,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Class ID (request as INET\\_DIAG\\_TCLASS)"]
+    #[doc = "Class ID (request as INET_DIAG_TCLASS)\n"]
     pub fn get_class_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::ClassId(val) = attr? {
+            if let Ok(ReplyAttrs::ClassId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2171,12 +2175,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "MD5 signature information"]
+    #[doc = "MD5 signature information\n"]
     pub fn get_md5sig(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::Md5sig(val) = attr? {
+            if let Ok(ReplyAttrs::Md5sig(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2187,12 +2191,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Upper Layer Protocol information"]
+    #[doc = "Upper Layer Protocol information\n"]
     pub fn get_ulp_info(&self) -> Result<IterableUlpInfoAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::UlpInfo(val) = attr? {
+            if let Ok(ReplyAttrs::UlpInfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2203,7 +2207,7 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "BPF storage information\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "BPF storage information\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn get_sk_bpf_storages(
         &self,
     ) -> MultiAttrIterable<Self, ReplyAttrs<'a>, IterableBpfStorageReply<'a>> {
@@ -2215,12 +2219,12 @@ impl<'a> IterableReplyAttrs<'a> {
             }
         })
     }
-    #[doc = "Cgroup ID"]
+    #[doc = "Cgroup ID\n"]
     pub fn get_cgroup_id(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::CgroupId(val) = attr? {
+            if let Ok(ReplyAttrs::CgroupId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2231,12 +2235,12 @@ impl<'a> IterableReplyAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Socket options\nAssociated type: [`SockoptFlag`] (enum)"]
+    #[doc = "Socket options\n\nAssociated type: [`SockoptFlag`] (enum)"]
     pub fn get_sockopt_flags(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReplyAttrs::SockoptFlags(val) = attr? {
+            if let Ok(ReplyAttrs::SockoptFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2302,14 +2306,16 @@ impl<'a> IterableReplyAttrs<'a> {
 impl<'a> Iterator for IterableReplyAttrs<'a> {
     type Item = Result<ReplyAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2693,14 +2699,16 @@ impl<'a> IterableBpfStorageReq<'a> {
 impl<'a> Iterator for IterableBpfStorageReq<'a> {
     type Item = Result<BpfStorageReq, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2791,7 +2799,7 @@ impl<'a> IterableBpfStorageReply<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfStorageReply::Storage(val) = attr? {
+            if let Ok(BpfStorageReply::Storage(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2836,14 +2844,16 @@ impl<'a> IterableBpfStorageReply<'a> {
 impl<'a> Iterator for IterableBpfStorageReply<'a> {
     type Item = Result<BpfStorageReply<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2937,7 +2947,7 @@ impl<'a> IterableBpfStorage<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfStorage::Pad(val) = attr? {
+            if let Ok(BpfStorage::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2952,7 +2962,7 @@ impl<'a> IterableBpfStorage<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfStorage::MapId(val) = attr? {
+            if let Ok(BpfStorage::MapId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2967,7 +2977,7 @@ impl<'a> IterableBpfStorage<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfStorage::MapValue(val) = attr? {
+            if let Ok(BpfStorage::MapValue(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3014,14 +3024,16 @@ impl<'a> IterableBpfStorage<'a> {
 impl<'a> Iterator for IterableBpfStorage<'a> {
     type Item = Result<BpfStorage<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3153,7 +3165,7 @@ impl<Prev: Rec> PushUlpInfoAttrs<Prev> {
         }
         prev
     }
-    #[doc = "ULP name (e\\.g\\., \"tls\", \"mptcp\")"]
+    #[doc = "ULP name (e.g., \\\"tls\\\", \\\"mptcp\\\")\n"]
     pub fn push_name(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -3163,20 +3175,20 @@ impl<Prev: Rec> PushUlpInfoAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "ULP name (e\\.g\\., \"tls\", \"mptcp\")"]
+    #[doc = "ULP name (e.g., \\\"tls\\\", \\\"mptcp\\\")\n"]
     pub fn push_name_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "TLS\\-specific information"]
+    #[doc = "TLS-specific information\n"]
     pub fn push_tls(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 2u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "MPTCP\\-specific information"]
+    #[doc = "MPTCP-specific information\n"]
     pub fn push_mptcp(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 3u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -3218,7 +3230,7 @@ impl<Prev: Rec> PushRequestAttrs<Prev> {
         }
         prev
     }
-    #[doc = "See bytecode\\-op"]
+    #[doc = "See bytecode-op\n"]
     pub fn push_bytecode(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -3272,7 +3284,7 @@ impl<Prev: Rec> PushReplyAttrs<Prev> {
         }
         prev
     }
-    #[doc = "Memory information extension"]
+    #[doc = "Memory information extension\n"]
     pub fn push_meminfo(mut self, value: Meminfo) -> Self {
         push_header(self.as_rec_mut(), 1u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
@@ -3283,13 +3295,13 @@ impl<Prev: Rec> PushReplyAttrs<Prev> {
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "TCP Vegas information"]
+    #[doc = "TCP Vegas information\n"]
     pub fn push_vegasinfo(mut self, value: TcpvegasInfo) -> Self {
         push_header(self.as_rec_mut(), 3u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "Congestion control algorithm name"]
+    #[doc = "Congestion control algorithm name\n"]
     pub fn push_cong(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -3299,61 +3311,61 @@ impl<Prev: Rec> PushReplyAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "Congestion control algorithm name"]
+    #[doc = "Congestion control algorithm name\n"]
     pub fn push_cong_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 4u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "Type of Service"]
+    #[doc = "Type of Service\n"]
     pub fn push_tos(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 5u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Traffic Class"]
+    #[doc = "Traffic Class\n"]
     pub fn push_tclass(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 6u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Socket memory information"]
+    #[doc = "Socket memory information\n"]
     pub fn push_skmeminfo(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 7u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "Shutdown state"]
+    #[doc = "Shutdown state\n"]
     pub fn push_shutdown(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 8u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "TCP DCTCP information (request as INET\\_DIAG\\_VEGASINFO)"]
+    #[doc = "TCP DCTCP information (request as INET_DIAG_VEGASINFO)\n"]
     pub fn push_dctcpinfo(mut self, value: TcpDctcpInfo) -> Self {
         push_header(self.as_rec_mut(), 9u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "Raw socket protocol (response attribute only)"]
+    #[doc = "Raw socket protocol (response attribute only)\n"]
     pub fn push_protocol(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 10u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "IPv6\\-only socket flag"]
+    #[doc = "IPv6-only socket flag\n"]
     pub fn push_skv6only(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 11u16, 0 as u16);
         self
     }
-    #[doc = "Local addresses\\. SCTP thing\\."]
+    #[doc = "Local addresses. SCTP thing.\n"]
     pub fn push_locals(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 12u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "Peer addresses\\. SCTP thing\\."]
+    #[doc = "Peer addresses. SCTP thing.\n"]
     pub fn push_peers(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 13u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -3364,31 +3376,31 @@ impl<Prev: Rec> PushReplyAttrs<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "Socket mark (only with CAP\\_NET\\_ADMIN)"]
+    #[doc = "Socket mark (only with CAP_NET_ADMIN)\n"]
     pub fn push_mark(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 15u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "TCP BBR information (request as INET\\_DIAG\\_VEGASINFO)"]
+    #[doc = "TCP BBR information (request as INET_DIAG_VEGASINFO)\n"]
     pub fn push_bbritfo(mut self, value: TcpBbrInfo) -> Self {
         push_header(self.as_rec_mut(), 16u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "Class ID (request as INET\\_DIAG\\_TCLASS)"]
+    #[doc = "Class ID (request as INET_DIAG_TCLASS)\n"]
     pub fn push_class_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 17u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "MD5 signature information"]
+    #[doc = "MD5 signature information\n"]
     pub fn push_md5sig(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 18u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "Upper Layer Protocol information"]
+    #[doc = "Upper Layer Protocol information\n"]
     pub fn nested_ulp_info(mut self) -> PushUlpInfoAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 19u16);
         PushUlpInfoAttrs {
@@ -3396,7 +3408,7 @@ impl<Prev: Rec> PushReplyAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "BPF storage information\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "BPF storage information\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn nested_sk_bpf_storages(mut self) -> PushBpfStorageReply<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 20u16);
         PushBpfStorageReply {
@@ -3404,13 +3416,13 @@ impl<Prev: Rec> PushReplyAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Cgroup ID"]
+    #[doc = "Cgroup ID\n"]
     pub fn push_cgroup_id(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 21u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Socket options\nAssociated type: [`SockoptFlag`] (enum)"]
+    #[doc = "Socket options\n\nAssociated type: [`SockoptFlag`] (enum)"]
     pub fn push_sockopt_flags(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 22u16, 2 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());

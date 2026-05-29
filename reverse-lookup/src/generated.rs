@@ -21,6 +21,7 @@ pub struct ReverseLookup<'a> {
     pub last_filter: &'a Cell<Option<usize>>,
     pub buf: &'a [u8],
 }
+#[allow(unused)]
 fn consider(fmt: &mut std::fmt::Formatter<'_>, proto: &str) -> std::fmt::Result {
     write!(
         fmt,
@@ -2503,6 +2504,18 @@ impl Debug for ReverseLookup<'_> {
                                 fmt,
                             );
                         }
+                        if let (36u8, None, true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::devlink::OpResourceDumpDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (36u8, Some(36u8), true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::devlink::OpResourceDumpDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
                         if let (36u8, None, false) = pat {
                             return Debug::fmt(
                                 &netlink_bindings::devlink::OpResourceDumpDo::decode_reply(buf),
@@ -3162,6 +3175,59 @@ impl Debug for ReverseLookup<'_> {
                     }
                     #[cfg(not(feature = "dpll"))]
                     return consider(fmt, "dpll");
+                }
+                if name == b"drm-ras" {
+                    let pat = (value, request_value, is_dump);
+                    #[cfg(feature = "drm-ras")]
+                    {
+                        if let (1u8, None, true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::drm_ras::OpListNodesDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (1u8, Some(1u8), true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::drm_ras::OpListNodesDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (2u8, None, true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::drm_ras::OpGetErrorCounterDump::decode_reply(
+                                    buf,
+                                ),
+                                fmt,
+                            );
+                        }
+                        if let (2u8, Some(2u8), true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::drm_ras::OpGetErrorCounterDump::decode_reply(
+                                    buf,
+                                ),
+                                fmt,
+                            );
+                        }
+                        if let (2u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::drm_ras::OpGetErrorCounterDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (2u8, Some(2u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::drm_ras::OpGetErrorCounterDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        write!(
+                            fmt,
+                            "(Unknown genl operation) value={value}, request_value={request_value:?}, is_dump={is_dump}"
+                        )?;
+                        return Ok(());
+                    }
+                    #[cfg(not(feature = "drm-ras"))]
+                    return consider(fmt, "drm-ras");
                 }
                 if name == b"ethtool" {
                     let pat = (value, request_value, is_dump);
@@ -4693,6 +4759,18 @@ impl Debug for ReverseLookup<'_> {
                                 fmt,
                             );
                         }
+                        if let (16u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::netdev::OpQueueCreateDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (16u8, Some(16u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::netdev::OpQueueCreateDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
                         write!(
                             fmt,
                             "(Unknown genl operation) value={value}, request_value={request_value:?}, is_dump={is_dump}"
@@ -5181,6 +5259,31 @@ impl Debug for ReverseLookup<'_> {
                     }
                     #[cfg(not(feature = "ovs_flow"))]
                     return consider(fmt, "ovs_flow");
+                }
+                if name == b"ovs_packet" {
+                    let pat = (value, request_value, is_dump);
+                    #[cfg(feature = "ovs_packet")]
+                    {
+                        if let (3u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::ovs_packet::OpExecuteDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (3u8, Some(3u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::ovs_packet::OpExecuteDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        write!(
+                            fmt,
+                            "(Unknown genl operation) value={value}, request_value={request_value:?}, is_dump={is_dump}"
+                        )?;
+                        return Ok(());
+                    }
+                    #[cfg(not(feature = "ovs_packet"))]
+                    return consider(fmt, "ovs_packet");
                 }
                 if name == b"ovs_vport" {
                     let pat = (value, request_value, is_dump);

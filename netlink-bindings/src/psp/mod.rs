@@ -1,4 +1,4 @@
-#![doc = "PSP Security Protocol Generic Netlink family\\."]
+#![doc = "PSP Security Protocol Generic Netlink family.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -36,22 +36,22 @@ impl Version {
 }
 #[derive(Clone)]
 pub enum Dev {
-    #[doc = "PSP device ID\\."]
+    #[doc = "PSP device ID.\n"]
     Id(u32),
-    #[doc = "ifindex of the main netdevice linked to the PSP device\\."]
+    #[doc = "ifindex of the main netdevice linked to the PSP device.\n"]
     Ifindex(u32),
-    #[doc = "Bitmask of PSP versions supported by the device\\.\nAssociated type: [`Version`] (1 bit per enumeration)"]
+    #[doc = "Bitmask of PSP versions supported by the device.\n\nAssociated type: [`Version`] (1 bit per enumeration)"]
     PspVersionsCap(u32),
-    #[doc = "Bitmask of currently enabled (accepted on Rx) PSP versions\\.\nAssociated type: [`Version`] (1 bit per enumeration)"]
+    #[doc = "Bitmask of currently enabled (accepted on Rx) PSP versions.\n\nAssociated type: [`Version`] (1 bit per enumeration)"]
     PspVersionsEna(u32),
 }
 impl<'a> IterableDev<'a> {
-    #[doc = "PSP device ID\\."]
+    #[doc = "PSP device ID.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dev::Id(val) = attr? {
+            if let Ok(Dev::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -62,12 +62,12 @@ impl<'a> IterableDev<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ifindex of the main netdevice linked to the PSP device\\."]
+    #[doc = "ifindex of the main netdevice linked to the PSP device.\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dev::Ifindex(val) = attr? {
+            if let Ok(Dev::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -78,12 +78,12 @@ impl<'a> IterableDev<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Bitmask of PSP versions supported by the device\\.\nAssociated type: [`Version`] (1 bit per enumeration)"]
+    #[doc = "Bitmask of PSP versions supported by the device.\n\nAssociated type: [`Version`] (1 bit per enumeration)"]
     pub fn get_psp_versions_cap(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dev::PspVersionsCap(val) = attr? {
+            if let Ok(Dev::PspVersionsCap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -94,12 +94,12 @@ impl<'a> IterableDev<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Bitmask of currently enabled (accepted on Rx) PSP versions\\.\nAssociated type: [`Version`] (1 bit per enumeration)"]
+    #[doc = "Bitmask of currently enabled (accepted on Rx) PSP versions.\n\nAssociated type: [`Version`] (1 bit per enumeration)"]
     pub fn get_psp_versions_ena(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dev::PspVersionsEna(val) = attr? {
+            if let Ok(Dev::PspVersionsEna(val)) = attr {
                 return Ok(val);
             }
         }
@@ -147,14 +147,16 @@ impl<'a> IterableDev<'a> {
 impl<'a> Iterator for IterableDev<'a> {
     type Item = Result<Dev, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -281,22 +283,22 @@ impl IterableDev<'_> {
 }
 #[derive(Clone)]
 pub enum Assoc<'a> {
-    #[doc = "PSP device ID\\."]
+    #[doc = "PSP device ID.\n"]
     DevId(u32),
-    #[doc = "PSP versions (AEAD and protocol version) used by this association,\ndictates the size of the key\\.\n\nAssociated type: [`Version`] (enum)"]
+    #[doc = "PSP versions (AEAD and protocol version) used by this association,\ndictates the size of the key.\n\nAssociated type: [`Version`] (enum)"]
     Version(u32),
     RxKey(IterableKeys<'a>),
     TxKey(IterableKeys<'a>),
-    #[doc = "Sockets which should be bound to the association immediately\\."]
+    #[doc = "Sockets which should be bound to the association immediately.\n"]
     SockFd(u32),
 }
 impl<'a> IterableAssoc<'a> {
-    #[doc = "PSP device ID\\."]
+    #[doc = "PSP device ID.\n"]
     pub fn get_dev_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Assoc::DevId(val) = attr? {
+            if let Ok(Assoc::DevId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -307,12 +309,12 @@ impl<'a> IterableAssoc<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "PSP versions (AEAD and protocol version) used by this association,\ndictates the size of the key\\.\n\nAssociated type: [`Version`] (enum)"]
+    #[doc = "PSP versions (AEAD and protocol version) used by this association,\ndictates the size of the key.\n\nAssociated type: [`Version`] (enum)"]
     pub fn get_version(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Assoc::Version(val) = attr? {
+            if let Ok(Assoc::Version(val)) = attr {
                 return Ok(val);
             }
         }
@@ -327,7 +329,7 @@ impl<'a> IterableAssoc<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Assoc::RxKey(val) = attr? {
+            if let Ok(Assoc::RxKey(val)) = attr {
                 return Ok(val);
             }
         }
@@ -342,7 +344,7 @@ impl<'a> IterableAssoc<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Assoc::TxKey(val) = attr? {
+            if let Ok(Assoc::TxKey(val)) = attr {
                 return Ok(val);
             }
         }
@@ -353,12 +355,12 @@ impl<'a> IterableAssoc<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Sockets which should be bound to the association immediately\\."]
+    #[doc = "Sockets which should be bound to the association immediately.\n"]
     pub fn get_sock_fd(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Assoc::SockFd(val) = attr? {
+            if let Ok(Assoc::SockFd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -407,14 +409,16 @@ impl<'a> IterableAssoc<'a> {
 impl<'a> Iterator for IterableAssoc<'a> {
     type Item = Result<Assoc<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -547,7 +551,7 @@ impl IterableAssoc<'_> {
 #[derive(Clone)]
 pub enum Keys<'a> {
     Key(&'a [u8]),
-    #[doc = "Security Parameters Index (SPI) of the association\\."]
+    #[doc = "Security Parameters Index (SPI) of the association.\n"]
     Spi(u32),
 }
 impl<'a> IterableKeys<'a> {
@@ -555,7 +559,7 @@ impl<'a> IterableKeys<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Keys::Key(val) = attr? {
+            if let Ok(Keys::Key(val)) = attr {
                 return Ok(val);
             }
         }
@@ -566,12 +570,12 @@ impl<'a> IterableKeys<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Security Parameters Index (SPI) of the association\\."]
+    #[doc = "Security Parameters Index (SPI) of the association.\n"]
     pub fn get_spi(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Keys::Spi(val) = attr? {
+            if let Ok(Keys::Spi(val)) = attr {
                 return Ok(val);
             }
         }
@@ -617,14 +621,16 @@ impl<'a> IterableKeys<'a> {
 impl<'a> Iterator for IterableKeys<'a> {
     type Item = Result<Keys<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -717,36 +723,36 @@ impl IterableKeys<'_> {
 }
 #[derive(Clone)]
 pub enum Stats {
-    #[doc = "PSP device ID\\."]
+    #[doc = "PSP device ID.\n"]
     DevId(u32),
-    #[doc = "Number of key rotations during the lifetime of the device\\.\nKernel statistic\\.\n"]
+    #[doc = "Number of key rotations during the lifetime of the device. Kernel\nstatistic.\n"]
     KeyRotations(u32),
-    #[doc = "Number of times a socket's Rx got shut down due to using\na key which went stale (fully rotated out)\\.\nKernel statistic\\.\n"]
+    #[doc = "Number of times a socket\\'s Rx got shut down due to using a key which\nwent stale (fully rotated out). Kernel statistic.\n"]
     StaleEvents(u32),
-    #[doc = "Number of successfully processed and authenticated PSP packets\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully processed and authenticated PSP packets. Device\nstatistic (from the PSP spec).\n"]
     RxPackets(u32),
-    #[doc = "Number of successfully authenticated PSP bytes received, counting from\nthe first byte after the IV through the last byte of payload\\.\nThe fixed initial portion of the PSP header (16 bytes)\nand the PSP trailer/ICV (16 bytes) are not included in this count\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully authenticated PSP bytes received, counting from\nthe first byte after the IV through the last byte of payload. The fixed\ninitial portion of the PSP header (16 bytes) and the PSP trailer/ICV (16\nbytes) are not included in this count. Device statistic (from the PSP\nspec).\n"]
     RxBytes(u32),
-    #[doc = "Number of received PSP packets with unsuccessful authentication\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of received PSP packets with unsuccessful authentication. Device\nstatistic (from the PSP spec).\n"]
     RxAuthFail(u32),
-    #[doc = "Number of received PSP packets with length/framing errors\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of received PSP packets with length/framing errors. Device\nstatistic (from the PSP spec).\n"]
     RxError(u32),
-    #[doc = "Number of received PSP packets with miscellaneous errors\n(invalid master key indicated by SPI, unsupported version, etc\\.)\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of received PSP packets with miscellaneous errors (invalid master\nkey indicated by SPI, unsupported version, etc.) Device statistic (from\nthe PSP spec).\n"]
     RxBad(u32),
-    #[doc = "Number of successfully processed PSP packets for transmission\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully processed PSP packets for transmission. Device\nstatistic (from the PSP spec).\n"]
     TxPackets(u32),
-    #[doc = "Number of successfully processed PSP bytes for transmit, counting from\nthe first byte after the IV through the last byte of payload\\.\nThe fixed initial portion of the PSP header (16 bytes)\nand the PSP trailer/ICV (16 bytes) are not included in this count\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully processed PSP bytes for transmit, counting from\nthe first byte after the IV through the last byte of payload. The fixed\ninitial portion of the PSP header (16 bytes) and the PSP trailer/ICV (16\nbytes) are not included in this count. Device statistic (from the PSP\nspec).\n"]
     TxBytes(u32),
-    #[doc = "Number of PSP packets for transmission with errors\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of PSP packets for transmission with errors. Device statistic\n(from the PSP spec).\n"]
     TxError(u32),
 }
 impl<'a> IterableStats<'a> {
-    #[doc = "PSP device ID\\."]
+    #[doc = "PSP device ID.\n"]
     pub fn get_dev_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::DevId(val) = attr? {
+            if let Ok(Stats::DevId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -757,12 +763,12 @@ impl<'a> IterableStats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of key rotations during the lifetime of the device\\.\nKernel statistic\\.\n"]
+    #[doc = "Number of key rotations during the lifetime of the device. Kernel\nstatistic.\n"]
     pub fn get_key_rotations(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::KeyRotations(val) = attr? {
+            if let Ok(Stats::KeyRotations(val)) = attr {
                 return Ok(val);
             }
         }
@@ -773,12 +779,12 @@ impl<'a> IterableStats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of times a socket's Rx got shut down due to using\na key which went stale (fully rotated out)\\.\nKernel statistic\\.\n"]
+    #[doc = "Number of times a socket\\'s Rx got shut down due to using a key which\nwent stale (fully rotated out). Kernel statistic.\n"]
     pub fn get_stale_events(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::StaleEvents(val) = attr? {
+            if let Ok(Stats::StaleEvents(val)) = attr {
                 return Ok(val);
             }
         }
@@ -789,12 +795,12 @@ impl<'a> IterableStats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of successfully processed and authenticated PSP packets\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully processed and authenticated PSP packets. Device\nstatistic (from the PSP spec).\n"]
     pub fn get_rx_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::RxPackets(val) = attr? {
+            if let Ok(Stats::RxPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -805,12 +811,12 @@ impl<'a> IterableStats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of successfully authenticated PSP bytes received, counting from\nthe first byte after the IV through the last byte of payload\\.\nThe fixed initial portion of the PSP header (16 bytes)\nand the PSP trailer/ICV (16 bytes) are not included in this count\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully authenticated PSP bytes received, counting from\nthe first byte after the IV through the last byte of payload. The fixed\ninitial portion of the PSP header (16 bytes) and the PSP trailer/ICV (16\nbytes) are not included in this count. Device statistic (from the PSP\nspec).\n"]
     pub fn get_rx_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::RxBytes(val) = attr? {
+            if let Ok(Stats::RxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -821,12 +827,12 @@ impl<'a> IterableStats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of received PSP packets with unsuccessful authentication\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of received PSP packets with unsuccessful authentication. Device\nstatistic (from the PSP spec).\n"]
     pub fn get_rx_auth_fail(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::RxAuthFail(val) = attr? {
+            if let Ok(Stats::RxAuthFail(val)) = attr {
                 return Ok(val);
             }
         }
@@ -837,12 +843,12 @@ impl<'a> IterableStats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of received PSP packets with length/framing errors\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of received PSP packets with length/framing errors. Device\nstatistic (from the PSP spec).\n"]
     pub fn get_rx_error(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::RxError(val) = attr? {
+            if let Ok(Stats::RxError(val)) = attr {
                 return Ok(val);
             }
         }
@@ -853,12 +859,12 @@ impl<'a> IterableStats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of received PSP packets with miscellaneous errors\n(invalid master key indicated by SPI, unsupported version, etc\\.)\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of received PSP packets with miscellaneous errors (invalid master\nkey indicated by SPI, unsupported version, etc.) Device statistic (from\nthe PSP spec).\n"]
     pub fn get_rx_bad(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::RxBad(val) = attr? {
+            if let Ok(Stats::RxBad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -869,12 +875,12 @@ impl<'a> IterableStats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of successfully processed PSP packets for transmission\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully processed PSP packets for transmission. Device\nstatistic (from the PSP spec).\n"]
     pub fn get_tx_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::TxPackets(val) = attr? {
+            if let Ok(Stats::TxPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -885,12 +891,12 @@ impl<'a> IterableStats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of successfully processed PSP bytes for transmit, counting from\nthe first byte after the IV through the last byte of payload\\.\nThe fixed initial portion of the PSP header (16 bytes)\nand the PSP trailer/ICV (16 bytes) are not included in this count\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully processed PSP bytes for transmit, counting from\nthe first byte after the IV through the last byte of payload. The fixed\ninitial portion of the PSP header (16 bytes) and the PSP trailer/ICV (16\nbytes) are not included in this count. Device statistic (from the PSP\nspec).\n"]
     pub fn get_tx_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::TxBytes(val) = attr? {
+            if let Ok(Stats::TxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -901,12 +907,12 @@ impl<'a> IterableStats<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of PSP packets for transmission with errors\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of PSP packets for transmission with errors. Device statistic\n(from the PSP spec).\n"]
     pub fn get_tx_error(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Stats::TxError(val) = attr? {
+            if let Ok(Stats::TxError(val)) = attr {
                 return Ok(val);
             }
         }
@@ -961,14 +967,16 @@ impl<'a> IterableStats<'a> {
 impl<'a> Iterator for IterableStats<'a> {
     type Item = Result<Stats, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1193,25 +1201,25 @@ impl<Prev: Rec> PushDev<Prev> {
         }
         prev
     }
-    #[doc = "PSP device ID\\."]
+    #[doc = "PSP device ID.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ifindex of the main netdevice linked to the PSP device\\."]
+    #[doc = "ifindex of the main netdevice linked to the PSP device.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Bitmask of PSP versions supported by the device\\.\nAssociated type: [`Version`] (1 bit per enumeration)"]
+    #[doc = "Bitmask of PSP versions supported by the device.\n\nAssociated type: [`Version`] (1 bit per enumeration)"]
     pub fn push_psp_versions_cap(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Bitmask of currently enabled (accepted on Rx) PSP versions\\.\nAssociated type: [`Version`] (1 bit per enumeration)"]
+    #[doc = "Bitmask of currently enabled (accepted on Rx) PSP versions.\n\nAssociated type: [`Version`] (1 bit per enumeration)"]
     pub fn push_psp_versions_ena(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1253,13 +1261,13 @@ impl<Prev: Rec> PushAssoc<Prev> {
         }
         prev
     }
-    #[doc = "PSP device ID\\."]
+    #[doc = "PSP device ID.\n"]
     pub fn push_dev_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "PSP versions (AEAD and protocol version) used by this association,\ndictates the size of the key\\.\n\nAssociated type: [`Version`] (enum)"]
+    #[doc = "PSP versions (AEAD and protocol version) used by this association,\ndictates the size of the key.\n\nAssociated type: [`Version`] (enum)"]
     pub fn push_version(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1279,7 +1287,7 @@ impl<Prev: Rec> PushAssoc<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Sockets which should be bound to the association immediately\\."]
+    #[doc = "Sockets which should be bound to the association immediately.\n"]
     pub fn push_sock_fd(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1326,7 +1334,7 @@ impl<Prev: Rec> PushKeys<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "Security Parameters Index (SPI) of the association\\."]
+    #[doc = "Security Parameters Index (SPI) of the association.\n"]
     pub fn push_spi(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1368,67 +1376,67 @@ impl<Prev: Rec> PushStats<Prev> {
         }
         prev
     }
-    #[doc = "PSP device ID\\."]
+    #[doc = "PSP device ID.\n"]
     pub fn push_dev_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of key rotations during the lifetime of the device\\.\nKernel statistic\\.\n"]
+    #[doc = "Number of key rotations during the lifetime of the device. Kernel\nstatistic.\n"]
     pub fn push_key_rotations(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of times a socket's Rx got shut down due to using\na key which went stale (fully rotated out)\\.\nKernel statistic\\.\n"]
+    #[doc = "Number of times a socket\\'s Rx got shut down due to using a key which\nwent stale (fully rotated out). Kernel statistic.\n"]
     pub fn push_stale_events(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of successfully processed and authenticated PSP packets\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully processed and authenticated PSP packets. Device\nstatistic (from the PSP spec).\n"]
     pub fn push_rx_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of successfully authenticated PSP bytes received, counting from\nthe first byte after the IV through the last byte of payload\\.\nThe fixed initial portion of the PSP header (16 bytes)\nand the PSP trailer/ICV (16 bytes) are not included in this count\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully authenticated PSP bytes received, counting from\nthe first byte after the IV through the last byte of payload. The fixed\ninitial portion of the PSP header (16 bytes) and the PSP trailer/ICV (16\nbytes) are not included in this count. Device statistic (from the PSP\nspec).\n"]
     pub fn push_rx_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of received PSP packets with unsuccessful authentication\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of received PSP packets with unsuccessful authentication. Device\nstatistic (from the PSP spec).\n"]
     pub fn push_rx_auth_fail(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of received PSP packets with length/framing errors\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of received PSP packets with length/framing errors. Device\nstatistic (from the PSP spec).\n"]
     pub fn push_rx_error(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of received PSP packets with miscellaneous errors\n(invalid master key indicated by SPI, unsupported version, etc\\.)\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of received PSP packets with miscellaneous errors (invalid master\nkey indicated by SPI, unsupported version, etc.) Device statistic (from\nthe PSP spec).\n"]
     pub fn push_rx_bad(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of successfully processed PSP packets for transmission\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully processed PSP packets for transmission. Device\nstatistic (from the PSP spec).\n"]
     pub fn push_tx_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 9u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of successfully processed PSP bytes for transmit, counting from\nthe first byte after the IV through the last byte of payload\\.\nThe fixed initial portion of the PSP header (16 bytes)\nand the PSP trailer/ICV (16 bytes) are not included in this count\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of successfully processed PSP bytes for transmit, counting from\nthe first byte after the IV through the last byte of payload. The fixed\ninitial portion of the PSP header (16 bytes) and the PSP trailer/ICV (16\nbytes) are not included in this count. Device statistic (from the PSP\nspec).\n"]
     pub fn push_tx_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of PSP packets for transmission with errors\\.\nDevice statistic (from the PSP spec)\\.\n"]
+    #[doc = "Number of PSP packets for transmission with errors. Device statistic\n(from the PSP spec).\n"]
     pub fn push_tx_error(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 11u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1495,7 +1503,7 @@ impl NotifGroup {
     #[doc = "Notifications:\n- [`OpKeyRotateNotif`]\n"]
     pub const USE_CSTR: &CStr = c"use";
 }
-#[doc = "Get / dump information about PSP capable devices on the system\\.\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n"]
+#[doc = "Get / dump information about PSP capable devices on the system.\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n\n"]
 #[derive(Debug)]
 pub struct OpDevGetDump<'r> {
     request: Request<'r>,
@@ -1550,7 +1558,7 @@ impl NetlinkRequest for OpDevGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump information about PSP capable devices on the system\\.\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n"]
+#[doc = "Get / dump information about PSP capable devices on the system.\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n\n"]
 #[derive(Debug)]
 pub struct OpDevGetDo<'r> {
     request: Request<'r>,
@@ -1603,7 +1611,7 @@ impl NetlinkRequest for OpDevGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set the configuration of a PSP device\\.\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n- [.push_psp_versions_ena()](PushDev::push_psp_versions_ena)\n"]
+#[doc = "Set the configuration of a PSP device.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n- [.push_psp_versions_ena()](PushDev::push_psp_versions_ena)\n\n"]
 #[derive(Debug)]
 pub struct OpDevSetDo<'r> {
     request: Request<'r>,
@@ -1656,7 +1664,7 @@ impl NetlinkRequest for OpDevSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Rotate the device key\\.\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n"]
+#[doc = "Rotate the device key.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n\n"]
 #[derive(Debug)]
 pub struct OpKeyRotateDo<'r> {
     request: Request<'r>,
@@ -1709,7 +1717,7 @@ impl NetlinkRequest for OpKeyRotateDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Allocate a new Rx key \\+ SPI pair, associate it with a socket\\.\nRequest attributes:\n- [.push_dev_id()](PushAssoc::push_dev_id)\n- [.push_version()](PushAssoc::push_version)\n- [.push_sock_fd()](PushAssoc::push_sock_fd)\n\nReply attributes:\n- [.get_dev_id()](IterableAssoc::get_dev_id)\n- [.get_rx_key()](IterableAssoc::get_rx_key)\n"]
+#[doc = "Allocate a new Rx key + SPI pair, associate it with a socket.\n\nRequest attributes:\n- [.push_dev_id()](PushAssoc::push_dev_id)\n- [.push_version()](PushAssoc::push_version)\n- [.push_sock_fd()](PushAssoc::push_sock_fd)\n\nReply attributes:\n- [.get_dev_id()](IterableAssoc::get_dev_id)\n- [.get_rx_key()](IterableAssoc::get_rx_key)\n\n"]
 #[derive(Debug)]
 pub struct OpRxAssocDo<'r> {
     request: Request<'r>,
@@ -1762,7 +1770,7 @@ impl NetlinkRequest for OpRxAssocDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Add a PSP Tx association\\.\nRequest attributes:\n- [.push_dev_id()](PushAssoc::push_dev_id)\n- [.push_version()](PushAssoc::push_version)\n- [.nested_tx_key()](PushAssoc::nested_tx_key)\n- [.push_sock_fd()](PushAssoc::push_sock_fd)\n"]
+#[doc = "Add a PSP Tx association.\n\nRequest attributes:\n- [.push_dev_id()](PushAssoc::push_dev_id)\n- [.push_version()](PushAssoc::push_version)\n- [.nested_tx_key()](PushAssoc::nested_tx_key)\n- [.push_sock_fd()](PushAssoc::push_sock_fd)\n\n"]
 #[derive(Debug)]
 pub struct OpTxAssocDo<'r> {
     request: Request<'r>,
@@ -1815,7 +1823,7 @@ impl NetlinkRequest for OpTxAssocDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get device statistics\\.\n\nReply attributes:\n- [.get_dev_id()](IterableStats::get_dev_id)\n- [.get_key_rotations()](IterableStats::get_key_rotations)\n- [.get_stale_events()](IterableStats::get_stale_events)\n"]
+#[doc = "Get device statistics.\n\nReply attributes:\n- [.get_dev_id()](IterableStats::get_dev_id)\n- [.get_key_rotations()](IterableStats::get_key_rotations)\n- [.get_stale_events()](IterableStats::get_stale_events)\n- [.get_rx_packets()](IterableStats::get_rx_packets)\n- [.get_rx_bytes()](IterableStats::get_rx_bytes)\n- [.get_rx_auth_fail()](IterableStats::get_rx_auth_fail)\n- [.get_rx_error()](IterableStats::get_rx_error)\n- [.get_rx_bad()](IterableStats::get_rx_bad)\n- [.get_tx_packets()](IterableStats::get_tx_packets)\n- [.get_tx_bytes()](IterableStats::get_tx_bytes)\n- [.get_tx_error()](IterableStats::get_tx_error)\n\n"]
 #[derive(Debug)]
 pub struct OpGetStatsDump<'r> {
     request: Request<'r>,
@@ -1870,7 +1878,7 @@ impl NetlinkRequest for OpGetStatsDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get device statistics\\.\nRequest attributes:\n- [.push_dev_id()](PushStats::push_dev_id)\n\nReply attributes:\n- [.get_dev_id()](IterableStats::get_dev_id)\n- [.get_key_rotations()](IterableStats::get_key_rotations)\n- [.get_stale_events()](IterableStats::get_stale_events)\n"]
+#[doc = "Get device statistics.\n\nRequest attributes:\n- [.push_dev_id()](PushStats::push_dev_id)\n\nReply attributes:\n- [.get_dev_id()](IterableStats::get_dev_id)\n- [.get_key_rotations()](IterableStats::get_key_rotations)\n- [.get_stale_events()](IterableStats::get_stale_events)\n- [.get_rx_packets()](IterableStats::get_rx_packets)\n- [.get_rx_bytes()](IterableStats::get_rx_bytes)\n- [.get_rx_auth_fail()](IterableStats::get_rx_auth_fail)\n- [.get_rx_error()](IterableStats::get_rx_error)\n- [.get_rx_bad()](IterableStats::get_rx_bad)\n- [.get_tx_packets()](IterableStats::get_tx_packets)\n- [.get_tx_bytes()](IterableStats::get_tx_bytes)\n- [.get_tx_error()](IterableStats::get_tx_error)\n\n"]
 #[derive(Debug)]
 pub struct OpGetStatsDo<'r> {
     request: Request<'r>,
@@ -2025,56 +2033,56 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get / dump information about PSP capable devices on the system\\.\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n"]
+    #[doc = "Get / dump information about PSP capable devices on the system.\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n\n"]
     pub fn op_dev_get_dump(self) -> OpDevGetDump<'buf> {
         let mut res = OpDevGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-dev-get-dump", OpDevGetDump::lookup);
         res
     }
-    #[doc = "Get / dump information about PSP capable devices on the system\\.\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n"]
+    #[doc = "Get / dump information about PSP capable devices on the system.\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n\n"]
     pub fn op_dev_get_do(self) -> OpDevGetDo<'buf> {
         let mut res = OpDevGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-dev-get-do", OpDevGetDo::lookup);
         res
     }
-    #[doc = "Set the configuration of a PSP device\\.\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n- [.push_psp_versions_ena()](PushDev::push_psp_versions_ena)\n"]
+    #[doc = "Set the configuration of a PSP device.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n- [.push_psp_versions_ena()](PushDev::push_psp_versions_ena)\n\n"]
     pub fn op_dev_set_do(self) -> OpDevSetDo<'buf> {
         let mut res = OpDevSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-dev-set-do", OpDevSetDo::lookup);
         res
     }
-    #[doc = "Rotate the device key\\.\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n"]
+    #[doc = "Rotate the device key.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n\n"]
     pub fn op_key_rotate_do(self) -> OpKeyRotateDo<'buf> {
         let mut res = OpKeyRotateDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-key-rotate-do", OpKeyRotateDo::lookup);
         res
     }
-    #[doc = "Allocate a new Rx key \\+ SPI pair, associate it with a socket\\.\nRequest attributes:\n- [.push_dev_id()](PushAssoc::push_dev_id)\n- [.push_version()](PushAssoc::push_version)\n- [.push_sock_fd()](PushAssoc::push_sock_fd)\n\nReply attributes:\n- [.get_dev_id()](IterableAssoc::get_dev_id)\n- [.get_rx_key()](IterableAssoc::get_rx_key)\n"]
+    #[doc = "Allocate a new Rx key + SPI pair, associate it with a socket.\n\nRequest attributes:\n- [.push_dev_id()](PushAssoc::push_dev_id)\n- [.push_version()](PushAssoc::push_version)\n- [.push_sock_fd()](PushAssoc::push_sock_fd)\n\nReply attributes:\n- [.get_dev_id()](IterableAssoc::get_dev_id)\n- [.get_rx_key()](IterableAssoc::get_rx_key)\n\n"]
     pub fn op_rx_assoc_do(self) -> OpRxAssocDo<'buf> {
         let mut res = OpRxAssocDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-rx-assoc-do", OpRxAssocDo::lookup);
         res
     }
-    #[doc = "Add a PSP Tx association\\.\nRequest attributes:\n- [.push_dev_id()](PushAssoc::push_dev_id)\n- [.push_version()](PushAssoc::push_version)\n- [.nested_tx_key()](PushAssoc::nested_tx_key)\n- [.push_sock_fd()](PushAssoc::push_sock_fd)\n"]
+    #[doc = "Add a PSP Tx association.\n\nRequest attributes:\n- [.push_dev_id()](PushAssoc::push_dev_id)\n- [.push_version()](PushAssoc::push_version)\n- [.nested_tx_key()](PushAssoc::nested_tx_key)\n- [.push_sock_fd()](PushAssoc::push_sock_fd)\n\n"]
     pub fn op_tx_assoc_do(self) -> OpTxAssocDo<'buf> {
         let mut res = OpTxAssocDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-tx-assoc-do", OpTxAssocDo::lookup);
         res
     }
-    #[doc = "Get device statistics\\.\n\nReply attributes:\n- [.get_dev_id()](IterableStats::get_dev_id)\n- [.get_key_rotations()](IterableStats::get_key_rotations)\n- [.get_stale_events()](IterableStats::get_stale_events)\n"]
+    #[doc = "Get device statistics.\n\nReply attributes:\n- [.get_dev_id()](IterableStats::get_dev_id)\n- [.get_key_rotations()](IterableStats::get_key_rotations)\n- [.get_stale_events()](IterableStats::get_stale_events)\n- [.get_rx_packets()](IterableStats::get_rx_packets)\n- [.get_rx_bytes()](IterableStats::get_rx_bytes)\n- [.get_rx_auth_fail()](IterableStats::get_rx_auth_fail)\n- [.get_rx_error()](IterableStats::get_rx_error)\n- [.get_rx_bad()](IterableStats::get_rx_bad)\n- [.get_tx_packets()](IterableStats::get_tx_packets)\n- [.get_tx_bytes()](IterableStats::get_tx_bytes)\n- [.get_tx_error()](IterableStats::get_tx_error)\n\n"]
     pub fn op_get_stats_dump(self) -> OpGetStatsDump<'buf> {
         let mut res = OpGetStatsDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-stats-dump", OpGetStatsDump::lookup);
         res
     }
-    #[doc = "Get device statistics\\.\nRequest attributes:\n- [.push_dev_id()](PushStats::push_dev_id)\n\nReply attributes:\n- [.get_dev_id()](IterableStats::get_dev_id)\n- [.get_key_rotations()](IterableStats::get_key_rotations)\n- [.get_stale_events()](IterableStats::get_stale_events)\n"]
+    #[doc = "Get device statistics.\n\nRequest attributes:\n- [.push_dev_id()](PushStats::push_dev_id)\n\nReply attributes:\n- [.get_dev_id()](IterableStats::get_dev_id)\n- [.get_key_rotations()](IterableStats::get_key_rotations)\n- [.get_stale_events()](IterableStats::get_stale_events)\n- [.get_rx_packets()](IterableStats::get_rx_packets)\n- [.get_rx_bytes()](IterableStats::get_rx_bytes)\n- [.get_rx_auth_fail()](IterableStats::get_rx_auth_fail)\n- [.get_rx_error()](IterableStats::get_rx_error)\n- [.get_rx_bad()](IterableStats::get_rx_bad)\n- [.get_tx_packets()](IterableStats::get_tx_packets)\n- [.get_tx_bytes()](IterableStats::get_tx_bytes)\n- [.get_tx_error()](IterableStats::get_tx_error)\n\n"]
     pub fn op_get_stats_do(self) -> OpGetStatsDo<'buf> {
         let mut res = OpGetStatsDo::new(self);
         res.request
@@ -2095,7 +2103,15 @@ mod generated_tests {
         let _ = IterableDev::get_psp_versions_ena;
         let _ = IterableStats::get_dev_id;
         let _ = IterableStats::get_key_rotations;
+        let _ = IterableStats::get_rx_auth_fail;
+        let _ = IterableStats::get_rx_bad;
+        let _ = IterableStats::get_rx_bytes;
+        let _ = IterableStats::get_rx_error;
+        let _ = IterableStats::get_rx_packets;
         let _ = IterableStats::get_stale_events;
+        let _ = IterableStats::get_tx_bytes;
+        let _ = IterableStats::get_tx_error;
+        let _ = IterableStats::get_tx_packets;
         let _ = OpDevAddNotif;
         let _ = OpDevChangeNotif;
         let _ = OpDevDelNotif;

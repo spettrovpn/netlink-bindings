@@ -1,4 +1,4 @@
-#![doc = "Route configuration over rtnetlink\\."]
+#![doc = "Route configuration over rtnetlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -252,7 +252,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Dst(val) = attr? {
+            if let Ok(RouteAttrs::Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -267,7 +267,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Src(val) = attr? {
+            if let Ok(RouteAttrs::Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -282,7 +282,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Iif(val) = attr? {
+            if let Ok(RouteAttrs::Iif(val)) = attr {
                 return Ok(val);
             }
         }
@@ -297,7 +297,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Oif(val) = attr? {
+            if let Ok(RouteAttrs::Oif(val)) = attr {
                 return Ok(val);
             }
         }
@@ -312,7 +312,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Gateway(val) = attr? {
+            if let Ok(RouteAttrs::Gateway(val)) = attr {
                 return Ok(val);
             }
         }
@@ -327,7 +327,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Priority(val) = attr? {
+            if let Ok(RouteAttrs::Priority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -342,7 +342,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Prefsrc(val) = attr? {
+            if let Ok(RouteAttrs::Prefsrc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -357,7 +357,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Metrics(val) = attr? {
+            if let Ok(RouteAttrs::Metrics(val)) = attr {
                 return Ok(val);
             }
         }
@@ -372,7 +372,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Multipath(val) = attr? {
+            if let Ok(RouteAttrs::Multipath(val)) = attr {
                 return Ok(val);
             }
         }
@@ -387,7 +387,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Protoinfo(val) = attr? {
+            if let Ok(RouteAttrs::Protoinfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -402,7 +402,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Flow(val) = attr? {
+            if let Ok(RouteAttrs::Flow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -417,7 +417,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Cacheinfo(val) = attr? {
+            if let Ok(RouteAttrs::Cacheinfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -432,7 +432,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Session(val) = attr? {
+            if let Ok(RouteAttrs::Session(val)) = attr {
                 return Ok(val);
             }
         }
@@ -447,7 +447,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::MpAlgo(val) = attr? {
+            if let Ok(RouteAttrs::MpAlgo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -462,7 +462,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Table(val) = attr? {
+            if let Ok(RouteAttrs::Table(val)) = attr {
                 return Ok(val);
             }
         }
@@ -477,7 +477,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Mark(val) = attr? {
+            if let Ok(RouteAttrs::Mark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -492,7 +492,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::MfcStats(val) = attr? {
+            if let Ok(RouteAttrs::MfcStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -507,7 +507,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Via(val) = attr? {
+            if let Ok(RouteAttrs::Via(val)) = attr {
                 return Ok(val);
             }
         }
@@ -522,7 +522,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Newdst(val) = attr? {
+            if let Ok(RouteAttrs::Newdst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -537,7 +537,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Pref(val) = attr? {
+            if let Ok(RouteAttrs::Pref(val)) = attr {
                 return Ok(val);
             }
         }
@@ -552,7 +552,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::EncapType(val) = attr? {
+            if let Ok(RouteAttrs::EncapType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -567,7 +567,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Encap(val) = attr? {
+            if let Ok(RouteAttrs::Encap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -582,7 +582,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Expires(val) = attr? {
+            if let Ok(RouteAttrs::Expires(val)) = attr {
                 return Ok(val);
             }
         }
@@ -597,7 +597,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Pad(val) = attr? {
+            if let Ok(RouteAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -612,7 +612,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Uid(val) = attr? {
+            if let Ok(RouteAttrs::Uid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -627,7 +627,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::TtlPropagate(val) = attr? {
+            if let Ok(RouteAttrs::TtlPropagate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -642,7 +642,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::IpProto(val) = attr? {
+            if let Ok(RouteAttrs::IpProto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -657,7 +657,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Sport(val) = attr? {
+            if let Ok(RouteAttrs::Sport(val)) = attr {
                 return Ok(val);
             }
         }
@@ -672,7 +672,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Dport(val) = attr? {
+            if let Ok(RouteAttrs::Dport(val)) = attr {
                 return Ok(val);
             }
         }
@@ -687,7 +687,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::NhId(val) = attr? {
+            if let Ok(RouteAttrs::NhId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -702,7 +702,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Flowlabel(val) = attr? {
+            if let Ok(RouteAttrs::Flowlabel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -777,14 +777,16 @@ impl<'a> IterableRouteAttrs<'a> {
 impl<'a> Iterator for IterableRouteAttrs<'a> {
     type Item = Result<RouteAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1252,7 +1254,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Lock(val) = attr? {
+            if let Ok(Metrics::Lock(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1267,7 +1269,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Mtu(val) = attr? {
+            if let Ok(Metrics::Mtu(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1282,7 +1284,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Window(val) = attr? {
+            if let Ok(Metrics::Window(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1297,7 +1299,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Rtt(val) = attr? {
+            if let Ok(Metrics::Rtt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1312,7 +1314,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Rttvar(val) = attr? {
+            if let Ok(Metrics::Rttvar(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1327,7 +1329,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Ssthresh(val) = attr? {
+            if let Ok(Metrics::Ssthresh(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1342,7 +1344,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Cwnd(val) = attr? {
+            if let Ok(Metrics::Cwnd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1357,7 +1359,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Advmss(val) = attr? {
+            if let Ok(Metrics::Advmss(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1372,7 +1374,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Reordering(val) = attr? {
+            if let Ok(Metrics::Reordering(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1387,7 +1389,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Hoplimit(val) = attr? {
+            if let Ok(Metrics::Hoplimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1402,7 +1404,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Initcwnd(val) = attr? {
+            if let Ok(Metrics::Initcwnd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1417,7 +1419,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Features(val) = attr? {
+            if let Ok(Metrics::Features(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1432,7 +1434,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::RtoMin(val) = attr? {
+            if let Ok(Metrics::RtoMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1447,7 +1449,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Initrwnd(val) = attr? {
+            if let Ok(Metrics::Initrwnd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1462,7 +1464,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::Quickack(val) = attr? {
+            if let Ok(Metrics::Quickack(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1477,7 +1479,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::CcAlgo(val) = attr? {
+            if let Ok(Metrics::CcAlgo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1492,7 +1494,7 @@ impl<'a> IterableMetrics<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Metrics::FastopenNoCookie(val) = attr? {
+            if let Ok(Metrics::FastopenNoCookie(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1554,14 +1556,16 @@ impl<'a> IterableMetrics<'a> {
 impl<'a> Iterator for IterableMetrics<'a> {
     type Item = Result<Metrics<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2176,7 +2180,7 @@ impl<Prev: Rec> Drop for PushMetrics<Prev> {
         }
     }
 }
-#[doc = "Dump route information\\.\n\nReply attributes:\n- [.get_dst()](IterableRouteAttrs::get_dst)\n- [.get_src()](IterableRouteAttrs::get_src)\n- [.get_iif()](IterableRouteAttrs::get_iif)\n- [.get_oif()](IterableRouteAttrs::get_oif)\n- [.get_gateway()](IterableRouteAttrs::get_gateway)\n- [.get_priority()](IterableRouteAttrs::get_priority)\n- [.get_prefsrc()](IterableRouteAttrs::get_prefsrc)\n- [.get_metrics()](IterableRouteAttrs::get_metrics)\n- [.get_multipath()](IterableRouteAttrs::get_multipath)\n- [.get_flow()](IterableRouteAttrs::get_flow)\n- [.get_cacheinfo()](IterableRouteAttrs::get_cacheinfo)\n- [.get_table()](IterableRouteAttrs::get_table)\n- [.get_mark()](IterableRouteAttrs::get_mark)\n- [.get_mfc_stats()](IterableRouteAttrs::get_mfc_stats)\n- [.get_via()](IterableRouteAttrs::get_via)\n- [.get_newdst()](IterableRouteAttrs::get_newdst)\n- [.get_pref()](IterableRouteAttrs::get_pref)\n- [.get_encap_type()](IterableRouteAttrs::get_encap_type)\n- [.get_encap()](IterableRouteAttrs::get_encap)\n- [.get_expires()](IterableRouteAttrs::get_expires)\n- [.get_pad()](IterableRouteAttrs::get_pad)\n- [.get_uid()](IterableRouteAttrs::get_uid)\n- [.get_ttl_propagate()](IterableRouteAttrs::get_ttl_propagate)\n- [.get_ip_proto()](IterableRouteAttrs::get_ip_proto)\n- [.get_sport()](IterableRouteAttrs::get_sport)\n- [.get_dport()](IterableRouteAttrs::get_dport)\n- [.get_nh_id()](IterableRouteAttrs::get_nh_id)\n- [.get_flowlabel()](IterableRouteAttrs::get_flowlabel)\n"]
+#[doc = "Dump route information.\n\nReply attributes:\n- [.get_dst()](IterableRouteAttrs::get_dst)\n- [.get_src()](IterableRouteAttrs::get_src)\n- [.get_iif()](IterableRouteAttrs::get_iif)\n- [.get_oif()](IterableRouteAttrs::get_oif)\n- [.get_gateway()](IterableRouteAttrs::get_gateway)\n- [.get_priority()](IterableRouteAttrs::get_priority)\n- [.get_prefsrc()](IterableRouteAttrs::get_prefsrc)\n- [.get_metrics()](IterableRouteAttrs::get_metrics)\n- [.get_multipath()](IterableRouteAttrs::get_multipath)\n- [.get_flow()](IterableRouteAttrs::get_flow)\n- [.get_cacheinfo()](IterableRouteAttrs::get_cacheinfo)\n- [.get_table()](IterableRouteAttrs::get_table)\n- [.get_mark()](IterableRouteAttrs::get_mark)\n- [.get_mfc_stats()](IterableRouteAttrs::get_mfc_stats)\n- [.get_via()](IterableRouteAttrs::get_via)\n- [.get_newdst()](IterableRouteAttrs::get_newdst)\n- [.get_pref()](IterableRouteAttrs::get_pref)\n- [.get_encap_type()](IterableRouteAttrs::get_encap_type)\n- [.get_encap()](IterableRouteAttrs::get_encap)\n- [.get_expires()](IterableRouteAttrs::get_expires)\n- [.get_pad()](IterableRouteAttrs::get_pad)\n- [.get_uid()](IterableRouteAttrs::get_uid)\n- [.get_ttl_propagate()](IterableRouteAttrs::get_ttl_propagate)\n- [.get_ip_proto()](IterableRouteAttrs::get_ip_proto)\n- [.get_sport()](IterableRouteAttrs::get_sport)\n- [.get_dport()](IterableRouteAttrs::get_dport)\n- [.get_nh_id()](IterableRouteAttrs::get_nh_id)\n- [.get_flowlabel()](IterableRouteAttrs::get_flowlabel)\n\n"]
 #[derive(Debug)]
 pub struct OpGetrouteDump<'r> {
     request: Request<'r>,
@@ -2239,7 +2243,7 @@ impl NetlinkRequest for OpGetrouteDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Dump route information\\.\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n\nReply attributes:\n- [.get_dst()](IterableRouteAttrs::get_dst)\n- [.get_src()](IterableRouteAttrs::get_src)\n- [.get_iif()](IterableRouteAttrs::get_iif)\n- [.get_oif()](IterableRouteAttrs::get_oif)\n- [.get_gateway()](IterableRouteAttrs::get_gateway)\n- [.get_priority()](IterableRouteAttrs::get_priority)\n- [.get_prefsrc()](IterableRouteAttrs::get_prefsrc)\n- [.get_metrics()](IterableRouteAttrs::get_metrics)\n- [.get_multipath()](IterableRouteAttrs::get_multipath)\n- [.get_flow()](IterableRouteAttrs::get_flow)\n- [.get_cacheinfo()](IterableRouteAttrs::get_cacheinfo)\n- [.get_table()](IterableRouteAttrs::get_table)\n- [.get_mark()](IterableRouteAttrs::get_mark)\n- [.get_mfc_stats()](IterableRouteAttrs::get_mfc_stats)\n- [.get_via()](IterableRouteAttrs::get_via)\n- [.get_newdst()](IterableRouteAttrs::get_newdst)\n- [.get_pref()](IterableRouteAttrs::get_pref)\n- [.get_encap_type()](IterableRouteAttrs::get_encap_type)\n- [.get_encap()](IterableRouteAttrs::get_encap)\n- [.get_expires()](IterableRouteAttrs::get_expires)\n- [.get_pad()](IterableRouteAttrs::get_pad)\n- [.get_uid()](IterableRouteAttrs::get_uid)\n- [.get_ttl_propagate()](IterableRouteAttrs::get_ttl_propagate)\n- [.get_ip_proto()](IterableRouteAttrs::get_ip_proto)\n- [.get_sport()](IterableRouteAttrs::get_sport)\n- [.get_dport()](IterableRouteAttrs::get_dport)\n- [.get_nh_id()](IterableRouteAttrs::get_nh_id)\n- [.get_flowlabel()](IterableRouteAttrs::get_flowlabel)\n"]
+#[doc = "Dump route information.\n\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n\nReply attributes:\n- [.get_dst()](IterableRouteAttrs::get_dst)\n- [.get_src()](IterableRouteAttrs::get_src)\n- [.get_iif()](IterableRouteAttrs::get_iif)\n- [.get_oif()](IterableRouteAttrs::get_oif)\n- [.get_gateway()](IterableRouteAttrs::get_gateway)\n- [.get_priority()](IterableRouteAttrs::get_priority)\n- [.get_prefsrc()](IterableRouteAttrs::get_prefsrc)\n- [.get_metrics()](IterableRouteAttrs::get_metrics)\n- [.get_multipath()](IterableRouteAttrs::get_multipath)\n- [.get_flow()](IterableRouteAttrs::get_flow)\n- [.get_cacheinfo()](IterableRouteAttrs::get_cacheinfo)\n- [.get_table()](IterableRouteAttrs::get_table)\n- [.get_mark()](IterableRouteAttrs::get_mark)\n- [.get_mfc_stats()](IterableRouteAttrs::get_mfc_stats)\n- [.get_via()](IterableRouteAttrs::get_via)\n- [.get_newdst()](IterableRouteAttrs::get_newdst)\n- [.get_pref()](IterableRouteAttrs::get_pref)\n- [.get_encap_type()](IterableRouteAttrs::get_encap_type)\n- [.get_encap()](IterableRouteAttrs::get_encap)\n- [.get_expires()](IterableRouteAttrs::get_expires)\n- [.get_pad()](IterableRouteAttrs::get_pad)\n- [.get_uid()](IterableRouteAttrs::get_uid)\n- [.get_ttl_propagate()](IterableRouteAttrs::get_ttl_propagate)\n- [.get_ip_proto()](IterableRouteAttrs::get_ip_proto)\n- [.get_sport()](IterableRouteAttrs::get_sport)\n- [.get_dport()](IterableRouteAttrs::get_dport)\n- [.get_nh_id()](IterableRouteAttrs::get_nh_id)\n- [.get_flowlabel()](IterableRouteAttrs::get_flowlabel)\n\n"]
 #[derive(Debug)]
 pub struct OpGetrouteDo<'r> {
     request: Request<'r>,
@@ -2300,7 +2304,7 @@ impl NetlinkRequest for OpGetrouteDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create a new route\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_gateway()](PushRouteAttrs::push_gateway)\n- [.push_priority()](PushRouteAttrs::push_priority)\n- [.push_prefsrc()](PushRouteAttrs::push_prefsrc)\n- [.nested_metrics()](PushRouteAttrs::nested_metrics)\n- [.push_multipath()](PushRouteAttrs::push_multipath)\n- [.push_flow()](PushRouteAttrs::push_flow)\n- [.push_cacheinfo()](PushRouteAttrs::push_cacheinfo)\n- [.push_table()](PushRouteAttrs::push_table)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_mfc_stats()](PushRouteAttrs::push_mfc_stats)\n- [.push_via()](PushRouteAttrs::push_via)\n- [.push_newdst()](PushRouteAttrs::push_newdst)\n- [.push_pref()](PushRouteAttrs::push_pref)\n- [.push_encap_type()](PushRouteAttrs::push_encap_type)\n- [.push_encap()](PushRouteAttrs::push_encap)\n- [.push_expires()](PushRouteAttrs::push_expires)\n- [.push_pad()](PushRouteAttrs::push_pad)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ttl_propagate()](PushRouteAttrs::push_ttl_propagate)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_nh_id()](PushRouteAttrs::push_nh_id)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n"]
+#[doc = "Create a new route\n\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_gateway()](PushRouteAttrs::push_gateway)\n- [.push_priority()](PushRouteAttrs::push_priority)\n- [.push_prefsrc()](PushRouteAttrs::push_prefsrc)\n- [.nested_metrics()](PushRouteAttrs::nested_metrics)\n- [.push_multipath()](PushRouteAttrs::push_multipath)\n- [.push_flow()](PushRouteAttrs::push_flow)\n- [.push_cacheinfo()](PushRouteAttrs::push_cacheinfo)\n- [.push_table()](PushRouteAttrs::push_table)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_mfc_stats()](PushRouteAttrs::push_mfc_stats)\n- [.push_via()](PushRouteAttrs::push_via)\n- [.push_newdst()](PushRouteAttrs::push_newdst)\n- [.push_pref()](PushRouteAttrs::push_pref)\n- [.push_encap_type()](PushRouteAttrs::push_encap_type)\n- [.push_encap()](PushRouteAttrs::push_encap)\n- [.push_expires()](PushRouteAttrs::push_expires)\n- [.push_pad()](PushRouteAttrs::push_pad)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ttl_propagate()](PushRouteAttrs::push_ttl_propagate)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_nh_id()](PushRouteAttrs::push_nh_id)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n\n"]
 #[derive(Debug)]
 pub struct OpNewrouteDo<'r> {
     request: Request<'r>,
@@ -2361,7 +2365,7 @@ impl NetlinkRequest for OpNewrouteDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing route\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_gateway()](PushRouteAttrs::push_gateway)\n- [.push_priority()](PushRouteAttrs::push_priority)\n- [.push_prefsrc()](PushRouteAttrs::push_prefsrc)\n- [.nested_metrics()](PushRouteAttrs::nested_metrics)\n- [.push_multipath()](PushRouteAttrs::push_multipath)\n- [.push_flow()](PushRouteAttrs::push_flow)\n- [.push_cacheinfo()](PushRouteAttrs::push_cacheinfo)\n- [.push_table()](PushRouteAttrs::push_table)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_mfc_stats()](PushRouteAttrs::push_mfc_stats)\n- [.push_via()](PushRouteAttrs::push_via)\n- [.push_newdst()](PushRouteAttrs::push_newdst)\n- [.push_pref()](PushRouteAttrs::push_pref)\n- [.push_encap_type()](PushRouteAttrs::push_encap_type)\n- [.push_encap()](PushRouteAttrs::push_encap)\n- [.push_expires()](PushRouteAttrs::push_expires)\n- [.push_pad()](PushRouteAttrs::push_pad)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ttl_propagate()](PushRouteAttrs::push_ttl_propagate)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_nh_id()](PushRouteAttrs::push_nh_id)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n"]
+#[doc = "Delete an existing route\n\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_gateway()](PushRouteAttrs::push_gateway)\n- [.push_priority()](PushRouteAttrs::push_priority)\n- [.push_prefsrc()](PushRouteAttrs::push_prefsrc)\n- [.nested_metrics()](PushRouteAttrs::nested_metrics)\n- [.push_multipath()](PushRouteAttrs::push_multipath)\n- [.push_flow()](PushRouteAttrs::push_flow)\n- [.push_cacheinfo()](PushRouteAttrs::push_cacheinfo)\n- [.push_table()](PushRouteAttrs::push_table)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_mfc_stats()](PushRouteAttrs::push_mfc_stats)\n- [.push_via()](PushRouteAttrs::push_via)\n- [.push_newdst()](PushRouteAttrs::push_newdst)\n- [.push_pref()](PushRouteAttrs::push_pref)\n- [.push_encap_type()](PushRouteAttrs::push_encap_type)\n- [.push_encap()](PushRouteAttrs::push_encap)\n- [.push_expires()](PushRouteAttrs::push_expires)\n- [.push_pad()](PushRouteAttrs::push_pad)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ttl_propagate()](PushRouteAttrs::push_ttl_propagate)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_nh_id()](PushRouteAttrs::push_nh_id)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n\n"]
 #[derive(Debug)]
 pub struct OpDelrouteDo<'r> {
     request: Request<'r>,
@@ -2663,28 +2667,28 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Dump route information\\.\n\nReply attributes:\n- [.get_dst()](IterableRouteAttrs::get_dst)\n- [.get_src()](IterableRouteAttrs::get_src)\n- [.get_iif()](IterableRouteAttrs::get_iif)\n- [.get_oif()](IterableRouteAttrs::get_oif)\n- [.get_gateway()](IterableRouteAttrs::get_gateway)\n- [.get_priority()](IterableRouteAttrs::get_priority)\n- [.get_prefsrc()](IterableRouteAttrs::get_prefsrc)\n- [.get_metrics()](IterableRouteAttrs::get_metrics)\n- [.get_multipath()](IterableRouteAttrs::get_multipath)\n- [.get_flow()](IterableRouteAttrs::get_flow)\n- [.get_cacheinfo()](IterableRouteAttrs::get_cacheinfo)\n- [.get_table()](IterableRouteAttrs::get_table)\n- [.get_mark()](IterableRouteAttrs::get_mark)\n- [.get_mfc_stats()](IterableRouteAttrs::get_mfc_stats)\n- [.get_via()](IterableRouteAttrs::get_via)\n- [.get_newdst()](IterableRouteAttrs::get_newdst)\n- [.get_pref()](IterableRouteAttrs::get_pref)\n- [.get_encap_type()](IterableRouteAttrs::get_encap_type)\n- [.get_encap()](IterableRouteAttrs::get_encap)\n- [.get_expires()](IterableRouteAttrs::get_expires)\n- [.get_pad()](IterableRouteAttrs::get_pad)\n- [.get_uid()](IterableRouteAttrs::get_uid)\n- [.get_ttl_propagate()](IterableRouteAttrs::get_ttl_propagate)\n- [.get_ip_proto()](IterableRouteAttrs::get_ip_proto)\n- [.get_sport()](IterableRouteAttrs::get_sport)\n- [.get_dport()](IterableRouteAttrs::get_dport)\n- [.get_nh_id()](IterableRouteAttrs::get_nh_id)\n- [.get_flowlabel()](IterableRouteAttrs::get_flowlabel)\n"]
+    #[doc = "Dump route information.\n\nReply attributes:\n- [.get_dst()](IterableRouteAttrs::get_dst)\n- [.get_src()](IterableRouteAttrs::get_src)\n- [.get_iif()](IterableRouteAttrs::get_iif)\n- [.get_oif()](IterableRouteAttrs::get_oif)\n- [.get_gateway()](IterableRouteAttrs::get_gateway)\n- [.get_priority()](IterableRouteAttrs::get_priority)\n- [.get_prefsrc()](IterableRouteAttrs::get_prefsrc)\n- [.get_metrics()](IterableRouteAttrs::get_metrics)\n- [.get_multipath()](IterableRouteAttrs::get_multipath)\n- [.get_flow()](IterableRouteAttrs::get_flow)\n- [.get_cacheinfo()](IterableRouteAttrs::get_cacheinfo)\n- [.get_table()](IterableRouteAttrs::get_table)\n- [.get_mark()](IterableRouteAttrs::get_mark)\n- [.get_mfc_stats()](IterableRouteAttrs::get_mfc_stats)\n- [.get_via()](IterableRouteAttrs::get_via)\n- [.get_newdst()](IterableRouteAttrs::get_newdst)\n- [.get_pref()](IterableRouteAttrs::get_pref)\n- [.get_encap_type()](IterableRouteAttrs::get_encap_type)\n- [.get_encap()](IterableRouteAttrs::get_encap)\n- [.get_expires()](IterableRouteAttrs::get_expires)\n- [.get_pad()](IterableRouteAttrs::get_pad)\n- [.get_uid()](IterableRouteAttrs::get_uid)\n- [.get_ttl_propagate()](IterableRouteAttrs::get_ttl_propagate)\n- [.get_ip_proto()](IterableRouteAttrs::get_ip_proto)\n- [.get_sport()](IterableRouteAttrs::get_sport)\n- [.get_dport()](IterableRouteAttrs::get_dport)\n- [.get_nh_id()](IterableRouteAttrs::get_nh_id)\n- [.get_flowlabel()](IterableRouteAttrs::get_flowlabel)\n\n"]
     pub fn op_getroute_dump(self, header: &Rtmsg) -> OpGetrouteDump<'buf> {
         let mut res = OpGetrouteDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getroute-dump", OpGetrouteDump::lookup);
         res
     }
-    #[doc = "Dump route information\\.\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n\nReply attributes:\n- [.get_dst()](IterableRouteAttrs::get_dst)\n- [.get_src()](IterableRouteAttrs::get_src)\n- [.get_iif()](IterableRouteAttrs::get_iif)\n- [.get_oif()](IterableRouteAttrs::get_oif)\n- [.get_gateway()](IterableRouteAttrs::get_gateway)\n- [.get_priority()](IterableRouteAttrs::get_priority)\n- [.get_prefsrc()](IterableRouteAttrs::get_prefsrc)\n- [.get_metrics()](IterableRouteAttrs::get_metrics)\n- [.get_multipath()](IterableRouteAttrs::get_multipath)\n- [.get_flow()](IterableRouteAttrs::get_flow)\n- [.get_cacheinfo()](IterableRouteAttrs::get_cacheinfo)\n- [.get_table()](IterableRouteAttrs::get_table)\n- [.get_mark()](IterableRouteAttrs::get_mark)\n- [.get_mfc_stats()](IterableRouteAttrs::get_mfc_stats)\n- [.get_via()](IterableRouteAttrs::get_via)\n- [.get_newdst()](IterableRouteAttrs::get_newdst)\n- [.get_pref()](IterableRouteAttrs::get_pref)\n- [.get_encap_type()](IterableRouteAttrs::get_encap_type)\n- [.get_encap()](IterableRouteAttrs::get_encap)\n- [.get_expires()](IterableRouteAttrs::get_expires)\n- [.get_pad()](IterableRouteAttrs::get_pad)\n- [.get_uid()](IterableRouteAttrs::get_uid)\n- [.get_ttl_propagate()](IterableRouteAttrs::get_ttl_propagate)\n- [.get_ip_proto()](IterableRouteAttrs::get_ip_proto)\n- [.get_sport()](IterableRouteAttrs::get_sport)\n- [.get_dport()](IterableRouteAttrs::get_dport)\n- [.get_nh_id()](IterableRouteAttrs::get_nh_id)\n- [.get_flowlabel()](IterableRouteAttrs::get_flowlabel)\n"]
+    #[doc = "Dump route information.\n\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n\nReply attributes:\n- [.get_dst()](IterableRouteAttrs::get_dst)\n- [.get_src()](IterableRouteAttrs::get_src)\n- [.get_iif()](IterableRouteAttrs::get_iif)\n- [.get_oif()](IterableRouteAttrs::get_oif)\n- [.get_gateway()](IterableRouteAttrs::get_gateway)\n- [.get_priority()](IterableRouteAttrs::get_priority)\n- [.get_prefsrc()](IterableRouteAttrs::get_prefsrc)\n- [.get_metrics()](IterableRouteAttrs::get_metrics)\n- [.get_multipath()](IterableRouteAttrs::get_multipath)\n- [.get_flow()](IterableRouteAttrs::get_flow)\n- [.get_cacheinfo()](IterableRouteAttrs::get_cacheinfo)\n- [.get_table()](IterableRouteAttrs::get_table)\n- [.get_mark()](IterableRouteAttrs::get_mark)\n- [.get_mfc_stats()](IterableRouteAttrs::get_mfc_stats)\n- [.get_via()](IterableRouteAttrs::get_via)\n- [.get_newdst()](IterableRouteAttrs::get_newdst)\n- [.get_pref()](IterableRouteAttrs::get_pref)\n- [.get_encap_type()](IterableRouteAttrs::get_encap_type)\n- [.get_encap()](IterableRouteAttrs::get_encap)\n- [.get_expires()](IterableRouteAttrs::get_expires)\n- [.get_pad()](IterableRouteAttrs::get_pad)\n- [.get_uid()](IterableRouteAttrs::get_uid)\n- [.get_ttl_propagate()](IterableRouteAttrs::get_ttl_propagate)\n- [.get_ip_proto()](IterableRouteAttrs::get_ip_proto)\n- [.get_sport()](IterableRouteAttrs::get_sport)\n- [.get_dport()](IterableRouteAttrs::get_dport)\n- [.get_nh_id()](IterableRouteAttrs::get_nh_id)\n- [.get_flowlabel()](IterableRouteAttrs::get_flowlabel)\n\n"]
     pub fn op_getroute_do(self, header: &Rtmsg) -> OpGetrouteDo<'buf> {
         let mut res = OpGetrouteDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getroute-do", OpGetrouteDo::lookup);
         res
     }
-    #[doc = "Create a new route\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_gateway()](PushRouteAttrs::push_gateway)\n- [.push_priority()](PushRouteAttrs::push_priority)\n- [.push_prefsrc()](PushRouteAttrs::push_prefsrc)\n- [.nested_metrics()](PushRouteAttrs::nested_metrics)\n- [.push_multipath()](PushRouteAttrs::push_multipath)\n- [.push_flow()](PushRouteAttrs::push_flow)\n- [.push_cacheinfo()](PushRouteAttrs::push_cacheinfo)\n- [.push_table()](PushRouteAttrs::push_table)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_mfc_stats()](PushRouteAttrs::push_mfc_stats)\n- [.push_via()](PushRouteAttrs::push_via)\n- [.push_newdst()](PushRouteAttrs::push_newdst)\n- [.push_pref()](PushRouteAttrs::push_pref)\n- [.push_encap_type()](PushRouteAttrs::push_encap_type)\n- [.push_encap()](PushRouteAttrs::push_encap)\n- [.push_expires()](PushRouteAttrs::push_expires)\n- [.push_pad()](PushRouteAttrs::push_pad)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ttl_propagate()](PushRouteAttrs::push_ttl_propagate)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_nh_id()](PushRouteAttrs::push_nh_id)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n"]
+    #[doc = "Create a new route\n\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_gateway()](PushRouteAttrs::push_gateway)\n- [.push_priority()](PushRouteAttrs::push_priority)\n- [.push_prefsrc()](PushRouteAttrs::push_prefsrc)\n- [.nested_metrics()](PushRouteAttrs::nested_metrics)\n- [.push_multipath()](PushRouteAttrs::push_multipath)\n- [.push_flow()](PushRouteAttrs::push_flow)\n- [.push_cacheinfo()](PushRouteAttrs::push_cacheinfo)\n- [.push_table()](PushRouteAttrs::push_table)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_mfc_stats()](PushRouteAttrs::push_mfc_stats)\n- [.push_via()](PushRouteAttrs::push_via)\n- [.push_newdst()](PushRouteAttrs::push_newdst)\n- [.push_pref()](PushRouteAttrs::push_pref)\n- [.push_encap_type()](PushRouteAttrs::push_encap_type)\n- [.push_encap()](PushRouteAttrs::push_encap)\n- [.push_expires()](PushRouteAttrs::push_expires)\n- [.push_pad()](PushRouteAttrs::push_pad)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ttl_propagate()](PushRouteAttrs::push_ttl_propagate)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_nh_id()](PushRouteAttrs::push_nh_id)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n\n"]
     pub fn op_newroute_do(self, header: &Rtmsg) -> OpNewrouteDo<'buf> {
         let mut res = OpNewrouteDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newroute-do", OpNewrouteDo::lookup);
         res
     }
-    #[doc = "Delete an existing route\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_gateway()](PushRouteAttrs::push_gateway)\n- [.push_priority()](PushRouteAttrs::push_priority)\n- [.push_prefsrc()](PushRouteAttrs::push_prefsrc)\n- [.nested_metrics()](PushRouteAttrs::nested_metrics)\n- [.push_multipath()](PushRouteAttrs::push_multipath)\n- [.push_flow()](PushRouteAttrs::push_flow)\n- [.push_cacheinfo()](PushRouteAttrs::push_cacheinfo)\n- [.push_table()](PushRouteAttrs::push_table)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_mfc_stats()](PushRouteAttrs::push_mfc_stats)\n- [.push_via()](PushRouteAttrs::push_via)\n- [.push_newdst()](PushRouteAttrs::push_newdst)\n- [.push_pref()](PushRouteAttrs::push_pref)\n- [.push_encap_type()](PushRouteAttrs::push_encap_type)\n- [.push_encap()](PushRouteAttrs::push_encap)\n- [.push_expires()](PushRouteAttrs::push_expires)\n- [.push_pad()](PushRouteAttrs::push_pad)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ttl_propagate()](PushRouteAttrs::push_ttl_propagate)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_nh_id()](PushRouteAttrs::push_nh_id)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n"]
+    #[doc = "Delete an existing route\n\nRequest attributes:\n- [.push_dst()](PushRouteAttrs::push_dst)\n- [.push_src()](PushRouteAttrs::push_src)\n- [.push_iif()](PushRouteAttrs::push_iif)\n- [.push_oif()](PushRouteAttrs::push_oif)\n- [.push_gateway()](PushRouteAttrs::push_gateway)\n- [.push_priority()](PushRouteAttrs::push_priority)\n- [.push_prefsrc()](PushRouteAttrs::push_prefsrc)\n- [.nested_metrics()](PushRouteAttrs::nested_metrics)\n- [.push_multipath()](PushRouteAttrs::push_multipath)\n- [.push_flow()](PushRouteAttrs::push_flow)\n- [.push_cacheinfo()](PushRouteAttrs::push_cacheinfo)\n- [.push_table()](PushRouteAttrs::push_table)\n- [.push_mark()](PushRouteAttrs::push_mark)\n- [.push_mfc_stats()](PushRouteAttrs::push_mfc_stats)\n- [.push_via()](PushRouteAttrs::push_via)\n- [.push_newdst()](PushRouteAttrs::push_newdst)\n- [.push_pref()](PushRouteAttrs::push_pref)\n- [.push_encap_type()](PushRouteAttrs::push_encap_type)\n- [.push_encap()](PushRouteAttrs::push_encap)\n- [.push_expires()](PushRouteAttrs::push_expires)\n- [.push_pad()](PushRouteAttrs::push_pad)\n- [.push_uid()](PushRouteAttrs::push_uid)\n- [.push_ttl_propagate()](PushRouteAttrs::push_ttl_propagate)\n- [.push_ip_proto()](PushRouteAttrs::push_ip_proto)\n- [.push_sport()](PushRouteAttrs::push_sport)\n- [.push_dport()](PushRouteAttrs::push_dport)\n- [.push_nh_id()](PushRouteAttrs::push_nh_id)\n- [.push_flowlabel()](PushRouteAttrs::push_flowlabel)\n\n"]
     pub fn op_delroute_do(self, header: &Rtmsg) -> OpDelrouteDo<'buf> {
         let mut res = OpDelrouteDo::new(self, header);
         res.request

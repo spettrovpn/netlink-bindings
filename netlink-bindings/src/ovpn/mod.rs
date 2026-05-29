@@ -1,4 +1,4 @@
-#![doc = "Netlink protocol to control OpenVPN network devices"]
+#![doc = "Netlink protocol to control OpenVPN network devices\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -71,60 +71,62 @@ impl KeySlot {
 }
 #[derive(Clone)]
 pub enum Peer<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     Id(u32),
-    #[doc = "The remote IPv4 address of the peer"]
+    #[doc = "The remote IPv4 address of the peer\n"]
     RemoteIpv4(std::net::Ipv4Addr),
-    #[doc = "The remote IPv6 address of the peer"]
+    #[doc = "The remote IPv6 address of the peer\n"]
     RemoteIpv6(&'a [u8]),
-    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)"]
+    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     RemoteIpv6ScopeId(u32),
-    #[doc = "The remote port of the peer"]
+    #[doc = "The remote port of the peer\n"]
     RemotePort(u16),
-    #[doc = "The socket to be used to communicate with the peer"]
+    #[doc = "The socket to be used to communicate with the peer\n"]
     Socket(u32),
-    #[doc = "The ID of the netns the socket assigned to this peer lives in"]
+    #[doc = "The ID of the netns the socket assigned to this peer lives in\n"]
     SocketNetnsid(i32),
-    #[doc = "The IPv4 address assigned to the peer by the server"]
+    #[doc = "The IPv4 address assigned to the peer by the server\n"]
     VpnIpv4(std::net::Ipv4Addr),
-    #[doc = "The IPv6 address assigned to the peer by the server"]
+    #[doc = "The IPv6 address assigned to the peer by the server\n"]
     VpnIpv6(&'a [u8]),
-    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     LocalIpv4(std::net::Ipv4Addr),
-    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     LocalIpv6(&'a [u8]),
-    #[doc = "The local port to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local port to be used to send packets to the peer (UDP only)\n"]
     LocalPort(u16),
-    #[doc = "The number of seconds after which a keep alive message is sent to the peer"]
+    #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     KeepaliveInterval(u32),
-    #[doc = "The number of seconds from the last activity after which the peer is assumed dead"]
+    #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     KeepaliveTimeout(u32),
-    #[doc = "The reason why a peer was deleted\nAssociated type: [`DelPeerReason`] (enum)"]
+    #[doc = "The reason why a peer was deleted\n\nAssociated type: [`DelPeerReason`] (enum)"]
     DelReason(u32),
-    #[doc = "Number of bytes received over the tunnel"]
+    #[doc = "Number of bytes received over the tunnel\n"]
     VpnRxBytes(u32),
-    #[doc = "Number of bytes transmitted over the tunnel"]
+    #[doc = "Number of bytes transmitted over the tunnel\n"]
     VpnTxBytes(u32),
-    #[doc = "Number of packets received over the tunnel"]
+    #[doc = "Number of packets received over the tunnel\n"]
     VpnRxPackets(u32),
-    #[doc = "Number of packets transmitted over the tunnel"]
+    #[doc = "Number of packets transmitted over the tunnel\n"]
     VpnTxPackets(u32),
-    #[doc = "Number of bytes received at the transport level"]
+    #[doc = "Number of bytes received at the transport level\n"]
     LinkRxBytes(u32),
-    #[doc = "Number of bytes transmitted at the transport level"]
+    #[doc = "Number of bytes transmitted at the transport level\n"]
     LinkTxBytes(u32),
-    #[doc = "Number of packets received at the transport level"]
+    #[doc = "Number of packets received at the transport level\n"]
     LinkRxPackets(u32),
-    #[doc = "Number of packets transmitted at the transport level"]
+    #[doc = "Number of packets transmitted at the transport level\n"]
     LinkTxPackets(u32),
+    #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
+    TxId(u32),
 }
 impl<'a> IterablePeer<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::Id(val) = attr? {
+            if let Ok(Peer::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -135,12 +137,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The remote IPv4 address of the peer"]
+    #[doc = "The remote IPv4 address of the peer\n"]
     pub fn get_remote_ipv4(&self) -> Result<std::net::Ipv4Addr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::RemoteIpv4(val) = attr? {
+            if let Ok(Peer::RemoteIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -151,12 +153,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The remote IPv6 address of the peer"]
+    #[doc = "The remote IPv6 address of the peer\n"]
     pub fn get_remote_ipv6(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::RemoteIpv6(val) = attr? {
+            if let Ok(Peer::RemoteIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -167,12 +169,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)"]
+    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     pub fn get_remote_ipv6_scope_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::RemoteIpv6ScopeId(val) = attr? {
+            if let Ok(Peer::RemoteIpv6ScopeId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -183,12 +185,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The remote port of the peer"]
+    #[doc = "The remote port of the peer\n"]
     pub fn get_remote_port(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::RemotePort(val) = attr? {
+            if let Ok(Peer::RemotePort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -199,12 +201,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The socket to be used to communicate with the peer"]
+    #[doc = "The socket to be used to communicate with the peer\n"]
     pub fn get_socket(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::Socket(val) = attr? {
+            if let Ok(Peer::Socket(val)) = attr {
                 return Ok(val);
             }
         }
@@ -215,12 +217,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The ID of the netns the socket assigned to this peer lives in"]
+    #[doc = "The ID of the netns the socket assigned to this peer lives in\n"]
     pub fn get_socket_netnsid(&self) -> Result<i32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::SocketNetnsid(val) = attr? {
+            if let Ok(Peer::SocketNetnsid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -231,12 +233,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The IPv4 address assigned to the peer by the server"]
+    #[doc = "The IPv4 address assigned to the peer by the server\n"]
     pub fn get_vpn_ipv4(&self) -> Result<std::net::Ipv4Addr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::VpnIpv4(val) = attr? {
+            if let Ok(Peer::VpnIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -247,12 +249,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The IPv6 address assigned to the peer by the server"]
+    #[doc = "The IPv6 address assigned to the peer by the server\n"]
     pub fn get_vpn_ipv6(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::VpnIpv6(val) = attr? {
+            if let Ok(Peer::VpnIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -263,12 +265,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     pub fn get_local_ipv4(&self) -> Result<std::net::Ipv4Addr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::LocalIpv4(val) = attr? {
+            if let Ok(Peer::LocalIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -279,12 +281,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     pub fn get_local_ipv6(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::LocalIpv6(val) = attr? {
+            if let Ok(Peer::LocalIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -295,12 +297,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The local port to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local port to be used to send packets to the peer (UDP only)\n"]
     pub fn get_local_port(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::LocalPort(val) = attr? {
+            if let Ok(Peer::LocalPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -311,12 +313,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The number of seconds after which a keep alive message is sent to the peer"]
+    #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     pub fn get_keepalive_interval(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::KeepaliveInterval(val) = attr? {
+            if let Ok(Peer::KeepaliveInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -327,12 +329,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The number of seconds from the last activity after which the peer is assumed dead"]
+    #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     pub fn get_keepalive_timeout(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::KeepaliveTimeout(val) = attr? {
+            if let Ok(Peer::KeepaliveTimeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -343,12 +345,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The reason why a peer was deleted\nAssociated type: [`DelPeerReason`] (enum)"]
+    #[doc = "The reason why a peer was deleted\n\nAssociated type: [`DelPeerReason`] (enum)"]
     pub fn get_del_reason(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::DelReason(val) = attr? {
+            if let Ok(Peer::DelReason(val)) = attr {
                 return Ok(val);
             }
         }
@@ -359,12 +361,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of bytes received over the tunnel"]
+    #[doc = "Number of bytes received over the tunnel\n"]
     pub fn get_vpn_rx_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::VpnRxBytes(val) = attr? {
+            if let Ok(Peer::VpnRxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -375,12 +377,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of bytes transmitted over the tunnel"]
+    #[doc = "Number of bytes transmitted over the tunnel\n"]
     pub fn get_vpn_tx_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::VpnTxBytes(val) = attr? {
+            if let Ok(Peer::VpnTxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -391,12 +393,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets received over the tunnel"]
+    #[doc = "Number of packets received over the tunnel\n"]
     pub fn get_vpn_rx_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::VpnRxPackets(val) = attr? {
+            if let Ok(Peer::VpnRxPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -407,12 +409,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets transmitted over the tunnel"]
+    #[doc = "Number of packets transmitted over the tunnel\n"]
     pub fn get_vpn_tx_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::VpnTxPackets(val) = attr? {
+            if let Ok(Peer::VpnTxPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -423,12 +425,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of bytes received at the transport level"]
+    #[doc = "Number of bytes received at the transport level\n"]
     pub fn get_link_rx_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::LinkRxBytes(val) = attr? {
+            if let Ok(Peer::LinkRxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -439,12 +441,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of bytes transmitted at the transport level"]
+    #[doc = "Number of bytes transmitted at the transport level\n"]
     pub fn get_link_tx_bytes(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::LinkTxBytes(val) = attr? {
+            if let Ok(Peer::LinkTxBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -455,12 +457,12 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets received at the transport level"]
+    #[doc = "Number of packets received at the transport level\n"]
     pub fn get_link_rx_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::LinkRxPackets(val) = attr? {
+            if let Ok(Peer::LinkRxPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -471,18 +473,34 @@ impl<'a> IterablePeer<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets transmitted at the transport level"]
+    #[doc = "Number of packets transmitted at the transport level\n"]
     pub fn get_link_tx_packets(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Peer::LinkTxPackets(val) = attr? {
+            if let Ok(Peer::LinkTxPackets(val)) = attr {
                 return Ok(val);
             }
         }
         Err(ErrorContext::new_missing(
             "Peer",
             "LinkTxPackets",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
+    pub fn get_tx_id(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Peer::TxId(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Peer",
+            "TxId",
             self.orig_loc,
             self.buf.as_ptr() as usize,
         ))
@@ -517,6 +535,7 @@ impl Peer<'_> {
             21u16 => "LinkTxBytes",
             22u16 => "LinkRxPackets",
             23u16 => "LinkTxPackets",
+            24u16 => "TxId",
             _ => return None,
         };
         Some(res)
@@ -543,14 +562,16 @@ impl<'a> IterablePeer<'a> {
 impl<'a> Iterator for IterablePeer<'a> {
     type Item = Result<Peer<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -670,6 +691,11 @@ impl<'a> Iterator for IterablePeer<'a> {
                     let Some(val) = res else { break };
                     val
                 }),
+                24u16 => Peer::TxId({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -723,6 +749,7 @@ impl<'a> std::fmt::Debug for IterablePeer<'_> {
                 Peer::LinkTxBytes(val) => fmt.field("LinkTxBytes", &val),
                 Peer::LinkRxPackets(val) => fmt.field("LinkRxPackets", &val),
                 Peer::LinkTxPackets(val) => fmt.field("LinkTxPackets", &val),
+                Peer::TxId(val) => fmt.field("TxId", &val),
             };
         }
         fmt.finish()
@@ -886,6 +913,12 @@ impl IterablePeer<'_> {
                         break;
                     }
                 }
+                Peer::TxId(val) => {
+                    if last_off == offset {
+                        stack.push(("TxId", last_off));
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -898,38 +931,40 @@ impl IterablePeer<'_> {
 }
 #[derive(Clone)]
 pub enum PeerNewInput<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     Id(u32),
-    #[doc = "The remote IPv4 address of the peer"]
+    #[doc = "The remote IPv4 address of the peer\n"]
     RemoteIpv4(std::net::Ipv4Addr),
-    #[doc = "The remote IPv6 address of the peer"]
+    #[doc = "The remote IPv6 address of the peer\n"]
     RemoteIpv6(&'a [u8]),
-    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)"]
+    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     RemoteIpv6ScopeId(u32),
-    #[doc = "The remote port of the peer"]
+    #[doc = "The remote port of the peer\n"]
     RemotePort(u16),
-    #[doc = "The socket to be used to communicate with the peer"]
+    #[doc = "The socket to be used to communicate with the peer\n"]
     Socket(u32),
-    #[doc = "The IPv4 address assigned to the peer by the server"]
+    #[doc = "The IPv4 address assigned to the peer by the server\n"]
     VpnIpv4(std::net::Ipv4Addr),
-    #[doc = "The IPv6 address assigned to the peer by the server"]
+    #[doc = "The IPv6 address assigned to the peer by the server\n"]
     VpnIpv6(&'a [u8]),
-    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     LocalIpv4(std::net::Ipv4Addr),
-    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     LocalIpv6(&'a [u8]),
-    #[doc = "The number of seconds after which a keep alive message is sent to the peer"]
+    #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     KeepaliveInterval(u32),
-    #[doc = "The number of seconds from the last activity after which the peer is assumed dead"]
+    #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     KeepaliveTimeout(u32),
+    #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
+    TxId(u32),
 }
 impl<'a> IterablePeerNewInput<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::Id(val) = attr? {
+            if let Ok(PeerNewInput::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -940,12 +975,12 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The remote IPv4 address of the peer"]
+    #[doc = "The remote IPv4 address of the peer\n"]
     pub fn get_remote_ipv4(&self) -> Result<std::net::Ipv4Addr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::RemoteIpv4(val) = attr? {
+            if let Ok(PeerNewInput::RemoteIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -956,12 +991,12 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The remote IPv6 address of the peer"]
+    #[doc = "The remote IPv6 address of the peer\n"]
     pub fn get_remote_ipv6(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::RemoteIpv6(val) = attr? {
+            if let Ok(PeerNewInput::RemoteIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -972,12 +1007,12 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)"]
+    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     pub fn get_remote_ipv6_scope_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::RemoteIpv6ScopeId(val) = attr? {
+            if let Ok(PeerNewInput::RemoteIpv6ScopeId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -988,12 +1023,12 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The remote port of the peer"]
+    #[doc = "The remote port of the peer\n"]
     pub fn get_remote_port(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::RemotePort(val) = attr? {
+            if let Ok(PeerNewInput::RemotePort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1004,12 +1039,12 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The socket to be used to communicate with the peer"]
+    #[doc = "The socket to be used to communicate with the peer\n"]
     pub fn get_socket(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::Socket(val) = attr? {
+            if let Ok(PeerNewInput::Socket(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1020,12 +1055,12 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The IPv4 address assigned to the peer by the server"]
+    #[doc = "The IPv4 address assigned to the peer by the server\n"]
     pub fn get_vpn_ipv4(&self) -> Result<std::net::Ipv4Addr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::VpnIpv4(val) = attr? {
+            if let Ok(PeerNewInput::VpnIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1036,12 +1071,12 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The IPv6 address assigned to the peer by the server"]
+    #[doc = "The IPv6 address assigned to the peer by the server\n"]
     pub fn get_vpn_ipv6(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::VpnIpv6(val) = attr? {
+            if let Ok(PeerNewInput::VpnIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1052,12 +1087,12 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     pub fn get_local_ipv4(&self) -> Result<std::net::Ipv4Addr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::LocalIpv4(val) = attr? {
+            if let Ok(PeerNewInput::LocalIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1068,12 +1103,12 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     pub fn get_local_ipv6(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::LocalIpv6(val) = attr? {
+            if let Ok(PeerNewInput::LocalIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1084,12 +1119,12 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The number of seconds after which a keep alive message is sent to the peer"]
+    #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     pub fn get_keepalive_interval(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::KeepaliveInterval(val) = attr? {
+            if let Ok(PeerNewInput::KeepaliveInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1100,18 +1135,34 @@ impl<'a> IterablePeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The number of seconds from the last activity after which the peer is assumed dead"]
+    #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     pub fn get_keepalive_timeout(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerNewInput::KeepaliveTimeout(val) = attr? {
+            if let Ok(PeerNewInput::KeepaliveTimeout(val)) = attr {
                 return Ok(val);
             }
         }
         Err(ErrorContext::new_missing(
             "PeerNewInput",
             "KeepaliveTimeout",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
+    pub fn get_tx_id(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(PeerNewInput::TxId(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "PeerNewInput",
+            "TxId",
             self.orig_loc,
             self.buf.as_ptr() as usize,
         ))
@@ -1146,14 +1197,16 @@ impl<'a> IterablePeerNewInput<'a> {
 impl<'a> Iterator for IterablePeerNewInput<'a> {
     type Item = Result<PeerNewInput<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1218,6 +1271,11 @@ impl<'a> Iterator for IterablePeerNewInput<'a> {
                     let Some(val) = res else { break };
                     val
                 }),
+                24u16 => PeerNewInput::TxId({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -1257,6 +1315,7 @@ impl<'a> std::fmt::Debug for IterablePeerNewInput<'_> {
                 PeerNewInput::LocalIpv6(val) => fmt.field("LocalIpv6", &val),
                 PeerNewInput::KeepaliveInterval(val) => fmt.field("KeepaliveInterval", &val),
                 PeerNewInput::KeepaliveTimeout(val) => fmt.field("KeepaliveTimeout", &val),
+                PeerNewInput::TxId(val) => fmt.field("TxId", &val),
             };
         }
         fmt.finish()
@@ -1357,6 +1416,12 @@ impl IterablePeerNewInput<'_> {
                         break;
                     }
                 }
+                PeerNewInput::TxId(val) => {
+                    if last_off == offset {
+                        stack.push(("TxId", last_off));
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -1369,36 +1434,38 @@ impl IterablePeerNewInput<'_> {
 }
 #[derive(Clone)]
 pub enum PeerSetInput<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     Id(u32),
-    #[doc = "The remote IPv4 address of the peer"]
+    #[doc = "The remote IPv4 address of the peer\n"]
     RemoteIpv4(std::net::Ipv4Addr),
-    #[doc = "The remote IPv6 address of the peer"]
+    #[doc = "The remote IPv6 address of the peer\n"]
     RemoteIpv6(&'a [u8]),
-    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)"]
+    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     RemoteIpv6ScopeId(u32),
-    #[doc = "The remote port of the peer"]
+    #[doc = "The remote port of the peer\n"]
     RemotePort(u16),
-    #[doc = "The IPv4 address assigned to the peer by the server"]
+    #[doc = "The IPv4 address assigned to the peer by the server\n"]
     VpnIpv4(std::net::Ipv4Addr),
-    #[doc = "The IPv6 address assigned to the peer by the server"]
+    #[doc = "The IPv6 address assigned to the peer by the server\n"]
     VpnIpv6(&'a [u8]),
-    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     LocalIpv4(std::net::Ipv4Addr),
-    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     LocalIpv6(&'a [u8]),
-    #[doc = "The number of seconds after which a keep alive message is sent to the peer"]
+    #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     KeepaliveInterval(u32),
-    #[doc = "The number of seconds from the last activity after which the peer is assumed dead"]
+    #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     KeepaliveTimeout(u32),
+    #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
+    TxId(u32),
 }
 impl<'a> IterablePeerSetInput<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::Id(val) = attr? {
+            if let Ok(PeerSetInput::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1409,12 +1476,12 @@ impl<'a> IterablePeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The remote IPv4 address of the peer"]
+    #[doc = "The remote IPv4 address of the peer\n"]
     pub fn get_remote_ipv4(&self) -> Result<std::net::Ipv4Addr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::RemoteIpv4(val) = attr? {
+            if let Ok(PeerSetInput::RemoteIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1425,12 +1492,12 @@ impl<'a> IterablePeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The remote IPv6 address of the peer"]
+    #[doc = "The remote IPv6 address of the peer\n"]
     pub fn get_remote_ipv6(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::RemoteIpv6(val) = attr? {
+            if let Ok(PeerSetInput::RemoteIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1441,12 +1508,12 @@ impl<'a> IterablePeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)"]
+    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     pub fn get_remote_ipv6_scope_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::RemoteIpv6ScopeId(val) = attr? {
+            if let Ok(PeerSetInput::RemoteIpv6ScopeId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1457,12 +1524,12 @@ impl<'a> IterablePeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The remote port of the peer"]
+    #[doc = "The remote port of the peer\n"]
     pub fn get_remote_port(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::RemotePort(val) = attr? {
+            if let Ok(PeerSetInput::RemotePort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1473,12 +1540,12 @@ impl<'a> IterablePeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The IPv4 address assigned to the peer by the server"]
+    #[doc = "The IPv4 address assigned to the peer by the server\n"]
     pub fn get_vpn_ipv4(&self) -> Result<std::net::Ipv4Addr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::VpnIpv4(val) = attr? {
+            if let Ok(PeerSetInput::VpnIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1489,12 +1556,12 @@ impl<'a> IterablePeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The IPv6 address assigned to the peer by the server"]
+    #[doc = "The IPv6 address assigned to the peer by the server\n"]
     pub fn get_vpn_ipv6(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::VpnIpv6(val) = attr? {
+            if let Ok(PeerSetInput::VpnIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1505,12 +1572,12 @@ impl<'a> IterablePeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     pub fn get_local_ipv4(&self) -> Result<std::net::Ipv4Addr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::LocalIpv4(val) = attr? {
+            if let Ok(PeerSetInput::LocalIpv4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1521,12 +1588,12 @@ impl<'a> IterablePeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     pub fn get_local_ipv6(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::LocalIpv6(val) = attr? {
+            if let Ok(PeerSetInput::LocalIpv6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1537,12 +1604,12 @@ impl<'a> IterablePeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The number of seconds after which a keep alive message is sent to the peer"]
+    #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     pub fn get_keepalive_interval(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::KeepaliveInterval(val) = attr? {
+            if let Ok(PeerSetInput::KeepaliveInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1553,18 +1620,34 @@ impl<'a> IterablePeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The number of seconds from the last activity after which the peer is assumed dead"]
+    #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     pub fn get_keepalive_timeout(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerSetInput::KeepaliveTimeout(val) = attr? {
+            if let Ok(PeerSetInput::KeepaliveTimeout(val)) = attr {
                 return Ok(val);
             }
         }
         Err(ErrorContext::new_missing(
             "PeerSetInput",
             "KeepaliveTimeout",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
+    pub fn get_tx_id(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(PeerSetInput::TxId(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "PeerSetInput",
+            "TxId",
             self.orig_loc,
             self.buf.as_ptr() as usize,
         ))
@@ -1599,14 +1682,16 @@ impl<'a> IterablePeerSetInput<'a> {
 impl<'a> Iterator for IterablePeerSetInput<'a> {
     type Item = Result<PeerSetInput<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1666,6 +1751,11 @@ impl<'a> Iterator for IterablePeerSetInput<'a> {
                     let Some(val) = res else { break };
                     val
                 }),
+                24u16 => PeerSetInput::TxId({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -1704,6 +1794,7 @@ impl<'a> std::fmt::Debug for IterablePeerSetInput<'_> {
                 PeerSetInput::LocalIpv6(val) => fmt.field("LocalIpv6", &val),
                 PeerSetInput::KeepaliveInterval(val) => fmt.field("KeepaliveInterval", &val),
                 PeerSetInput::KeepaliveTimeout(val) => fmt.field("KeepaliveTimeout", &val),
+                PeerSetInput::TxId(val) => fmt.field("TxId", &val),
             };
         }
         fmt.finish()
@@ -1798,6 +1889,12 @@ impl IterablePeerSetInput<'_> {
                         break;
                     }
                 }
+                PeerSetInput::TxId(val) => {
+                    if last_off == offset {
+                        stack.push(("TxId", last_off));
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -1810,16 +1907,16 @@ impl IterablePeerSetInput<'_> {
 }
 #[derive(Clone)]
 pub enum PeerDelInput {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     Id(u32),
 }
 impl<'a> IterablePeerDelInput<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PeerDelInput::Id(val) = attr? {
+            if let Ok(PeerDelInput::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1860,14 +1957,16 @@ impl<'a> IterablePeerDelInput<'a> {
 impl<'a> Iterator for IterablePeerDelInput<'a> {
     type Item = Result<PeerDelInput, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1951,26 +2050,26 @@ impl IterablePeerDelInput<'_> {
 }
 #[derive(Clone)]
 pub enum Keyconf<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     PeerId(u32),
-    #[doc = "The slot where the key should be stored\nAssociated type: [`KeySlot`] (enum)"]
+    #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     Slot(u32),
-    #[doc = "The unique ID of the key in the peer context\\. Used to fetch the correct key upon decryption"]
+    #[doc = "The unique ID of the key in the peer context. Used to fetch the correct\nkey upon decryption\n"]
     KeyId(u32),
-    #[doc = "The cipher to be used when communicating with the peer\nAssociated type: [`CipherAlg`] (enum)"]
+    #[doc = "The cipher to be used when communicating with the peer\n\nAssociated type: [`CipherAlg`] (enum)"]
     CipherAlg(u32),
-    #[doc = "Key material for encrypt direction"]
+    #[doc = "Key material for encrypt direction\n"]
     EncryptDir(IterableKeydir<'a>),
-    #[doc = "Key material for decrypt direction"]
+    #[doc = "Key material for decrypt direction\n"]
     DecryptDir(IterableKeydir<'a>),
 }
 impl<'a> IterableKeyconf<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn get_peer_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Keyconf::PeerId(val) = attr? {
+            if let Ok(Keyconf::PeerId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1981,12 +2080,12 @@ impl<'a> IterableKeyconf<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The slot where the key should be stored\nAssociated type: [`KeySlot`] (enum)"]
+    #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     pub fn get_slot(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Keyconf::Slot(val) = attr? {
+            if let Ok(Keyconf::Slot(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1997,12 +2096,12 @@ impl<'a> IterableKeyconf<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The unique ID of the key in the peer context\\. Used to fetch the correct key upon decryption"]
+    #[doc = "The unique ID of the key in the peer context. Used to fetch the correct\nkey upon decryption\n"]
     pub fn get_key_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Keyconf::KeyId(val) = attr? {
+            if let Ok(Keyconf::KeyId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2013,12 +2112,12 @@ impl<'a> IterableKeyconf<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The cipher to be used when communicating with the peer\nAssociated type: [`CipherAlg`] (enum)"]
+    #[doc = "The cipher to be used when communicating with the peer\n\nAssociated type: [`CipherAlg`] (enum)"]
     pub fn get_cipher_alg(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Keyconf::CipherAlg(val) = attr? {
+            if let Ok(Keyconf::CipherAlg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2029,12 +2128,12 @@ impl<'a> IterableKeyconf<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Key material for encrypt direction"]
+    #[doc = "Key material for encrypt direction\n"]
     pub fn get_encrypt_dir(&self) -> Result<IterableKeydir<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Keyconf::EncryptDir(val) = attr? {
+            if let Ok(Keyconf::EncryptDir(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2045,12 +2144,12 @@ impl<'a> IterableKeyconf<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Key material for decrypt direction"]
+    #[doc = "Key material for decrypt direction\n"]
     pub fn get_decrypt_dir(&self) -> Result<IterableKeydir<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Keyconf::DecryptDir(val) = attr? {
+            if let Ok(Keyconf::DecryptDir(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2100,14 +2199,16 @@ impl<'a> IterableKeyconf<'a> {
 impl<'a> Iterator for IterableKeyconf<'a> {
     type Item = Result<Keyconf<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2253,18 +2354,18 @@ impl IterableKeyconf<'_> {
 }
 #[derive(Clone)]
 pub enum Keydir<'a> {
-    #[doc = "The actual key to be used by the cipher"]
+    #[doc = "The actual key to be used by the cipher\n"]
     CipherKey(&'a [u8]),
-    #[doc = "Random nonce to be concatenated to the packet ID, in order to obtain the actual cipher IV"]
+    #[doc = "Random nonce to be concatenated to the packet ID, in order to obtain the\nactual cipher IV\n"]
     NonceTail(&'a [u8]),
 }
 impl<'a> IterableKeydir<'a> {
-    #[doc = "The actual key to be used by the cipher"]
+    #[doc = "The actual key to be used by the cipher\n"]
     pub fn get_cipher_key(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Keydir::CipherKey(val) = attr? {
+            if let Ok(Keydir::CipherKey(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2275,12 +2376,12 @@ impl<'a> IterableKeydir<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Random nonce to be concatenated to the packet ID, in order to obtain the actual cipher IV"]
+    #[doc = "Random nonce to be concatenated to the packet ID, in order to obtain the\nactual cipher IV\n"]
     pub fn get_nonce_tail(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Keydir::NonceTail(val) = attr? {
+            if let Ok(Keydir::NonceTail(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2326,14 +2427,16 @@ impl<'a> IterableKeydir<'a> {
 impl<'a> Iterator for IterableKeydir<'a> {
     type Item = Result<Keydir<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2426,22 +2529,22 @@ impl IterableKeydir<'_> {
 }
 #[derive(Clone)]
 pub enum KeyconfGet {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     PeerId(u32),
-    #[doc = "The slot where the key should be stored\nAssociated type: [`KeySlot`] (enum)"]
+    #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     Slot(u32),
-    #[doc = "The unique ID of the key in the peer context\\. Used to fetch the correct key upon decryption"]
+    #[doc = "The unique ID of the key in the peer context. Used to fetch the correct\nkey upon decryption\n"]
     KeyId(u32),
-    #[doc = "The cipher to be used when communicating with the peer\nAssociated type: [`CipherAlg`] (enum)"]
+    #[doc = "The cipher to be used when communicating with the peer\n\nAssociated type: [`CipherAlg`] (enum)"]
     CipherAlg(u32),
 }
 impl<'a> IterableKeyconfGet<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn get_peer_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyconfGet::PeerId(val) = attr? {
+            if let Ok(KeyconfGet::PeerId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2452,12 +2555,12 @@ impl<'a> IterableKeyconfGet<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The slot where the key should be stored\nAssociated type: [`KeySlot`] (enum)"]
+    #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     pub fn get_slot(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyconfGet::Slot(val) = attr? {
+            if let Ok(KeyconfGet::Slot(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2468,12 +2571,12 @@ impl<'a> IterableKeyconfGet<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The unique ID of the key in the peer context\\. Used to fetch the correct key upon decryption"]
+    #[doc = "The unique ID of the key in the peer context. Used to fetch the correct\nkey upon decryption\n"]
     pub fn get_key_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyconfGet::KeyId(val) = attr? {
+            if let Ok(KeyconfGet::KeyId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2484,12 +2587,12 @@ impl<'a> IterableKeyconfGet<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The cipher to be used when communicating with the peer\nAssociated type: [`CipherAlg`] (enum)"]
+    #[doc = "The cipher to be used when communicating with the peer\n\nAssociated type: [`CipherAlg`] (enum)"]
     pub fn get_cipher_alg(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyconfGet::CipherAlg(val) = attr? {
+            if let Ok(KeyconfGet::CipherAlg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2530,14 +2633,16 @@ impl<'a> IterableKeyconfGet<'a> {
 impl<'a> Iterator for IterableKeyconfGet<'a> {
     type Item = Result<KeyconfGet, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2661,16 +2766,16 @@ impl IterableKeyconfGet<'_> {
 }
 #[derive(Clone)]
 pub enum KeyconfSwapInput {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     PeerId(u32),
 }
 impl<'a> IterableKeyconfSwapInput<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn get_peer_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyconfSwapInput::PeerId(val) = attr? {
+            if let Ok(KeyconfSwapInput::PeerId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2711,14 +2816,16 @@ impl<'a> IterableKeyconfSwapInput<'a> {
 impl<'a> Iterator for IterableKeyconfSwapInput<'a> {
     type Item = Result<KeyconfSwapInput, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2802,18 +2909,18 @@ impl IterableKeyconfSwapInput<'_> {
 }
 #[derive(Clone)]
 pub enum KeyconfDelInput {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     PeerId(u32),
-    #[doc = "The slot where the key should be stored\nAssociated type: [`KeySlot`] (enum)"]
+    #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     Slot(u32),
 }
 impl<'a> IterableKeyconfDelInput<'a> {
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn get_peer_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyconfDelInput::PeerId(val) = attr? {
+            if let Ok(KeyconfDelInput::PeerId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2824,12 +2931,12 @@ impl<'a> IterableKeyconfDelInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The slot where the key should be stored\nAssociated type: [`KeySlot`] (enum)"]
+    #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     pub fn get_slot(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let KeyconfDelInput::Slot(val) = attr? {
+            if let Ok(KeyconfDelInput::Slot(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2870,14 +2977,16 @@ impl<'a> IterableKeyconfDelInput<'a> {
 impl<'a> Iterator for IterableKeyconfDelInput<'a> {
     type Item = Result<KeyconfDelInput, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2975,20 +3084,20 @@ impl IterableKeyconfDelInput<'_> {
 }
 #[derive(Clone)]
 pub enum Ovpn<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     Ifindex(u32),
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     Peer(IterablePeer<'a>),
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     Keyconf(IterableKeyconf<'a>),
 }
 impl<'a> IterableOvpn<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Ovpn::Ifindex(val) = attr? {
+            if let Ok(Ovpn::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2999,12 +3108,12 @@ impl<'a> IterableOvpn<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn get_peer(&self) -> Result<IterablePeer<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Ovpn::Peer(val) = attr? {
+            if let Ok(Ovpn::Peer(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3015,12 +3124,12 @@ impl<'a> IterableOvpn<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     pub fn get_keyconf(&self) -> Result<IterableKeyconf<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Ovpn::Keyconf(val) = attr? {
+            if let Ok(Ovpn::Keyconf(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3067,14 +3176,16 @@ impl<'a> IterableOvpn<'a> {
 impl<'a> Iterator for IterableOvpn<'a> {
     type Item = Result<Ovpn<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3180,18 +3291,18 @@ impl IterableOvpn<'_> {
 }
 #[derive(Clone)]
 pub enum OvpnPeerNewInput<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     Ifindex(u32),
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     Peer(IterablePeerNewInput<'a>),
 }
 impl<'a> IterableOvpnPeerNewInput<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnPeerNewInput::Ifindex(val) = attr? {
+            if let Ok(OvpnPeerNewInput::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3202,12 +3313,12 @@ impl<'a> IterableOvpnPeerNewInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn get_peer(&self) -> Result<IterablePeerNewInput<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnPeerNewInput::Peer(val) = attr? {
+            if let Ok(OvpnPeerNewInput::Peer(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3248,14 +3359,16 @@ impl<'a> IterableOvpnPeerNewInput<'a> {
 impl<'a> Iterator for IterableOvpnPeerNewInput<'a> {
     type Item = Result<OvpnPeerNewInput<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3352,18 +3465,18 @@ impl IterableOvpnPeerNewInput<'_> {
 }
 #[derive(Clone)]
 pub enum OvpnPeerSetInput<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     Ifindex(u32),
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     Peer(IterablePeerSetInput<'a>),
 }
 impl<'a> IterableOvpnPeerSetInput<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnPeerSetInput::Ifindex(val) = attr? {
+            if let Ok(OvpnPeerSetInput::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3374,12 +3487,12 @@ impl<'a> IterableOvpnPeerSetInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn get_peer(&self) -> Result<IterablePeerSetInput<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnPeerSetInput::Peer(val) = attr? {
+            if let Ok(OvpnPeerSetInput::Peer(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3420,14 +3533,16 @@ impl<'a> IterableOvpnPeerSetInput<'a> {
 impl<'a> Iterator for IterableOvpnPeerSetInput<'a> {
     type Item = Result<OvpnPeerSetInput<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3524,18 +3639,18 @@ impl IterableOvpnPeerSetInput<'_> {
 }
 #[derive(Clone)]
 pub enum OvpnPeerDelInput<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     Ifindex(u32),
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     Peer(IterablePeerDelInput<'a>),
 }
 impl<'a> IterableOvpnPeerDelInput<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnPeerDelInput::Ifindex(val) = attr? {
+            if let Ok(OvpnPeerDelInput::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3546,12 +3661,12 @@ impl<'a> IterableOvpnPeerDelInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn get_peer(&self) -> Result<IterablePeerDelInput<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnPeerDelInput::Peer(val) = attr? {
+            if let Ok(OvpnPeerDelInput::Peer(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3592,14 +3707,16 @@ impl<'a> IterableOvpnPeerDelInput<'a> {
 impl<'a> Iterator for IterableOvpnPeerDelInput<'a> {
     type Item = Result<OvpnPeerDelInput<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3696,18 +3813,18 @@ impl IterableOvpnPeerDelInput<'_> {
 }
 #[derive(Clone)]
 pub enum OvpnKeyconfGet<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     Ifindex(u32),
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     Keyconf(IterableKeyconfGet<'a>),
 }
 impl<'a> IterableOvpnKeyconfGet<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnKeyconfGet::Ifindex(val) = attr? {
+            if let Ok(OvpnKeyconfGet::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3718,12 +3835,12 @@ impl<'a> IterableOvpnKeyconfGet<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     pub fn get_keyconf(&self) -> Result<IterableKeyconfGet<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnKeyconfGet::Keyconf(val) = attr? {
+            if let Ok(OvpnKeyconfGet::Keyconf(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3764,14 +3881,16 @@ impl<'a> IterableOvpnKeyconfGet<'a> {
 impl<'a> Iterator for IterableOvpnKeyconfGet<'a> {
     type Item = Result<OvpnKeyconfGet<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3868,18 +3987,18 @@ impl IterableOvpnKeyconfGet<'_> {
 }
 #[derive(Clone)]
 pub enum OvpnKeyconfSwapInput<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     Ifindex(u32),
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     Keyconf(IterableKeyconfSwapInput<'a>),
 }
 impl<'a> IterableOvpnKeyconfSwapInput<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnKeyconfSwapInput::Ifindex(val) = attr? {
+            if let Ok(OvpnKeyconfSwapInput::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3890,12 +4009,12 @@ impl<'a> IterableOvpnKeyconfSwapInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     pub fn get_keyconf(&self) -> Result<IterableKeyconfSwapInput<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnKeyconfSwapInput::Keyconf(val) = attr? {
+            if let Ok(OvpnKeyconfSwapInput::Keyconf(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3936,14 +4055,16 @@ impl<'a> IterableOvpnKeyconfSwapInput<'a> {
 impl<'a> Iterator for IterableOvpnKeyconfSwapInput<'a> {
     type Item = Result<OvpnKeyconfSwapInput<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4040,18 +4161,18 @@ impl IterableOvpnKeyconfSwapInput<'_> {
 }
 #[derive(Clone)]
 pub enum OvpnKeyconfDelInput<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     Ifindex(u32),
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     Keyconf(IterableKeyconfDelInput<'a>),
 }
 impl<'a> IterableOvpnKeyconfDelInput<'a> {
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnKeyconfDelInput::Ifindex(val) = attr? {
+            if let Ok(OvpnKeyconfDelInput::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4062,12 +4183,12 @@ impl<'a> IterableOvpnKeyconfDelInput<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     pub fn get_keyconf(&self) -> Result<IterableKeyconfDelInput<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let OvpnKeyconfDelInput::Keyconf(val) = attr? {
+            if let Ok(OvpnKeyconfDelInput::Keyconf(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4108,14 +4229,16 @@ impl<'a> IterableOvpnKeyconfDelInput<'a> {
 impl<'a> Iterator for IterableOvpnKeyconfDelInput<'a> {
     type Item = Result<OvpnKeyconfDelInput<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4236,141 +4359,147 @@ impl<Prev: Rec> PushPeer<Prev> {
         }
         prev
     }
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The remote IPv4 address of the peer"]
+    #[doc = "The remote IPv4 address of the peer\n"]
     pub fn push_remote_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
-    #[doc = "The remote IPv6 address of the peer"]
+    #[doc = "The remote IPv6 address of the peer\n"]
     pub fn push_remote_ipv6(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 3u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)"]
+    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     pub fn push_remote_ipv6_scope_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The remote port of the peer"]
+    #[doc = "The remote port of the peer\n"]
     pub fn push_remote_port(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 5u16, 2 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "The socket to be used to communicate with the peer"]
+    #[doc = "The socket to be used to communicate with the peer\n"]
     pub fn push_socket(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The ID of the netns the socket assigned to this peer lives in"]
+    #[doc = "The ID of the netns the socket assigned to this peer lives in\n"]
     pub fn push_socket_netnsid(mut self, value: i32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The IPv4 address assigned to the peer by the server"]
+    #[doc = "The IPv4 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
-    #[doc = "The IPv6 address assigned to the peer by the server"]
+    #[doc = "The IPv6 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv6(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 9u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
-    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv6(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 11u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "The local port to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local port to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_port(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 12u16, 2 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "The number of seconds after which a keep alive message is sent to the peer"]
+    #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     pub fn push_keepalive_interval(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 13u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The number of seconds from the last activity after which the peer is assumed dead"]
+    #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     pub fn push_keepalive_timeout(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 14u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The reason why a peer was deleted\nAssociated type: [`DelPeerReason`] (enum)"]
+    #[doc = "The reason why a peer was deleted\n\nAssociated type: [`DelPeerReason`] (enum)"]
     pub fn push_del_reason(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 15u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of bytes received over the tunnel"]
+    #[doc = "Number of bytes received over the tunnel\n"]
     pub fn push_vpn_rx_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 16u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of bytes transmitted over the tunnel"]
+    #[doc = "Number of bytes transmitted over the tunnel\n"]
     pub fn push_vpn_tx_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 17u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets received over the tunnel"]
+    #[doc = "Number of packets received over the tunnel\n"]
     pub fn push_vpn_rx_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 18u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets transmitted over the tunnel"]
+    #[doc = "Number of packets transmitted over the tunnel\n"]
     pub fn push_vpn_tx_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 19u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of bytes received at the transport level"]
+    #[doc = "Number of bytes received at the transport level\n"]
     pub fn push_link_rx_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 20u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of bytes transmitted at the transport level"]
+    #[doc = "Number of bytes transmitted at the transport level\n"]
     pub fn push_link_tx_bytes(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 21u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets received at the transport level"]
+    #[doc = "Number of packets received at the transport level\n"]
     pub fn push_link_rx_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 22u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Number of packets transmitted at the transport level"]
+    #[doc = "Number of packets transmitted at the transport level\n"]
     pub fn push_link_tx_packets(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 23u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
+    pub fn push_tx_id(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 24u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
@@ -4410,75 +4539,81 @@ impl<Prev: Rec> PushPeerNewInput<Prev> {
         }
         prev
     }
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The remote IPv4 address of the peer"]
+    #[doc = "The remote IPv4 address of the peer\n"]
     pub fn push_remote_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
-    #[doc = "The remote IPv6 address of the peer"]
+    #[doc = "The remote IPv6 address of the peer\n"]
     pub fn push_remote_ipv6(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 3u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)"]
+    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     pub fn push_remote_ipv6_scope_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The remote port of the peer"]
+    #[doc = "The remote port of the peer\n"]
     pub fn push_remote_port(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 5u16, 2 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "The socket to be used to communicate with the peer"]
+    #[doc = "The socket to be used to communicate with the peer\n"]
     pub fn push_socket(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The IPv4 address assigned to the peer by the server"]
+    #[doc = "The IPv4 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
-    #[doc = "The IPv6 address assigned to the peer by the server"]
+    #[doc = "The IPv6 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv6(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 9u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
-    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv6(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 11u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "The number of seconds after which a keep alive message is sent to the peer"]
+    #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     pub fn push_keepalive_interval(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 13u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The number of seconds from the last activity after which the peer is assumed dead"]
+    #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     pub fn push_keepalive_timeout(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 14u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
+    pub fn push_tx_id(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 24u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
@@ -4518,69 +4653,75 @@ impl<Prev: Rec> PushPeerSetInput<Prev> {
         }
         prev
     }
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The remote IPv4 address of the peer"]
+    #[doc = "The remote IPv4 address of the peer\n"]
     pub fn push_remote_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
-    #[doc = "The remote IPv6 address of the peer"]
+    #[doc = "The remote IPv6 address of the peer\n"]
     pub fn push_remote_ipv6(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 3u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)"]
+    #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     pub fn push_remote_ipv6_scope_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The remote port of the peer"]
+    #[doc = "The remote port of the peer\n"]
     pub fn push_remote_port(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 5u16, 2 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "The IPv4 address assigned to the peer by the server"]
+    #[doc = "The IPv4 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
-    #[doc = "The IPv6 address assigned to the peer by the server"]
+    #[doc = "The IPv6 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv6(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 9u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
-    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)"]
+    #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv6(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 11u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "The number of seconds after which a keep alive message is sent to the peer"]
+    #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     pub fn push_keepalive_interval(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 13u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The number of seconds from the last activity after which the peer is assumed dead"]
+    #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     pub fn push_keepalive_timeout(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 14u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
+    pub fn push_tx_id(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 24u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
@@ -4620,7 +4761,7 @@ impl<Prev: Rec> PushPeerDelInput<Prev> {
         }
         prev
     }
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during operations for a specific device"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -4662,31 +4803,31 @@ impl<Prev: Rec> PushKeyconf<Prev> {
         }
         prev
     }
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn push_peer_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The slot where the key should be stored\nAssociated type: [`KeySlot`] (enum)"]
+    #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     pub fn push_slot(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The unique ID of the key in the peer context\\. Used to fetch the correct key upon decryption"]
+    #[doc = "The unique ID of the key in the peer context. Used to fetch the correct\nkey upon decryption\n"]
     pub fn push_key_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The cipher to be used when communicating with the peer\nAssociated type: [`CipherAlg`] (enum)"]
+    #[doc = "The cipher to be used when communicating with the peer\n\nAssociated type: [`CipherAlg`] (enum)"]
     pub fn push_cipher_alg(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Key material for encrypt direction"]
+    #[doc = "Key material for encrypt direction\n"]
     pub fn nested_encrypt_dir(mut self) -> PushKeydir<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 5u16);
         PushKeydir {
@@ -4694,7 +4835,7 @@ impl<Prev: Rec> PushKeyconf<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Key material for decrypt direction"]
+    #[doc = "Key material for decrypt direction\n"]
     pub fn nested_decrypt_dir(mut self) -> PushKeydir<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 6u16);
         PushKeydir {
@@ -4738,13 +4879,13 @@ impl<Prev: Rec> PushKeydir<Prev> {
         }
         prev
     }
-    #[doc = "The actual key to be used by the cipher"]
+    #[doc = "The actual key to be used by the cipher\n"]
     pub fn push_cipher_key(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "Random nonce to be concatenated to the packet ID, in order to obtain the actual cipher IV"]
+    #[doc = "Random nonce to be concatenated to the packet ID, in order to obtain the\nactual cipher IV\n"]
     pub fn push_nonce_tail(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 2u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -4786,25 +4927,25 @@ impl<Prev: Rec> PushKeyconfGet<Prev> {
         }
         prev
     }
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn push_peer_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The slot where the key should be stored\nAssociated type: [`KeySlot`] (enum)"]
+    #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     pub fn push_slot(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The unique ID of the key in the peer context\\. Used to fetch the correct key upon decryption"]
+    #[doc = "The unique ID of the key in the peer context. Used to fetch the correct\nkey upon decryption\n"]
     pub fn push_key_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The cipher to be used when communicating with the peer\nAssociated type: [`CipherAlg`] (enum)"]
+    #[doc = "The cipher to be used when communicating with the peer\n\nAssociated type: [`CipherAlg`] (enum)"]
     pub fn push_cipher_alg(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -4846,7 +4987,7 @@ impl<Prev: Rec> PushKeyconfSwapInput<Prev> {
         }
         prev
     }
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn push_peer_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -4888,13 +5029,13 @@ impl<Prev: Rec> PushKeyconfDelInput<Prev> {
         }
         prev
     }
-    #[doc = "The unique ID of the peer in the device context\\. To be used to identify peers during key operations"]
+    #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn push_peer_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The slot where the key should be stored\nAssociated type: [`KeySlot`] (enum)"]
+    #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     pub fn push_slot(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -4936,13 +5077,13 @@ impl<Prev: Rec> PushOvpn<Prev> {
         }
         prev
     }
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn nested_peer(mut self) -> PushPeer<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
         PushPeer {
@@ -4950,7 +5091,7 @@ impl<Prev: Rec> PushOvpn<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     pub fn nested_keyconf(mut self) -> PushKeyconf<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
         PushKeyconf {
@@ -4994,13 +5135,13 @@ impl<Prev: Rec> PushOvpnPeerNewInput<Prev> {
         }
         prev
     }
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn nested_peer(mut self) -> PushPeerNewInput<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
         PushPeerNewInput {
@@ -5044,13 +5185,13 @@ impl<Prev: Rec> PushOvpnPeerSetInput<Prev> {
         }
         prev
     }
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn nested_peer(mut self) -> PushPeerSetInput<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
         PushPeerSetInput {
@@ -5094,13 +5235,13 @@ impl<Prev: Rec> PushOvpnPeerDelInput<Prev> {
         }
         prev
     }
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The peer object containing the attributed of interest for the specific operation"]
+    #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn nested_peer(mut self) -> PushPeerDelInput<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
         PushPeerDelInput {
@@ -5144,13 +5285,13 @@ impl<Prev: Rec> PushOvpnKeyconfGet<Prev> {
         }
         prev
     }
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     pub fn nested_keyconf(mut self) -> PushKeyconfGet<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
         PushKeyconfGet {
@@ -5194,13 +5335,13 @@ impl<Prev: Rec> PushOvpnKeyconfSwapInput<Prev> {
         }
         prev
     }
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     pub fn nested_keyconf(mut self) -> PushKeyconfSwapInput<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
         PushKeyconfSwapInput {
@@ -5244,13 +5385,13 @@ impl<Prev: Rec> PushOvpnKeyconfDelInput<Prev> {
         }
         prev
     }
-    #[doc = "Index of the ovpn interface to operate on"]
+    #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Peer specific cipher configuration"]
+    #[doc = "Peer specific cipher configuration\n"]
     pub fn nested_keyconf(mut self) -> PushKeyconfDelInput<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
         PushKeyconfDelInput {
@@ -5288,14 +5429,24 @@ impl OpKeySwapNotif {
         IterableOvpnKeyconfGet::with_loc(attrs, buf.as_ptr() as usize)
     }
 }
+#[doc = "Notify attributes:\n- [`.get_peer()`](IterableOvpn::get_peer)\n"]
+#[derive(Debug)]
+pub struct OpPeerFloatNotif;
+impl OpPeerFloatNotif {
+    pub const CMD: u8 = 11u8;
+    pub fn decode_notif<'a>(buf: &'a [u8]) -> IterableOvpn<'a> {
+        let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
+        IterableOvpn::with_loc(attrs, buf.as_ptr() as usize)
+    }
+}
 pub struct NotifGroup;
 impl NotifGroup {
-    #[doc = "Notifications:\n- [`OpPeerDelNotif`]\n- [`OpKeySwapNotif`]\n"]
+    #[doc = "Notifications:\n- [`OpPeerDelNotif`]\n- [`OpKeySwapNotif`]\n- [`OpPeerFloatNotif`]\n"]
     pub const PEERS: &str = "peers";
-    #[doc = "Notifications:\n- [`OpPeerDelNotif`]\n- [`OpKeySwapNotif`]\n"]
+    #[doc = "Notifications:\n- [`OpPeerDelNotif`]\n- [`OpKeySwapNotif`]\n- [`OpPeerFloatNotif`]\n"]
     pub const PEERS_CSTR: &CStr = c"peers";
 }
-#[doc = "Add a remote peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerNewInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerNewInput::nested_peer)\n"]
+#[doc = "Add a remote peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerNewInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerNewInput::nested_peer)\n\n"]
 #[derive(Debug)]
 pub struct OpPeerNewDo<'r> {
     request: Request<'r>,
@@ -5348,7 +5499,7 @@ impl NetlinkRequest for OpPeerNewDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "modify a remote peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerSetInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerSetInput::nested_peer)\n"]
+#[doc = "modify a remote peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerSetInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerSetInput::nested_peer)\n\n"]
 #[derive(Debug)]
 pub struct OpPeerSetDo<'r> {
     request: Request<'r>,
@@ -5401,7 +5552,7 @@ impl NetlinkRequest for OpPeerSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Retrieve data about existing remote peers (or a specific one)\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n\nReply attributes:\n- [.get_peer()](IterableOvpn::get_peer)\n"]
+#[doc = "Retrieve data about existing remote peers (or a specific one)\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n\nReply attributes:\n- [.get_peer()](IterableOvpn::get_peer)\n\n"]
 #[derive(Debug)]
 pub struct OpPeerGetDump<'r> {
     request: Request<'r>,
@@ -5456,7 +5607,7 @@ impl NetlinkRequest for OpPeerGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Retrieve data about existing remote peers (or a specific one)\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n- [.nested_peer()](PushOvpn::nested_peer)\n\nReply attributes:\n- [.get_peer()](IterableOvpn::get_peer)\n"]
+#[doc = "Retrieve data about existing remote peers (or a specific one)\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n- [.nested_peer()](PushOvpn::nested_peer)\n\nReply attributes:\n- [.get_peer()](IterableOvpn::get_peer)\n\n"]
 #[derive(Debug)]
 pub struct OpPeerGetDo<'r> {
     request: Request<'r>,
@@ -5509,7 +5660,7 @@ impl NetlinkRequest for OpPeerGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete existing remote peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerDelInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerDelInput::nested_peer)\n"]
+#[doc = "Delete existing remote peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerDelInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerDelInput::nested_peer)\n\n"]
 #[derive(Debug)]
 pub struct OpPeerDelDo<'r> {
     request: Request<'r>,
@@ -5562,7 +5713,7 @@ impl NetlinkRequest for OpPeerDelDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Add a cipher key for a specific peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n- [.nested_keyconf()](PushOvpn::nested_keyconf)\n"]
+#[doc = "Add a cipher key for a specific peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n- [.nested_keyconf()](PushOvpn::nested_keyconf)\n\n"]
 #[derive(Debug)]
 pub struct OpKeyNewDo<'r> {
     request: Request<'r>,
@@ -5615,7 +5766,7 @@ impl NetlinkRequest for OpKeyNewDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Retrieve non\\-sensitive data about peer key and cipher\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfGet::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfGet::nested_keyconf)\n\nReply attributes:\n- [.get_keyconf()](IterableOvpnKeyconfGet::get_keyconf)\n"]
+#[doc = "Retrieve non-sensitive data about peer key and cipher\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfGet::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfGet::nested_keyconf)\n\nReply attributes:\n- [.get_keyconf()](IterableOvpnKeyconfGet::get_keyconf)\n\n"]
 #[derive(Debug)]
 pub struct OpKeyGetDo<'r> {
     request: Request<'r>,
@@ -5668,7 +5819,7 @@ impl NetlinkRequest for OpKeyGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Swap primary and secondary session keys for a specific peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfSwapInput::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfSwapInput::nested_keyconf)\n"]
+#[doc = "Swap primary and secondary session keys for a specific peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfSwapInput::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfSwapInput::nested_keyconf)\n\n"]
 #[derive(Debug)]
 pub struct OpKeySwapDo<'r> {
     request: Request<'r>,
@@ -5723,7 +5874,7 @@ impl NetlinkRequest for OpKeySwapDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete cipher key for a specific peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfDelInput::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfDelInput::nested_keyconf)\n"]
+#[doc = "Delete cipher key for a specific peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfDelInput::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfDelInput::nested_keyconf)\n\n"]
 #[derive(Debug)]
 pub struct OpKeyDelDo<'r> {
     request: Request<'r>,
@@ -5880,63 +6031,63 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Add a remote peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerNewInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerNewInput::nested_peer)\n"]
+    #[doc = "Add a remote peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerNewInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerNewInput::nested_peer)\n\n"]
     pub fn op_peer_new_do(self) -> OpPeerNewDo<'buf> {
         let mut res = OpPeerNewDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-peer-new-do", OpPeerNewDo::lookup);
         res
     }
-    #[doc = "modify a remote peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerSetInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerSetInput::nested_peer)\n"]
+    #[doc = "modify a remote peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerSetInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerSetInput::nested_peer)\n\n"]
     pub fn op_peer_set_do(self) -> OpPeerSetDo<'buf> {
         let mut res = OpPeerSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-peer-set-do", OpPeerSetDo::lookup);
         res
     }
-    #[doc = "Retrieve data about existing remote peers (or a specific one)\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n\nReply attributes:\n- [.get_peer()](IterableOvpn::get_peer)\n"]
+    #[doc = "Retrieve data about existing remote peers (or a specific one)\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n\nReply attributes:\n- [.get_peer()](IterableOvpn::get_peer)\n\n"]
     pub fn op_peer_get_dump(self) -> OpPeerGetDump<'buf> {
         let mut res = OpPeerGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-peer-get-dump", OpPeerGetDump::lookup);
         res
     }
-    #[doc = "Retrieve data about existing remote peers (or a specific one)\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n- [.nested_peer()](PushOvpn::nested_peer)\n\nReply attributes:\n- [.get_peer()](IterableOvpn::get_peer)\n"]
+    #[doc = "Retrieve data about existing remote peers (or a specific one)\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n- [.nested_peer()](PushOvpn::nested_peer)\n\nReply attributes:\n- [.get_peer()](IterableOvpn::get_peer)\n\n"]
     pub fn op_peer_get_do(self) -> OpPeerGetDo<'buf> {
         let mut res = OpPeerGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-peer-get-do", OpPeerGetDo::lookup);
         res
     }
-    #[doc = "Delete existing remote peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerDelInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerDelInput::nested_peer)\n"]
+    #[doc = "Delete existing remote peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnPeerDelInput::push_ifindex)\n- [.nested_peer()](PushOvpnPeerDelInput::nested_peer)\n\n"]
     pub fn op_peer_del_do(self) -> OpPeerDelDo<'buf> {
         let mut res = OpPeerDelDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-peer-del-do", OpPeerDelDo::lookup);
         res
     }
-    #[doc = "Add a cipher key for a specific peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n- [.nested_keyconf()](PushOvpn::nested_keyconf)\n"]
+    #[doc = "Add a cipher key for a specific peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpn::push_ifindex)\n- [.nested_keyconf()](PushOvpn::nested_keyconf)\n\n"]
     pub fn op_key_new_do(self) -> OpKeyNewDo<'buf> {
         let mut res = OpKeyNewDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-key-new-do", OpKeyNewDo::lookup);
         res
     }
-    #[doc = "Retrieve non\\-sensitive data about peer key and cipher\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfGet::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfGet::nested_keyconf)\n\nReply attributes:\n- [.get_keyconf()](IterableOvpnKeyconfGet::get_keyconf)\n"]
+    #[doc = "Retrieve non-sensitive data about peer key and cipher\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfGet::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfGet::nested_keyconf)\n\nReply attributes:\n- [.get_keyconf()](IterableOvpnKeyconfGet::get_keyconf)\n\n"]
     pub fn op_key_get_do(self) -> OpKeyGetDo<'buf> {
         let mut res = OpKeyGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-key-get-do", OpKeyGetDo::lookup);
         res
     }
-    #[doc = "Swap primary and secondary session keys for a specific peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfSwapInput::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfSwapInput::nested_keyconf)\n"]
+    #[doc = "Swap primary and secondary session keys for a specific peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfSwapInput::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfSwapInput::nested_keyconf)\n\n"]
     pub fn op_key_swap_do(self) -> OpKeySwapDo<'buf> {
         let mut res = OpKeySwapDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-key-swap-do", OpKeySwapDo::lookup);
         res
     }
-    #[doc = "Delete cipher key for a specific peer\nFlags: admin-perm\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfDelInput::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfDelInput::nested_keyconf)\n"]
+    #[doc = "Delete cipher key for a specific peer\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushOvpnKeyconfDelInput::push_ifindex)\n- [.nested_keyconf()](PushOvpnKeyconfDelInput::nested_keyconf)\n\n"]
     pub fn op_key_del_do(self) -> OpKeyDelDo<'buf> {
         let mut res = OpKeyDelDo::new(self);
         res.request
@@ -5953,6 +6104,7 @@ mod generated_tests {
         let _ = IterableOvpnKeyconfGet::get_keyconf;
         let _ = OpKeySwapNotif;
         let _ = OpPeerDelNotif;
+        let _ = OpPeerFloatNotif;
         let _ = PushOvpn::<&mut Vec<u8>>::nested_keyconf;
         let _ = PushOvpn::<&mut Vec<u8>>::nested_peer;
         let _ = PushOvpn::<&mut Vec<u8>>::push_ifindex;

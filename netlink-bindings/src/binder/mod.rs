@@ -1,4 +1,4 @@
-#![doc = "Binder interface over generic netlink"]
+#![doc = "Binder interface over generic netlink\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -17,34 +17,34 @@ pub const PROTONAME: &str = "binder";
 pub const PROTONAME_CSTR: &CStr = c"binder";
 #[derive(Clone)]
 pub enum Report<'a> {
-    #[doc = "The enum binder\\_driver\\_return\\_protocol returned to the sender\\."]
+    #[doc = "The enum binder_driver_return_protocol returned to the sender.\n"]
     Error(u32),
-    #[doc = "The binder context where the transaction occurred\\."]
+    #[doc = "The binder context where the transaction occurred.\n"]
     Context(&'a CStr),
-    #[doc = "The PID of the sender process\\."]
+    #[doc = "The PID of the sender process.\n"]
     FromPid(u32),
-    #[doc = "The TID of the sender thread\\."]
+    #[doc = "The TID of the sender thread.\n"]
     FromTid(u32),
-    #[doc = "The PID of the recipient process\\. This attribute may not be present\nif the target could not be determined\\.\n"]
+    #[doc = "The PID of the recipient process. This attribute may not be present if\nthe target could not be determined.\n"]
     ToPid(u32),
-    #[doc = "The TID of the recipient thread\\. This attribute may not be present\nif the target could not be determined\\.\n"]
+    #[doc = "The TID of the recipient thread. This attribute may not be present if\nthe target could not be determined.\n"]
     ToTid(u32),
-    #[doc = "When present, indicates the failed transaction is a reply\\."]
+    #[doc = "When present, indicates the failed transaction is a reply.\n"]
     IsReply(()),
-    #[doc = "The bitmask of enum transaction\\_flags from the transaction\\."]
+    #[doc = "The bitmask of enum transaction_flags from the transaction.\n"]
     Flags(u32),
-    #[doc = "The application\\-defined code from the transaction\\."]
+    #[doc = "The application-defined code from the transaction.\n"]
     Code(u32),
-    #[doc = "The transaction payload size in bytes\\."]
+    #[doc = "The transaction payload size in bytes.\n"]
     DataSize(u32),
 }
 impl<'a> IterableReport<'a> {
-    #[doc = "The enum binder\\_driver\\_return\\_protocol returned to the sender\\."]
+    #[doc = "The enum binder_driver_return_protocol returned to the sender.\n"]
     pub fn get_error(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Report::Error(val) = attr? {
+            if let Ok(Report::Error(val)) = attr {
                 return Ok(val);
             }
         }
@@ -55,12 +55,12 @@ impl<'a> IterableReport<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The binder context where the transaction occurred\\."]
+    #[doc = "The binder context where the transaction occurred.\n"]
     pub fn get_context(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Report::Context(val) = attr? {
+            if let Ok(Report::Context(val)) = attr {
                 return Ok(val);
             }
         }
@@ -71,12 +71,12 @@ impl<'a> IterableReport<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The PID of the sender process\\."]
+    #[doc = "The PID of the sender process.\n"]
     pub fn get_from_pid(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Report::FromPid(val) = attr? {
+            if let Ok(Report::FromPid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -87,12 +87,12 @@ impl<'a> IterableReport<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The TID of the sender thread\\."]
+    #[doc = "The TID of the sender thread.\n"]
     pub fn get_from_tid(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Report::FromTid(val) = attr? {
+            if let Ok(Report::FromTid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -103,12 +103,12 @@ impl<'a> IterableReport<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The PID of the recipient process\\. This attribute may not be present\nif the target could not be determined\\.\n"]
+    #[doc = "The PID of the recipient process. This attribute may not be present if\nthe target could not be determined.\n"]
     pub fn get_to_pid(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Report::ToPid(val) = attr? {
+            if let Ok(Report::ToPid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -119,12 +119,12 @@ impl<'a> IterableReport<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The TID of the recipient thread\\. This attribute may not be present\nif the target could not be determined\\.\n"]
+    #[doc = "The TID of the recipient thread. This attribute may not be present if\nthe target could not be determined.\n"]
     pub fn get_to_tid(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Report::ToTid(val) = attr? {
+            if let Ok(Report::ToTid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -135,12 +135,12 @@ impl<'a> IterableReport<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "When present, indicates the failed transaction is a reply\\."]
+    #[doc = "When present, indicates the failed transaction is a reply.\n"]
     pub fn get_is_reply(&self) -> Result<(), ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Report::IsReply(val) = attr? {
+            if let Ok(Report::IsReply(val)) = attr {
                 return Ok(val);
             }
         }
@@ -151,12 +151,12 @@ impl<'a> IterableReport<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The bitmask of enum transaction\\_flags from the transaction\\."]
+    #[doc = "The bitmask of enum transaction_flags from the transaction.\n"]
     pub fn get_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Report::Flags(val) = attr? {
+            if let Ok(Report::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -167,12 +167,12 @@ impl<'a> IterableReport<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The application\\-defined code from the transaction\\."]
+    #[doc = "The application-defined code from the transaction.\n"]
     pub fn get_code(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Report::Code(val) = attr? {
+            if let Ok(Report::Code(val)) = attr {
                 return Ok(val);
             }
         }
@@ -183,12 +183,12 @@ impl<'a> IterableReport<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The transaction payload size in bytes\\."]
+    #[doc = "The transaction payload size in bytes.\n"]
     pub fn get_data_size(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Report::DataSize(val) = attr? {
+            if let Ok(Report::DataSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -242,14 +242,16 @@ impl<'a> IterableReport<'a> {
 impl<'a> Iterator for IterableReport<'a> {
     type Item = Result<Report<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -458,13 +460,13 @@ impl<Prev: Rec> PushReport<Prev> {
         }
         prev
     }
-    #[doc = "The enum binder\\_driver\\_return\\_protocol returned to the sender\\."]
+    #[doc = "The enum binder_driver_return_protocol returned to the sender.\n"]
     pub fn push_error(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The binder context where the transaction occurred\\."]
+    #[doc = "The binder context where the transaction occurred.\n"]
     pub fn push_context(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -474,55 +476,55 @@ impl<Prev: Rec> PushReport<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "The binder context where the transaction occurred\\."]
+    #[doc = "The binder context where the transaction occurred.\n"]
     pub fn push_context_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 2u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "The PID of the sender process\\."]
+    #[doc = "The PID of the sender process.\n"]
     pub fn push_from_pid(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The TID of the sender thread\\."]
+    #[doc = "The TID of the sender thread.\n"]
     pub fn push_from_tid(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The PID of the recipient process\\. This attribute may not be present\nif the target could not be determined\\.\n"]
+    #[doc = "The PID of the recipient process. This attribute may not be present if\nthe target could not be determined.\n"]
     pub fn push_to_pid(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The TID of the recipient thread\\. This attribute may not be present\nif the target could not be determined\\.\n"]
+    #[doc = "The TID of the recipient thread. This attribute may not be present if\nthe target could not be determined.\n"]
     pub fn push_to_tid(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "When present, indicates the failed transaction is a reply\\."]
+    #[doc = "When present, indicates the failed transaction is a reply.\n"]
     pub fn push_is_reply(mut self, value: ()) -> Self {
         push_header(self.as_rec_mut(), 7u16, 0 as u16);
         self
     }
-    #[doc = "The bitmask of enum transaction\\_flags from the transaction\\."]
+    #[doc = "The bitmask of enum transaction_flags from the transaction.\n"]
     pub fn push_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The application\\-defined code from the transaction\\."]
+    #[doc = "The application-defined code from the transaction.\n"]
     pub fn push_code(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 9u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The transaction payload size in bytes\\."]
+    #[doc = "The transaction payload size in bytes.\n"]
     pub fn push_data_size(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());

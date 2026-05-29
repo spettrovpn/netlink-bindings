@@ -1,4 +1,4 @@
-#![doc = "Foo\\-over\\-UDP\\.\n"]
+#![doc = "Foo-over-UDP.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -51,7 +51,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::Port(val) = attr? {
+            if let Ok(Fou::Port(val)) = attr {
                 return Ok(val);
             }
         }
@@ -66,7 +66,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::Af(val) = attr? {
+            if let Ok(Fou::Af(val)) = attr {
                 return Ok(val);
             }
         }
@@ -81,7 +81,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::Ipproto(val) = attr? {
+            if let Ok(Fou::Ipproto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -96,7 +96,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::Type(val) = attr? {
+            if let Ok(Fou::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -111,7 +111,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::RemcsumNopartial(val) = attr? {
+            if let Ok(Fou::RemcsumNopartial(val)) = attr {
                 return Ok(val);
             }
         }
@@ -126,7 +126,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::LocalV4(val) = attr? {
+            if let Ok(Fou::LocalV4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -141,7 +141,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::LocalV6(val) = attr? {
+            if let Ok(Fou::LocalV6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -156,7 +156,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::PeerV4(val) = attr? {
+            if let Ok(Fou::PeerV4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -171,7 +171,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::PeerV6(val) = attr? {
+            if let Ok(Fou::PeerV6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -186,7 +186,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::PeerPort(val) = attr? {
+            if let Ok(Fou::PeerPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -201,7 +201,7 @@ impl<'a> IterableFou<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Fou::Ifindex(val) = attr? {
+            if let Ok(Fou::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -257,14 +257,16 @@ impl<'a> IterableFou<'a> {
 impl<'a> Iterator for IterableFou<'a> {
     type Item = Result<Fou<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -549,7 +551,7 @@ impl<Prev: Rec> Drop for PushFou<Prev> {
         }
     }
 }
-#[doc = "Add port\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_ipproto()](PushFou::push_ipproto)\n- [.push_type()](PushFou::push_type)\n- [.push_remcsum_nopartial()](PushFou::push_remcsum_nopartial)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n"]
+#[doc = "Add port.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_ipproto()](PushFou::push_ipproto)\n- [.push_type()](PushFou::push_type)\n- [.push_remcsum_nopartial()](PushFou::push_remcsum_nopartial)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n\n"]
 #[derive(Debug)]
 pub struct OpAddDo<'r> {
     request: Request<'r>,
@@ -602,7 +604,7 @@ impl NetlinkRequest for OpAddDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete port\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_af()](PushFou::push_af)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n"]
+#[doc = "Delete port.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_af()](PushFou::push_af)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n\n"]
 #[derive(Debug)]
 pub struct OpDelDo<'r> {
     request: Request<'r>,
@@ -655,7 +657,7 @@ impl NetlinkRequest for OpDelDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get tunnel info\\.\n\nReply attributes:\n- [.get_port()](IterableFou::get_port)\n- [.get_ipproto()](IterableFou::get_ipproto)\n- [.get_type()](IterableFou::get_type)\n- [.get_remcsum_nopartial()](IterableFou::get_remcsum_nopartial)\n- [.get_local_v4()](IterableFou::get_local_v4)\n- [.get_local_v6()](IterableFou::get_local_v6)\n- [.get_peer_v4()](IterableFou::get_peer_v4)\n- [.get_peer_v6()](IterableFou::get_peer_v6)\n- [.get_peer_port()](IterableFou::get_peer_port)\n- [.get_ifindex()](IterableFou::get_ifindex)\n"]
+#[doc = "Get tunnel info.\n\nReply attributes:\n- [.get_port()](IterableFou::get_port)\n- [.get_ipproto()](IterableFou::get_ipproto)\n- [.get_type()](IterableFou::get_type)\n- [.get_remcsum_nopartial()](IterableFou::get_remcsum_nopartial)\n- [.get_local_v4()](IterableFou::get_local_v4)\n- [.get_local_v6()](IterableFou::get_local_v6)\n- [.get_peer_v4()](IterableFou::get_peer_v4)\n- [.get_peer_v6()](IterableFou::get_peer_v6)\n- [.get_peer_port()](IterableFou::get_peer_port)\n- [.get_ifindex()](IterableFou::get_ifindex)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDump<'r> {
     request: Request<'r>,
@@ -710,7 +712,7 @@ impl NetlinkRequest for OpGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get tunnel info\\.\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_af()](PushFou::push_af)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n\nReply attributes:\n- [.get_port()](IterableFou::get_port)\n- [.get_ipproto()](IterableFou::get_ipproto)\n- [.get_type()](IterableFou::get_type)\n- [.get_remcsum_nopartial()](IterableFou::get_remcsum_nopartial)\n- [.get_local_v4()](IterableFou::get_local_v4)\n- [.get_local_v6()](IterableFou::get_local_v6)\n- [.get_peer_v4()](IterableFou::get_peer_v4)\n- [.get_peer_v6()](IterableFou::get_peer_v6)\n- [.get_peer_port()](IterableFou::get_peer_port)\n- [.get_ifindex()](IterableFou::get_ifindex)\n"]
+#[doc = "Get tunnel info.\n\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_af()](PushFou::push_af)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n\nReply attributes:\n- [.get_port()](IterableFou::get_port)\n- [.get_ipproto()](IterableFou::get_ipproto)\n- [.get_type()](IterableFou::get_type)\n- [.get_remcsum_nopartial()](IterableFou::get_remcsum_nopartial)\n- [.get_local_v4()](IterableFou::get_local_v4)\n- [.get_local_v6()](IterableFou::get_local_v6)\n- [.get_peer_v4()](IterableFou::get_peer_v4)\n- [.get_peer_v6()](IterableFou::get_peer_v6)\n- [.get_peer_port()](IterableFou::get_peer_port)\n- [.get_ifindex()](IterableFou::get_ifindex)\n\n"]
 #[derive(Debug)]
 pub struct OpGetDo<'r> {
     request: Request<'r>,
@@ -865,28 +867,28 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Add port\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_ipproto()](PushFou::push_ipproto)\n- [.push_type()](PushFou::push_type)\n- [.push_remcsum_nopartial()](PushFou::push_remcsum_nopartial)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n"]
+    #[doc = "Add port.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_ipproto()](PushFou::push_ipproto)\n- [.push_type()](PushFou::push_type)\n- [.push_remcsum_nopartial()](PushFou::push_remcsum_nopartial)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n\n"]
     pub fn op_add_do(self) -> OpAddDo<'buf> {
         let mut res = OpAddDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-add-do", OpAddDo::lookup);
         res
     }
-    #[doc = "Delete port\\.\nFlags: admin-perm\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_af()](PushFou::push_af)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n"]
+    #[doc = "Delete port.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_af()](PushFou::push_af)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n\n"]
     pub fn op_del_do(self) -> OpDelDo<'buf> {
         let mut res = OpDelDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-del-do", OpDelDo::lookup);
         res
     }
-    #[doc = "Get tunnel info\\.\n\nReply attributes:\n- [.get_port()](IterableFou::get_port)\n- [.get_ipproto()](IterableFou::get_ipproto)\n- [.get_type()](IterableFou::get_type)\n- [.get_remcsum_nopartial()](IterableFou::get_remcsum_nopartial)\n- [.get_local_v4()](IterableFou::get_local_v4)\n- [.get_local_v6()](IterableFou::get_local_v6)\n- [.get_peer_v4()](IterableFou::get_peer_v4)\n- [.get_peer_v6()](IterableFou::get_peer_v6)\n- [.get_peer_port()](IterableFou::get_peer_port)\n- [.get_ifindex()](IterableFou::get_ifindex)\n"]
+    #[doc = "Get tunnel info.\n\nReply attributes:\n- [.get_port()](IterableFou::get_port)\n- [.get_ipproto()](IterableFou::get_ipproto)\n- [.get_type()](IterableFou::get_type)\n- [.get_remcsum_nopartial()](IterableFou::get_remcsum_nopartial)\n- [.get_local_v4()](IterableFou::get_local_v4)\n- [.get_local_v6()](IterableFou::get_local_v6)\n- [.get_peer_v4()](IterableFou::get_peer_v4)\n- [.get_peer_v6()](IterableFou::get_peer_v6)\n- [.get_peer_port()](IterableFou::get_peer_port)\n- [.get_ifindex()](IterableFou::get_ifindex)\n\n"]
     pub fn op_get_dump(self) -> OpGetDump<'buf> {
         let mut res = OpGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-dump", OpGetDump::lookup);
         res
     }
-    #[doc = "Get tunnel info\\.\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_af()](PushFou::push_af)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n\nReply attributes:\n- [.get_port()](IterableFou::get_port)\n- [.get_ipproto()](IterableFou::get_ipproto)\n- [.get_type()](IterableFou::get_type)\n- [.get_remcsum_nopartial()](IterableFou::get_remcsum_nopartial)\n- [.get_local_v4()](IterableFou::get_local_v4)\n- [.get_local_v6()](IterableFou::get_local_v6)\n- [.get_peer_v4()](IterableFou::get_peer_v4)\n- [.get_peer_v6()](IterableFou::get_peer_v6)\n- [.get_peer_port()](IterableFou::get_peer_port)\n- [.get_ifindex()](IterableFou::get_ifindex)\n"]
+    #[doc = "Get tunnel info.\n\nRequest attributes:\n- [.push_port()](PushFou::push_port)\n- [.push_af()](PushFou::push_af)\n- [.push_local_v4()](PushFou::push_local_v4)\n- [.push_local_v6()](PushFou::push_local_v6)\n- [.push_peer_v4()](PushFou::push_peer_v4)\n- [.push_peer_v6()](PushFou::push_peer_v6)\n- [.push_peer_port()](PushFou::push_peer_port)\n- [.push_ifindex()](PushFou::push_ifindex)\n\nReply attributes:\n- [.get_port()](IterableFou::get_port)\n- [.get_ipproto()](IterableFou::get_ipproto)\n- [.get_type()](IterableFou::get_type)\n- [.get_remcsum_nopartial()](IterableFou::get_remcsum_nopartial)\n- [.get_local_v4()](IterableFou::get_local_v4)\n- [.get_local_v6()](IterableFou::get_local_v6)\n- [.get_peer_v4()](IterableFou::get_peer_v4)\n- [.get_peer_v6()](IterableFou::get_peer_v6)\n- [.get_peer_port()](IterableFou::get_peer_port)\n- [.get_ifindex()](IterableFou::get_ifindex)\n\n"]
     pub fn op_get_do(self) -> OpGetDo<'buf> {
         let mut res = OpGetDo::new(self);
         res.request

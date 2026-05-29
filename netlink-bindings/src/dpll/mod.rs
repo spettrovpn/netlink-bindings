@@ -1,4 +1,4 @@
-#![doc = "DPLL subsystem\\."]
+#![doc = "DPLL subsystem.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -15,13 +15,13 @@ use crate::{
 };
 pub const PROTONAME: &str = "dpll";
 pub const PROTONAME_CSTR: &CStr = c"dpll";
-#[doc = "working modes a dpll can support, differentiates if and how dpll selects\none of its inputs to syntonize with it, valid values for DPLL\\_A\\_MODE\nattribute\n"]
+#[doc = "working modes a dpll can support, differentiates if and how dpll selects\none of its inputs to syntonize with it, valid values for DPLL_A_MODE\nattribute\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum Mode {
-    #[doc = "input can be only selected by sending a request to dpll"]
+    #[doc = "input can be only selected by sending a request to dpll\n"]
     Manual = 1,
-    #[doc = "highest prio input pin auto selected by dpll"]
+    #[doc = "highest prio input pin auto selected by dpll\n"]
     Automatic = 2,
 }
 impl Mode {
@@ -33,17 +33,17 @@ impl Mode {
         })
     }
 }
-#[doc = "provides information of dpll device lock status, valid values for\nDPLL\\_A\\_LOCK\\_STATUS attribute\n"]
+#[doc = "provides information of dpll device lock status, valid values for\nDPLL_A_LOCK_STATUS attribute\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum LockStatus {
-    #[doc = "dpll was not yet locked to any valid input (or forced by setting\nDPLL\\_A\\_MODE to DPLL\\_MODE\\_DETACHED)\n"]
+    #[doc = "dpll was not yet locked to any valid input (or forced by setting\nDPLL_A_MODE to DPLL_MODE_DETACHED)\n"]
     Unlocked = 1,
     #[doc = "dpll is locked to a valid signal, but no holdover available\n"]
     Locked = 2,
     #[doc = "dpll is locked and holdover acquired\n"]
     LockedHoAcq = 3,
-    #[doc = "dpll is in holdover state \\- lost a valid lock or was forced\nby disconnecting all the pins (latter possible only\nwhen dpll lock\\-state was already DPLL\\_LOCK\\_STATUS\\_LOCKED\\_HO\\_ACQ,\nif dpll lock\\-state was not DPLL\\_LOCK\\_STATUS\\_LOCKED\\_HO\\_ACQ, the\ndpll's lock\\-state shall remain DPLL\\_LOCK\\_STATUS\\_UNLOCKED)\n"]
+    #[doc = "dpll is in holdover state - lost a valid lock or was forced by\ndisconnecting all the pins (latter possible only when dpll lock-state\nwas already DPLL_LOCK_STATUS_LOCKED_HO_ACQ, if dpll lock-state was not\nDPLL_LOCK_STATUS_LOCKED_HO_ACQ, the dpll\\'s lock-state shall remain\nDPLL_LOCK_STATUS_UNLOCKED)\n"]
     Holdover = 4,
 }
 impl LockStatus {
@@ -57,17 +57,17 @@ impl LockStatus {
         })
     }
 }
-#[doc = "if previous status change was done due to a failure, this provides\ninformation of dpll device lock status error\\.\nValid values for DPLL\\_A\\_LOCK\\_STATUS\\_ERROR attribute\n"]
+#[doc = "if previous status change was done due to a failure, this provides\ninformation of dpll device lock status error. Valid values for\nDPLL_A_LOCK_STATUS_ERROR attribute\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum LockStatusError {
     #[doc = "dpll device lock status was changed without any error\n"]
     None = 1,
-    #[doc = "dpll device lock status was changed due to undefined error\\.\nDriver fills this value up in case it is not able\nto obtain suitable exact error type\\.\n"]
+    #[doc = "dpll device lock status was changed due to undefined error. Driver fills\nthis value up in case it is not able to obtain suitable exact error\ntype.\n"]
     Undefined = 2,
-    #[doc = "dpll device lock status was changed because of associated\nmedia got down\\.\nThis may happen for example if dpll device was previously\nlocked on an input pin of type PIN\\_TYPE\\_SYNCE\\_ETH\\_PORT\\.\n"]
+    #[doc = "dpll device lock status was changed because of associated media got\ndown. This may happen for example if dpll device was previously locked\non an input pin of type PIN_TYPE_SYNCE_ETH_PORT.\n"]
     MediaDown = 3,
-    #[doc = "the FFO (Fractional Frequency Offset) between the RX and TX\nsymbol rate on the media got too high\\.\nThis may happen for example if dpll device was previously\nlocked on an input pin of type PIN\\_TYPE\\_SYNCE\\_ETH\\_PORT\\.\n"]
+    #[doc = "the FFO (Fractional Frequency Offset) between the RX and TX symbol rate\non the media got too high. This may happen for example if dpll device\nwas previously locked on an input pin of type PIN_TYPE_SYNCE_ETH_PORT.\n"]
     FractionalFrequencyOffsetTooHigh = 4,
 }
 impl LockStatusError {
@@ -81,7 +81,7 @@ impl LockStatusError {
         })
     }
 }
-#[doc = "level of quality of a clock device\\. This mainly applies when\nthe dpll lock\\-status is DPLL\\_LOCK\\_STATUS\\_HOLDOVER\\.\nThe current list is defined according to the table 11\\-7 contained\nin ITU\\-T G\\.8264/Y\\.1364 document\\. One may extend this list freely\nby other ITU\\-T defined clock qualities, or different ones defined\nby another standardization body (for those, please use\ndifferent prefix)\\.\n"]
+#[doc = "level of quality of a clock device. This mainly applies when the dpll\nlock-status is DPLL_LOCK_STATUS_HOLDOVER. The current list is defined\naccording to the table 11-7 contained in ITU-T G.8264/Y.1364 document.\nOne may extend this list freely by other ITU-T defined clock qualities,\nor different ones defined by another standardization body (for those,\nplease use different prefix).\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum ClockQualityLevel {
@@ -109,15 +109,15 @@ impl ClockQualityLevel {
         })
     }
 }
-#[doc = "temperature divider allowing userspace to calculate the\ntemperature as float with three digit decimal precision\\.\nValue of (DPLL\\_A\\_TEMP / DPLL\\_TEMP\\_DIVIDER) is integer part of\ntemperature value\\.\nValue of (DPLL\\_A\\_TEMP % DPLL\\_TEMP\\_DIVIDER) is fractional part of\ntemperature value\\.\n"]
+#[doc = "temperature divider allowing userspace to calculate the temperature as\nfloat with three digit decimal precision. Value of (DPLL_A_TEMP /\nDPLL_TEMP_DIVIDER) is integer part of temperature value. Value of\n(DPLL_A_TEMP % DPLL_TEMP_DIVIDER) is fractional part of temperature\nvalue.\n"]
 pub const TEMP_DIVIDER: u64 = 1000u64;
-#[doc = "type of dpll, valid values for DPLL\\_A\\_TYPE attribute"]
+#[doc = "type of dpll, valid values for DPLL_A_TYPE attribute\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum Type {
-    #[doc = "dpll produces Pulse\\-Per\\-Second signal"]
+    #[doc = "dpll produces Pulse-Per-Second signal\n"]
     Pps = 1,
-    #[doc = "dpll drives the Ethernet Equipment Clock"]
+    #[doc = "dpll drives the Ethernet Equipment Clock\n"]
     Eec = 2,
 }
 impl Type {
@@ -129,19 +129,19 @@ impl Type {
         })
     }
 }
-#[doc = "defines possible types of a pin, valid values for DPLL\\_A\\_PIN\\_TYPE\nattribute\n"]
+#[doc = "defines possible types of a pin, valid values for DPLL_A_PIN_TYPE\nattribute\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum PinType {
-    #[doc = "aggregates another layer of selectable pins"]
+    #[doc = "aggregates another layer of selectable pins\n"]
     Mux = 1,
-    #[doc = "external input"]
+    #[doc = "external input\n"]
     Ext = 2,
-    #[doc = "ethernet port PHY's recovered clock"]
+    #[doc = "ethernet port PHY\\'s recovered clock\n"]
     SynceEthPort = 3,
-    #[doc = "device internal oscillator"]
+    #[doc = "device internal oscillator\n"]
     IntOscillator = 4,
-    #[doc = "GNSS recovered clock"]
+    #[doc = "GNSS recovered clock\n"]
     Gnss = 5,
 }
 impl PinType {
@@ -156,13 +156,13 @@ impl PinType {
         })
     }
 }
-#[doc = "defines possible direction of a pin, valid values for\nDPLL\\_A\\_PIN\\_DIRECTION attribute\n"]
+#[doc = "defines possible direction of a pin, valid values for\nDPLL_A_PIN_DIRECTION attribute\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum PinDirection {
-    #[doc = "pin used as a input of a signal"]
+    #[doc = "pin used as a input of a signal\n"]
     Input = 1,
-    #[doc = "pin used to output the signal"]
+    #[doc = "pin used to output the signal\n"]
     Output = 2,
 }
 impl PinDirection {
@@ -178,15 +178,15 @@ pub const PIN_FREQUENCY_1_HZ: u64 = 1u64;
 pub const PIN_FREQUENCY_10_KHZ: u64 = 10000u64;
 pub const PIN_FREQUENCY_77_5_KHZ: u64 = 77500u64;
 pub const PIN_FREQUENCY_10_MHZ: u64 = 10000000u64;
-#[doc = "defines possible states of a pin, valid values for\nDPLL\\_A\\_PIN\\_STATE attribute\n"]
+#[doc = "defines possible states of a pin, valid values for DPLL_A_PIN_STATE\nattribute\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum PinState {
-    #[doc = "pin connected, active input of phase locked loop"]
+    #[doc = "pin connected, active input of phase locked loop\n"]
     Connected = 1,
-    #[doc = "pin disconnected, not considered as a valid input"]
+    #[doc = "pin disconnected, not considered as a valid input\n"]
     Disconnected = 2,
-    #[doc = "pin enabled for automatic input selection"]
+    #[doc = "pin enabled for automatic input selection\n"]
     Selectable = 3,
 }
 impl PinState {
@@ -199,15 +199,39 @@ impl PinState {
         })
     }
 }
-#[doc = "defines possible capabilities of a pin, valid flags on\nDPLL\\_A\\_PIN\\_CAPABILITIES attribute\n"]
+#[doc = "defines possible operational states of a pin with respect to its parent\nDPLL device, valid values for DPLL_A_PIN_OPERSTATE attribute\n"]
+#[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
+#[derive(Debug, Clone, Copy)]
+pub enum PinOperstate {
+    #[doc = "pin is qualified and actively used by the DPLL\n"]
+    Active = 1,
+    #[doc = "pin is qualified but not actively used by the DPLL\n"]
+    Standby = 2,
+    #[doc = "pin does not have a valid signal\n"]
+    NoSignal = 3,
+    #[doc = "pin signal failed qualification (e.g. frequency or phase monitor)\n"]
+    QualFailed = 4,
+}
+impl PinOperstate {
+    pub fn from_value(value: u64) -> Option<Self> {
+        Some(match value {
+            1 => Self::Active,
+            2 => Self::Standby,
+            3 => Self::NoSignal,
+            4 => Self::QualFailed,
+            _ => return None,
+        })
+    }
+}
+#[doc = "defines possible capabilities of a pin, valid flags on\nDPLL_A_PIN_CAPABILITIES attribute\n"]
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum PinCapabilities {
-    #[doc = "pin direction can be changed"]
+    #[doc = "pin direction can be changed\n"]
     DirectionCanChange = 1 << 0,
-    #[doc = "pin priority can be changed"]
+    #[doc = "pin priority can be changed\n"]
     PriorityCanChange = 1 << 1,
-    #[doc = "pin state can be changed"]
+    #[doc = "pin state can be changed\n"]
     StateCanChange = 1 << 2,
 }
 impl PinCapabilities {
@@ -220,9 +244,11 @@ impl PinCapabilities {
         })
     }
 }
-#[doc = "phase offset divider allows userspace to calculate a value of\nmeasured signal phase difference between a pin and dpll device\nas a fractional value with three digit decimal precision\\.\nValue of (DPLL\\_A\\_PHASE\\_OFFSET / DPLL\\_PHASE\\_OFFSET\\_DIVIDER) is an\ninteger part of a measured phase offset value\\.\nValue of (DPLL\\_A\\_PHASE\\_OFFSET % DPLL\\_PHASE\\_OFFSET\\_DIVIDER) is a\nfractional part of a measured phase offset value\\.\n"]
+#[doc = "phase offset divider allows userspace to calculate a value of measured\nsignal phase difference between a pin and dpll device as a fractional\nvalue with three digit decimal precision. Value of (DPLL_A_PHASE_OFFSET\n/ DPLL_PHASE_OFFSET_DIVIDER) is an integer part of a measured phase\noffset value. Value of (DPLL_A_PHASE_OFFSET % DPLL_PHASE_OFFSET_DIVIDER)\nis a fractional part of a measured phase offset value.\n"]
 pub const PHASE_OFFSET_DIVIDER: u64 = 1000u64;
-#[doc = "Allow control (enable/disable) and status checking over features\\.\n"]
+#[doc = "pin measured frequency divider allows userspace to calculate a value of\nmeasured input frequency as a fractional value with three digit decimal\nprecision (millihertz). Value of (DPLL_A_PIN_MEASURED_FREQUENCY /\nDPLL_PIN_MEASURED_FREQUENCY_DIVIDER) is an integer part of a measured\nfrequency value. Value of (DPLL_A_PIN_MEASURED_FREQUENCY %\nDPLL_PIN_MEASURED_FREQUENCY_DIVIDER) is a fractional part of a measured\nfrequency value.\n"]
+pub const PIN_MEASURED_FREQUENCY_DIVIDER: u64 = 1000u64;
+#[doc = "Allow control (enable/disable) and status checking over features.\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum FeatureState {
@@ -257,19 +283,21 @@ pub enum Dpll<'a> {
     Type(u32),
     #[doc = "Associated type: [`LockStatusError`] (enum)"]
     LockStatusError(u32),
-    #[doc = "Level of quality of a clock device\\. This mainly applies when\nthe dpll lock\\-status is DPLL\\_LOCK\\_STATUS\\_HOLDOVER\\. This could\nbe put to message multiple times to indicate possible parallel\nquality levels (e\\.g\\. one specified by ITU option 1 and another\none specified by option 2)\\.\n\nAssociated type: [`ClockQualityLevel`] (enum)\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "Level of quality of a clock device. This mainly applies when the dpll\nlock-status is DPLL_LOCK_STATUS_HOLDOVER. This could be put to message\nmultiple times to indicate possible parallel quality levels (e.g. one\nspecified by ITU option 1 and another one specified by option 2).\n\nAssociated type: [`ClockQualityLevel`] (enum)\nAttribute may repeat multiple times (treat it as array)"]
     ClockQualityLevel(u32),
-    #[doc = "Receive or request state of phase offset monitor feature\\. If enabled, dpll device shall monitor and notify all currently available inputs for changes of their phase offset against the dpll device\\.\nAssociated type: [`FeatureState`] (enum)"]
+    #[doc = "Receive or request state of phase offset monitor feature. If enabled,\ndpll device shall monitor and notify all currently available inputs for\nchanges of their phase offset against the dpll device.\n\nAssociated type: [`FeatureState`] (enum)"]
     PhaseOffsetMonitor(u32),
-    #[doc = "Averaging factor applied to calculation of reported phase offset\\."]
+    #[doc = "Averaging factor applied to calculation of reported phase offset.\n"]
     PhaseOffsetAvgFactor(u32),
+    #[doc = "Current or desired state of the frequency monitor feature. If enabled,\ndpll device shall measure all currently available inputs for their\nactual input frequency.\n\nAssociated type: [`FeatureState`] (enum)"]
+    FrequencyMonitor(u32),
 }
 impl<'a> IterableDpll<'a> {
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::Id(val) = attr? {
+            if let Ok(Dpll::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -284,7 +312,7 @@ impl<'a> IterableDpll<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::ModuleName(val) = attr? {
+            if let Ok(Dpll::ModuleName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -299,7 +327,7 @@ impl<'a> IterableDpll<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::Pad(val) = attr? {
+            if let Ok(Dpll::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -314,7 +342,7 @@ impl<'a> IterableDpll<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::ClockId(val) = attr? {
+            if let Ok(Dpll::ClockId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -330,7 +358,7 @@ impl<'a> IterableDpll<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::Mode(val) = attr? {
+            if let Ok(Dpll::Mode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -356,7 +384,7 @@ impl<'a> IterableDpll<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::LockStatus(val) = attr? {
+            if let Ok(Dpll::LockStatus(val)) = attr {
                 return Ok(val);
             }
         }
@@ -371,7 +399,7 @@ impl<'a> IterableDpll<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::Temp(val) = attr? {
+            if let Ok(Dpll::Temp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -387,7 +415,7 @@ impl<'a> IterableDpll<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::Type(val) = attr? {
+            if let Ok(Dpll::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -403,7 +431,7 @@ impl<'a> IterableDpll<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::LockStatusError(val) = attr? {
+            if let Ok(Dpll::LockStatusError(val)) = attr {
                 return Ok(val);
             }
         }
@@ -414,7 +442,7 @@ impl<'a> IterableDpll<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Level of quality of a clock device\\. This mainly applies when\nthe dpll lock\\-status is DPLL\\_LOCK\\_STATUS\\_HOLDOVER\\. This could\nbe put to message multiple times to indicate possible parallel\nquality levels (e\\.g\\. one specified by ITU option 1 and another\none specified by option 2)\\.\n\nAssociated type: [`ClockQualityLevel`] (enum)\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "Level of quality of a clock device. This mainly applies when the dpll\nlock-status is DPLL_LOCK_STATUS_HOLDOVER. This could be put to message\nmultiple times to indicate possible parallel quality levels (e.g. one\nspecified by ITU option 1 and another one specified by option 2).\n\nAssociated type: [`ClockQualityLevel`] (enum)\nAttribute may repeat multiple times (treat it as array)"]
     pub fn get_clock_quality_level(&self) -> MultiAttrIterable<Self, Dpll<'a>, u32> {
         MultiAttrIterable::new(self.clone(), |variant| {
             if let Dpll::ClockQualityLevel(val) = variant {
@@ -424,12 +452,12 @@ impl<'a> IterableDpll<'a> {
             }
         })
     }
-    #[doc = "Receive or request state of phase offset monitor feature\\. If enabled, dpll device shall monitor and notify all currently available inputs for changes of their phase offset against the dpll device\\.\nAssociated type: [`FeatureState`] (enum)"]
+    #[doc = "Receive or request state of phase offset monitor feature. If enabled,\ndpll device shall monitor and notify all currently available inputs for\nchanges of their phase offset against the dpll device.\n\nAssociated type: [`FeatureState`] (enum)"]
     pub fn get_phase_offset_monitor(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::PhaseOffsetMonitor(val) = attr? {
+            if let Ok(Dpll::PhaseOffsetMonitor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -440,18 +468,34 @@ impl<'a> IterableDpll<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Averaging factor applied to calculation of reported phase offset\\."]
+    #[doc = "Averaging factor applied to calculation of reported phase offset.\n"]
     pub fn get_phase_offset_avg_factor(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dpll::PhaseOffsetAvgFactor(val) = attr? {
+            if let Ok(Dpll::PhaseOffsetAvgFactor(val)) = attr {
                 return Ok(val);
             }
         }
         Err(ErrorContext::new_missing(
             "Dpll",
             "PhaseOffsetAvgFactor",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "Current or desired state of the frequency monitor feature. If enabled,\ndpll device shall measure all currently available inputs for their\nactual input frequency.\n\nAssociated type: [`FeatureState`] (enum)"]
+    pub fn get_frequency_monitor(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Dpll::FrequencyMonitor(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Dpll",
+            "FrequencyMonitor",
             self.orig_loc,
             self.buf.as_ptr() as usize,
         ))
@@ -476,6 +520,7 @@ impl Dpll<'_> {
             11u16 => "ClockQualityLevel",
             12u16 => "PhaseOffsetMonitor",
             13u16 => "PhaseOffsetAvgFactor",
+            14u16 => "FrequencyMonitor",
             _ => return None,
         };
         Some(res)
@@ -502,14 +547,16 @@ impl<'a> IterableDpll<'a> {
 impl<'a> Iterator for IterableDpll<'a> {
     type Item = Result<Dpll<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -579,6 +626,11 @@ impl<'a> Iterator for IterableDpll<'a> {
                     let Some(val) = res else { break };
                     val
                 }),
+                14u16 => Dpll::FrequencyMonitor({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -633,6 +685,10 @@ impl<'a> std::fmt::Debug for IterableDpll<'_> {
                     &FormatEnum(val.into(), FeatureState::from_value),
                 ),
                 Dpll::PhaseOffsetAvgFactor(val) => fmt.field("PhaseOffsetAvgFactor", &val),
+                Dpll::FrequencyMonitor(val) => fmt.field(
+                    "FrequencyMonitor",
+                    &FormatEnum(val.into(), FeatureState::from_value),
+                ),
             };
         }
         fmt.finish()
@@ -736,6 +792,12 @@ impl IterableDpll<'_> {
                         break;
                     }
                 }
+                Dpll::FrequencyMonitor(val) => {
+                    if last_off == offset {
+                        stack.push(("FrequencyMonitor", last_off));
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -778,27 +840,31 @@ pub enum Pin<'a> {
     PhaseAdjustMax(i32),
     PhaseAdjust(i32),
     PhaseOffset(i64),
-    #[doc = "The FFO (Fractional Frequency Offset) between the RX and TX\nsymbol rate on the media associated with the pin:\n(rx\\_frequency\\-tx\\_frequency)/rx\\_frequency\nValue is in PPM (parts per million)\\.\nThis may be implemented for example for pin of type\nPIN\\_TYPE\\_SYNCE\\_ETH\\_PORT\\.\n"]
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPM\n(parts per million). This is a lower-precision version of\nfractional-frequency-offset-ppt.\n"]
     FractionalFrequencyOffset(i32),
-    #[doc = "Frequency of Embedded SYNC signal\\. If provided, the pin is configured\nwith a SYNC signal embedded into its base clock frequency\\.\n"]
+    #[doc = "Frequency of Embedded SYNC signal. If provided, the pin is configured\nwith a SYNC signal embedded into its base clock frequency.\n"]
     EsyncFrequency(u64),
-    #[doc = "If provided a pin is capable of embedding a SYNC signal (within given\nrange) into its base frequency signal\\.\n\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "If provided a pin is capable of embedding a SYNC signal (within given\nrange) into its base frequency signal.\n\nAttribute may repeat multiple times (treat it as array)"]
     EsyncFrequencySupported(IterableFrequencyRange<'a>),
-    #[doc = "A ratio of high to low state of a SYNC signal pulse embedded\ninto base clock frequency\\. Value is in percents\\.\n"]
+    #[doc = "A ratio of high to low state of a SYNC signal pulse embedded into base\nclock frequency. Value is in percents.\n"]
     EsyncPulse(u32),
-    #[doc = "Capable pin provides list of pins that can be bound to create a\nreference\\-sync pin pair\\.\n\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "Capable pin provides list of pins that can be bound to create a\nreference-sync pin pair.\n\nAttribute may repeat multiple times (treat it as array)"]
     ReferenceSync(IterableReferenceSync<'a>),
-    #[doc = "Granularity of phase adjustment, in picoseconds\\. The value of\nphase adjustment must be a multiple of this granularity\\.\n"]
+    #[doc = "Granularity of phase adjustment, in picoseconds. The value of phase\nadjustment must be a multiple of this granularity.\n"]
     PhaseAdjustGran(u32),
-    #[doc = "The FFO (Fractional Frequency Offset) of the pin with respect to\nthe nominal frequency\\.\nValue = (frequency\\_measured \\- frequency\\_nominal) / frequency\\_nominal\nValue is in PPT (parts per trillion, 10^\\-12)\\.\nNote: This attribute provides higher resolution than the standard\nfractional\\-frequency\\-offset (which is in PPM)\\.\n"]
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPT\n(parts per trillion, 10\\^-12). This is a higher-precision version of\nfractional-frequency-offset.\n"]
     FractionalFrequencyOffsetPpt(i32),
+    #[doc = "The measured frequency of the input pin in millihertz (mHz). Value of\n(DPLL_A_PIN_MEASURED_FREQUENCY / DPLL_PIN_MEASURED_FREQUENCY_DIVIDER) is\nan integer part (Hz) of a measured frequency value. Value of\n(DPLL_A_PIN_MEASURED_FREQUENCY % DPLL_PIN_MEASURED_FREQUENCY_DIVIDER) is\na fractional part of a measured frequency value.\n"]
+    MeasuredFrequency(u64),
+    #[doc = "Operational state of the pin with respect to its parent DPLL device.\nUnlike state (which reflects the administrative intent), operstate\nreflects the actual hardware status.\n\nAssociated type: [`PinOperstate`] (enum)"]
+    Operstate(u32),
 }
 impl<'a> IterablePin<'a> {
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::Id(val) = attr? {
+            if let Ok(Pin::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -813,7 +879,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::ParentId(val) = attr? {
+            if let Ok(Pin::ParentId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -828,7 +894,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::ModuleName(val) = attr? {
+            if let Ok(Pin::ModuleName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -843,7 +909,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::Pad(val) = attr? {
+            if let Ok(Pin::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -858,7 +924,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::ClockId(val) = attr? {
+            if let Ok(Pin::ClockId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -873,7 +939,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::BoardLabel(val) = attr? {
+            if let Ok(Pin::BoardLabel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -888,7 +954,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::PanelLabel(val) = attr? {
+            if let Ok(Pin::PanelLabel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -903,7 +969,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::PackageLabel(val) = attr? {
+            if let Ok(Pin::PackageLabel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -919,7 +985,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::Type(val) = attr? {
+            if let Ok(Pin::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -935,7 +1001,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::Direction(val) = attr? {
+            if let Ok(Pin::Direction(val)) = attr {
                 return Ok(val);
             }
         }
@@ -950,7 +1016,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::Frequency(val) = attr? {
+            if let Ok(Pin::Frequency(val)) = attr {
                 return Ok(val);
             }
         }
@@ -977,7 +1043,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::FrequencyMin(val) = attr? {
+            if let Ok(Pin::FrequencyMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -992,7 +1058,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::FrequencyMax(val) = attr? {
+            if let Ok(Pin::FrequencyMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1007,7 +1073,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::Prio(val) = attr? {
+            if let Ok(Pin::Prio(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1023,7 +1089,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::State(val) = attr? {
+            if let Ok(Pin::State(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1039,7 +1105,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::Capabilities(val) = attr? {
+            if let Ok(Pin::Capabilities(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1076,7 +1142,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::PhaseAdjustMin(val) = attr? {
+            if let Ok(Pin::PhaseAdjustMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1091,7 +1157,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::PhaseAdjustMax(val) = attr? {
+            if let Ok(Pin::PhaseAdjustMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1106,7 +1172,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::PhaseAdjust(val) = attr? {
+            if let Ok(Pin::PhaseAdjust(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1121,7 +1187,7 @@ impl<'a> IterablePin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::PhaseOffset(val) = attr? {
+            if let Ok(Pin::PhaseOffset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1132,12 +1198,12 @@ impl<'a> IterablePin<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The FFO (Fractional Frequency Offset) between the RX and TX\nsymbol rate on the media associated with the pin:\n(rx\\_frequency\\-tx\\_frequency)/rx\\_frequency\nValue is in PPM (parts per million)\\.\nThis may be implemented for example for pin of type\nPIN\\_TYPE\\_SYNCE\\_ETH\\_PORT\\.\n"]
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPM\n(parts per million). This is a lower-precision version of\nfractional-frequency-offset-ppt.\n"]
     pub fn get_fractional_frequency_offset(&self) -> Result<i32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::FractionalFrequencyOffset(val) = attr? {
+            if let Ok(Pin::FractionalFrequencyOffset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1148,12 +1214,12 @@ impl<'a> IterablePin<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Frequency of Embedded SYNC signal\\. If provided, the pin is configured\nwith a SYNC signal embedded into its base clock frequency\\.\n"]
+    #[doc = "Frequency of Embedded SYNC signal. If provided, the pin is configured\nwith a SYNC signal embedded into its base clock frequency.\n"]
     pub fn get_esync_frequency(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::EsyncFrequency(val) = attr? {
+            if let Ok(Pin::EsyncFrequency(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1164,7 +1230,7 @@ impl<'a> IterablePin<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "If provided a pin is capable of embedding a SYNC signal (within given\nrange) into its base frequency signal\\.\n\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "If provided a pin is capable of embedding a SYNC signal (within given\nrange) into its base frequency signal.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn get_esync_frequency_supported(
         &self,
     ) -> MultiAttrIterable<Self, Pin<'a>, IterableFrequencyRange<'a>> {
@@ -1176,12 +1242,12 @@ impl<'a> IterablePin<'a> {
             }
         })
     }
-    #[doc = "A ratio of high to low state of a SYNC signal pulse embedded\ninto base clock frequency\\. Value is in percents\\.\n"]
+    #[doc = "A ratio of high to low state of a SYNC signal pulse embedded into base\nclock frequency. Value is in percents.\n"]
     pub fn get_esync_pulse(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::EsyncPulse(val) = attr? {
+            if let Ok(Pin::EsyncPulse(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1192,7 +1258,7 @@ impl<'a> IterablePin<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Capable pin provides list of pins that can be bound to create a\nreference\\-sync pin pair\\.\n\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "Capable pin provides list of pins that can be bound to create a\nreference-sync pin pair.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn get_reference_sync(
         &self,
     ) -> MultiAttrIterable<Self, Pin<'a>, IterableReferenceSync<'a>> {
@@ -1204,12 +1270,12 @@ impl<'a> IterablePin<'a> {
             }
         })
     }
-    #[doc = "Granularity of phase adjustment, in picoseconds\\. The value of\nphase adjustment must be a multiple of this granularity\\.\n"]
+    #[doc = "Granularity of phase adjustment, in picoseconds. The value of phase\nadjustment must be a multiple of this granularity.\n"]
     pub fn get_phase_adjust_gran(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::PhaseAdjustGran(val) = attr? {
+            if let Ok(Pin::PhaseAdjustGran(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1220,18 +1286,50 @@ impl<'a> IterablePin<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "The FFO (Fractional Frequency Offset) of the pin with respect to\nthe nominal frequency\\.\nValue = (frequency\\_measured \\- frequency\\_nominal) / frequency\\_nominal\nValue is in PPT (parts per trillion, 10^\\-12)\\.\nNote: This attribute provides higher resolution than the standard\nfractional\\-frequency\\-offset (which is in PPM)\\.\n"]
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPT\n(parts per trillion, 10\\^-12). This is a higher-precision version of\nfractional-frequency-offset.\n"]
     pub fn get_fractional_frequency_offset_ppt(&self) -> Result<i32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Pin::FractionalFrequencyOffsetPpt(val) = attr? {
+            if let Ok(Pin::FractionalFrequencyOffsetPpt(val)) = attr {
                 return Ok(val);
             }
         }
         Err(ErrorContext::new_missing(
             "Pin",
             "FractionalFrequencyOffsetPpt",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "The measured frequency of the input pin in millihertz (mHz). Value of\n(DPLL_A_PIN_MEASURED_FREQUENCY / DPLL_PIN_MEASURED_FREQUENCY_DIVIDER) is\nan integer part (Hz) of a measured frequency value. Value of\n(DPLL_A_PIN_MEASURED_FREQUENCY % DPLL_PIN_MEASURED_FREQUENCY_DIVIDER) is\na fractional part of a measured frequency value.\n"]
+    pub fn get_measured_frequency(&self) -> Result<u64, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Pin::MeasuredFrequency(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Pin",
+            "MeasuredFrequency",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "Operational state of the pin with respect to its parent DPLL device.\nUnlike state (which reflects the administrative intent), operstate\nreflects the actual hardware status.\n\nAssociated type: [`PinOperstate`] (enum)"]
+    pub fn get_operstate(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Pin::Operstate(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Pin",
+            "Operstate",
             self.orig_loc,
             self.buf.as_ptr() as usize,
         ))
@@ -1273,6 +1371,8 @@ impl Pin<'_> {
             28u16 => "ReferenceSync",
             29u16 => "PhaseAdjustGran",
             30u16 => "FractionalFrequencyOffsetPpt",
+            31u16 => "MeasuredFrequency",
+            32u16 => "Operstate",
             _ => return None,
         };
         Some(res)
@@ -1299,14 +1399,16 @@ impl<'a> IterablePin<'a> {
 impl<'a> Iterator for IterablePin<'a> {
     type Item = Result<Pin<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1461,6 +1563,16 @@ impl<'a> Iterator for IterablePin<'a> {
                     let Some(val) = res else { break };
                     val
                 }),
+                31u16 => Pin::MeasuredFrequency({
+                    let res = parse_u64(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                32u16 => Pin::Operstate({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -1528,6 +1640,11 @@ impl<'a> std::fmt::Debug for IterablePin<'_> {
                 Pin::FractionalFrequencyOffsetPpt(val) => {
                     fmt.field("FractionalFrequencyOffsetPpt", &val)
                 }
+                Pin::MeasuredFrequency(val) => fmt.field("MeasuredFrequency", &val),
+                Pin::Operstate(val) => fmt.field(
+                    "Operstate",
+                    &FormatEnum(val.into(), PinOperstate::from_value),
+                ),
             };
         }
         fmt.finish()
@@ -1734,6 +1851,18 @@ impl IterablePin<'_> {
                         break;
                     }
                 }
+                Pin::MeasuredFrequency(val) => {
+                    if last_off == offset {
+                        stack.push(("MeasuredFrequency", last_off));
+                        break;
+                    }
+                }
+                Pin::Operstate(val) => {
+                    if last_off == offset {
+                        stack.push(("Operstate", last_off));
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -1753,13 +1882,19 @@ pub enum PinParentDevice {
     #[doc = "Associated type: [`PinState`] (enum)"]
     State(u32),
     PhaseOffset(i64),
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPM\n(parts per million). This is a lower-precision version of\nfractional-frequency-offset-ppt.\n"]
+    FractionalFrequencyOffset(i32),
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPT\n(parts per trillion, 10\\^-12). This is a higher-precision version of\nfractional-frequency-offset.\n"]
+    FractionalFrequencyOffsetPpt(i32),
+    #[doc = "Operational state of the pin with respect to its parent DPLL device.\nUnlike state (which reflects the administrative intent), operstate\nreflects the actual hardware status.\n\nAssociated type: [`PinOperstate`] (enum)"]
+    Operstate(u32),
 }
 impl<'a> IterablePinParentDevice<'a> {
     pub fn get_parent_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PinParentDevice::ParentId(val) = attr? {
+            if let Ok(PinParentDevice::ParentId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1775,7 +1910,7 @@ impl<'a> IterablePinParentDevice<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PinParentDevice::Direction(val) = attr? {
+            if let Ok(PinParentDevice::Direction(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1790,7 +1925,7 @@ impl<'a> IterablePinParentDevice<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PinParentDevice::Prio(val) = attr? {
+            if let Ok(PinParentDevice::Prio(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1806,7 +1941,7 @@ impl<'a> IterablePinParentDevice<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PinParentDevice::State(val) = attr? {
+            if let Ok(PinParentDevice::State(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1821,13 +1956,61 @@ impl<'a> IterablePinParentDevice<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PinParentDevice::PhaseOffset(val) = attr? {
+            if let Ok(PinParentDevice::PhaseOffset(val)) = attr {
                 return Ok(val);
             }
         }
         Err(ErrorContext::new_missing(
             "PinParentDevice",
             "PhaseOffset",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPM\n(parts per million). This is a lower-precision version of\nfractional-frequency-offset-ppt.\n"]
+    pub fn get_fractional_frequency_offset(&self) -> Result<i32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(PinParentDevice::FractionalFrequencyOffset(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "PinParentDevice",
+            "FractionalFrequencyOffset",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPT\n(parts per trillion, 10\\^-12). This is a higher-precision version of\nfractional-frequency-offset.\n"]
+    pub fn get_fractional_frequency_offset_ppt(&self) -> Result<i32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(PinParentDevice::FractionalFrequencyOffsetPpt(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "PinParentDevice",
+            "FractionalFrequencyOffsetPpt",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "Operational state of the pin with respect to its parent DPLL device.\nUnlike state (which reflects the administrative intent), operstate\nreflects the actual hardware status.\n\nAssociated type: [`PinOperstate`] (enum)"]
+    pub fn get_operstate(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(PinParentDevice::Operstate(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "PinParentDevice",
+            "Operstate",
             self.orig_loc,
             self.buf.as_ptr() as usize,
         ))
@@ -1862,14 +2045,16 @@ impl<'a> IterablePinParentDevice<'a> {
 impl<'a> Iterator for IterablePinParentDevice<'a> {
     type Item = Result<PinParentDevice, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1896,6 +2081,21 @@ impl<'a> Iterator for IterablePinParentDevice<'a> {
                 }),
                 23u16 => PinParentDevice::PhaseOffset({
                     let res = parse_i64(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                24u16 => PinParentDevice::FractionalFrequencyOffset({
+                    let res = parse_i32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                30u16 => PinParentDevice::FractionalFrequencyOffsetPpt({
+                    let res = parse_i32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                32u16 => PinParentDevice::Operstate({
+                    let res = parse_u32(next);
                     let Some(val) = res else { break };
                     val
                 }),
@@ -1936,6 +2136,16 @@ impl std::fmt::Debug for IterablePinParentDevice<'_> {
                     fmt.field("State", &FormatEnum(val.into(), PinState::from_value))
                 }
                 PinParentDevice::PhaseOffset(val) => fmt.field("PhaseOffset", &val),
+                PinParentDevice::FractionalFrequencyOffset(val) => {
+                    fmt.field("FractionalFrequencyOffset", &val)
+                }
+                PinParentDevice::FractionalFrequencyOffsetPpt(val) => {
+                    fmt.field("FractionalFrequencyOffsetPpt", &val)
+                }
+                PinParentDevice::Operstate(val) => fmt.field(
+                    "Operstate",
+                    &FormatEnum(val.into(), PinOperstate::from_value),
+                ),
             };
         }
         fmt.finish()
@@ -1994,6 +2204,24 @@ impl IterablePinParentDevice<'_> {
                         break;
                     }
                 }
+                PinParentDevice::FractionalFrequencyOffset(val) => {
+                    if last_off == offset {
+                        stack.push(("FractionalFrequencyOffset", last_off));
+                        break;
+                    }
+                }
+                PinParentDevice::FractionalFrequencyOffsetPpt(val) => {
+                    if last_off == offset {
+                        stack.push(("FractionalFrequencyOffsetPpt", last_off));
+                        break;
+                    }
+                }
+                PinParentDevice::Operstate(val) => {
+                    if last_off == offset {
+                        stack.push(("Operstate", last_off));
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -2015,7 +2243,7 @@ impl<'a> IterablePinParentPin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PinParentPin::ParentId(val) = attr? {
+            if let Ok(PinParentPin::ParentId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2031,7 +2259,7 @@ impl<'a> IterablePinParentPin<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PinParentPin::State(val) = attr? {
+            if let Ok(PinParentPin::State(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2072,14 +2300,16 @@ impl<'a> IterablePinParentPin<'a> {
 impl<'a> Iterator for IterablePinParentPin<'a> {
     type Item = Result<PinParentPin, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2185,7 +2415,7 @@ impl<'a> IterableFrequencyRange<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyRange::FrequencyMin(val) = attr? {
+            if let Ok(FrequencyRange::FrequencyMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2200,7 +2430,7 @@ impl<'a> IterableFrequencyRange<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FrequencyRange::FrequencyMax(val) = attr? {
+            if let Ok(FrequencyRange::FrequencyMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2241,14 +2471,16 @@ impl<'a> IterableFrequencyRange<'a> {
 impl<'a> Iterator for IterableFrequencyRange<'a> {
     type Item = Result<FrequencyRange, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2353,7 +2585,7 @@ impl<'a> IterableReferenceSync<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReferenceSync::Id(val) = attr? {
+            if let Ok(ReferenceSync::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2369,7 +2601,7 @@ impl<'a> IterableReferenceSync<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ReferenceSync::State(val) = attr? {
+            if let Ok(ReferenceSync::State(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2410,14 +2642,16 @@ impl<'a> IterableReferenceSync<'a> {
 impl<'a> Iterator for IterableReferenceSync<'a> {
     type Item = Result<ReferenceSync, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2604,21 +2838,27 @@ impl<Prev: Rec> PushDpll<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Level of quality of a clock device\\. This mainly applies when\nthe dpll lock\\-status is DPLL\\_LOCK\\_STATUS\\_HOLDOVER\\. This could\nbe put to message multiple times to indicate possible parallel\nquality levels (e\\.g\\. one specified by ITU option 1 and another\none specified by option 2)\\.\n\nAssociated type: [`ClockQualityLevel`] (enum)\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "Level of quality of a clock device. This mainly applies when the dpll\nlock-status is DPLL_LOCK_STATUS_HOLDOVER. This could be put to message\nmultiple times to indicate possible parallel quality levels (e.g. one\nspecified by ITU option 1 and another one specified by option 2).\n\nAssociated type: [`ClockQualityLevel`] (enum)\nAttribute may repeat multiple times (treat it as array)"]
     pub fn push_clock_quality_level(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 11u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Receive or request state of phase offset monitor feature\\. If enabled, dpll device shall monitor and notify all currently available inputs for changes of their phase offset against the dpll device\\.\nAssociated type: [`FeatureState`] (enum)"]
+    #[doc = "Receive or request state of phase offset monitor feature. If enabled,\ndpll device shall monitor and notify all currently available inputs for\nchanges of their phase offset against the dpll device.\n\nAssociated type: [`FeatureState`] (enum)"]
     pub fn push_phase_offset_monitor(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 12u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Averaging factor applied to calculation of reported phase offset\\."]
+    #[doc = "Averaging factor applied to calculation of reported phase offset.\n"]
     pub fn push_phase_offset_avg_factor(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 13u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "Current or desired state of the frequency monitor feature. If enabled,\ndpll device shall measure all currently available inputs for their\nactual input frequency.\n\nAssociated type: [`FeatureState`] (enum)"]
+    pub fn push_frequency_monitor(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 14u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
@@ -2826,19 +3066,19 @@ impl<Prev: Rec> PushPin<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The FFO (Fractional Frequency Offset) between the RX and TX\nsymbol rate on the media associated with the pin:\n(rx\\_frequency\\-tx\\_frequency)/rx\\_frequency\nValue is in PPM (parts per million)\\.\nThis may be implemented for example for pin of type\nPIN\\_TYPE\\_SYNCE\\_ETH\\_PORT\\.\n"]
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPM\n(parts per million). This is a lower-precision version of\nfractional-frequency-offset-ppt.\n"]
     pub fn push_fractional_frequency_offset(mut self, value: i32) -> Self {
         push_header(self.as_rec_mut(), 24u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Frequency of Embedded SYNC signal\\. If provided, the pin is configured\nwith a SYNC signal embedded into its base clock frequency\\.\n"]
+    #[doc = "Frequency of Embedded SYNC signal. If provided, the pin is configured\nwith a SYNC signal embedded into its base clock frequency.\n"]
     pub fn push_esync_frequency(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 25u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "If provided a pin is capable of embedding a SYNC signal (within given\nrange) into its base frequency signal\\.\n\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "If provided a pin is capable of embedding a SYNC signal (within given\nrange) into its base frequency signal.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn nested_esync_frequency_supported(mut self) -> PushFrequencyRange<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 26u16);
         PushFrequencyRange {
@@ -2846,13 +3086,13 @@ impl<Prev: Rec> PushPin<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "A ratio of high to low state of a SYNC signal pulse embedded\ninto base clock frequency\\. Value is in percents\\.\n"]
+    #[doc = "A ratio of high to low state of a SYNC signal pulse embedded into base\nclock frequency. Value is in percents.\n"]
     pub fn push_esync_pulse(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 27u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Capable pin provides list of pins that can be bound to create a\nreference\\-sync pin pair\\.\n\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "Capable pin provides list of pins that can be bound to create a\nreference-sync pin pair.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn nested_reference_sync(mut self) -> PushReferenceSync<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 28u16);
         PushReferenceSync {
@@ -2860,15 +3100,27 @@ impl<Prev: Rec> PushPin<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "Granularity of phase adjustment, in picoseconds\\. The value of\nphase adjustment must be a multiple of this granularity\\.\n"]
+    #[doc = "Granularity of phase adjustment, in picoseconds. The value of phase\nadjustment must be a multiple of this granularity.\n"]
     pub fn push_phase_adjust_gran(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 29u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "The FFO (Fractional Frequency Offset) of the pin with respect to\nthe nominal frequency\\.\nValue = (frequency\\_measured \\- frequency\\_nominal) / frequency\\_nominal\nValue is in PPT (parts per trillion, 10^\\-12)\\.\nNote: This attribute provides higher resolution than the standard\nfractional\\-frequency\\-offset (which is in PPM)\\.\n"]
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPT\n(parts per trillion, 10\\^-12). This is a higher-precision version of\nfractional-frequency-offset.\n"]
     pub fn push_fractional_frequency_offset_ppt(mut self, value: i32) -> Self {
         push_header(self.as_rec_mut(), 30u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "The measured frequency of the input pin in millihertz (mHz). Value of\n(DPLL_A_PIN_MEASURED_FREQUENCY / DPLL_PIN_MEASURED_FREQUENCY_DIVIDER) is\nan integer part (Hz) of a measured frequency value. Value of\n(DPLL_A_PIN_MEASURED_FREQUENCY % DPLL_PIN_MEASURED_FREQUENCY_DIVIDER) is\na fractional part of a measured frequency value.\n"]
+    pub fn push_measured_frequency(mut self, value: u64) -> Self {
+        push_header(self.as_rec_mut(), 31u16, 8 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "Operational state of the pin with respect to its parent DPLL device.\nUnlike state (which reflects the administrative intent), operstate\nreflects the actual hardware status.\n\nAssociated type: [`PinOperstate`] (enum)"]
+    pub fn push_operstate(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 32u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
@@ -2932,6 +3184,24 @@ impl<Prev: Rec> PushPinParentDevice<Prev> {
     }
     pub fn push_phase_offset(mut self, value: i64) -> Self {
         push_header(self.as_rec_mut(), 23u16, 8 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPM\n(parts per million). This is a lower-precision version of\nfractional-frequency-offset-ppt.\n"]
+    pub fn push_fractional_frequency_offset(mut self, value: i32) -> Self {
+        push_header(self.as_rec_mut(), 24u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "The FFO (Fractional Frequency Offset) of the pin. At top level this\nrepresents the RX vs TX symbol rate offset on the media associated with\nthe pin. Inside the pin-parent-device nest it represents the frequency\noffset between the pin and its parent DPLL device. Value is in PPT\n(parts per trillion, 10\\^-12). This is a higher-precision version of\nfractional-frequency-offset.\n"]
+    pub fn push_fractional_frequency_offset_ppt(mut self, value: i32) -> Self {
+        push_header(self.as_rec_mut(), 30u16, 4 as u16);
+        self.as_rec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "Operational state of the pin with respect to its parent DPLL device.\nUnlike state (which reflects the administrative intent), operstate\nreflects the actual hardware status.\n\nAssociated type: [`PinOperstate`] (enum)"]
+    pub fn push_operstate(mut self, value: u32) -> Self {
+        push_header(self.as_rec_mut(), 32u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
@@ -3085,7 +3355,7 @@ impl<Prev: Rec> Drop for PushReferenceSync<Prev> {
         }
     }
 }
-#[doc = "Notify attributes:\n- [`.get_id()`](IterableDpll::get_id)\n- [`.get_module_name()`](IterableDpll::get_module_name)\n- [`.get_mode()`](IterableDpll::get_mode)\n- [`.get_mode_supported()`](IterableDpll::get_mode_supported)\n- [`.get_lock_status()`](IterableDpll::get_lock_status)\n- [`.get_lock_status_error()`](IterableDpll::get_lock_status_error)\n- [`.get_temp()`](IterableDpll::get_temp)\n- [`.get_clock_id()`](IterableDpll::get_clock_id)\n- [`.get_type()`](IterableDpll::get_type)\n- [`.get_phase_offset_monitor()`](IterableDpll::get_phase_offset_monitor)\n- [`.get_phase_offset_avg_factor()`](IterableDpll::get_phase_offset_avg_factor)\n"]
+#[doc = "Notify attributes:\n- [`.get_id()`](IterableDpll::get_id)\n- [`.get_module_name()`](IterableDpll::get_module_name)\n- [`.get_mode()`](IterableDpll::get_mode)\n- [`.get_mode_supported()`](IterableDpll::get_mode_supported)\n- [`.get_lock_status()`](IterableDpll::get_lock_status)\n- [`.get_lock_status_error()`](IterableDpll::get_lock_status_error)\n- [`.get_temp()`](IterableDpll::get_temp)\n- [`.get_clock_id()`](IterableDpll::get_clock_id)\n- [`.get_type()`](IterableDpll::get_type)\n- [`.get_phase_offset_monitor()`](IterableDpll::get_phase_offset_monitor)\n- [`.get_phase_offset_avg_factor()`](IterableDpll::get_phase_offset_avg_factor)\n- [`.get_frequency_monitor()`](IterableDpll::get_frequency_monitor)\n"]
 #[derive(Debug)]
 pub struct OpDeviceCreateNotif;
 impl OpDeviceCreateNotif {
@@ -3095,7 +3365,7 @@ impl OpDeviceCreateNotif {
         IterableDpll::with_loc(attrs, buf.as_ptr() as usize)
     }
 }
-#[doc = "Notify attributes:\n- [`.get_id()`](IterableDpll::get_id)\n- [`.get_module_name()`](IterableDpll::get_module_name)\n- [`.get_mode()`](IterableDpll::get_mode)\n- [`.get_mode_supported()`](IterableDpll::get_mode_supported)\n- [`.get_lock_status()`](IterableDpll::get_lock_status)\n- [`.get_lock_status_error()`](IterableDpll::get_lock_status_error)\n- [`.get_temp()`](IterableDpll::get_temp)\n- [`.get_clock_id()`](IterableDpll::get_clock_id)\n- [`.get_type()`](IterableDpll::get_type)\n- [`.get_phase_offset_monitor()`](IterableDpll::get_phase_offset_monitor)\n- [`.get_phase_offset_avg_factor()`](IterableDpll::get_phase_offset_avg_factor)\n"]
+#[doc = "Notify attributes:\n- [`.get_id()`](IterableDpll::get_id)\n- [`.get_module_name()`](IterableDpll::get_module_name)\n- [`.get_mode()`](IterableDpll::get_mode)\n- [`.get_mode_supported()`](IterableDpll::get_mode_supported)\n- [`.get_lock_status()`](IterableDpll::get_lock_status)\n- [`.get_lock_status_error()`](IterableDpll::get_lock_status_error)\n- [`.get_temp()`](IterableDpll::get_temp)\n- [`.get_clock_id()`](IterableDpll::get_clock_id)\n- [`.get_type()`](IterableDpll::get_type)\n- [`.get_phase_offset_monitor()`](IterableDpll::get_phase_offset_monitor)\n- [`.get_phase_offset_avg_factor()`](IterableDpll::get_phase_offset_avg_factor)\n- [`.get_frequency_monitor()`](IterableDpll::get_frequency_monitor)\n"]
 #[derive(Debug)]
 pub struct OpDeviceDeleteNotif;
 impl OpDeviceDeleteNotif {
@@ -3105,7 +3375,7 @@ impl OpDeviceDeleteNotif {
         IterableDpll::with_loc(attrs, buf.as_ptr() as usize)
     }
 }
-#[doc = "Notify attributes:\n- [`.get_id()`](IterableDpll::get_id)\n- [`.get_module_name()`](IterableDpll::get_module_name)\n- [`.get_mode()`](IterableDpll::get_mode)\n- [`.get_mode_supported()`](IterableDpll::get_mode_supported)\n- [`.get_lock_status()`](IterableDpll::get_lock_status)\n- [`.get_lock_status_error()`](IterableDpll::get_lock_status_error)\n- [`.get_temp()`](IterableDpll::get_temp)\n- [`.get_clock_id()`](IterableDpll::get_clock_id)\n- [`.get_type()`](IterableDpll::get_type)\n- [`.get_phase_offset_monitor()`](IterableDpll::get_phase_offset_monitor)\n- [`.get_phase_offset_avg_factor()`](IterableDpll::get_phase_offset_avg_factor)\n"]
+#[doc = "Notify attributes:\n- [`.get_id()`](IterableDpll::get_id)\n- [`.get_module_name()`](IterableDpll::get_module_name)\n- [`.get_mode()`](IterableDpll::get_mode)\n- [`.get_mode_supported()`](IterableDpll::get_mode_supported)\n- [`.get_lock_status()`](IterableDpll::get_lock_status)\n- [`.get_lock_status_error()`](IterableDpll::get_lock_status_error)\n- [`.get_temp()`](IterableDpll::get_temp)\n- [`.get_clock_id()`](IterableDpll::get_clock_id)\n- [`.get_type()`](IterableDpll::get_type)\n- [`.get_phase_offset_monitor()`](IterableDpll::get_phase_offset_monitor)\n- [`.get_phase_offset_avg_factor()`](IterableDpll::get_phase_offset_avg_factor)\n- [`.get_frequency_monitor()`](IterableDpll::get_frequency_monitor)\n"]
 #[derive(Debug)]
 pub struct OpDeviceChangeNotif;
 impl OpDeviceChangeNotif {
@@ -3115,7 +3385,7 @@ impl OpDeviceChangeNotif {
         IterableDpll::with_loc(attrs, buf.as_ptr() as usize)
     }
 }
-#[doc = "Notify attributes:\n- [`.get_id()`](IterablePin::get_id)\n- [`.get_module_name()`](IterablePin::get_module_name)\n- [`.get_clock_id()`](IterablePin::get_clock_id)\n- [`.get_board_label()`](IterablePin::get_board_label)\n- [`.get_panel_label()`](IterablePin::get_panel_label)\n- [`.get_package_label()`](IterablePin::get_package_label)\n- [`.get_type()`](IterablePin::get_type)\n- [`.get_frequency()`](IterablePin::get_frequency)\n- [`.get_frequency_supported()`](IterablePin::get_frequency_supported)\n- [`.get_capabilities()`](IterablePin::get_capabilities)\n- [`.get_parent_device()`](IterablePin::get_parent_device)\n- [`.get_parent_pin()`](IterablePin::get_parent_pin)\n- [`.get_phase_adjust_gran()`](IterablePin::get_phase_adjust_gran)\n- [`.get_phase_adjust_min()`](IterablePin::get_phase_adjust_min)\n- [`.get_phase_adjust_max()`](IterablePin::get_phase_adjust_max)\n- [`.get_phase_adjust()`](IterablePin::get_phase_adjust)\n- [`.get_fractional_frequency_offset()`](IterablePin::get_fractional_frequency_offset)\n- [`.get_fractional_frequency_offset_ppt()`](IterablePin::get_fractional_frequency_offset_ppt)\n- [`.get_esync_frequency()`](IterablePin::get_esync_frequency)\n- [`.get_esync_frequency_supported()`](IterablePin::get_esync_frequency_supported)\n- [`.get_esync_pulse()`](IterablePin::get_esync_pulse)\n- [`.get_reference_sync()`](IterablePin::get_reference_sync)\n"]
+#[doc = "Notify attributes:\n- [`.get_id()`](IterablePin::get_id)\n- [`.get_module_name()`](IterablePin::get_module_name)\n- [`.get_clock_id()`](IterablePin::get_clock_id)\n- [`.get_board_label()`](IterablePin::get_board_label)\n- [`.get_panel_label()`](IterablePin::get_panel_label)\n- [`.get_package_label()`](IterablePin::get_package_label)\n- [`.get_type()`](IterablePin::get_type)\n- [`.get_frequency()`](IterablePin::get_frequency)\n- [`.get_frequency_supported()`](IterablePin::get_frequency_supported)\n- [`.get_capabilities()`](IterablePin::get_capabilities)\n- [`.get_parent_device()`](IterablePin::get_parent_device)\n- [`.get_parent_pin()`](IterablePin::get_parent_pin)\n- [`.get_phase_adjust_gran()`](IterablePin::get_phase_adjust_gran)\n- [`.get_phase_adjust_min()`](IterablePin::get_phase_adjust_min)\n- [`.get_phase_adjust_max()`](IterablePin::get_phase_adjust_max)\n- [`.get_phase_adjust()`](IterablePin::get_phase_adjust)\n- [`.get_fractional_frequency_offset()`](IterablePin::get_fractional_frequency_offset)\n- [`.get_fractional_frequency_offset_ppt()`](IterablePin::get_fractional_frequency_offset_ppt)\n- [`.get_esync_frequency()`](IterablePin::get_esync_frequency)\n- [`.get_esync_frequency_supported()`](IterablePin::get_esync_frequency_supported)\n- [`.get_esync_pulse()`](IterablePin::get_esync_pulse)\n- [`.get_reference_sync()`](IterablePin::get_reference_sync)\n- [`.get_measured_frequency()`](IterablePin::get_measured_frequency)\n"]
 #[derive(Debug)]
 pub struct OpPinCreateNotif;
 impl OpPinCreateNotif {
@@ -3125,7 +3395,7 @@ impl OpPinCreateNotif {
         IterablePin::with_loc(attrs, buf.as_ptr() as usize)
     }
 }
-#[doc = "Notify attributes:\n- [`.get_id()`](IterablePin::get_id)\n- [`.get_module_name()`](IterablePin::get_module_name)\n- [`.get_clock_id()`](IterablePin::get_clock_id)\n- [`.get_board_label()`](IterablePin::get_board_label)\n- [`.get_panel_label()`](IterablePin::get_panel_label)\n- [`.get_package_label()`](IterablePin::get_package_label)\n- [`.get_type()`](IterablePin::get_type)\n- [`.get_frequency()`](IterablePin::get_frequency)\n- [`.get_frequency_supported()`](IterablePin::get_frequency_supported)\n- [`.get_capabilities()`](IterablePin::get_capabilities)\n- [`.get_parent_device()`](IterablePin::get_parent_device)\n- [`.get_parent_pin()`](IterablePin::get_parent_pin)\n- [`.get_phase_adjust_gran()`](IterablePin::get_phase_adjust_gran)\n- [`.get_phase_adjust_min()`](IterablePin::get_phase_adjust_min)\n- [`.get_phase_adjust_max()`](IterablePin::get_phase_adjust_max)\n- [`.get_phase_adjust()`](IterablePin::get_phase_adjust)\n- [`.get_fractional_frequency_offset()`](IterablePin::get_fractional_frequency_offset)\n- [`.get_fractional_frequency_offset_ppt()`](IterablePin::get_fractional_frequency_offset_ppt)\n- [`.get_esync_frequency()`](IterablePin::get_esync_frequency)\n- [`.get_esync_frequency_supported()`](IterablePin::get_esync_frequency_supported)\n- [`.get_esync_pulse()`](IterablePin::get_esync_pulse)\n- [`.get_reference_sync()`](IterablePin::get_reference_sync)\n"]
+#[doc = "Notify attributes:\n- [`.get_id()`](IterablePin::get_id)\n- [`.get_module_name()`](IterablePin::get_module_name)\n- [`.get_clock_id()`](IterablePin::get_clock_id)\n- [`.get_board_label()`](IterablePin::get_board_label)\n- [`.get_panel_label()`](IterablePin::get_panel_label)\n- [`.get_package_label()`](IterablePin::get_package_label)\n- [`.get_type()`](IterablePin::get_type)\n- [`.get_frequency()`](IterablePin::get_frequency)\n- [`.get_frequency_supported()`](IterablePin::get_frequency_supported)\n- [`.get_capabilities()`](IterablePin::get_capabilities)\n- [`.get_parent_device()`](IterablePin::get_parent_device)\n- [`.get_parent_pin()`](IterablePin::get_parent_pin)\n- [`.get_phase_adjust_gran()`](IterablePin::get_phase_adjust_gran)\n- [`.get_phase_adjust_min()`](IterablePin::get_phase_adjust_min)\n- [`.get_phase_adjust_max()`](IterablePin::get_phase_adjust_max)\n- [`.get_phase_adjust()`](IterablePin::get_phase_adjust)\n- [`.get_fractional_frequency_offset()`](IterablePin::get_fractional_frequency_offset)\n- [`.get_fractional_frequency_offset_ppt()`](IterablePin::get_fractional_frequency_offset_ppt)\n- [`.get_esync_frequency()`](IterablePin::get_esync_frequency)\n- [`.get_esync_frequency_supported()`](IterablePin::get_esync_frequency_supported)\n- [`.get_esync_pulse()`](IterablePin::get_esync_pulse)\n- [`.get_reference_sync()`](IterablePin::get_reference_sync)\n- [`.get_measured_frequency()`](IterablePin::get_measured_frequency)\n"]
 #[derive(Debug)]
 pub struct OpPinDeleteNotif;
 impl OpPinDeleteNotif {
@@ -3135,7 +3405,7 @@ impl OpPinDeleteNotif {
         IterablePin::with_loc(attrs, buf.as_ptr() as usize)
     }
 }
-#[doc = "Notify attributes:\n- [`.get_id()`](IterablePin::get_id)\n- [`.get_module_name()`](IterablePin::get_module_name)\n- [`.get_clock_id()`](IterablePin::get_clock_id)\n- [`.get_board_label()`](IterablePin::get_board_label)\n- [`.get_panel_label()`](IterablePin::get_panel_label)\n- [`.get_package_label()`](IterablePin::get_package_label)\n- [`.get_type()`](IterablePin::get_type)\n- [`.get_frequency()`](IterablePin::get_frequency)\n- [`.get_frequency_supported()`](IterablePin::get_frequency_supported)\n- [`.get_capabilities()`](IterablePin::get_capabilities)\n- [`.get_parent_device()`](IterablePin::get_parent_device)\n- [`.get_parent_pin()`](IterablePin::get_parent_pin)\n- [`.get_phase_adjust_gran()`](IterablePin::get_phase_adjust_gran)\n- [`.get_phase_adjust_min()`](IterablePin::get_phase_adjust_min)\n- [`.get_phase_adjust_max()`](IterablePin::get_phase_adjust_max)\n- [`.get_phase_adjust()`](IterablePin::get_phase_adjust)\n- [`.get_fractional_frequency_offset()`](IterablePin::get_fractional_frequency_offset)\n- [`.get_fractional_frequency_offset_ppt()`](IterablePin::get_fractional_frequency_offset_ppt)\n- [`.get_esync_frequency()`](IterablePin::get_esync_frequency)\n- [`.get_esync_frequency_supported()`](IterablePin::get_esync_frequency_supported)\n- [`.get_esync_pulse()`](IterablePin::get_esync_pulse)\n- [`.get_reference_sync()`](IterablePin::get_reference_sync)\n"]
+#[doc = "Notify attributes:\n- [`.get_id()`](IterablePin::get_id)\n- [`.get_module_name()`](IterablePin::get_module_name)\n- [`.get_clock_id()`](IterablePin::get_clock_id)\n- [`.get_board_label()`](IterablePin::get_board_label)\n- [`.get_panel_label()`](IterablePin::get_panel_label)\n- [`.get_package_label()`](IterablePin::get_package_label)\n- [`.get_type()`](IterablePin::get_type)\n- [`.get_frequency()`](IterablePin::get_frequency)\n- [`.get_frequency_supported()`](IterablePin::get_frequency_supported)\n- [`.get_capabilities()`](IterablePin::get_capabilities)\n- [`.get_parent_device()`](IterablePin::get_parent_device)\n- [`.get_parent_pin()`](IterablePin::get_parent_pin)\n- [`.get_phase_adjust_gran()`](IterablePin::get_phase_adjust_gran)\n- [`.get_phase_adjust_min()`](IterablePin::get_phase_adjust_min)\n- [`.get_phase_adjust_max()`](IterablePin::get_phase_adjust_max)\n- [`.get_phase_adjust()`](IterablePin::get_phase_adjust)\n- [`.get_fractional_frequency_offset()`](IterablePin::get_fractional_frequency_offset)\n- [`.get_fractional_frequency_offset_ppt()`](IterablePin::get_fractional_frequency_offset_ppt)\n- [`.get_esync_frequency()`](IterablePin::get_esync_frequency)\n- [`.get_esync_frequency_supported()`](IterablePin::get_esync_frequency_supported)\n- [`.get_esync_pulse()`](IterablePin::get_esync_pulse)\n- [`.get_reference_sync()`](IterablePin::get_reference_sync)\n- [`.get_measured_frequency()`](IterablePin::get_measured_frequency)\n"]
 #[derive(Debug)]
 pub struct OpPinChangeNotif;
 impl OpPinChangeNotif {
@@ -3152,7 +3422,7 @@ impl NotifGroup {
     #[doc = "Notifications:\n- [`OpDeviceCreateNotif`]\n- [`OpDeviceDeleteNotif`]\n- [`OpDeviceChangeNotif`]\n- [`OpPinCreateNotif`]\n- [`OpPinDeleteNotif`]\n- [`OpPinChangeNotif`]\n"]
     pub const MONITOR_CSTR: &CStr = c"monitor";
 }
-#[doc = "Get id of dpll device that matches given attributes\n\nFlags: admin-perm\nRequest attributes:\n- [.push_module_name()](PushDpll::push_module_name)\n- [.push_clock_id()](PushDpll::push_clock_id)\n- [.push_type()](PushDpll::push_type)\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n"]
+#[doc = "Get id of dpll device that matches given attributes\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_module_name()](PushDpll::push_module_name)\n- [.push_clock_id()](PushDpll::push_clock_id)\n- [.push_type()](PushDpll::push_type)\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n\n"]
 #[derive(Debug)]
 pub struct OpDeviceIdGetDo<'r> {
     request: Request<'r>,
@@ -3205,7 +3475,7 @@ impl NetlinkRequest for OpDeviceIdGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get list of DPLL devices (dump) or attributes of a single dpll device\n\nFlags: admin-perm\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n- [.get_module_name()](IterableDpll::get_module_name)\n- [.get_clock_id()](IterableDpll::get_clock_id)\n- [.get_mode()](IterableDpll::get_mode)\n- [.get_mode_supported()](IterableDpll::get_mode_supported)\n- [.get_lock_status()](IterableDpll::get_lock_status)\n- [.get_temp()](IterableDpll::get_temp)\n- [.get_type()](IterableDpll::get_type)\n- [.get_lock_status_error()](IterableDpll::get_lock_status_error)\n- [.get_phase_offset_monitor()](IterableDpll::get_phase_offset_monitor)\n- [.get_phase_offset_avg_factor()](IterableDpll::get_phase_offset_avg_factor)\n"]
+#[doc = "Get list of DPLL devices (dump) or attributes of a single dpll device\n\nFlags: admin-perm\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n- [.get_module_name()](IterableDpll::get_module_name)\n- [.get_clock_id()](IterableDpll::get_clock_id)\n- [.get_mode()](IterableDpll::get_mode)\n- [.get_mode_supported()](IterableDpll::get_mode_supported)\n- [.get_lock_status()](IterableDpll::get_lock_status)\n- [.get_temp()](IterableDpll::get_temp)\n- [.get_type()](IterableDpll::get_type)\n- [.get_lock_status_error()](IterableDpll::get_lock_status_error)\n- [.get_phase_offset_monitor()](IterableDpll::get_phase_offset_monitor)\n- [.get_phase_offset_avg_factor()](IterableDpll::get_phase_offset_avg_factor)\n- [.get_frequency_monitor()](IterableDpll::get_frequency_monitor)\n\n"]
 #[derive(Debug)]
 pub struct OpDeviceGetDump<'r> {
     request: Request<'r>,
@@ -3260,7 +3530,7 @@ impl NetlinkRequest for OpDeviceGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get list of DPLL devices (dump) or attributes of a single dpll device\n\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushDpll::push_id)\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n- [.get_module_name()](IterableDpll::get_module_name)\n- [.get_clock_id()](IterableDpll::get_clock_id)\n- [.get_mode()](IterableDpll::get_mode)\n- [.get_mode_supported()](IterableDpll::get_mode_supported)\n- [.get_lock_status()](IterableDpll::get_lock_status)\n- [.get_temp()](IterableDpll::get_temp)\n- [.get_type()](IterableDpll::get_type)\n- [.get_lock_status_error()](IterableDpll::get_lock_status_error)\n- [.get_phase_offset_monitor()](IterableDpll::get_phase_offset_monitor)\n- [.get_phase_offset_avg_factor()](IterableDpll::get_phase_offset_avg_factor)\n"]
+#[doc = "Get list of DPLL devices (dump) or attributes of a single dpll device\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDpll::push_id)\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n- [.get_module_name()](IterableDpll::get_module_name)\n- [.get_clock_id()](IterableDpll::get_clock_id)\n- [.get_mode()](IterableDpll::get_mode)\n- [.get_mode_supported()](IterableDpll::get_mode_supported)\n- [.get_lock_status()](IterableDpll::get_lock_status)\n- [.get_temp()](IterableDpll::get_temp)\n- [.get_type()](IterableDpll::get_type)\n- [.get_lock_status_error()](IterableDpll::get_lock_status_error)\n- [.get_phase_offset_monitor()](IterableDpll::get_phase_offset_monitor)\n- [.get_phase_offset_avg_factor()](IterableDpll::get_phase_offset_avg_factor)\n- [.get_frequency_monitor()](IterableDpll::get_frequency_monitor)\n\n"]
 #[derive(Debug)]
 pub struct OpDeviceGetDo<'r> {
     request: Request<'r>,
@@ -3313,7 +3583,7 @@ impl NetlinkRequest for OpDeviceGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set attributes for a DPLL device\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushDpll::push_id)\n- [.push_mode()](PushDpll::push_mode)\n- [.push_phase_offset_monitor()](PushDpll::push_phase_offset_monitor)\n- [.push_phase_offset_avg_factor()](PushDpll::push_phase_offset_avg_factor)\n"]
+#[doc = "Set attributes for a DPLL device\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDpll::push_id)\n- [.push_mode()](PushDpll::push_mode)\n- [.push_phase_offset_monitor()](PushDpll::push_phase_offset_monitor)\n- [.push_phase_offset_avg_factor()](PushDpll::push_phase_offset_avg_factor)\n- [.push_frequency_monitor()](PushDpll::push_frequency_monitor)\n\n"]
 #[derive(Debug)]
 pub struct OpDeviceSetDo<'r> {
     request: Request<'r>,
@@ -3366,7 +3636,7 @@ impl NetlinkRequest for OpDeviceSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get id of a pin that matches given attributes\n\nFlags: admin-perm\nRequest attributes:\n- [.push_module_name()](PushPin::push_module_name)\n- [.push_clock_id()](PushPin::push_clock_id)\n- [.push_board_label()](PushPin::push_board_label)\n- [.push_panel_label()](PushPin::push_panel_label)\n- [.push_package_label()](PushPin::push_package_label)\n- [.push_type()](PushPin::push_type)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n"]
+#[doc = "Get id of a pin that matches given attributes\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_module_name()](PushPin::push_module_name)\n- [.push_clock_id()](PushPin::push_clock_id)\n- [.push_board_label()](PushPin::push_board_label)\n- [.push_panel_label()](PushPin::push_panel_label)\n- [.push_package_label()](PushPin::push_package_label)\n- [.push_type()](PushPin::push_type)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n\n"]
 #[derive(Debug)]
 pub struct OpPinIdGetDo<'r> {
     request: Request<'r>,
@@ -3419,7 +3689,7 @@ impl NetlinkRequest for OpPinIdGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get list of pins and its attributes\\.\n\n\\- dump request without any attributes given \\- list all the pins in the\n  system\n\\- dump request with target dpll \\- list all the pins registered with\n  a given dpll device\n\\- do request with target dpll and target pin \\- single pin attributes\n\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n- [.get_module_name()](IterablePin::get_module_name)\n- [.get_clock_id()](IterablePin::get_clock_id)\n- [.get_board_label()](IterablePin::get_board_label)\n- [.get_panel_label()](IterablePin::get_panel_label)\n- [.get_package_label()](IterablePin::get_package_label)\n- [.get_type()](IterablePin::get_type)\n- [.get_frequency()](IterablePin::get_frequency)\n- [.get_frequency_supported()](IterablePin::get_frequency_supported)\n- [.get_capabilities()](IterablePin::get_capabilities)\n- [.get_parent_device()](IterablePin::get_parent_device)\n- [.get_parent_pin()](IterablePin::get_parent_pin)\n- [.get_phase_adjust_min()](IterablePin::get_phase_adjust_min)\n- [.get_phase_adjust_max()](IterablePin::get_phase_adjust_max)\n- [.get_phase_adjust()](IterablePin::get_phase_adjust)\n- [.get_fractional_frequency_offset()](IterablePin::get_fractional_frequency_offset)\n- [.get_esync_frequency()](IterablePin::get_esync_frequency)\n- [.get_esync_frequency_supported()](IterablePin::get_esync_frequency_supported)\n- [.get_esync_pulse()](IterablePin::get_esync_pulse)\n- [.get_reference_sync()](IterablePin::get_reference_sync)\n- [.get_phase_adjust_gran()](IterablePin::get_phase_adjust_gran)\n- [.get_fractional_frequency_offset_ppt()](IterablePin::get_fractional_frequency_offset_ppt)\n"]
+#[doc = "Get list of pins and its attributes.\n\n- dump request without any attributes given - list all the pins in the\n  system\n- dump request with target dpll - list all the pins registered with a\n  given dpll device\n- do request with target dpll and target pin - single pin attributes\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n- [.get_module_name()](IterablePin::get_module_name)\n- [.get_clock_id()](IterablePin::get_clock_id)\n- [.get_board_label()](IterablePin::get_board_label)\n- [.get_panel_label()](IterablePin::get_panel_label)\n- [.get_package_label()](IterablePin::get_package_label)\n- [.get_type()](IterablePin::get_type)\n- [.get_frequency()](IterablePin::get_frequency)\n- [.get_frequency_supported()](IterablePin::get_frequency_supported)\n- [.get_capabilities()](IterablePin::get_capabilities)\n- [.get_parent_device()](IterablePin::get_parent_device)\n- [.get_parent_pin()](IterablePin::get_parent_pin)\n- [.get_phase_adjust_min()](IterablePin::get_phase_adjust_min)\n- [.get_phase_adjust_max()](IterablePin::get_phase_adjust_max)\n- [.get_phase_adjust()](IterablePin::get_phase_adjust)\n- [.get_fractional_frequency_offset()](IterablePin::get_fractional_frequency_offset)\n- [.get_esync_frequency()](IterablePin::get_esync_frequency)\n- [.get_esync_frequency_supported()](IterablePin::get_esync_frequency_supported)\n- [.get_esync_pulse()](IterablePin::get_esync_pulse)\n- [.get_reference_sync()](IterablePin::get_reference_sync)\n- [.get_phase_adjust_gran()](IterablePin::get_phase_adjust_gran)\n- [.get_fractional_frequency_offset_ppt()](IterablePin::get_fractional_frequency_offset_ppt)\n- [.get_measured_frequency()](IterablePin::get_measured_frequency)\n\n"]
 #[derive(Debug)]
 pub struct OpPinGetDump<'r> {
     request: Request<'r>,
@@ -3474,7 +3744,7 @@ impl NetlinkRequest for OpPinGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get list of pins and its attributes\\.\n\n\\- dump request without any attributes given \\- list all the pins in the\n  system\n\\- dump request with target dpll \\- list all the pins registered with\n  a given dpll device\n\\- do request with target dpll and target pin \\- single pin attributes\n\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n- [.get_module_name()](IterablePin::get_module_name)\n- [.get_clock_id()](IterablePin::get_clock_id)\n- [.get_board_label()](IterablePin::get_board_label)\n- [.get_panel_label()](IterablePin::get_panel_label)\n- [.get_package_label()](IterablePin::get_package_label)\n- [.get_type()](IterablePin::get_type)\n- [.get_frequency()](IterablePin::get_frequency)\n- [.get_frequency_supported()](IterablePin::get_frequency_supported)\n- [.get_capabilities()](IterablePin::get_capabilities)\n- [.get_parent_device()](IterablePin::get_parent_device)\n- [.get_parent_pin()](IterablePin::get_parent_pin)\n- [.get_phase_adjust_min()](IterablePin::get_phase_adjust_min)\n- [.get_phase_adjust_max()](IterablePin::get_phase_adjust_max)\n- [.get_phase_adjust()](IterablePin::get_phase_adjust)\n- [.get_fractional_frequency_offset()](IterablePin::get_fractional_frequency_offset)\n- [.get_esync_frequency()](IterablePin::get_esync_frequency)\n- [.get_esync_frequency_supported()](IterablePin::get_esync_frequency_supported)\n- [.get_esync_pulse()](IterablePin::get_esync_pulse)\n- [.get_reference_sync()](IterablePin::get_reference_sync)\n- [.get_phase_adjust_gran()](IterablePin::get_phase_adjust_gran)\n- [.get_fractional_frequency_offset_ppt()](IterablePin::get_fractional_frequency_offset_ppt)\n"]
+#[doc = "Get list of pins and its attributes.\n\n- dump request without any attributes given - list all the pins in the\n  system\n- dump request with target dpll - list all the pins registered with a\n  given dpll device\n- do request with target dpll and target pin - single pin attributes\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n- [.get_module_name()](IterablePin::get_module_name)\n- [.get_clock_id()](IterablePin::get_clock_id)\n- [.get_board_label()](IterablePin::get_board_label)\n- [.get_panel_label()](IterablePin::get_panel_label)\n- [.get_package_label()](IterablePin::get_package_label)\n- [.get_type()](IterablePin::get_type)\n- [.get_frequency()](IterablePin::get_frequency)\n- [.get_frequency_supported()](IterablePin::get_frequency_supported)\n- [.get_capabilities()](IterablePin::get_capabilities)\n- [.get_parent_device()](IterablePin::get_parent_device)\n- [.get_parent_pin()](IterablePin::get_parent_pin)\n- [.get_phase_adjust_min()](IterablePin::get_phase_adjust_min)\n- [.get_phase_adjust_max()](IterablePin::get_phase_adjust_max)\n- [.get_phase_adjust()](IterablePin::get_phase_adjust)\n- [.get_fractional_frequency_offset()](IterablePin::get_fractional_frequency_offset)\n- [.get_esync_frequency()](IterablePin::get_esync_frequency)\n- [.get_esync_frequency_supported()](IterablePin::get_esync_frequency_supported)\n- [.get_esync_pulse()](IterablePin::get_esync_pulse)\n- [.get_reference_sync()](IterablePin::get_reference_sync)\n- [.get_phase_adjust_gran()](IterablePin::get_phase_adjust_gran)\n- [.get_fractional_frequency_offset_ppt()](IterablePin::get_fractional_frequency_offset_ppt)\n- [.get_measured_frequency()](IterablePin::get_measured_frequency)\n\n"]
 #[derive(Debug)]
 pub struct OpPinGetDo<'r> {
     request: Request<'r>,
@@ -3527,7 +3797,7 @@ impl NetlinkRequest for OpPinGetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set attributes of a target pin\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n- [.push_direction()](PushPin::push_direction)\n- [.push_frequency()](PushPin::push_frequency)\n- [.push_prio()](PushPin::push_prio)\n- [.push_state()](PushPin::push_state)\n- [.nested_parent_device()](PushPin::nested_parent_device)\n- [.nested_parent_pin()](PushPin::nested_parent_pin)\n- [.push_phase_adjust()](PushPin::push_phase_adjust)\n- [.push_esync_frequency()](PushPin::push_esync_frequency)\n- [.nested_reference_sync()](PushPin::nested_reference_sync)\n"]
+#[doc = "Set attributes of a target pin\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n- [.push_direction()](PushPin::push_direction)\n- [.push_frequency()](PushPin::push_frequency)\n- [.push_prio()](PushPin::push_prio)\n- [.push_state()](PushPin::push_state)\n- [.nested_parent_device()](PushPin::nested_parent_device)\n- [.nested_parent_pin()](PushPin::nested_parent_pin)\n- [.push_phase_adjust()](PushPin::push_phase_adjust)\n- [.push_esync_frequency()](PushPin::push_esync_frequency)\n- [.nested_reference_sync()](PushPin::nested_reference_sync)\n\n"]
 #[derive(Debug)]
 pub struct OpPinSetDo<'r> {
     request: Request<'r>,
@@ -3682,7 +3952,7 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get id of dpll device that matches given attributes\n\nFlags: admin-perm\nRequest attributes:\n- [.push_module_name()](PushDpll::push_module_name)\n- [.push_clock_id()](PushDpll::push_clock_id)\n- [.push_type()](PushDpll::push_type)\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n"]
+    #[doc = "Get id of dpll device that matches given attributes\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_module_name()](PushDpll::push_module_name)\n- [.push_clock_id()](PushDpll::push_clock_id)\n- [.push_type()](PushDpll::push_type)\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n\n"]
     pub fn op_device_id_get_do(self) -> OpDeviceIdGetDo<'buf> {
         let mut res = OpDeviceIdGetDo::new(self);
         res.request.do_writeback(
@@ -3692,7 +3962,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get list of DPLL devices (dump) or attributes of a single dpll device\n\nFlags: admin-perm\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n- [.get_module_name()](IterableDpll::get_module_name)\n- [.get_clock_id()](IterableDpll::get_clock_id)\n- [.get_mode()](IterableDpll::get_mode)\n- [.get_mode_supported()](IterableDpll::get_mode_supported)\n- [.get_lock_status()](IterableDpll::get_lock_status)\n- [.get_temp()](IterableDpll::get_temp)\n- [.get_type()](IterableDpll::get_type)\n- [.get_lock_status_error()](IterableDpll::get_lock_status_error)\n- [.get_phase_offset_monitor()](IterableDpll::get_phase_offset_monitor)\n- [.get_phase_offset_avg_factor()](IterableDpll::get_phase_offset_avg_factor)\n"]
+    #[doc = "Get list of DPLL devices (dump) or attributes of a single dpll device\n\nFlags: admin-perm\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n- [.get_module_name()](IterableDpll::get_module_name)\n- [.get_clock_id()](IterableDpll::get_clock_id)\n- [.get_mode()](IterableDpll::get_mode)\n- [.get_mode_supported()](IterableDpll::get_mode_supported)\n- [.get_lock_status()](IterableDpll::get_lock_status)\n- [.get_temp()](IterableDpll::get_temp)\n- [.get_type()](IterableDpll::get_type)\n- [.get_lock_status_error()](IterableDpll::get_lock_status_error)\n- [.get_phase_offset_monitor()](IterableDpll::get_phase_offset_monitor)\n- [.get_phase_offset_avg_factor()](IterableDpll::get_phase_offset_avg_factor)\n- [.get_frequency_monitor()](IterableDpll::get_frequency_monitor)\n\n"]
     pub fn op_device_get_dump(self) -> OpDeviceGetDump<'buf> {
         let mut res = OpDeviceGetDump::new(self);
         res.request.do_writeback(
@@ -3702,42 +3972,42 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get list of DPLL devices (dump) or attributes of a single dpll device\n\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushDpll::push_id)\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n- [.get_module_name()](IterableDpll::get_module_name)\n- [.get_clock_id()](IterableDpll::get_clock_id)\n- [.get_mode()](IterableDpll::get_mode)\n- [.get_mode_supported()](IterableDpll::get_mode_supported)\n- [.get_lock_status()](IterableDpll::get_lock_status)\n- [.get_temp()](IterableDpll::get_temp)\n- [.get_type()](IterableDpll::get_type)\n- [.get_lock_status_error()](IterableDpll::get_lock_status_error)\n- [.get_phase_offset_monitor()](IterableDpll::get_phase_offset_monitor)\n- [.get_phase_offset_avg_factor()](IterableDpll::get_phase_offset_avg_factor)\n"]
+    #[doc = "Get list of DPLL devices (dump) or attributes of a single dpll device\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDpll::push_id)\n\nReply attributes:\n- [.get_id()](IterableDpll::get_id)\n- [.get_module_name()](IterableDpll::get_module_name)\n- [.get_clock_id()](IterableDpll::get_clock_id)\n- [.get_mode()](IterableDpll::get_mode)\n- [.get_mode_supported()](IterableDpll::get_mode_supported)\n- [.get_lock_status()](IterableDpll::get_lock_status)\n- [.get_temp()](IterableDpll::get_temp)\n- [.get_type()](IterableDpll::get_type)\n- [.get_lock_status_error()](IterableDpll::get_lock_status_error)\n- [.get_phase_offset_monitor()](IterableDpll::get_phase_offset_monitor)\n- [.get_phase_offset_avg_factor()](IterableDpll::get_phase_offset_avg_factor)\n- [.get_frequency_monitor()](IterableDpll::get_frequency_monitor)\n\n"]
     pub fn op_device_get_do(self) -> OpDeviceGetDo<'buf> {
         let mut res = OpDeviceGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-device-get-do", OpDeviceGetDo::lookup);
         res
     }
-    #[doc = "Set attributes for a DPLL device\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushDpll::push_id)\n- [.push_mode()](PushDpll::push_mode)\n- [.push_phase_offset_monitor()](PushDpll::push_phase_offset_monitor)\n- [.push_phase_offset_avg_factor()](PushDpll::push_phase_offset_avg_factor)\n"]
+    #[doc = "Set attributes for a DPLL device\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDpll::push_id)\n- [.push_mode()](PushDpll::push_mode)\n- [.push_phase_offset_monitor()](PushDpll::push_phase_offset_monitor)\n- [.push_phase_offset_avg_factor()](PushDpll::push_phase_offset_avg_factor)\n- [.push_frequency_monitor()](PushDpll::push_frequency_monitor)\n\n"]
     pub fn op_device_set_do(self) -> OpDeviceSetDo<'buf> {
         let mut res = OpDeviceSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-device-set-do", OpDeviceSetDo::lookup);
         res
     }
-    #[doc = "Get id of a pin that matches given attributes\n\nFlags: admin-perm\nRequest attributes:\n- [.push_module_name()](PushPin::push_module_name)\n- [.push_clock_id()](PushPin::push_clock_id)\n- [.push_board_label()](PushPin::push_board_label)\n- [.push_panel_label()](PushPin::push_panel_label)\n- [.push_package_label()](PushPin::push_package_label)\n- [.push_type()](PushPin::push_type)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n"]
+    #[doc = "Get id of a pin that matches given attributes\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_module_name()](PushPin::push_module_name)\n- [.push_clock_id()](PushPin::push_clock_id)\n- [.push_board_label()](PushPin::push_board_label)\n- [.push_panel_label()](PushPin::push_panel_label)\n- [.push_package_label()](PushPin::push_package_label)\n- [.push_type()](PushPin::push_type)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n\n"]
     pub fn op_pin_id_get_do(self) -> OpPinIdGetDo<'buf> {
         let mut res = OpPinIdGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-pin-id-get-do", OpPinIdGetDo::lookup);
         res
     }
-    #[doc = "Get list of pins and its attributes\\.\n\n\\- dump request without any attributes given \\- list all the pins in the\n  system\n\\- dump request with target dpll \\- list all the pins registered with\n  a given dpll device\n\\- do request with target dpll and target pin \\- single pin attributes\n\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n- [.get_module_name()](IterablePin::get_module_name)\n- [.get_clock_id()](IterablePin::get_clock_id)\n- [.get_board_label()](IterablePin::get_board_label)\n- [.get_panel_label()](IterablePin::get_panel_label)\n- [.get_package_label()](IterablePin::get_package_label)\n- [.get_type()](IterablePin::get_type)\n- [.get_frequency()](IterablePin::get_frequency)\n- [.get_frequency_supported()](IterablePin::get_frequency_supported)\n- [.get_capabilities()](IterablePin::get_capabilities)\n- [.get_parent_device()](IterablePin::get_parent_device)\n- [.get_parent_pin()](IterablePin::get_parent_pin)\n- [.get_phase_adjust_min()](IterablePin::get_phase_adjust_min)\n- [.get_phase_adjust_max()](IterablePin::get_phase_adjust_max)\n- [.get_phase_adjust()](IterablePin::get_phase_adjust)\n- [.get_fractional_frequency_offset()](IterablePin::get_fractional_frequency_offset)\n- [.get_esync_frequency()](IterablePin::get_esync_frequency)\n- [.get_esync_frequency_supported()](IterablePin::get_esync_frequency_supported)\n- [.get_esync_pulse()](IterablePin::get_esync_pulse)\n- [.get_reference_sync()](IterablePin::get_reference_sync)\n- [.get_phase_adjust_gran()](IterablePin::get_phase_adjust_gran)\n- [.get_fractional_frequency_offset_ppt()](IterablePin::get_fractional_frequency_offset_ppt)\n"]
+    #[doc = "Get list of pins and its attributes.\n\n- dump request without any attributes given - list all the pins in the\n  system\n- dump request with target dpll - list all the pins registered with a\n  given dpll device\n- do request with target dpll and target pin - single pin attributes\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n- [.get_module_name()](IterablePin::get_module_name)\n- [.get_clock_id()](IterablePin::get_clock_id)\n- [.get_board_label()](IterablePin::get_board_label)\n- [.get_panel_label()](IterablePin::get_panel_label)\n- [.get_package_label()](IterablePin::get_package_label)\n- [.get_type()](IterablePin::get_type)\n- [.get_frequency()](IterablePin::get_frequency)\n- [.get_frequency_supported()](IterablePin::get_frequency_supported)\n- [.get_capabilities()](IterablePin::get_capabilities)\n- [.get_parent_device()](IterablePin::get_parent_device)\n- [.get_parent_pin()](IterablePin::get_parent_pin)\n- [.get_phase_adjust_min()](IterablePin::get_phase_adjust_min)\n- [.get_phase_adjust_max()](IterablePin::get_phase_adjust_max)\n- [.get_phase_adjust()](IterablePin::get_phase_adjust)\n- [.get_fractional_frequency_offset()](IterablePin::get_fractional_frequency_offset)\n- [.get_esync_frequency()](IterablePin::get_esync_frequency)\n- [.get_esync_frequency_supported()](IterablePin::get_esync_frequency_supported)\n- [.get_esync_pulse()](IterablePin::get_esync_pulse)\n- [.get_reference_sync()](IterablePin::get_reference_sync)\n- [.get_phase_adjust_gran()](IterablePin::get_phase_adjust_gran)\n- [.get_fractional_frequency_offset_ppt()](IterablePin::get_fractional_frequency_offset_ppt)\n- [.get_measured_frequency()](IterablePin::get_measured_frequency)\n\n"]
     pub fn op_pin_get_dump(self) -> OpPinGetDump<'buf> {
         let mut res = OpPinGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-pin-get-dump", OpPinGetDump::lookup);
         res
     }
-    #[doc = "Get list of pins and its attributes\\.\n\n\\- dump request without any attributes given \\- list all the pins in the\n  system\n\\- dump request with target dpll \\- list all the pins registered with\n  a given dpll device\n\\- do request with target dpll and target pin \\- single pin attributes\n\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n- [.get_module_name()](IterablePin::get_module_name)\n- [.get_clock_id()](IterablePin::get_clock_id)\n- [.get_board_label()](IterablePin::get_board_label)\n- [.get_panel_label()](IterablePin::get_panel_label)\n- [.get_package_label()](IterablePin::get_package_label)\n- [.get_type()](IterablePin::get_type)\n- [.get_frequency()](IterablePin::get_frequency)\n- [.get_frequency_supported()](IterablePin::get_frequency_supported)\n- [.get_capabilities()](IterablePin::get_capabilities)\n- [.get_parent_device()](IterablePin::get_parent_device)\n- [.get_parent_pin()](IterablePin::get_parent_pin)\n- [.get_phase_adjust_min()](IterablePin::get_phase_adjust_min)\n- [.get_phase_adjust_max()](IterablePin::get_phase_adjust_max)\n- [.get_phase_adjust()](IterablePin::get_phase_adjust)\n- [.get_fractional_frequency_offset()](IterablePin::get_fractional_frequency_offset)\n- [.get_esync_frequency()](IterablePin::get_esync_frequency)\n- [.get_esync_frequency_supported()](IterablePin::get_esync_frequency_supported)\n- [.get_esync_pulse()](IterablePin::get_esync_pulse)\n- [.get_reference_sync()](IterablePin::get_reference_sync)\n- [.get_phase_adjust_gran()](IterablePin::get_phase_adjust_gran)\n- [.get_fractional_frequency_offset_ppt()](IterablePin::get_fractional_frequency_offset_ppt)\n"]
+    #[doc = "Get list of pins and its attributes.\n\n- dump request without any attributes given - list all the pins in the\n  system\n- dump request with target dpll - list all the pins registered with a\n  given dpll device\n- do request with target dpll and target pin - single pin attributes\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n\nReply attributes:\n- [.get_id()](IterablePin::get_id)\n- [.get_module_name()](IterablePin::get_module_name)\n- [.get_clock_id()](IterablePin::get_clock_id)\n- [.get_board_label()](IterablePin::get_board_label)\n- [.get_panel_label()](IterablePin::get_panel_label)\n- [.get_package_label()](IterablePin::get_package_label)\n- [.get_type()](IterablePin::get_type)\n- [.get_frequency()](IterablePin::get_frequency)\n- [.get_frequency_supported()](IterablePin::get_frequency_supported)\n- [.get_capabilities()](IterablePin::get_capabilities)\n- [.get_parent_device()](IterablePin::get_parent_device)\n- [.get_parent_pin()](IterablePin::get_parent_pin)\n- [.get_phase_adjust_min()](IterablePin::get_phase_adjust_min)\n- [.get_phase_adjust_max()](IterablePin::get_phase_adjust_max)\n- [.get_phase_adjust()](IterablePin::get_phase_adjust)\n- [.get_fractional_frequency_offset()](IterablePin::get_fractional_frequency_offset)\n- [.get_esync_frequency()](IterablePin::get_esync_frequency)\n- [.get_esync_frequency_supported()](IterablePin::get_esync_frequency_supported)\n- [.get_esync_pulse()](IterablePin::get_esync_pulse)\n- [.get_reference_sync()](IterablePin::get_reference_sync)\n- [.get_phase_adjust_gran()](IterablePin::get_phase_adjust_gran)\n- [.get_fractional_frequency_offset_ppt()](IterablePin::get_fractional_frequency_offset_ppt)\n- [.get_measured_frequency()](IterablePin::get_measured_frequency)\n\n"]
     pub fn op_pin_get_do(self) -> OpPinGetDo<'buf> {
         let mut res = OpPinGetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-pin-get-do", OpPinGetDo::lookup);
         res
     }
-    #[doc = "Set attributes of a target pin\nFlags: admin-perm\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n- [.push_direction()](PushPin::push_direction)\n- [.push_frequency()](PushPin::push_frequency)\n- [.push_prio()](PushPin::push_prio)\n- [.push_state()](PushPin::push_state)\n- [.nested_parent_device()](PushPin::nested_parent_device)\n- [.nested_parent_pin()](PushPin::nested_parent_pin)\n- [.push_phase_adjust()](PushPin::push_phase_adjust)\n- [.push_esync_frequency()](PushPin::push_esync_frequency)\n- [.nested_reference_sync()](PushPin::nested_reference_sync)\n"]
+    #[doc = "Set attributes of a target pin\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushPin::push_id)\n- [.push_direction()](PushPin::push_direction)\n- [.push_frequency()](PushPin::push_frequency)\n- [.push_prio()](PushPin::push_prio)\n- [.push_state()](PushPin::push_state)\n- [.nested_parent_device()](PushPin::nested_parent_device)\n- [.nested_parent_pin()](PushPin::nested_parent_pin)\n- [.push_phase_adjust()](PushPin::push_phase_adjust)\n- [.push_esync_frequency()](PushPin::push_esync_frequency)\n- [.nested_reference_sync()](PushPin::nested_reference_sync)\n\n"]
     pub fn op_pin_set_do(self) -> OpPinSetDo<'buf> {
         let mut res = OpPinSetDo::new(self);
         res.request
@@ -3751,6 +4021,7 @@ mod generated_tests {
     #[test]
     fn tests() {
         let _ = IterableDpll::get_clock_id;
+        let _ = IterableDpll::get_frequency_monitor;
         let _ = IterableDpll::get_id;
         let _ = IterableDpll::get_lock_status;
         let _ = IterableDpll::get_lock_status_error;
@@ -3772,6 +4043,7 @@ mod generated_tests {
         let _ = IterablePin::get_frequency;
         let _ = IterablePin::get_frequency_supported;
         let _ = IterablePin::get_id;
+        let _ = IterablePin::get_measured_frequency;
         let _ = IterablePin::get_module_name;
         let _ = IterablePin::get_package_label;
         let _ = IterablePin::get_panel_label;
@@ -3790,6 +4062,7 @@ mod generated_tests {
         let _ = OpPinCreateNotif;
         let _ = OpPinDeleteNotif;
         let _ = PushDpll::<&mut Vec<u8>>::push_clock_id;
+        let _ = PushDpll::<&mut Vec<u8>>::push_frequency_monitor;
         let _ = PushDpll::<&mut Vec<u8>>::push_id;
         let _ = PushDpll::<&mut Vec<u8>>::push_mode;
         let _ = PushDpll::<&mut Vec<u8>>::push_module_name;

@@ -1,4 +1,4 @@
-#![doc = "lockd configuration over generic netlink"]
+#![doc = "lockd configuration over generic netlink\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -26,7 +26,7 @@ impl<'a> IterableServer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Server::Gracetime(val) = attr? {
+            if let Ok(Server::Gracetime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -41,7 +41,7 @@ impl<'a> IterableServer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Server::TcpPort(val) = attr? {
+            if let Ok(Server::TcpPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -56,7 +56,7 @@ impl<'a> IterableServer<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Server::UdpPort(val) = attr? {
+            if let Ok(Server::UdpPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -103,14 +103,16 @@ impl<'a> IterableServer<'a> {
 impl<'a> Iterator for IterableServer<'a> {
     type Item = Result<Server, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -264,7 +266,7 @@ impl<Prev: Rec> Drop for PushServer<Prev> {
         }
     }
 }
-#[doc = "set the lockd server parameters\nFlags: admin-perm\nRequest attributes:\n- [.push_gracetime()](PushServer::push_gracetime)\n- [.push_tcp_port()](PushServer::push_tcp_port)\n- [.push_udp_port()](PushServer::push_udp_port)\n"]
+#[doc = "set the lockd server parameters\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_gracetime()](PushServer::push_gracetime)\n- [.push_tcp_port()](PushServer::push_tcp_port)\n- [.push_udp_port()](PushServer::push_udp_port)\n\n"]
 #[derive(Debug)]
 pub struct OpServerSetDo<'r> {
     request: Request<'r>,
@@ -317,7 +319,7 @@ impl NetlinkRequest for OpServerSetDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "get the lockd server parameters\n\nReply attributes:\n- [.get_gracetime()](IterableServer::get_gracetime)\n- [.get_tcp_port()](IterableServer::get_tcp_port)\n- [.get_udp_port()](IterableServer::get_udp_port)\n"]
+#[doc = "get the lockd server parameters\n\nReply attributes:\n- [.get_gracetime()](IterableServer::get_gracetime)\n- [.get_tcp_port()](IterableServer::get_tcp_port)\n- [.get_udp_port()](IterableServer::get_udp_port)\n\n"]
 #[derive(Debug)]
 pub struct OpServerGetDo<'r> {
     request: Request<'r>,
@@ -467,14 +469,14 @@ impl<'buf> Request<'buf> {
         self.flags ^= self.flags & flags;
         self
     }
-    #[doc = "set the lockd server parameters\nFlags: admin-perm\nRequest attributes:\n- [.push_gracetime()](PushServer::push_gracetime)\n- [.push_tcp_port()](PushServer::push_tcp_port)\n- [.push_udp_port()](PushServer::push_udp_port)\n"]
+    #[doc = "set the lockd server parameters\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_gracetime()](PushServer::push_gracetime)\n- [.push_tcp_port()](PushServer::push_tcp_port)\n- [.push_udp_port()](PushServer::push_udp_port)\n\n"]
     pub fn op_server_set_do(self) -> OpServerSetDo<'buf> {
         let mut res = OpServerSetDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-server-set-do", OpServerSetDo::lookup);
         res
     }
-    #[doc = "get the lockd server parameters\n\nReply attributes:\n- [.get_gracetime()](IterableServer::get_gracetime)\n- [.get_tcp_port()](IterableServer::get_tcp_port)\n- [.get_udp_port()](IterableServer::get_udp_port)\n"]
+    #[doc = "get the lockd server parameters\n\nReply attributes:\n- [.get_gracetime()](IterableServer::get_gracetime)\n- [.get_tcp_port()](IterableServer::get_tcp_port)\n- [.get_udp_port()](IterableServer::get_udp_port)\n\n"]
     pub fn op_server_get_do(self) -> OpServerGetDo<'buf> {
         let mut res = OpServerGetDo::new(self);
         res.request

@@ -1,4 +1,4 @@
-#![doc = "Netfilter nftables configuration over netlink\\."]
+#![doc = "Netfilter nftables configuration over netlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -102,7 +102,7 @@ impl MetaKeys {
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum BitwiseOps {
-    #[doc = "mask\\-and\\-xor operation used to implement NOT, AND, OR and XOR boolean operations"]
+    #[doc = "mask-and-xor operation used to implement NOT, AND, OR and XOR boolean\noperations\n"]
     MaskXor = 0,
     Lshift = 1,
     Rshift = 2,
@@ -472,7 +472,7 @@ impl RejectTypes {
         })
     }
 }
-#[doc = "These codes are mapped to real ICMP and ICMPv6 codes\\."]
+#[doc = "These codes are mapped to real ICMP and ICMPv6 codes.\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum RejectInetCode {
@@ -513,7 +513,7 @@ impl PayloadBase {
         })
     }
 }
-#[doc = "Range operator"]
+#[doc = "Range operator\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum RangeOps {
@@ -529,7 +529,7 @@ impl RangeOps {
         })
     }
 }
-#[doc = "nf\\_tables registers\\.\nnf\\_tables used to have five registers: a verdict register and four data\nregisters of size 16\\. The data registers have been changed to 16 registers\nof size 4\\. For compatibility reasons, the NFT\\_REG\\_\\[1\\-4\\] registers still\nmap to areas of size 16, the 4 byte registers are addressed using\nNFT\\_REG32\\_00 \\- NFT\\_REG32\\_15\\.\n"]
+#[doc = "nf_tables registers. nf_tables used to have five registers: a verdict\nregister and four data registers of size 16. The data registers have\nbeen changed to 16 registers of size 4. For compatibility reasons, the\n[NFT_REG]()\\[1-4\\] registers still map to areas of size 16, the 4 byte\nregisters are addressed using NFT_REG32_00 - NFT_REG32_15.\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum Registers {
@@ -598,27 +598,27 @@ impl NumgenTypes {
         })
     }
 }
-#[doc = "nf\\_tables log levels"]
+#[doc = "nf_tables log levels\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum LogLevel {
-    #[doc = "system is unusable"]
+    #[doc = "system is unusable\n"]
     Emerg = 0,
-    #[doc = "action must be taken immediately"]
+    #[doc = "action must be taken immediately\n"]
     Alert = 1,
-    #[doc = "critical conditions"]
+    #[doc = "critical conditions\n"]
     Crit = 2,
-    #[doc = "error conditions"]
+    #[doc = "error conditions\n"]
     Err = 3,
-    #[doc = "warning conditions"]
+    #[doc = "warning conditions\n"]
     Warning = 4,
-    #[doc = "normal but significant condition"]
+    #[doc = "normal but significant condition\n"]
     Notice = 5,
-    #[doc = "informational"]
+    #[doc = "informational\n"]
     Info = 6,
-    #[doc = "debug\\-level messages"]
+    #[doc = "debug-level messages\n"]
     Debug = 7,
-    #[doc = "enabling audit logging"]
+    #[doc = "enabling audit logging\n"]
     Audit = 8,
 }
 impl LogLevel {
@@ -637,21 +637,21 @@ impl LogLevel {
         })
     }
 }
-#[doc = "nf\\_tables log flags"]
+#[doc = "nf_tables log flags\n"]
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum LogFlags {
-    #[doc = "Log TCP sequence numbers"]
+    #[doc = "Log TCP sequence numbers\n"]
     Tcpseq = 1 << 0,
-    #[doc = "Log TCP options"]
+    #[doc = "Log TCP options\n"]
     Tcpopt = 1 << 1,
-    #[doc = "Log IP options"]
+    #[doc = "Log IP options\n"]
     Ipopt = 1 << 2,
-    #[doc = "Log UID owning local socket"]
+    #[doc = "Log UID owning local socket\n"]
     Uid = 1 << 3,
-    #[doc = "Unsupported, don't reuse"]
+    #[doc = "Unsupported, don\\'t reuse\n"]
     Nflog = 1 << 4,
-    #[doc = "Decode MAC header"]
+    #[doc = "Decode MAC header\n"]
     Macdecode = 1 << 5,
 }
 impl LogFlags {
@@ -749,28 +749,404 @@ impl std::fmt::Debug for Nfgenmsg {
             .finish()
     }
 }
+#[repr(C, packed(4))]
+pub struct NatRange2 {
+    pub flags: u32,
+    pub min_addr: [u8; 16usize],
+    pub max_addr: [u8; 16usize],
+    pub _min_port_be: u16,
+    pub _max_port_be: u16,
+    pub _base_port_be: u16,
+    pub _pad_42: [u8; 2usize],
+}
+impl Clone for NatRange2 {
+    fn clone(&self) -> Self {
+        Self::new_from_array(*self.as_array())
+    }
+}
+#[doc = "Create zero-initialized struct"]
+impl Default for NatRange2 {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+impl NatRange2 {
+    #[doc = "Create zero-initialized struct"]
+    pub fn new() -> Self {
+        Self::new_from_array([0u8; Self::len()])
+    }
+    #[doc = "Copy from contents from slice"]
+    pub fn new_from_slice(other: &[u8]) -> Option<Self> {
+        if other.len() != Self::len() {
+            return None;
+        }
+        let mut buf = [0u8; Self::len()];
+        buf.clone_from_slice(other);
+        Some(Self::new_from_array(buf))
+    }
+    #[doc = "Copy from contents from another slice, padding with zeros or truncating when needed"]
+    pub fn new_from_zeroed(other: &[u8]) -> Self {
+        let mut buf = [0u8; Self::len()];
+        let len = buf.len().min(other.len());
+        buf[..len].clone_from_slice(&other[..len]);
+        Self::new_from_array(buf)
+    }
+    pub fn new_from_array(buf: [u8; 44usize]) -> Self {
+        unsafe { std::mem::transmute(buf) }
+    }
+    pub fn as_slice(&self) -> &[u8] {
+        unsafe {
+            let ptr: *const u8 = std::mem::transmute(self as *const Self);
+            std::slice::from_raw_parts(ptr, Self::len())
+        }
+    }
+    pub fn from_slice(buf: &[u8]) -> &Self {
+        assert!(buf.len() >= Self::len());
+        assert!(buf.as_ptr() as usize % std::mem::align_of::<Self>() == 0);
+        unsafe { std::mem::transmute(buf.as_ptr()) }
+    }
+    pub fn as_array(&self) -> &[u8; 44usize] {
+        unsafe { std::mem::transmute(self) }
+    }
+    pub fn from_array(buf: &[u8; 44usize]) -> &Self {
+        assert!(buf.as_ptr() as usize % std::mem::align_of::<Self>() == 0);
+        unsafe { std::mem::transmute(buf) }
+    }
+    pub fn into_array(self) -> [u8; 44usize] {
+        unsafe { std::mem::transmute(self) }
+    }
+    pub const fn len() -> usize {
+        const _: () = assert!(std::mem::size_of::<NatRange2>() == 44usize);
+        44usize
+    }
+    pub fn min_port(&self) -> u16 {
+        u16::from_be(self._min_port_be)
+    }
+    pub fn set_min_port(&mut self, value: u16) {
+        self._min_port_be = value.to_be();
+    }
+    pub fn max_port(&self) -> u16 {
+        u16::from_be(self._max_port_be)
+    }
+    pub fn set_max_port(&mut self, value: u16) {
+        self._max_port_be = value.to_be();
+    }
+    pub fn base_port(&self) -> u16 {
+        u16::from_be(self._base_port_be)
+    }
+    pub fn set_base_port(&mut self, value: u16) {
+        self._base_port_be = value.to_be();
+    }
+}
+impl std::fmt::Debug for NatRange2 {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        fmt.debug_struct("NatRange2")
+            .field("flags", &self.flags)
+            .field("min_addr", &self.min_addr)
+            .field("max_addr", &self.max_addr)
+            .field("min_port", &self.min_port())
+            .field("max_port", &self.max_port())
+            .field("base_port", &self.base_port())
+            .finish()
+    }
+}
+#[repr(C, packed(4))]
+pub struct NatIpv4MultiRange {
+    #[doc = "Always set to 1. Multiple ranges no longer supported.\n"]
+    pub range_size: u32,
+    pub range: NatIpv4Range,
+}
+impl Clone for NatIpv4MultiRange {
+    fn clone(&self) -> Self {
+        Self::new_from_array(*self.as_array())
+    }
+}
+#[doc = "Create zero-initialized struct"]
+impl Default for NatIpv4MultiRange {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+impl NatIpv4MultiRange {
+    #[doc = "Create zero-initialized struct"]
+    pub fn new() -> Self {
+        Self::new_from_array([0u8; Self::len()])
+    }
+    #[doc = "Copy from contents from slice"]
+    pub fn new_from_slice(other: &[u8]) -> Option<Self> {
+        if other.len() != Self::len() {
+            return None;
+        }
+        let mut buf = [0u8; Self::len()];
+        buf.clone_from_slice(other);
+        Some(Self::new_from_array(buf))
+    }
+    #[doc = "Copy from contents from another slice, padding with zeros or truncating when needed"]
+    pub fn new_from_zeroed(other: &[u8]) -> Self {
+        let mut buf = [0u8; Self::len()];
+        let len = buf.len().min(other.len());
+        buf[..len].clone_from_slice(&other[..len]);
+        Self::new_from_array(buf)
+    }
+    pub fn new_from_array(buf: [u8; 20usize]) -> Self {
+        unsafe { std::mem::transmute(buf) }
+    }
+    pub fn as_slice(&self) -> &[u8] {
+        unsafe {
+            let ptr: *const u8 = std::mem::transmute(self as *const Self);
+            std::slice::from_raw_parts(ptr, Self::len())
+        }
+    }
+    pub fn from_slice(buf: &[u8]) -> &Self {
+        assert!(buf.len() >= Self::len());
+        assert!(buf.as_ptr() as usize % std::mem::align_of::<Self>() == 0);
+        unsafe { std::mem::transmute(buf.as_ptr()) }
+    }
+    pub fn as_array(&self) -> &[u8; 20usize] {
+        unsafe { std::mem::transmute(self) }
+    }
+    pub fn from_array(buf: &[u8; 20usize]) -> &Self {
+        assert!(buf.as_ptr() as usize % std::mem::align_of::<Self>() == 0);
+        unsafe { std::mem::transmute(buf) }
+    }
+    pub fn into_array(self) -> [u8; 20usize] {
+        unsafe { std::mem::transmute(self) }
+    }
+    pub const fn len() -> usize {
+        const _: () = assert!(std::mem::size_of::<NatIpv4MultiRange>() == 20usize);
+        20usize
+    }
+}
+impl std::fmt::Debug for NatIpv4MultiRange {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        fmt.debug_struct("NatIpv4MultiRange")
+            .field("range_size", &self.range_size)
+            .field("range", &self.range)
+            .finish()
+    }
+}
+#[repr(C, packed(4))]
+pub struct NatIpv4Range {
+    #[doc = "Associated type: [`NatRangeFlags`] (enum)"]
+    pub flags: u32,
+    pub _min_ip_be: u32,
+    pub _max_ip_be: u32,
+    pub _min_port_be: u16,
+    pub _max_port_be: u16,
+}
+impl Clone for NatIpv4Range {
+    fn clone(&self) -> Self {
+        Self::new_from_array(*self.as_array())
+    }
+}
+#[doc = "Create zero-initialized struct"]
+impl Default for NatIpv4Range {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+impl NatIpv4Range {
+    #[doc = "Create zero-initialized struct"]
+    pub fn new() -> Self {
+        Self::new_from_array([0u8; Self::len()])
+    }
+    #[doc = "Copy from contents from slice"]
+    pub fn new_from_slice(other: &[u8]) -> Option<Self> {
+        if other.len() != Self::len() {
+            return None;
+        }
+        let mut buf = [0u8; Self::len()];
+        buf.clone_from_slice(other);
+        Some(Self::new_from_array(buf))
+    }
+    #[doc = "Copy from contents from another slice, padding with zeros or truncating when needed"]
+    pub fn new_from_zeroed(other: &[u8]) -> Self {
+        let mut buf = [0u8; Self::len()];
+        let len = buf.len().min(other.len());
+        buf[..len].clone_from_slice(&other[..len]);
+        Self::new_from_array(buf)
+    }
+    pub fn new_from_array(buf: [u8; 16usize]) -> Self {
+        unsafe { std::mem::transmute(buf) }
+    }
+    pub fn as_slice(&self) -> &[u8] {
+        unsafe {
+            let ptr: *const u8 = std::mem::transmute(self as *const Self);
+            std::slice::from_raw_parts(ptr, Self::len())
+        }
+    }
+    pub fn from_slice(buf: &[u8]) -> &Self {
+        assert!(buf.len() >= Self::len());
+        assert!(buf.as_ptr() as usize % std::mem::align_of::<Self>() == 0);
+        unsafe { std::mem::transmute(buf.as_ptr()) }
+    }
+    pub fn as_array(&self) -> &[u8; 16usize] {
+        unsafe { std::mem::transmute(self) }
+    }
+    pub fn from_array(buf: &[u8; 16usize]) -> &Self {
+        assert!(buf.as_ptr() as usize % std::mem::align_of::<Self>() == 0);
+        unsafe { std::mem::transmute(buf) }
+    }
+    pub fn into_array(self) -> [u8; 16usize] {
+        unsafe { std::mem::transmute(self) }
+    }
+    pub const fn len() -> usize {
+        const _: () = assert!(std::mem::size_of::<NatIpv4Range>() == 16usize);
+        16usize
+    }
+    pub fn min_ip(&self) -> u32 {
+        u32::from_be(self._min_ip_be)
+    }
+    pub fn set_min_ip(&mut self, value: u32) {
+        self._min_ip_be = value.to_be();
+    }
+    pub fn max_ip(&self) -> u32 {
+        u32::from_be(self._max_ip_be)
+    }
+    pub fn set_max_ip(&mut self, value: u32) {
+        self._max_ip_be = value.to_be();
+    }
+    pub fn min_port(&self) -> u16 {
+        u16::from_be(self._min_port_be)
+    }
+    pub fn set_min_port(&mut self, value: u16) {
+        self._min_port_be = value.to_be();
+    }
+    pub fn max_port(&self) -> u16 {
+        u16::from_be(self._max_port_be)
+    }
+    pub fn set_max_port(&mut self, value: u16) {
+        self._max_port_be = value.to_be();
+    }
+}
+impl std::fmt::Debug for NatIpv4Range {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        fmt.debug_struct("NatIpv4Range")
+            .field(
+                "flags",
+                &FormatFlags(self.flags.into(), NatRangeFlags::from_value),
+            )
+            .field("min_ip", &self.min_ip())
+            .field("max_ip", &self.max_ip())
+            .field("min_port", &self.min_port())
+            .field("max_port", &self.max_port())
+            .finish()
+    }
+}
+#[repr(C, packed(4))]
+pub struct NatRange {
+    pub flags: u32,
+    pub min_addr: [u8; 16usize],
+    pub max_addr: [u8; 16usize],
+    pub _min_port_be: u16,
+    pub _max_port_be: u16,
+}
+impl Clone for NatRange {
+    fn clone(&self) -> Self {
+        Self::new_from_array(*self.as_array())
+    }
+}
+#[doc = "Create zero-initialized struct"]
+impl Default for NatRange {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+impl NatRange {
+    #[doc = "Create zero-initialized struct"]
+    pub fn new() -> Self {
+        Self::new_from_array([0u8; Self::len()])
+    }
+    #[doc = "Copy from contents from slice"]
+    pub fn new_from_slice(other: &[u8]) -> Option<Self> {
+        if other.len() != Self::len() {
+            return None;
+        }
+        let mut buf = [0u8; Self::len()];
+        buf.clone_from_slice(other);
+        Some(Self::new_from_array(buf))
+    }
+    #[doc = "Copy from contents from another slice, padding with zeros or truncating when needed"]
+    pub fn new_from_zeroed(other: &[u8]) -> Self {
+        let mut buf = [0u8; Self::len()];
+        let len = buf.len().min(other.len());
+        buf[..len].clone_from_slice(&other[..len]);
+        Self::new_from_array(buf)
+    }
+    pub fn new_from_array(buf: [u8; 40usize]) -> Self {
+        unsafe { std::mem::transmute(buf) }
+    }
+    pub fn as_slice(&self) -> &[u8] {
+        unsafe {
+            let ptr: *const u8 = std::mem::transmute(self as *const Self);
+            std::slice::from_raw_parts(ptr, Self::len())
+        }
+    }
+    pub fn from_slice(buf: &[u8]) -> &Self {
+        assert!(buf.len() >= Self::len());
+        assert!(buf.as_ptr() as usize % std::mem::align_of::<Self>() == 0);
+        unsafe { std::mem::transmute(buf.as_ptr()) }
+    }
+    pub fn as_array(&self) -> &[u8; 40usize] {
+        unsafe { std::mem::transmute(self) }
+    }
+    pub fn from_array(buf: &[u8; 40usize]) -> &Self {
+        assert!(buf.as_ptr() as usize % std::mem::align_of::<Self>() == 0);
+        unsafe { std::mem::transmute(buf) }
+    }
+    pub fn into_array(self) -> [u8; 40usize] {
+        unsafe { std::mem::transmute(self) }
+    }
+    pub const fn len() -> usize {
+        const _: () = assert!(std::mem::size_of::<NatRange>() == 40usize);
+        40usize
+    }
+    pub fn min_port(&self) -> u16 {
+        u16::from_be(self._min_port_be)
+    }
+    pub fn set_min_port(&mut self, value: u16) {
+        self._min_port_be = value.to_be();
+    }
+    pub fn max_port(&self) -> u16 {
+        u16::from_be(self._max_port_be)
+    }
+    pub fn set_max_port(&mut self, value: u16) {
+        self._max_port_be = value.to_be();
+    }
+}
+impl std::fmt::Debug for NatRange {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        fmt.debug_struct("NatRange")
+            .field("flags", &self.flags)
+            .field("min_addr", &self.min_addr)
+            .field("max_addr", &self.max_addr)
+            .field("min_port", &self.min_port())
+            .field("max_port", &self.max_port())
+            .finish()
+    }
+}
 #[derive(Clone)]
 pub enum LogAttrs<'a> {
-    #[doc = "netlink group to send messages to"]
+    #[doc = "netlink group to send messages to\n"]
     Group(u16),
-    #[doc = "prefix to prepend to log messages"]
+    #[doc = "prefix to prepend to log messages\n"]
     Prefix(&'a CStr),
-    #[doc = "length of payload to include in netlink message"]
+    #[doc = "length of payload to include in netlink message\n"]
     Snaplen(u32),
-    #[doc = "queue threshold"]
+    #[doc = "queue threshold\n"]
     Qthreshold(u16),
-    #[doc = "log level\nAssociated type: [`LogLevel`] (enum)"]
+    #[doc = "log level\n\nAssociated type: [`LogLevel`] (enum)"]
     Level(u32),
-    #[doc = "logging flags\nAssociated type: [`LogFlags`] (enum)"]
+    #[doc = "logging flags\n\nAssociated type: [`LogFlags`] (enum)"]
     Flags(u32),
 }
 impl<'a> IterableLogAttrs<'a> {
-    #[doc = "netlink group to send messages to"]
+    #[doc = "netlink group to send messages to\n"]
     pub fn get_group(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let LogAttrs::Group(val) = attr? {
+            if let Ok(LogAttrs::Group(val)) = attr {
                 return Ok(val);
             }
         }
@@ -781,12 +1157,12 @@ impl<'a> IterableLogAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "prefix to prepend to log messages"]
+    #[doc = "prefix to prepend to log messages\n"]
     pub fn get_prefix(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let LogAttrs::Prefix(val) = attr? {
+            if let Ok(LogAttrs::Prefix(val)) = attr {
                 return Ok(val);
             }
         }
@@ -797,12 +1173,12 @@ impl<'a> IterableLogAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "length of payload to include in netlink message"]
+    #[doc = "length of payload to include in netlink message\n"]
     pub fn get_snaplen(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let LogAttrs::Snaplen(val) = attr? {
+            if let Ok(LogAttrs::Snaplen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -813,12 +1189,12 @@ impl<'a> IterableLogAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "queue threshold"]
+    #[doc = "queue threshold\n"]
     pub fn get_qthreshold(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let LogAttrs::Qthreshold(val) = attr? {
+            if let Ok(LogAttrs::Qthreshold(val)) = attr {
                 return Ok(val);
             }
         }
@@ -829,12 +1205,12 @@ impl<'a> IterableLogAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "log level\nAssociated type: [`LogLevel`] (enum)"]
+    #[doc = "log level\n\nAssociated type: [`LogLevel`] (enum)"]
     pub fn get_level(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let LogAttrs::Level(val) = attr? {
+            if let Ok(LogAttrs::Level(val)) = attr {
                 return Ok(val);
             }
         }
@@ -845,12 +1221,12 @@ impl<'a> IterableLogAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "logging flags\nAssociated type: [`LogFlags`] (enum)"]
+    #[doc = "logging flags\n\nAssociated type: [`LogFlags`] (enum)"]
     pub fn get_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let LogAttrs::Flags(val) = attr? {
+            if let Ok(LogAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -900,14 +1276,16 @@ impl<'a> IterableLogAttrs<'a> {
 impl<'a> Iterator for IterableLogAttrs<'a> {
     type Item = Result<LogAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1055,22 +1433,22 @@ impl IterableLogAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum NumgenAttrs {
-    #[doc = "destination register\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "destination register\n\nAssociated type: [`Registers`] (enum)"]
     Dreg(u32),
-    #[doc = "maximum counter value"]
+    #[doc = "maximum counter value\n"]
     Modulus(u32),
-    #[doc = "operation type\nAssociated type: [`NumgenTypes`] (enum)"]
+    #[doc = "operation type\n\nAssociated type: [`NumgenTypes`] (enum)"]
     Type(u32),
-    #[doc = "offset to be added to the counter"]
+    #[doc = "offset to be added to the counter\n"]
     Offset(u32),
 }
 impl<'a> IterableNumgenAttrs<'a> {
-    #[doc = "destination register\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "destination register\n\nAssociated type: [`Registers`] (enum)"]
     pub fn get_dreg(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NumgenAttrs::Dreg(val) = attr? {
+            if let Ok(NumgenAttrs::Dreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1081,12 +1459,12 @@ impl<'a> IterableNumgenAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "maximum counter value"]
+    #[doc = "maximum counter value\n"]
     pub fn get_modulus(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NumgenAttrs::Modulus(val) = attr? {
+            if let Ok(NumgenAttrs::Modulus(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1097,12 +1475,12 @@ impl<'a> IterableNumgenAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "operation type\nAssociated type: [`NumgenTypes`] (enum)"]
+    #[doc = "operation type\n\nAssociated type: [`NumgenTypes`] (enum)"]
     pub fn get_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NumgenAttrs::Type(val) = attr? {
+            if let Ok(NumgenAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1113,12 +1491,12 @@ impl<'a> IterableNumgenAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "offset to be added to the counter"]
+    #[doc = "offset to be added to the counter\n"]
     pub fn get_offset(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NumgenAttrs::Offset(val) = attr? {
+            if let Ok(NumgenAttrs::Offset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1166,14 +1544,16 @@ impl<'a> IterableNumgenAttrs<'a> {
 impl<'a> Iterator for IterableNumgenAttrs<'a> {
     type Item = Result<NumgenAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1297,22 +1677,22 @@ impl IterableNumgenAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum RangeAttrs<'a> {
-    #[doc = "source register of data to compare\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "source register of data to compare\n\nAssociated type: [`Registers`] (enum)"]
     Sreg(u32),
-    #[doc = "cmp operation\nAssociated type: [`RangeOps`] (enum)"]
+    #[doc = "cmp operation\n\nAssociated type: [`RangeOps`] (enum)"]
     Op(u32),
-    #[doc = "data range from"]
+    #[doc = "data range from\n"]
     FromData(IterableDataAttrs<'a>),
-    #[doc = "data range to"]
+    #[doc = "data range to\n"]
     ToData(IterableDataAttrs<'a>),
 }
 impl<'a> IterableRangeAttrs<'a> {
-    #[doc = "source register of data to compare\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "source register of data to compare\n\nAssociated type: [`Registers`] (enum)"]
     pub fn get_sreg(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RangeAttrs::Sreg(val) = attr? {
+            if let Ok(RangeAttrs::Sreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1323,12 +1703,12 @@ impl<'a> IterableRangeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "cmp operation\nAssociated type: [`RangeOps`] (enum)"]
+    #[doc = "cmp operation\n\nAssociated type: [`RangeOps`] (enum)"]
     pub fn get_op(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RangeAttrs::Op(val) = attr? {
+            if let Ok(RangeAttrs::Op(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1339,12 +1719,12 @@ impl<'a> IterableRangeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "data range from"]
+    #[doc = "data range from\n"]
     pub fn get_from_data(&self) -> Result<IterableDataAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RangeAttrs::FromData(val) = attr? {
+            if let Ok(RangeAttrs::FromData(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1355,12 +1735,12 @@ impl<'a> IterableRangeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "data range to"]
+    #[doc = "data range to\n"]
     pub fn get_to_data(&self) -> Result<IterableDataAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RangeAttrs::ToData(val) = attr? {
+            if let Ok(RangeAttrs::ToData(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1408,14 +1788,16 @@ impl<'a> IterableRangeAttrs<'a> {
 impl<'a> Iterator for IterableRangeAttrs<'a> {
     type Item = Result<RangeAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1540,16 +1922,16 @@ impl IterableRangeAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum BatchAttrs {
-    #[doc = "generation ID for this changeset"]
+    #[doc = "generation ID for this changeset\n"]
     Genid(u32),
 }
 impl<'a> IterableBatchAttrs<'a> {
-    #[doc = "generation ID for this changeset"]
+    #[doc = "generation ID for this changeset\n"]
     pub fn get_genid(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BatchAttrs::Genid(val) = attr? {
+            if let Ok(BatchAttrs::Genid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1594,14 +1976,16 @@ impl<'a> IterableBatchAttrs<'a> {
 impl<'a> Iterator for IterableBatchAttrs<'a> {
     type Item = Result<BatchAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1685,27 +2069,27 @@ impl IterableBatchAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum TableAttrs<'a> {
-    #[doc = "name of the table"]
+    #[doc = "name of the table\n"]
     Name(&'a CStr),
-    #[doc = "bitmask of flags\nAssociated type: [`TableFlags`] (1 bit per enumeration)"]
+    #[doc = "bitmask of flags\n\nAssociated type: [`TableFlags`] (1 bit per enumeration)"]
     Flags(u32),
-    #[doc = "number of chains in this table"]
+    #[doc = "number of chains in this table\n"]
     Use(u32),
-    #[doc = "numeric handle of the table"]
+    #[doc = "numeric handle of the table\n"]
     Handle(u64),
     Pad(&'a [u8]),
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     Userdata(&'a [u8]),
-    #[doc = "owner of this table through netlink portID"]
+    #[doc = "owner of this table through netlink portID\n"]
     Owner(u32),
 }
 impl<'a> IterableTableAttrs<'a> {
-    #[doc = "name of the table"]
+    #[doc = "name of the table\n"]
     pub fn get_name(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TableAttrs::Name(val) = attr? {
+            if let Ok(TableAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1716,12 +2100,12 @@ impl<'a> IterableTableAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "bitmask of flags\nAssociated type: [`TableFlags`] (1 bit per enumeration)"]
+    #[doc = "bitmask of flags\n\nAssociated type: [`TableFlags`] (1 bit per enumeration)"]
     pub fn get_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TableAttrs::Flags(val) = attr? {
+            if let Ok(TableAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1732,12 +2116,12 @@ impl<'a> IterableTableAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "number of chains in this table"]
+    #[doc = "number of chains in this table\n"]
     pub fn get_use(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TableAttrs::Use(val) = attr? {
+            if let Ok(TableAttrs::Use(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1748,12 +2132,12 @@ impl<'a> IterableTableAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "numeric handle of the table"]
+    #[doc = "numeric handle of the table\n"]
     pub fn get_handle(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TableAttrs::Handle(val) = attr? {
+            if let Ok(TableAttrs::Handle(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1768,7 +2152,7 @@ impl<'a> IterableTableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TableAttrs::Pad(val) = attr? {
+            if let Ok(TableAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1779,12 +2163,12 @@ impl<'a> IterableTableAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn get_userdata(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TableAttrs::Userdata(val) = attr? {
+            if let Ok(TableAttrs::Userdata(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1795,12 +2179,12 @@ impl<'a> IterableTableAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "owner of this table through netlink portID"]
+    #[doc = "owner of this table through netlink portID\n"]
     pub fn get_owner(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TableAttrs::Owner(val) = attr? {
+            if let Ok(TableAttrs::Owner(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1851,14 +2235,16 @@ impl<'a> IterableTableAttrs<'a> {
 impl<'a> Iterator for IterableTableAttrs<'a> {
     type Item = Result<TableAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2016,36 +2402,36 @@ impl IterableTableAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum ChainAttrs<'a> {
-    #[doc = "name of the table containing the chain"]
+    #[doc = "name of the table containing the chain\n"]
     Table(&'a CStr),
-    #[doc = "numeric handle of the chain"]
+    #[doc = "numeric handle of the chain\n"]
     Handle(u64),
-    #[doc = "name of the chain"]
+    #[doc = "name of the chain\n"]
     Name(&'a CStr),
-    #[doc = "hook specification for basechains"]
+    #[doc = "hook specification for basechains\n"]
     Hook(IterableNftHookAttrs<'a>),
-    #[doc = "numeric policy of the chain"]
+    #[doc = "numeric policy of the chain\n"]
     Policy(u32),
-    #[doc = "number of references to this chain"]
+    #[doc = "number of references to this chain\n"]
     Use(u32),
-    #[doc = "type name of the chain"]
+    #[doc = "type name of the chain\n"]
     Type(&'a CStr),
-    #[doc = "counter specification of the chain"]
+    #[doc = "counter specification of the chain\n"]
     Counters(IterableNftCounterAttrs<'a>),
-    #[doc = "chain flags\nAssociated type: [`ChainFlags`] (1 bit per enumeration)"]
+    #[doc = "chain flags\n\nAssociated type: [`ChainFlags`] (1 bit per enumeration)"]
     Flags(u32),
-    #[doc = "uniquely identifies a chain in a transaction"]
+    #[doc = "uniquely identifies a chain in a transaction\n"]
     Id(u32),
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     Userdata(&'a [u8]),
 }
 impl<'a> IterableChainAttrs<'a> {
-    #[doc = "name of the table containing the chain"]
+    #[doc = "name of the table containing the chain\n"]
     pub fn get_table(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Table(val) = attr? {
+            if let Ok(ChainAttrs::Table(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2056,12 +2442,12 @@ impl<'a> IterableChainAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "numeric handle of the chain"]
+    #[doc = "numeric handle of the chain\n"]
     pub fn get_handle(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Handle(val) = attr? {
+            if let Ok(ChainAttrs::Handle(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2072,12 +2458,12 @@ impl<'a> IterableChainAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "name of the chain"]
+    #[doc = "name of the chain\n"]
     pub fn get_name(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Name(val) = attr? {
+            if let Ok(ChainAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2088,12 +2474,12 @@ impl<'a> IterableChainAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "hook specification for basechains"]
+    #[doc = "hook specification for basechains\n"]
     pub fn get_hook(&self) -> Result<IterableNftHookAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Hook(val) = attr? {
+            if let Ok(ChainAttrs::Hook(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2104,12 +2490,12 @@ impl<'a> IterableChainAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "numeric policy of the chain"]
+    #[doc = "numeric policy of the chain\n"]
     pub fn get_policy(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Policy(val) = attr? {
+            if let Ok(ChainAttrs::Policy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2120,12 +2506,12 @@ impl<'a> IterableChainAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "number of references to this chain"]
+    #[doc = "number of references to this chain\n"]
     pub fn get_use(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Use(val) = attr? {
+            if let Ok(ChainAttrs::Use(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2136,12 +2522,12 @@ impl<'a> IterableChainAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "type name of the chain"]
+    #[doc = "type name of the chain\n"]
     pub fn get_type(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Type(val) = attr? {
+            if let Ok(ChainAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2152,12 +2538,12 @@ impl<'a> IterableChainAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "counter specification of the chain"]
+    #[doc = "counter specification of the chain\n"]
     pub fn get_counters(&self) -> Result<IterableNftCounterAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Counters(val) = attr? {
+            if let Ok(ChainAttrs::Counters(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2168,12 +2554,12 @@ impl<'a> IterableChainAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "chain flags\nAssociated type: [`ChainFlags`] (1 bit per enumeration)"]
+    #[doc = "chain flags\n\nAssociated type: [`ChainFlags`] (1 bit per enumeration)"]
     pub fn get_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Flags(val) = attr? {
+            if let Ok(ChainAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2184,12 +2570,12 @@ impl<'a> IterableChainAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "uniquely identifies a chain in a transaction"]
+    #[doc = "uniquely identifies a chain in a transaction\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Id(val) = attr? {
+            if let Ok(ChainAttrs::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2200,12 +2586,12 @@ impl<'a> IterableChainAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn get_userdata(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChainAttrs::Userdata(val) = attr? {
+            if let Ok(ChainAttrs::Userdata(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2260,14 +2646,16 @@ impl<'a> IterableChainAttrs<'a> {
 impl<'a> Iterator for IterableChainAttrs<'a> {
     type Item = Result<ChainAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2483,7 +2871,7 @@ impl<'a> IterableCounterAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CounterAttrs::Bytes(val) = attr? {
+            if let Ok(CounterAttrs::Bytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2498,7 +2886,7 @@ impl<'a> IterableCounterAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CounterAttrs::Packets(val) = attr? {
+            if let Ok(CounterAttrs::Packets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2513,7 +2901,7 @@ impl<'a> IterableCounterAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CounterAttrs::Pad(val) = attr? {
+            if let Ok(CounterAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2560,14 +2948,16 @@ impl<'a> IterableCounterAttrs<'a> {
 impl<'a> Iterator for IterableCounterAttrs<'a> {
     type Item = Result<CounterAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2677,9 +3067,9 @@ impl IterableCounterAttrs<'_> {
 pub enum NftHookAttrs<'a> {
     Num(u32),
     Priority(i32),
-    #[doc = "net device name"]
+    #[doc = "net device name\n"]
     Dev(&'a CStr),
-    #[doc = "list of net devices"]
+    #[doc = "list of net devices\n"]
     Devs(IterableHookDevAttrs<'a>),
 }
 impl<'a> IterableNftHookAttrs<'a> {
@@ -2687,7 +3077,7 @@ impl<'a> IterableNftHookAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NftHookAttrs::Num(val) = attr? {
+            if let Ok(NftHookAttrs::Num(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2702,7 +3092,7 @@ impl<'a> IterableNftHookAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NftHookAttrs::Priority(val) = attr? {
+            if let Ok(NftHookAttrs::Priority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2713,12 +3103,12 @@ impl<'a> IterableNftHookAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "net device name"]
+    #[doc = "net device name\n"]
     pub fn get_dev(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NftHookAttrs::Dev(val) = attr? {
+            if let Ok(NftHookAttrs::Dev(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2729,12 +3119,12 @@ impl<'a> IterableNftHookAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "list of net devices"]
+    #[doc = "list of net devices\n"]
     pub fn get_devs(&self) -> Result<IterableHookDevAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NftHookAttrs::Devs(val) = attr? {
+            if let Ok(NftHookAttrs::Devs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -2782,14 +3172,16 @@ impl<'a> IterableNftHookAttrs<'a> {
 impl<'a> Iterator for IterableNftHookAttrs<'a> {
     type Item = Result<NftHookAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2958,14 +3350,16 @@ impl<'a> IterableHookDevAttrs<'a> {
 impl<'a> Iterator for IterableHookDevAttrs<'a> {
     type Item = Result<HookDevAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3057,7 +3451,7 @@ impl<'a> IterableNftCounterAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NftCounterAttrs::Bytes(val) = attr? {
+            if let Ok(NftCounterAttrs::Bytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3072,7 +3466,7 @@ impl<'a> IterableNftCounterAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NftCounterAttrs::Packets(val) = attr? {
+            if let Ok(NftCounterAttrs::Packets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3118,14 +3512,16 @@ impl<'a> IterableNftCounterAttrs<'a> {
 impl<'a> Iterator for IterableNftCounterAttrs<'a> {
     type Item = Result<NftCounterAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3221,34 +3617,34 @@ impl IterableNftCounterAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum RuleAttrs<'a> {
-    #[doc = "name of the table containing the rule"]
+    #[doc = "name of the table containing the rule\n"]
     Table(&'a CStr),
-    #[doc = "name of the chain containing the rule"]
+    #[doc = "name of the chain containing the rule\n"]
     Chain(&'a CStr),
-    #[doc = "numeric handle of the rule"]
+    #[doc = "numeric handle of the rule\n"]
     Handle(u64),
-    #[doc = "list of expressions"]
+    #[doc = "list of expressions\n"]
     Expressions(IterableExprListAttrs<'a>),
-    #[doc = "compatibility specifications of the rule"]
+    #[doc = "compatibility specifications of the rule\n"]
     Compat(IterableRuleCompatAttrs<'a>),
-    #[doc = "numeric handle of the previous rule"]
+    #[doc = "numeric handle of the previous rule\n"]
     Position(u64),
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     Userdata(&'a [u8]),
-    #[doc = "uniquely identifies a rule in a transaction"]
+    #[doc = "uniquely identifies a rule in a transaction\n"]
     Id(u32),
-    #[doc = "transaction unique identifier of the previous rule"]
+    #[doc = "transaction unique identifier of the previous rule\n"]
     PositionId(u32),
-    #[doc = "add the rule to chain by ID, alternative to chain name"]
+    #[doc = "add the rule to chain by ID, alternative to chain name\n"]
     ChainId(u32),
 }
 impl<'a> IterableRuleAttrs<'a> {
-    #[doc = "name of the table containing the rule"]
+    #[doc = "name of the table containing the rule\n"]
     pub fn get_table(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleAttrs::Table(val) = attr? {
+            if let Ok(RuleAttrs::Table(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3259,12 +3655,12 @@ impl<'a> IterableRuleAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "name of the chain containing the rule"]
+    #[doc = "name of the chain containing the rule\n"]
     pub fn get_chain(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleAttrs::Chain(val) = attr? {
+            if let Ok(RuleAttrs::Chain(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3275,12 +3671,12 @@ impl<'a> IterableRuleAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "numeric handle of the rule"]
+    #[doc = "numeric handle of the rule\n"]
     pub fn get_handle(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleAttrs::Handle(val) = attr? {
+            if let Ok(RuleAttrs::Handle(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3291,12 +3687,12 @@ impl<'a> IterableRuleAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "list of expressions"]
+    #[doc = "list of expressions\n"]
     pub fn get_expressions(&self) -> Result<IterableExprListAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleAttrs::Expressions(val) = attr? {
+            if let Ok(RuleAttrs::Expressions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3307,12 +3703,12 @@ impl<'a> IterableRuleAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "compatibility specifications of the rule"]
+    #[doc = "compatibility specifications of the rule\n"]
     pub fn get_compat(&self) -> Result<IterableRuleCompatAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleAttrs::Compat(val) = attr? {
+            if let Ok(RuleAttrs::Compat(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3323,12 +3719,12 @@ impl<'a> IterableRuleAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "numeric handle of the previous rule"]
+    #[doc = "numeric handle of the previous rule\n"]
     pub fn get_position(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleAttrs::Position(val) = attr? {
+            if let Ok(RuleAttrs::Position(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3339,12 +3735,12 @@ impl<'a> IterableRuleAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn get_userdata(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleAttrs::Userdata(val) = attr? {
+            if let Ok(RuleAttrs::Userdata(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3355,12 +3751,12 @@ impl<'a> IterableRuleAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "uniquely identifies a rule in a transaction"]
+    #[doc = "uniquely identifies a rule in a transaction\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleAttrs::Id(val) = attr? {
+            if let Ok(RuleAttrs::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3371,12 +3767,12 @@ impl<'a> IterableRuleAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "transaction unique identifier of the previous rule"]
+    #[doc = "transaction unique identifier of the previous rule\n"]
     pub fn get_position_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleAttrs::PositionId(val) = attr? {
+            if let Ok(RuleAttrs::PositionId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3387,12 +3783,12 @@ impl<'a> IterableRuleAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "add the rule to chain by ID, alternative to chain name"]
+    #[doc = "add the rule to chain by ID, alternative to chain name\n"]
     pub fn get_chain_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleAttrs::ChainId(val) = attr? {
+            if let Ok(RuleAttrs::ChainId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3446,14 +3842,16 @@ impl<'a> IterableRuleAttrs<'a> {
 impl<'a> Iterator for IterableRuleAttrs<'a> {
     type Item = Result<RuleAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3694,14 +4092,16 @@ impl<'a> IterableExprListAttrs<'a> {
 impl<'a> Iterator for IterableExprListAttrs<'a> {
     type Item = Result<ExprListAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -3786,18 +4186,18 @@ impl IterableExprListAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum ExprAttrs<'a> {
-    #[doc = "name of the expression type"]
+    #[doc = "name of the expression type\n"]
     Name(&'a CStr),
-    #[doc = "type specific data"]
+    #[doc = "type specific data\n"]
     Data(ExprOps<'a>),
 }
 impl<'a> IterableExprAttrs<'a> {
-    #[doc = "name of the expression type"]
+    #[doc = "name of the expression type\n"]
     pub fn get_name(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprAttrs::Name(val) = attr? {
+            if let Ok(ExprAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3808,12 +4208,12 @@ impl<'a> IterableExprAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "type specific data"]
+    #[doc = "type specific data\n"]
     pub fn get_data(&self) -> Result<ExprOps<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprAttrs::Data(val) = attr? {
+            if let Ok(ExprAttrs::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -3919,14 +4319,16 @@ impl<'a> IterableExprAttrs<'a> {
 impl<'a> Iterator for IterableExprAttrs<'a> {
     type Item = Result<ExprAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4029,18 +4431,18 @@ impl IterableExprAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum RuleCompatAttrs {
-    #[doc = "numeric value of the handled protocol"]
+    #[doc = "numeric value of the handled protocol\n"]
     Proto(u32),
-    #[doc = "bitmask of flags"]
+    #[doc = "bitmask of flags\n"]
     Flags(u32),
 }
 impl<'a> IterableRuleCompatAttrs<'a> {
-    #[doc = "numeric value of the handled protocol"]
+    #[doc = "numeric value of the handled protocol\n"]
     pub fn get_proto(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleCompatAttrs::Proto(val) = attr? {
+            if let Ok(RuleCompatAttrs::Proto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4051,12 +4453,12 @@ impl<'a> IterableRuleCompatAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "bitmask of flags"]
+    #[doc = "bitmask of flags\n"]
     pub fn get_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RuleCompatAttrs::Flags(val) = attr? {
+            if let Ok(RuleCompatAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4102,14 +4504,16 @@ impl<'a> IterableRuleCompatAttrs<'a> {
 impl<'a> Iterator for IterableRuleCompatAttrs<'a> {
     type Item = Result<RuleCompatAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4205,53 +4609,53 @@ impl IterableRuleCompatAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum SetAttrs<'a> {
-    #[doc = "table name"]
+    #[doc = "table name\n"]
     Table(&'a CStr),
-    #[doc = "set name"]
+    #[doc = "set name\n"]
     Name(&'a CStr),
-    #[doc = "bitmask of enum nft\\_set\\_flags\nAssociated type: [`SetFlags`] (enum)"]
+    #[doc = "bitmask of enum nft_set_flags\n\nAssociated type: [`SetFlags`] (enum)"]
     Flags(u32),
-    #[doc = "key data type, informational purpose only"]
+    #[doc = "key data type, informational purpose only\n"]
     KeyType(u32),
-    #[doc = "key data length"]
+    #[doc = "key data length\n"]
     KeyLen(u32),
-    #[doc = "mapping data type"]
+    #[doc = "mapping data type\n"]
     DataType(u32),
-    #[doc = "mapping data length"]
+    #[doc = "mapping data length\n"]
     DataLen(u32),
-    #[doc = "selection policy"]
+    #[doc = "selection policy\n"]
     Policy(u32),
-    #[doc = "set description"]
+    #[doc = "set description\n"]
     Desc(IterableSetDescAttrs<'a>),
-    #[doc = "uniquely identifies a set in a transaction"]
+    #[doc = "uniquely identifies a set in a transaction\n"]
     Id(u32),
-    #[doc = "default timeout value"]
+    #[doc = "default timeout value\n"]
     Timeout(u64),
-    #[doc = "garbage collection interval"]
+    #[doc = "garbage collection interval\n"]
     GcInterval(u32),
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     Userdata(&'a [u8]),
     Pad(&'a [u8]),
-    #[doc = "stateful object type"]
+    #[doc = "stateful object type\n"]
     ObjType(u32),
-    #[doc = "set handle"]
+    #[doc = "set handle\n"]
     Handle(u64),
-    #[doc = "set expression\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "set expression\n\nAttribute may repeat multiple times (treat it as array)"]
     Expr(IterableExprAttrs<'a>),
-    #[doc = "list of expressions"]
+    #[doc = "list of expressions\n"]
     Expressions(IterableSetListAttrs<'a>),
-    #[doc = "set backend type"]
+    #[doc = "set backend type\n"]
     Type(&'a CStr),
-    #[doc = "number of set elements"]
+    #[doc = "number of set elements\n"]
     Count(u32),
 }
 impl<'a> IterableSetAttrs<'a> {
-    #[doc = "table name"]
+    #[doc = "table name\n"]
     pub fn get_table(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Table(val) = attr? {
+            if let Ok(SetAttrs::Table(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4262,12 +4666,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "set name"]
+    #[doc = "set name\n"]
     pub fn get_name(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Name(val) = attr? {
+            if let Ok(SetAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4278,12 +4682,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "bitmask of enum nft\\_set\\_flags\nAssociated type: [`SetFlags`] (enum)"]
+    #[doc = "bitmask of enum nft_set_flags\n\nAssociated type: [`SetFlags`] (enum)"]
     pub fn get_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Flags(val) = attr? {
+            if let Ok(SetAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4294,12 +4698,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "key data type, informational purpose only"]
+    #[doc = "key data type, informational purpose only\n"]
     pub fn get_key_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::KeyType(val) = attr? {
+            if let Ok(SetAttrs::KeyType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4310,12 +4714,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "key data length"]
+    #[doc = "key data length\n"]
     pub fn get_key_len(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::KeyLen(val) = attr? {
+            if let Ok(SetAttrs::KeyLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4326,12 +4730,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "mapping data type"]
+    #[doc = "mapping data type\n"]
     pub fn get_data_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::DataType(val) = attr? {
+            if let Ok(SetAttrs::DataType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4342,12 +4746,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "mapping data length"]
+    #[doc = "mapping data length\n"]
     pub fn get_data_len(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::DataLen(val) = attr? {
+            if let Ok(SetAttrs::DataLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4358,12 +4762,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "selection policy"]
+    #[doc = "selection policy\n"]
     pub fn get_policy(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Policy(val) = attr? {
+            if let Ok(SetAttrs::Policy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4374,12 +4778,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "set description"]
+    #[doc = "set description\n"]
     pub fn get_desc(&self) -> Result<IterableSetDescAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Desc(val) = attr? {
+            if let Ok(SetAttrs::Desc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4390,12 +4794,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "uniquely identifies a set in a transaction"]
+    #[doc = "uniquely identifies a set in a transaction\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Id(val) = attr? {
+            if let Ok(SetAttrs::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4406,12 +4810,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "default timeout value"]
+    #[doc = "default timeout value\n"]
     pub fn get_timeout(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Timeout(val) = attr? {
+            if let Ok(SetAttrs::Timeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4422,12 +4826,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "garbage collection interval"]
+    #[doc = "garbage collection interval\n"]
     pub fn get_gc_interval(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::GcInterval(val) = attr? {
+            if let Ok(SetAttrs::GcInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4438,12 +4842,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn get_userdata(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Userdata(val) = attr? {
+            if let Ok(SetAttrs::Userdata(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4458,7 +4862,7 @@ impl<'a> IterableSetAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Pad(val) = attr? {
+            if let Ok(SetAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4469,12 +4873,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "stateful object type"]
+    #[doc = "stateful object type\n"]
     pub fn get_obj_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::ObjType(val) = attr? {
+            if let Ok(SetAttrs::ObjType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4485,12 +4889,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "set handle"]
+    #[doc = "set handle\n"]
     pub fn get_handle(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Handle(val) = attr? {
+            if let Ok(SetAttrs::Handle(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4501,7 +4905,7 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "set expression\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "set expression\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn get_expr(&self) -> MultiAttrIterable<Self, SetAttrs<'a>, IterableExprAttrs<'a>> {
         MultiAttrIterable::new(self.clone(), |variant| {
             if let SetAttrs::Expr(val) = variant {
@@ -4511,12 +4915,12 @@ impl<'a> IterableSetAttrs<'a> {
             }
         })
     }
-    #[doc = "list of expressions"]
+    #[doc = "list of expressions\n"]
     pub fn get_expressions(&self) -> Result<IterableSetListAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Expressions(val) = attr? {
+            if let Ok(SetAttrs::Expressions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4527,12 +4931,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "set backend type"]
+    #[doc = "set backend type\n"]
     pub fn get_type(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Type(val) = attr? {
+            if let Ok(SetAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4543,12 +4947,12 @@ impl<'a> IterableSetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "number of set elements"]
+    #[doc = "number of set elements\n"]
     pub fn get_count(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetAttrs::Count(val) = attr? {
+            if let Ok(SetAttrs::Count(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4612,14 +5016,16 @@ impl<'a> IterableSetAttrs<'a> {
 impl<'a> Iterator for IterableSetAttrs<'a> {
     type Item = Result<SetAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -4934,18 +5340,18 @@ impl IterableSetAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum SetDescAttrs<'a> {
-    #[doc = "number of elements in set"]
+    #[doc = "number of elements in set\n"]
     Size(u32),
-    #[doc = "description of field concatenation\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "description of field concatenation\n\nAttribute may repeat multiple times (treat it as array)"]
     Concat(IterableSetDescConcatAttrs<'a>),
 }
 impl<'a> IterableSetDescAttrs<'a> {
-    #[doc = "number of elements in set"]
+    #[doc = "number of elements in set\n"]
     pub fn get_size(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetDescAttrs::Size(val) = attr? {
+            if let Ok(SetDescAttrs::Size(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4956,7 +5362,7 @@ impl<'a> IterableSetDescAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "description of field concatenation\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "description of field concatenation\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn get_concat(
         &self,
     ) -> MultiAttrIterable<Self, SetDescAttrs<'a>, IterableSetDescConcatAttrs<'a>> {
@@ -5003,14 +5409,16 @@ impl<'a> IterableSetDescAttrs<'a> {
 impl<'a> Iterator for IterableSetDescAttrs<'a> {
     type Item = Result<SetDescAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5114,7 +5522,7 @@ impl<'a> IterableSetDescConcatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetDescConcatAttrs::Elem(val) = attr? {
+            if let Ok(SetDescConcatAttrs::Elem(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5159,14 +5567,16 @@ impl<'a> IterableSetDescConcatAttrs<'a> {
 impl<'a> Iterator for IterableSetDescConcatAttrs<'a> {
     type Item = Result<SetDescConcatAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5258,7 +5668,7 @@ impl<'a> IterableSetFieldAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetFieldAttrs::Len(val) = attr? {
+            if let Ok(SetFieldAttrs::Len(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5303,14 +5713,16 @@ impl<'a> IterableSetFieldAttrs<'a> {
 impl<'a> Iterator for IterableSetFieldAttrs<'a> {
     type Item = Result<SetFieldAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5442,14 +5854,16 @@ impl<'a> IterableSetListAttrs<'a> {
 impl<'a> Iterator for IterableSetListAttrs<'a> {
     type Item = Result<SetListAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5534,34 +5948,34 @@ impl IterableSetListAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum SetelemAttrs<'a> {
-    #[doc = "key value"]
+    #[doc = "key value\n"]
     Key(IterableDataAttrs<'a>),
-    #[doc = "data value of mapping"]
+    #[doc = "data value of mapping\n"]
     Data(IterableDataAttrs<'a>),
-    #[doc = "bitmask of nft\\_set\\_elem\\_flags"]
+    #[doc = "bitmask of nft_set_elem_flags\n"]
     Flags(&'a [u8]),
-    #[doc = "timeout value"]
+    #[doc = "timeout value\n"]
     Timeout(u64),
-    #[doc = "expiration time"]
+    #[doc = "expiration time\n"]
     Expiration(u64),
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     Userdata(&'a [u8]),
-    #[doc = "expression"]
+    #[doc = "expression\n"]
     Expr(IterableExprAttrs<'a>),
-    #[doc = "stateful object reference"]
+    #[doc = "stateful object reference\n"]
     Objref(&'a CStr),
-    #[doc = "closing key value"]
+    #[doc = "closing key value\n"]
     KeyEnd(IterableDataAttrs<'a>),
-    #[doc = "list of expressions"]
+    #[doc = "list of expressions\n"]
     Expressions(IterableExprListAttrs<'a>),
 }
 impl<'a> IterableSetelemAttrs<'a> {
-    #[doc = "key value"]
+    #[doc = "key value\n"]
     pub fn get_key(&self) -> Result<IterableDataAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemAttrs::Key(val) = attr? {
+            if let Ok(SetelemAttrs::Key(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5572,12 +5986,12 @@ impl<'a> IterableSetelemAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "data value of mapping"]
+    #[doc = "data value of mapping\n"]
     pub fn get_data(&self) -> Result<IterableDataAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemAttrs::Data(val) = attr? {
+            if let Ok(SetelemAttrs::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5588,12 +6002,12 @@ impl<'a> IterableSetelemAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "bitmask of nft\\_set\\_elem\\_flags"]
+    #[doc = "bitmask of nft_set_elem_flags\n"]
     pub fn get_flags(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemAttrs::Flags(val) = attr? {
+            if let Ok(SetelemAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5604,12 +6018,12 @@ impl<'a> IterableSetelemAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "timeout value"]
+    #[doc = "timeout value\n"]
     pub fn get_timeout(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemAttrs::Timeout(val) = attr? {
+            if let Ok(SetelemAttrs::Timeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5620,12 +6034,12 @@ impl<'a> IterableSetelemAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "expiration time"]
+    #[doc = "expiration time\n"]
     pub fn get_expiration(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemAttrs::Expiration(val) = attr? {
+            if let Ok(SetelemAttrs::Expiration(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5636,12 +6050,12 @@ impl<'a> IterableSetelemAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn get_userdata(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemAttrs::Userdata(val) = attr? {
+            if let Ok(SetelemAttrs::Userdata(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5652,12 +6066,12 @@ impl<'a> IterableSetelemAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "expression"]
+    #[doc = "expression\n"]
     pub fn get_expr(&self) -> Result<IterableExprAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemAttrs::Expr(val) = attr? {
+            if let Ok(SetelemAttrs::Expr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5668,12 +6082,12 @@ impl<'a> IterableSetelemAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "stateful object reference"]
+    #[doc = "stateful object reference\n"]
     pub fn get_objref(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemAttrs::Objref(val) = attr? {
+            if let Ok(SetelemAttrs::Objref(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5684,12 +6098,12 @@ impl<'a> IterableSetelemAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "closing key value"]
+    #[doc = "closing key value\n"]
     pub fn get_key_end(&self) -> Result<IterableDataAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemAttrs::KeyEnd(val) = attr? {
+            if let Ok(SetelemAttrs::KeyEnd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5700,12 +6114,12 @@ impl<'a> IterableSetelemAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "list of expressions"]
+    #[doc = "list of expressions\n"]
     pub fn get_expressions(&self) -> Result<IterableExprListAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemAttrs::Expressions(val) = attr? {
+            if let Ok(SetelemAttrs::Expressions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5759,14 +6173,16 @@ impl<'a> IterableSetelemAttrs<'a> {
 impl<'a> Iterator for IterableSetelemAttrs<'a> {
     type Item = Result<SetelemAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6009,14 +6425,16 @@ impl<'a> IterableSetelemListElemAttrs<'a> {
 impl<'a> Iterator for IterableSetelemListElemAttrs<'a> {
     type Item = Result<SetelemListElemAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6111,7 +6529,7 @@ impl<'a> IterableSetelemListAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemListAttrs::Table(val) = attr? {
+            if let Ok(SetelemListAttrs::Table(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6126,7 +6544,7 @@ impl<'a> IterableSetelemListAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemListAttrs::Set(val) = attr? {
+            if let Ok(SetelemListAttrs::Set(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6141,7 +6559,7 @@ impl<'a> IterableSetelemListAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemListAttrs::Elements(val) = attr? {
+            if let Ok(SetelemListAttrs::Elements(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6156,7 +6574,7 @@ impl<'a> IterableSetelemListAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SetelemListAttrs::SetId(val) = attr? {
+            if let Ok(SetelemListAttrs::SetId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6204,14 +6622,16 @@ impl<'a> IterableSetelemListAttrs<'a> {
 impl<'a> Iterator for IterableSetelemListAttrs<'a> {
     type Item = Result<SetelemListAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6332,18 +6752,18 @@ impl IterableSetelemListAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum GenAttrs<'a> {
-    #[doc = "ruleset generation id"]
+    #[doc = "ruleset generation id\n"]
     Id(u32),
     ProcPid(u32),
     ProcName(&'a CStr),
 }
 impl<'a> IterableGenAttrs<'a> {
-    #[doc = "ruleset generation id"]
+    #[doc = "ruleset generation id\n"]
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let GenAttrs::Id(val) = attr? {
+            if let Ok(GenAttrs::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6358,7 +6778,7 @@ impl<'a> IterableGenAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let GenAttrs::ProcPid(val) = attr? {
+            if let Ok(GenAttrs::ProcPid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6373,7 +6793,7 @@ impl<'a> IterableGenAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let GenAttrs::ProcName(val) = attr? {
+            if let Ok(GenAttrs::ProcName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6420,14 +6840,16 @@ impl<'a> IterableGenAttrs<'a> {
 impl<'a> Iterator for IterableGenAttrs<'a> {
     type Item = Result<GenAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6535,29 +6957,29 @@ impl IterableGenAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum ObjAttrs<'a> {
-    #[doc = "name of the table containing the expression"]
+    #[doc = "name of the table containing the expression\n"]
     Table(&'a CStr),
-    #[doc = "name of this expression type"]
+    #[doc = "name of this expression type\n"]
     Name(&'a CStr),
-    #[doc = "stateful object type\nAssociated type: [`ObjectType`] (enum)"]
+    #[doc = "stateful object type\n\nAssociated type: [`ObjectType`] (enum)"]
     Type(u32),
-    #[doc = "stateful object data"]
+    #[doc = "stateful object data\n"]
     Data(ObjData<'a>),
-    #[doc = "number of references to this expression"]
+    #[doc = "number of references to this expression\n"]
     Use(u32),
-    #[doc = "object handle"]
+    #[doc = "object handle\n"]
     Handle(u64),
     Pad(&'a [u8]),
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     Userdata(&'a [u8]),
 }
 impl<'a> IterableObjAttrs<'a> {
-    #[doc = "name of the table containing the expression"]
+    #[doc = "name of the table containing the expression\n"]
     pub fn get_table(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ObjAttrs::Table(val) = attr? {
+            if let Ok(ObjAttrs::Table(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6568,12 +6990,12 @@ impl<'a> IterableObjAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "name of this expression type"]
+    #[doc = "name of this expression type\n"]
     pub fn get_name(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ObjAttrs::Name(val) = attr? {
+            if let Ok(ObjAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6584,12 +7006,12 @@ impl<'a> IterableObjAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "stateful object type\nAssociated type: [`ObjectType`] (enum)"]
+    #[doc = "stateful object type\n\nAssociated type: [`ObjectType`] (enum)"]
     pub fn get_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ObjAttrs::Type(val) = attr? {
+            if let Ok(ObjAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6600,12 +7022,12 @@ impl<'a> IterableObjAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "stateful object data"]
+    #[doc = "stateful object data\n"]
     pub fn get_data(&self) -> Result<ObjData<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ObjAttrs::Data(val) = attr? {
+            if let Ok(ObjAttrs::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6616,12 +7038,12 @@ impl<'a> IterableObjAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "number of references to this expression"]
+    #[doc = "number of references to this expression\n"]
     pub fn get_use(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ObjAttrs::Use(val) = attr? {
+            if let Ok(ObjAttrs::Use(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6632,12 +7054,12 @@ impl<'a> IterableObjAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "object handle"]
+    #[doc = "object handle\n"]
     pub fn get_handle(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ObjAttrs::Handle(val) = attr? {
+            if let Ok(ObjAttrs::Handle(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6652,7 +7074,7 @@ impl<'a> IterableObjAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ObjAttrs::Pad(val) = attr? {
+            if let Ok(ObjAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6663,12 +7085,12 @@ impl<'a> IterableObjAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn get_userdata(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ObjAttrs::Userdata(val) = attr? {
+            if let Ok(ObjAttrs::Userdata(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6738,14 +7160,16 @@ impl<'a> IterableObjAttrs<'a> {
 impl<'a> Iterator for IterableObjAttrs<'a> {
     type Item = Result<ObjAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6933,7 +7357,7 @@ impl<'a> IterableQuotaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let QuotaAttrs::Bytes(val) = attr? {
+            if let Ok(QuotaAttrs::Bytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6949,7 +7373,7 @@ impl<'a> IterableQuotaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let QuotaAttrs::Flags(val) = attr? {
+            if let Ok(QuotaAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6964,7 +7388,7 @@ impl<'a> IterableQuotaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let QuotaAttrs::Pad(val) = attr? {
+            if let Ok(QuotaAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6979,7 +7403,7 @@ impl<'a> IterableQuotaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let QuotaAttrs::Consumed(val) = attr? {
+            if let Ok(QuotaAttrs::Consumed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7027,14 +7451,16 @@ impl<'a> IterableQuotaAttrs<'a> {
 impl<'a> Iterator for IterableQuotaAttrs<'a> {
     type Item = Result<QuotaAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7169,7 +7595,7 @@ impl<'a> IterableFlowtableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowtableAttrs::Table(val) = attr? {
+            if let Ok(FlowtableAttrs::Table(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7184,7 +7610,7 @@ impl<'a> IterableFlowtableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowtableAttrs::Name(val) = attr? {
+            if let Ok(FlowtableAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7199,7 +7625,7 @@ impl<'a> IterableFlowtableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowtableAttrs::Hook(val) = attr? {
+            if let Ok(FlowtableAttrs::Hook(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7214,7 +7640,7 @@ impl<'a> IterableFlowtableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowtableAttrs::Use(val) = attr? {
+            if let Ok(FlowtableAttrs::Use(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7229,7 +7655,7 @@ impl<'a> IterableFlowtableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowtableAttrs::Handle(val) = attr? {
+            if let Ok(FlowtableAttrs::Handle(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7244,7 +7670,7 @@ impl<'a> IterableFlowtableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowtableAttrs::Pad(val) = attr? {
+            if let Ok(FlowtableAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7259,7 +7685,7 @@ impl<'a> IterableFlowtableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowtableAttrs::Flags(val) = attr? {
+            if let Ok(FlowtableAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7310,14 +7736,16 @@ impl<'a> IterableFlowtableAttrs<'a> {
 impl<'a> Iterator for IterableFlowtableAttrs<'a> {
     type Item = Result<FlowtableAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7483,7 +7911,7 @@ impl<'a> IterableFlowtableHookAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowtableHookAttrs::Num(val) = attr? {
+            if let Ok(FlowtableHookAttrs::Num(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7498,7 +7926,7 @@ impl<'a> IterableFlowtableHookAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowtableHookAttrs::Priority(val) = attr? {
+            if let Ok(FlowtableHookAttrs::Priority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7513,7 +7941,7 @@ impl<'a> IterableFlowtableHookAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowtableHookAttrs::Devs(val) = attr? {
+            if let Ok(FlowtableHookAttrs::Devs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7560,14 +7988,16 @@ impl<'a> IterableFlowtableHookAttrs<'a> {
 impl<'a> Iterator for IterableFlowtableHookAttrs<'a> {
     type Item = Result<FlowtableHookAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7690,7 +8120,7 @@ impl<'a> IterableExprBitwiseAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprBitwiseAttrs::Sreg(val) = attr? {
+            if let Ok(ExprBitwiseAttrs::Sreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7705,7 +8135,7 @@ impl<'a> IterableExprBitwiseAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprBitwiseAttrs::Dreg(val) = attr? {
+            if let Ok(ExprBitwiseAttrs::Dreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7720,7 +8150,7 @@ impl<'a> IterableExprBitwiseAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprBitwiseAttrs::Len(val) = attr? {
+            if let Ok(ExprBitwiseAttrs::Len(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7735,7 +8165,7 @@ impl<'a> IterableExprBitwiseAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprBitwiseAttrs::Mask(val) = attr? {
+            if let Ok(ExprBitwiseAttrs::Mask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7750,7 +8180,7 @@ impl<'a> IterableExprBitwiseAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprBitwiseAttrs::Xor(val) = attr? {
+            if let Ok(ExprBitwiseAttrs::Xor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7766,7 +8196,7 @@ impl<'a> IterableExprBitwiseAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprBitwiseAttrs::Op(val) = attr? {
+            if let Ok(ExprBitwiseAttrs::Op(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7781,7 +8211,7 @@ impl<'a> IterableExprBitwiseAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprBitwiseAttrs::Data(val) = attr? {
+            if let Ok(ExprBitwiseAttrs::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7832,14 +8262,16 @@ impl<'a> IterableExprBitwiseAttrs<'a> {
 impl<'a> Iterator for IterableExprBitwiseAttrs<'a> {
     type Item = Result<ExprBitwiseAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8008,7 +8440,7 @@ impl<'a> IterableExprCmpAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprCmpAttrs::Sreg(val) = attr? {
+            if let Ok(ExprCmpAttrs::Sreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8024,7 +8456,7 @@ impl<'a> IterableExprCmpAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprCmpAttrs::Op(val) = attr? {
+            if let Ok(ExprCmpAttrs::Op(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8039,7 +8471,7 @@ impl<'a> IterableExprCmpAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprCmpAttrs::Data(val) = attr? {
+            if let Ok(ExprCmpAttrs::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8086,14 +8518,16 @@ impl<'a> IterableExprCmpAttrs<'a> {
 impl<'a> Iterator for IterableExprCmpAttrs<'a> {
     type Item = Result<ExprCmpAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8212,7 +8646,7 @@ impl<'a> IterableDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DataAttrs::Value(val) = attr? {
+            if let Ok(DataAttrs::Value(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8227,7 +8661,7 @@ impl<'a> IterableDataAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DataAttrs::Verdict(val) = attr? {
+            if let Ok(DataAttrs::Verdict(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8273,14 +8707,16 @@ impl<'a> IterableDataAttrs<'a> {
 impl<'a> Iterator for IterableDataAttrs<'a> {
     type Item = Result<DataAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8377,20 +8813,20 @@ impl IterableDataAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum VerdictAttrs<'a> {
-    #[doc = "nf\\_tables verdict\nAssociated type: [`VerdictCode`] (enum)"]
+    #[doc = "nf_tables verdict\n\nAssociated type: [`VerdictCode`] (enum)"]
     Code(u32),
-    #[doc = "jump target chain name"]
+    #[doc = "jump target chain name\n"]
     Chain(&'a CStr),
-    #[doc = "jump target chain ID"]
+    #[doc = "jump target chain ID\n"]
     ChainId(u32),
 }
 impl<'a> IterableVerdictAttrs<'a> {
-    #[doc = "nf\\_tables verdict\nAssociated type: [`VerdictCode`] (enum)"]
+    #[doc = "nf_tables verdict\n\nAssociated type: [`VerdictCode`] (enum)"]
     pub fn get_code(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let VerdictAttrs::Code(val) = attr? {
+            if let Ok(VerdictAttrs::Code(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8401,12 +8837,12 @@ impl<'a> IterableVerdictAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "jump target chain name"]
+    #[doc = "jump target chain name\n"]
     pub fn get_chain(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let VerdictAttrs::Chain(val) = attr? {
+            if let Ok(VerdictAttrs::Chain(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8417,12 +8853,12 @@ impl<'a> IterableVerdictAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "jump target chain ID"]
+    #[doc = "jump target chain ID\n"]
     pub fn get_chain_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let VerdictAttrs::ChainId(val) = attr? {
+            if let Ok(VerdictAttrs::ChainId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8469,14 +8905,16 @@ impl<'a> IterableVerdictAttrs<'a> {
 impl<'a> Iterator for IterableVerdictAttrs<'a> {
     type Item = Result<VerdictAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8586,19 +9024,19 @@ impl IterableVerdictAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum ExprCounterAttrs<'a> {
-    #[doc = "Number of bytes"]
+    #[doc = "Number of bytes\n"]
     Bytes(u64),
-    #[doc = "Number of packets"]
+    #[doc = "Number of packets\n"]
     Packets(u64),
     Pad(&'a [u8]),
 }
 impl<'a> IterableExprCounterAttrs<'a> {
-    #[doc = "Number of bytes"]
+    #[doc = "Number of bytes\n"]
     pub fn get_bytes(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprCounterAttrs::Bytes(val) = attr? {
+            if let Ok(ExprCounterAttrs::Bytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8609,12 +9047,12 @@ impl<'a> IterableExprCounterAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Number of packets"]
+    #[doc = "Number of packets\n"]
     pub fn get_packets(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprCounterAttrs::Packets(val) = attr? {
+            if let Ok(ExprCounterAttrs::Packets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8629,7 +9067,7 @@ impl<'a> IterableExprCounterAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprCounterAttrs::Pad(val) = attr? {
+            if let Ok(ExprCounterAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8676,14 +9114,16 @@ impl<'a> IterableExprCounterAttrs<'a> {
 impl<'a> Iterator for IterableExprCounterAttrs<'a> {
     type Item = Result<ExprCounterAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8802,7 +9242,7 @@ impl<'a> IterableExprFibAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprFibAttrs::Dreg(val) = attr? {
+            if let Ok(ExprFibAttrs::Dreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8818,7 +9258,7 @@ impl<'a> IterableExprFibAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprFibAttrs::Result(val) = attr? {
+            if let Ok(ExprFibAttrs::Result(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8834,7 +9274,7 @@ impl<'a> IterableExprFibAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprFibAttrs::Flags(val) = attr? {
+            if let Ok(ExprFibAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8881,14 +9321,16 @@ impl<'a> IterableExprFibAttrs<'a> {
 impl<'a> Iterator for IterableExprFibAttrs<'a> {
     type Item = Result<ExprFibAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9012,7 +9454,7 @@ impl<'a> IterableExprCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprCtAttrs::Dreg(val) = attr? {
+            if let Ok(ExprCtAttrs::Dreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9028,7 +9470,7 @@ impl<'a> IterableExprCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprCtAttrs::Key(val) = attr? {
+            if let Ok(ExprCtAttrs::Key(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9044,7 +9486,7 @@ impl<'a> IterableExprCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprCtAttrs::Direction(val) = attr? {
+            if let Ok(ExprCtAttrs::Direction(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9059,7 +9501,7 @@ impl<'a> IterableExprCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprCtAttrs::Sreg(val) = attr? {
+            if let Ok(ExprCtAttrs::Sreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9107,14 +9549,16 @@ impl<'a> IterableExprCtAttrs<'a> {
 impl<'a> Iterator for IterableExprCtAttrs<'a> {
     type Item = Result<ExprCtAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9239,16 +9683,16 @@ impl IterableExprCtAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum ExprFlowOffloadAttrs<'a> {
-    #[doc = "Flow offload table name"]
+    #[doc = "Flow offload table name\n"]
     Name(&'a CStr),
 }
 impl<'a> IterableExprFlowOffloadAttrs<'a> {
-    #[doc = "Flow offload table name"]
+    #[doc = "Flow offload table name\n"]
     pub fn get_name(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprFlowOffloadAttrs::Name(val) = attr? {
+            if let Ok(ExprFlowOffloadAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9293,14 +9737,16 @@ impl<'a> IterableExprFlowOffloadAttrs<'a> {
 impl<'a> Iterator for IterableExprFlowOffloadAttrs<'a> {
     type Item = Result<ExprFlowOffloadAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9392,7 +9838,7 @@ impl<'a> IterableExprImmediateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprImmediateAttrs::Dreg(val) = attr? {
+            if let Ok(ExprImmediateAttrs::Dreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9407,7 +9853,7 @@ impl<'a> IterableExprImmediateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprImmediateAttrs::Data(val) = attr? {
+            if let Ok(ExprImmediateAttrs::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9453,14 +9899,16 @@ impl<'a> IterableExprImmediateAttrs<'a> {
 impl<'a> Iterator for IterableExprImmediateAttrs<'a> {
     type Item = Result<ExprImmediateAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9557,9 +10005,9 @@ impl IterableExprImmediateAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum ExprLookupAttrs<'a> {
-    #[doc = "Name of set to use"]
+    #[doc = "Name of set to use\n"]
     Set(&'a CStr),
-    #[doc = "ID of set to use"]
+    #[doc = "ID of set to use\n"]
     SetId(u32),
     Sreg(u32),
     Dreg(u32),
@@ -9567,12 +10015,12 @@ pub enum ExprLookupAttrs<'a> {
     Flags(u32),
 }
 impl<'a> IterableExprLookupAttrs<'a> {
-    #[doc = "Name of set to use"]
+    #[doc = "Name of set to use\n"]
     pub fn get_set(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprLookupAttrs::Set(val) = attr? {
+            if let Ok(ExprLookupAttrs::Set(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9583,12 +10031,12 @@ impl<'a> IterableExprLookupAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ID of set to use"]
+    #[doc = "ID of set to use\n"]
     pub fn get_set_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprLookupAttrs::SetId(val) = attr? {
+            if let Ok(ExprLookupAttrs::SetId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9603,7 +10051,7 @@ impl<'a> IterableExprLookupAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprLookupAttrs::Sreg(val) = attr? {
+            if let Ok(ExprLookupAttrs::Sreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9618,7 +10066,7 @@ impl<'a> IterableExprLookupAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprLookupAttrs::Dreg(val) = attr? {
+            if let Ok(ExprLookupAttrs::Dreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9634,7 +10082,7 @@ impl<'a> IterableExprLookupAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprLookupAttrs::Flags(val) = attr? {
+            if let Ok(ExprLookupAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9683,14 +10131,16 @@ impl<'a> IterableExprLookupAttrs<'a> {
 impl<'a> Iterator for IterableExprLookupAttrs<'a> {
     type Item = Result<ExprLookupAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9837,7 +10287,7 @@ impl<'a> IterableExprMasqAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprMasqAttrs::Flags(val) = attr? {
+            if let Ok(ExprMasqAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9853,7 +10303,7 @@ impl<'a> IterableExprMasqAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprMasqAttrs::RegProtoMin(val) = attr? {
+            if let Ok(ExprMasqAttrs::RegProtoMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9869,7 +10319,7 @@ impl<'a> IterableExprMasqAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprMasqAttrs::RegProtoMax(val) = attr? {
+            if let Ok(ExprMasqAttrs::RegProtoMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9916,14 +10366,16 @@ impl<'a> IterableExprMasqAttrs<'a> {
 impl<'a> Iterator for IterableExprMasqAttrs<'a> {
     type Item = Result<ExprMasqAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10049,7 +10501,7 @@ impl<'a> IterableExprMetaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprMetaAttrs::Dreg(val) = attr? {
+            if let Ok(ExprMetaAttrs::Dreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10065,7 +10517,7 @@ impl<'a> IterableExprMetaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprMetaAttrs::Key(val) = attr? {
+            if let Ok(ExprMetaAttrs::Key(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10080,7 +10532,7 @@ impl<'a> IterableExprMetaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprMetaAttrs::Sreg(val) = attr? {
+            if let Ok(ExprMetaAttrs::Sreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10127,14 +10579,16 @@ impl<'a> IterableExprMetaAttrs<'a> {
 impl<'a> Iterator for IterableExprMetaAttrs<'a> {
     type Item = Result<ExprMetaAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10258,7 +10712,7 @@ impl<'a> IterableExprNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprNatAttrs::Type(val) = attr? {
+            if let Ok(ExprNatAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10273,7 +10727,7 @@ impl<'a> IterableExprNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprNatAttrs::Family(val) = attr? {
+            if let Ok(ExprNatAttrs::Family(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10288,7 +10742,7 @@ impl<'a> IterableExprNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprNatAttrs::RegAddrMin(val) = attr? {
+            if let Ok(ExprNatAttrs::RegAddrMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10303,7 +10757,7 @@ impl<'a> IterableExprNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprNatAttrs::RegAddrMax(val) = attr? {
+            if let Ok(ExprNatAttrs::RegAddrMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10318,7 +10772,7 @@ impl<'a> IterableExprNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprNatAttrs::RegProtoMin(val) = attr? {
+            if let Ok(ExprNatAttrs::RegProtoMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10333,7 +10787,7 @@ impl<'a> IterableExprNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprNatAttrs::RegProtoMax(val) = attr? {
+            if let Ok(ExprNatAttrs::RegProtoMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10349,7 +10803,7 @@ impl<'a> IterableExprNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprNatAttrs::Flags(val) = attr? {
+            if let Ok(ExprNatAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10400,14 +10854,16 @@ impl<'a> IterableExprNatAttrs<'a> {
 impl<'a> Iterator for IterableExprNatAttrs<'a> {
     type Item = Result<ExprNatAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10565,30 +11021,30 @@ impl IterableExprNatAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum ExprPayloadAttrs {
-    #[doc = "destination register to load data into\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "destination register to load data into\n\nAssociated type: [`Registers`] (enum)"]
     Dreg(u32),
-    #[doc = "payload base\nAssociated type: [`PayloadBase`] (enum)"]
+    #[doc = "payload base\n\nAssociated type: [`PayloadBase`] (enum)"]
     Base(u32),
-    #[doc = "payload offset relative to base"]
+    #[doc = "payload offset relative to base\n"]
     Offset(u32),
-    #[doc = "payload length"]
+    #[doc = "payload length\n"]
     Len(u32),
-    #[doc = "source register to load data from\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "source register to load data from\n\nAssociated type: [`Registers`] (enum)"]
     Sreg(u32),
-    #[doc = "checksum type"]
+    #[doc = "checksum type\n"]
     CsumType(u32),
-    #[doc = "checksum offset relative to base"]
+    #[doc = "checksum offset relative to base\n"]
     CsumOffset(u32),
-    #[doc = "checksum flags"]
+    #[doc = "checksum flags\n"]
     CsumFlags(u32),
 }
 impl<'a> IterableExprPayloadAttrs<'a> {
-    #[doc = "destination register to load data into\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "destination register to load data into\n\nAssociated type: [`Registers`] (enum)"]
     pub fn get_dreg(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprPayloadAttrs::Dreg(val) = attr? {
+            if let Ok(ExprPayloadAttrs::Dreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10599,12 +11055,12 @@ impl<'a> IterableExprPayloadAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "payload base\nAssociated type: [`PayloadBase`] (enum)"]
+    #[doc = "payload base\n\nAssociated type: [`PayloadBase`] (enum)"]
     pub fn get_base(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprPayloadAttrs::Base(val) = attr? {
+            if let Ok(ExprPayloadAttrs::Base(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10615,12 +11071,12 @@ impl<'a> IterableExprPayloadAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "payload offset relative to base"]
+    #[doc = "payload offset relative to base\n"]
     pub fn get_offset(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprPayloadAttrs::Offset(val) = attr? {
+            if let Ok(ExprPayloadAttrs::Offset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10631,12 +11087,12 @@ impl<'a> IterableExprPayloadAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "payload length"]
+    #[doc = "payload length\n"]
     pub fn get_len(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprPayloadAttrs::Len(val) = attr? {
+            if let Ok(ExprPayloadAttrs::Len(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10647,12 +11103,12 @@ impl<'a> IterableExprPayloadAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "source register to load data from\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "source register to load data from\n\nAssociated type: [`Registers`] (enum)"]
     pub fn get_sreg(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprPayloadAttrs::Sreg(val) = attr? {
+            if let Ok(ExprPayloadAttrs::Sreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10663,12 +11119,12 @@ impl<'a> IterableExprPayloadAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "checksum type"]
+    #[doc = "checksum type\n"]
     pub fn get_csum_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprPayloadAttrs::CsumType(val) = attr? {
+            if let Ok(ExprPayloadAttrs::CsumType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10679,12 +11135,12 @@ impl<'a> IterableExprPayloadAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "checksum offset relative to base"]
+    #[doc = "checksum offset relative to base\n"]
     pub fn get_csum_offset(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprPayloadAttrs::CsumOffset(val) = attr? {
+            if let Ok(ExprPayloadAttrs::CsumOffset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10695,12 +11151,12 @@ impl<'a> IterableExprPayloadAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "checksum flags"]
+    #[doc = "checksum flags\n"]
     pub fn get_csum_flags(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprPayloadAttrs::CsumFlags(val) = attr? {
+            if let Ok(ExprPayloadAttrs::CsumFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10752,14 +11208,16 @@ impl<'a> IterableExprPayloadAttrs<'a> {
 impl<'a> Iterator for IterableExprPayloadAttrs<'a> {
     type Item = Result<ExprPayloadAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10943,7 +11401,7 @@ impl<'a> IterableExprRejectAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprRejectAttrs::Type(val) = attr? {
+            if let Ok(ExprRejectAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10958,7 +11416,7 @@ impl<'a> IterableExprRejectAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprRejectAttrs::IcmpCode(val) = attr? {
+            if let Ok(ExprRejectAttrs::IcmpCode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11004,14 +11462,16 @@ impl<'a> IterableExprRejectAttrs<'a> {
 impl<'a> Iterator for IterableExprRejectAttrs<'a> {
     type Item = Result<ExprRejectAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11111,6 +11571,7 @@ impl IterableExprRejectAttrs<'_> {
 pub enum ExprTargetAttrs<'a> {
     Name(&'a CStr),
     Rev(u32),
+    #[doc = "Grep for `static struct xt_target` in `linux/net/nftables`. This field\nis usually a struct:\n\n- Name\n- Revision number\n- IP version (4/6)\n- Size of provided struct\n"]
     Info(&'a [u8]),
 }
 impl<'a> IterableExprTargetAttrs<'a> {
@@ -11118,7 +11579,7 @@ impl<'a> IterableExprTargetAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprTargetAttrs::Name(val) = attr? {
+            if let Ok(ExprTargetAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11133,7 +11594,7 @@ impl<'a> IterableExprTargetAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprTargetAttrs::Rev(val) = attr? {
+            if let Ok(ExprTargetAttrs::Rev(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11144,11 +11605,12 @@ impl<'a> IterableExprTargetAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
+    #[doc = "Grep for `static struct xt_target` in `linux/net/nftables`. This field\nis usually a struct:\n\n- Name\n- Revision number\n- IP version (4/6)\n- Size of provided struct\n"]
     pub fn get_info(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprTargetAttrs::Info(val) = attr? {
+            if let Ok(ExprTargetAttrs::Info(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11195,14 +11657,16 @@ impl<'a> IterableExprTargetAttrs<'a> {
 impl<'a> Iterator for IterableExprTargetAttrs<'a> {
     type Item = Result<ExprTargetAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11319,7 +11783,7 @@ impl<'a> IterableExprTproxyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprTproxyAttrs::Family(val) = attr? {
+            if let Ok(ExprTproxyAttrs::Family(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11334,7 +11798,7 @@ impl<'a> IterableExprTproxyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprTproxyAttrs::RegAddr(val) = attr? {
+            if let Ok(ExprTproxyAttrs::RegAddr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11349,7 +11813,7 @@ impl<'a> IterableExprTproxyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprTproxyAttrs::RegPort(val) = attr? {
+            if let Ok(ExprTproxyAttrs::RegPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11396,14 +11860,16 @@ impl<'a> IterableExprTproxyAttrs<'a> {
 impl<'a> Iterator for IterableExprTproxyAttrs<'a> {
     type Item = Result<ExprTproxyAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11512,12 +11978,12 @@ impl IterableExprTproxyAttrs<'_> {
 #[derive(Clone)]
 pub enum ExprObjrefAttrs<'a> {
     ImmType(u32),
-    #[doc = "object name"]
+    #[doc = "object name\n"]
     ImmName(&'a CStr),
     SetSreg(u32),
-    #[doc = "name of object map"]
+    #[doc = "name of object map\n"]
     SetName(&'a CStr),
-    #[doc = "id of object map"]
+    #[doc = "id of object map\n"]
     SetId(u32),
 }
 impl<'a> IterableExprObjrefAttrs<'a> {
@@ -11525,7 +11991,7 @@ impl<'a> IterableExprObjrefAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprObjrefAttrs::ImmType(val) = attr? {
+            if let Ok(ExprObjrefAttrs::ImmType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11536,12 +12002,12 @@ impl<'a> IterableExprObjrefAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "object name"]
+    #[doc = "object name\n"]
     pub fn get_imm_name(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprObjrefAttrs::ImmName(val) = attr? {
+            if let Ok(ExprObjrefAttrs::ImmName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11556,7 +12022,7 @@ impl<'a> IterableExprObjrefAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprObjrefAttrs::SetSreg(val) = attr? {
+            if let Ok(ExprObjrefAttrs::SetSreg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11567,12 +12033,12 @@ impl<'a> IterableExprObjrefAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "name of object map"]
+    #[doc = "name of object map\n"]
     pub fn get_set_name(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprObjrefAttrs::SetName(val) = attr? {
+            if let Ok(ExprObjrefAttrs::SetName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11583,12 +12049,12 @@ impl<'a> IterableExprObjrefAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "id of object map"]
+    #[doc = "id of object map\n"]
     pub fn get_set_id(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ExprObjrefAttrs::SetId(val) = attr? {
+            if let Ok(ExprObjrefAttrs::SetId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11637,14 +12103,16 @@ impl<'a> IterableExprObjrefAttrs<'a> {
 impl<'a> Iterator for IterableExprObjrefAttrs<'a> {
     type Item = Result<ExprObjrefAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11785,7 +12253,7 @@ impl<'a> IterableCompatTargetAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CompatTargetAttrs::Name(val) = attr? {
+            if let Ok(CompatTargetAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11800,7 +12268,7 @@ impl<'a> IterableCompatTargetAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CompatTargetAttrs::Rev(val) = attr? {
+            if let Ok(CompatTargetAttrs::Rev(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11815,7 +12283,7 @@ impl<'a> IterableCompatTargetAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CompatTargetAttrs::Info(val) = attr? {
+            if let Ok(CompatTargetAttrs::Info(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11862,14 +12330,16 @@ impl<'a> IterableCompatTargetAttrs<'a> {
 impl<'a> Iterator for IterableCompatTargetAttrs<'a> {
     type Item = Result<CompatTargetAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11986,7 +12456,7 @@ impl<'a> IterableCompatMatchAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CompatMatchAttrs::Name(val) = attr? {
+            if let Ok(CompatMatchAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12001,7 +12471,7 @@ impl<'a> IterableCompatMatchAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CompatMatchAttrs::Rev(val) = attr? {
+            if let Ok(CompatMatchAttrs::Rev(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12016,7 +12486,7 @@ impl<'a> IterableCompatMatchAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CompatMatchAttrs::Info(val) = attr? {
+            if let Ok(CompatMatchAttrs::Info(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12063,14 +12533,16 @@ impl<'a> IterableCompatMatchAttrs<'a> {
 impl<'a> Iterator for IterableCompatMatchAttrs<'a> {
     type Item = Result<CompatMatchAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12187,7 +12659,7 @@ impl<'a> IterableCompatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CompatAttrs::Name(val) = attr? {
+            if let Ok(CompatAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12202,7 +12674,7 @@ impl<'a> IterableCompatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CompatAttrs::Rev(val) = attr? {
+            if let Ok(CompatAttrs::Rev(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12217,7 +12689,7 @@ impl<'a> IterableCompatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CompatAttrs::Type(val) = attr? {
+            if let Ok(CompatAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12264,14 +12736,16 @@ impl<'a> IterableCompatAttrs<'a> {
 impl<'a> Iterator for IterableCompatAttrs<'a> {
     type Item = Result<CompatAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12403,13 +12877,13 @@ impl<Prev: Rec> PushLogAttrs<Prev> {
         }
         prev
     }
-    #[doc = "netlink group to send messages to"]
+    #[doc = "netlink group to send messages to\n"]
     pub fn push_group(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 1u16, 2 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "prefix to prepend to log messages"]
+    #[doc = "prefix to prepend to log messages\n"]
     pub fn push_prefix(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -12419,32 +12893,32 @@ impl<Prev: Rec> PushLogAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "prefix to prepend to log messages"]
+    #[doc = "prefix to prepend to log messages\n"]
     pub fn push_prefix_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 2u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "length of payload to include in netlink message"]
+    #[doc = "length of payload to include in netlink message\n"]
     pub fn push_snaplen(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "queue threshold"]
+    #[doc = "queue threshold\n"]
     pub fn push_qthreshold(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 4u16, 2 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "log level\nAssociated type: [`LogLevel`] (enum)"]
+    #[doc = "log level\n\nAssociated type: [`LogLevel`] (enum)"]
     pub fn push_level(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "logging flags\nAssociated type: [`LogFlags`] (enum)"]
+    #[doc = "logging flags\n\nAssociated type: [`LogFlags`] (enum)"]
     pub fn push_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -12486,25 +12960,25 @@ impl<Prev: Rec> PushNumgenAttrs<Prev> {
         }
         prev
     }
-    #[doc = "destination register\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "destination register\n\nAssociated type: [`Registers`] (enum)"]
     pub fn push_dreg(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "maximum counter value"]
+    #[doc = "maximum counter value\n"]
     pub fn push_modulus(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "operation type\nAssociated type: [`NumgenTypes`] (enum)"]
+    #[doc = "operation type\n\nAssociated type: [`NumgenTypes`] (enum)"]
     pub fn push_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "offset to be added to the counter"]
+    #[doc = "offset to be added to the counter\n"]
     pub fn push_offset(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -12546,19 +13020,19 @@ impl<Prev: Rec> PushRangeAttrs<Prev> {
         }
         prev
     }
-    #[doc = "source register of data to compare\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "source register of data to compare\n\nAssociated type: [`Registers`] (enum)"]
     pub fn push_sreg(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "cmp operation\nAssociated type: [`RangeOps`] (enum)"]
+    #[doc = "cmp operation\n\nAssociated type: [`RangeOps`] (enum)"]
     pub fn push_op(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "data range from"]
+    #[doc = "data range from\n"]
     pub fn nested_from_data(mut self) -> PushDataAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
         PushDataAttrs {
@@ -12566,7 +13040,7 @@ impl<Prev: Rec> PushRangeAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "data range to"]
+    #[doc = "data range to\n"]
     pub fn nested_to_data(mut self) -> PushDataAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 4u16);
         PushDataAttrs {
@@ -12610,7 +13084,7 @@ impl<Prev: Rec> PushBatchAttrs<Prev> {
         }
         prev
     }
-    #[doc = "generation ID for this changeset"]
+    #[doc = "generation ID for this changeset\n"]
     pub fn push_genid(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -12652,7 +13126,7 @@ impl<Prev: Rec> PushTableAttrs<Prev> {
         }
         prev
     }
-    #[doc = "name of the table"]
+    #[doc = "name of the table\n"]
     pub fn push_name(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -12662,26 +13136,26 @@ impl<Prev: Rec> PushTableAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "name of the table"]
+    #[doc = "name of the table\n"]
     pub fn push_name_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "bitmask of flags\nAssociated type: [`TableFlags`] (1 bit per enumeration)"]
+    #[doc = "bitmask of flags\n\nAssociated type: [`TableFlags`] (1 bit per enumeration)"]
     pub fn push_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "number of chains in this table"]
+    #[doc = "number of chains in this table\n"]
     pub fn push_use(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "numeric handle of the table"]
+    #[doc = "numeric handle of the table\n"]
     pub fn push_handle(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 4u16, 8 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -12692,13 +13166,13 @@ impl<Prev: Rec> PushTableAttrs<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn push_userdata(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 6u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "owner of this table through netlink portID"]
+    #[doc = "owner of this table through netlink portID\n"]
     pub fn push_owner(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -12740,7 +13214,7 @@ impl<Prev: Rec> PushChainAttrs<Prev> {
         }
         prev
     }
-    #[doc = "name of the table containing the chain"]
+    #[doc = "name of the table containing the chain\n"]
     pub fn push_table(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -12750,20 +13224,20 @@ impl<Prev: Rec> PushChainAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "name of the table containing the chain"]
+    #[doc = "name of the table containing the chain\n"]
     pub fn push_table_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "numeric handle of the chain"]
+    #[doc = "numeric handle of the chain\n"]
     pub fn push_handle(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 2u16, 8 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "name of the chain"]
+    #[doc = "name of the chain\n"]
     pub fn push_name(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -12773,14 +13247,14 @@ impl<Prev: Rec> PushChainAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "name of the chain"]
+    #[doc = "name of the chain\n"]
     pub fn push_name_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 3u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "hook specification for basechains"]
+    #[doc = "hook specification for basechains\n"]
     pub fn nested_hook(mut self) -> PushNftHookAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 4u16);
         PushNftHookAttrs {
@@ -12788,19 +13262,19 @@ impl<Prev: Rec> PushChainAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "numeric policy of the chain"]
+    #[doc = "numeric policy of the chain\n"]
     pub fn push_policy(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "number of references to this chain"]
+    #[doc = "number of references to this chain\n"]
     pub fn push_use(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "type name of the chain"]
+    #[doc = "type name of the chain\n"]
     pub fn push_type(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -12810,14 +13284,14 @@ impl<Prev: Rec> PushChainAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "type name of the chain"]
+    #[doc = "type name of the chain\n"]
     pub fn push_type_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 7u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "counter specification of the chain"]
+    #[doc = "counter specification of the chain\n"]
     pub fn nested_counters(mut self) -> PushNftCounterAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 8u16);
         PushNftCounterAttrs {
@@ -12825,19 +13299,19 @@ impl<Prev: Rec> PushChainAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "chain flags\nAssociated type: [`ChainFlags`] (1 bit per enumeration)"]
+    #[doc = "chain flags\n\nAssociated type: [`ChainFlags`] (1 bit per enumeration)"]
     pub fn push_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 9u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "uniquely identifies a chain in a transaction"]
+    #[doc = "uniquely identifies a chain in a transaction\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn push_userdata(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 11u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -12940,7 +13414,7 @@ impl<Prev: Rec> PushNftHookAttrs<Prev> {
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "net device name"]
+    #[doc = "net device name\n"]
     pub fn push_dev(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -12950,14 +13424,14 @@ impl<Prev: Rec> PushNftHookAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "net device name"]
+    #[doc = "net device name\n"]
     pub fn push_dev_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 3u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "list of net devices"]
+    #[doc = "list of net devices\n"]
     pub fn nested_devs(mut self) -> PushHookDevAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 4u16);
         PushHookDevAttrs {
@@ -13100,7 +13574,7 @@ impl<Prev: Rec> PushRuleAttrs<Prev> {
         }
         prev
     }
-    #[doc = "name of the table containing the rule"]
+    #[doc = "name of the table containing the rule\n"]
     pub fn push_table(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -13110,14 +13584,14 @@ impl<Prev: Rec> PushRuleAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "name of the table containing the rule"]
+    #[doc = "name of the table containing the rule\n"]
     pub fn push_table_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "name of the chain containing the rule"]
+    #[doc = "name of the chain containing the rule\n"]
     pub fn push_chain(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -13127,20 +13601,20 @@ impl<Prev: Rec> PushRuleAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "name of the chain containing the rule"]
+    #[doc = "name of the chain containing the rule\n"]
     pub fn push_chain_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 2u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "numeric handle of the rule"]
+    #[doc = "numeric handle of the rule\n"]
     pub fn push_handle(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 3u16, 8 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "list of expressions"]
+    #[doc = "list of expressions\n"]
     pub fn nested_expressions(mut self) -> PushExprListAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 4u16);
         PushExprListAttrs {
@@ -13148,7 +13622,7 @@ impl<Prev: Rec> PushRuleAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "compatibility specifications of the rule"]
+    #[doc = "compatibility specifications of the rule\n"]
     pub fn nested_compat(mut self) -> PushRuleCompatAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 5u16);
         PushRuleCompatAttrs {
@@ -13156,31 +13630,31 @@ impl<Prev: Rec> PushRuleAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "numeric handle of the previous rule"]
+    #[doc = "numeric handle of the previous rule\n"]
     pub fn push_position(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 6u16, 8 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn push_userdata(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 7u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "uniquely identifies a rule in a transaction"]
+    #[doc = "uniquely identifies a rule in a transaction\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "transaction unique identifier of the previous rule"]
+    #[doc = "transaction unique identifier of the previous rule\n"]
     pub fn push_position_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 9u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "add the rule to chain by ID, alternative to chain name"]
+    #[doc = "add the rule to chain by ID, alternative to chain name\n"]
     pub fn push_chain_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -13266,7 +13740,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
         }
         prev
     }
-    #[doc = "name of the expression type"]
+    #[doc = "name of the expression type\n"]
     pub fn push_name(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -13276,15 +13750,15 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "name of the expression type"]
+    #[doc = "name of the expression type\n"]
     pub fn push_name_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "type specific data"]
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "type specific data\n"]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_bitwise(mut self) -> PushExprBitwiseAttrs<PushDummy<Prev>> {
         self = self.push_name(c"bitwise");
@@ -13298,7 +13772,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_cmp(mut self) -> PushExprCmpAttrs<PushDummy<Prev>> {
         self = self.push_name(c"cmp");
@@ -13312,7 +13786,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_counter(mut self) -> PushExprCounterAttrs<PushDummy<Prev>> {
         self = self.push_name(c"counter");
@@ -13326,7 +13800,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_ct(mut self) -> PushExprCtAttrs<PushDummy<Prev>> {
         self = self.push_name(c"ct");
@@ -13340,7 +13814,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_fib(mut self) -> PushExprFibAttrs<PushDummy<Prev>> {
         self = self.push_name(c"fib");
@@ -13354,7 +13828,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_flow_offload(mut self) -> PushExprFlowOffloadAttrs<PushDummy<Prev>> {
         self = self.push_name(c"flow_offload");
@@ -13368,7 +13842,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_immediate(mut self) -> PushExprImmediateAttrs<PushDummy<Prev>> {
         self = self.push_name(c"immediate");
@@ -13382,7 +13856,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_log(mut self) -> PushLogAttrs<PushDummy<Prev>> {
         self = self.push_name(c"log");
@@ -13396,7 +13870,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_lookup(mut self) -> PushExprLookupAttrs<PushDummy<Prev>> {
         self = self.push_name(c"lookup");
@@ -13410,7 +13884,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_match(mut self) -> PushCompatMatchAttrs<PushDummy<Prev>> {
         self = self.push_name(c"match");
@@ -13424,7 +13898,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_meta(mut self) -> PushExprMetaAttrs<PushDummy<Prev>> {
         self = self.push_name(c"meta");
@@ -13438,7 +13912,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_nat(mut self) -> PushExprNatAttrs<PushDummy<Prev>> {
         self = self.push_name(c"nat");
@@ -13452,7 +13926,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_numgen(mut self) -> PushNumgenAttrs<PushDummy<Prev>> {
         self = self.push_name(c"numgen");
@@ -13466,7 +13940,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_objref(mut self) -> PushExprObjrefAttrs<PushDummy<Prev>> {
         self = self.push_name(c"objref");
@@ -13480,7 +13954,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_payload(mut self) -> PushExprPayloadAttrs<PushDummy<Prev>> {
         self = self.push_name(c"payload");
@@ -13494,7 +13968,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_quota(mut self) -> PushQuotaAttrs<PushDummy<Prev>> {
         self = self.push_name(c"quota");
@@ -13508,7 +13982,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_range(mut self) -> PushRangeAttrs<PushDummy<Prev>> {
         self = self.push_name(c"range");
@@ -13522,7 +13996,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_reject(mut self) -> PushExprRejectAttrs<PushDummy<Prev>> {
         self = self.push_name(c"reject");
@@ -13536,7 +14010,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_target(mut self) -> PushExprTargetAttrs<PushDummy<Prev>> {
         self = self.push_name(c"target");
@@ -13550,7 +14024,7 @@ impl<Prev: Rec> PushExprAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `name` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_tproxy(mut self) -> PushExprTproxyAttrs<PushDummy<Prev>> {
         self = self.push_name(c"tproxy");
@@ -13600,13 +14074,13 @@ impl<Prev: Rec> PushRuleCompatAttrs<Prev> {
         }
         prev
     }
-    #[doc = "numeric value of the handled protocol"]
+    #[doc = "numeric value of the handled protocol\n"]
     pub fn push_proto(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "bitmask of flags"]
+    #[doc = "bitmask of flags\n"]
     pub fn push_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -13648,7 +14122,7 @@ impl<Prev: Rec> PushSetAttrs<Prev> {
         }
         prev
     }
-    #[doc = "table name"]
+    #[doc = "table name\n"]
     pub fn push_table(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -13658,14 +14132,14 @@ impl<Prev: Rec> PushSetAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "table name"]
+    #[doc = "table name\n"]
     pub fn push_table_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "set name"]
+    #[doc = "set name\n"]
     pub fn push_name(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -13675,50 +14149,50 @@ impl<Prev: Rec> PushSetAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "set name"]
+    #[doc = "set name\n"]
     pub fn push_name_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 2u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "bitmask of enum nft\\_set\\_flags\nAssociated type: [`SetFlags`] (enum)"]
+    #[doc = "bitmask of enum nft_set_flags\n\nAssociated type: [`SetFlags`] (enum)"]
     pub fn push_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "key data type, informational purpose only"]
+    #[doc = "key data type, informational purpose only\n"]
     pub fn push_key_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "key data length"]
+    #[doc = "key data length\n"]
     pub fn push_key_len(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "mapping data type"]
+    #[doc = "mapping data type\n"]
     pub fn push_data_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "mapping data length"]
+    #[doc = "mapping data length\n"]
     pub fn push_data_len(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "selection policy"]
+    #[doc = "selection policy\n"]
     pub fn push_policy(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "set description"]
+    #[doc = "set description\n"]
     pub fn nested_desc(mut self) -> PushSetDescAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 9u16);
         PushSetDescAttrs {
@@ -13726,25 +14200,25 @@ impl<Prev: Rec> PushSetAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "uniquely identifies a set in a transaction"]
+    #[doc = "uniquely identifies a set in a transaction\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "default timeout value"]
+    #[doc = "default timeout value\n"]
     pub fn push_timeout(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 11u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "garbage collection interval"]
+    #[doc = "garbage collection interval\n"]
     pub fn push_gc_interval(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 12u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn push_userdata(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 13u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -13755,19 +14229,19 @@ impl<Prev: Rec> PushSetAttrs<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "stateful object type"]
+    #[doc = "stateful object type\n"]
     pub fn push_obj_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 15u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "set handle"]
+    #[doc = "set handle\n"]
     pub fn push_handle(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 16u16, 8 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "set expression\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "set expression\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn nested_expr(mut self) -> PushExprAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 17u16);
         PushExprAttrs {
@@ -13775,7 +14249,7 @@ impl<Prev: Rec> PushSetAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "list of expressions"]
+    #[doc = "list of expressions\n"]
     pub fn nested_expressions(mut self) -> PushSetListAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 18u16);
         PushSetListAttrs {
@@ -13783,7 +14257,7 @@ impl<Prev: Rec> PushSetAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "set backend type"]
+    #[doc = "set backend type\n"]
     pub fn push_type(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -13793,14 +14267,14 @@ impl<Prev: Rec> PushSetAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "set backend type"]
+    #[doc = "set backend type\n"]
     pub fn push_type_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 19u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "number of set elements"]
+    #[doc = "number of set elements\n"]
     pub fn push_count(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 20u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -13842,13 +14316,13 @@ impl<Prev: Rec> PushSetDescAttrs<Prev> {
         }
         prev
     }
-    #[doc = "number of elements in set"]
+    #[doc = "number of elements in set\n"]
     pub fn push_size(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "description of field concatenation\nAttribute may repeat multiple times (treat it as array)"]
+    #[doc = "description of field concatenation\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn nested_concat(mut self) -> PushSetDescConcatAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
         PushSetDescConcatAttrs {
@@ -14020,7 +14494,7 @@ impl<Prev: Rec> PushSetelemAttrs<Prev> {
         }
         prev
     }
-    #[doc = "key value"]
+    #[doc = "key value\n"]
     pub fn nested_key(mut self) -> PushDataAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 1u16);
         PushDataAttrs {
@@ -14028,7 +14502,7 @@ impl<Prev: Rec> PushSetelemAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "data value of mapping"]
+    #[doc = "data value of mapping\n"]
     pub fn nested_data(mut self) -> PushDataAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
         PushDataAttrs {
@@ -14036,31 +14510,31 @@ impl<Prev: Rec> PushSetelemAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "bitmask of nft\\_set\\_elem\\_flags"]
+    #[doc = "bitmask of nft_set_elem_flags\n"]
     pub fn push_flags(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 3u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "timeout value"]
+    #[doc = "timeout value\n"]
     pub fn push_timeout(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 4u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "expiration time"]
+    #[doc = "expiration time\n"]
     pub fn push_expiration(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 5u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn push_userdata(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 6u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "expression"]
+    #[doc = "expression\n"]
     pub fn nested_expr(mut self) -> PushExprAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 7u16);
         PushExprAttrs {
@@ -14068,7 +14542,7 @@ impl<Prev: Rec> PushSetelemAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "stateful object reference"]
+    #[doc = "stateful object reference\n"]
     pub fn push_objref(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -14078,14 +14552,14 @@ impl<Prev: Rec> PushSetelemAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "stateful object reference"]
+    #[doc = "stateful object reference\n"]
     pub fn push_objref_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 8u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "closing key value"]
+    #[doc = "closing key value\n"]
     pub fn nested_key_end(mut self) -> PushDataAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 9u16);
         PushDataAttrs {
@@ -14093,7 +14567,7 @@ impl<Prev: Rec> PushSetelemAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "list of expressions"]
+    #[doc = "list of expressions\n"]
     pub fn nested_expressions(mut self) -> PushExprListAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 10u16);
         PushExprListAttrs {
@@ -14259,7 +14733,7 @@ impl<Prev: Rec> PushGenAttrs<Prev> {
         }
         prev
     }
-    #[doc = "ruleset generation id"]
+    #[doc = "ruleset generation id\n"]
     pub fn push_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -14321,7 +14795,7 @@ impl<Prev: Rec> PushObjAttrs<Prev> {
         }
         prev
     }
-    #[doc = "name of the table containing the expression"]
+    #[doc = "name of the table containing the expression\n"]
     pub fn push_table(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -14331,14 +14805,14 @@ impl<Prev: Rec> PushObjAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "name of the table containing the expression"]
+    #[doc = "name of the table containing the expression\n"]
     pub fn push_table_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "name of this expression type"]
+    #[doc = "name of this expression type\n"]
     pub fn push_name(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -14348,21 +14822,21 @@ impl<Prev: Rec> PushObjAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "name of this expression type"]
+    #[doc = "name of this expression type\n"]
     pub fn push_name_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 2u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "stateful object type\nAssociated type: [`ObjectType`] (enum)"]
+    #[doc = "stateful object type\n\nAssociated type: [`ObjectType`] (enum)"]
     pub fn push_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "stateful object data"]
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "stateful object data\n"]
+    #[doc = "Selector attribute `type` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_counter(mut self) -> PushCounterAttrs<PushDummy<Prev>> {
         self = self.push_type(ObjectType::Counter as u32);
@@ -14376,7 +14850,7 @@ impl<Prev: Rec> PushObjAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `type` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_quota(mut self) -> PushQuotaAttrs<PushDummy<Prev>> {
         self = self.push_type(ObjectType::Quota as u32);
@@ -14390,13 +14864,13 @@ impl<Prev: Rec> PushObjAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "number of references to this expression"]
+    #[doc = "number of references to this expression\n"]
     pub fn push_use(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "object handle"]
+    #[doc = "object handle\n"]
     pub fn push_handle(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 6u16, 8 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -14407,7 +14881,7 @@ impl<Prev: Rec> PushObjAttrs<Prev> {
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "user data"]
+    #[doc = "user data\n"]
     pub fn push_userdata(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 8u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -14832,13 +15306,13 @@ impl<Prev: Rec> PushVerdictAttrs<Prev> {
         }
         prev
     }
-    #[doc = "nf\\_tables verdict\nAssociated type: [`VerdictCode`] (enum)"]
+    #[doc = "nf_tables verdict\n\nAssociated type: [`VerdictCode`] (enum)"]
     pub fn push_code(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "jump target chain name"]
+    #[doc = "jump target chain name\n"]
     pub fn push_chain(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -14848,14 +15322,14 @@ impl<Prev: Rec> PushVerdictAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "jump target chain name"]
+    #[doc = "jump target chain name\n"]
     pub fn push_chain_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 2u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "jump target chain ID"]
+    #[doc = "jump target chain ID\n"]
     pub fn push_chain_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -14897,13 +15371,13 @@ impl<Prev: Rec> PushExprCounterAttrs<Prev> {
         }
         prev
     }
-    #[doc = "Number of bytes"]
+    #[doc = "Number of bytes\n"]
     pub fn push_bytes(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 1u16, 8 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "Number of packets"]
+    #[doc = "Number of packets\n"]
     pub fn push_packets(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 2u16, 8 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -15061,7 +15535,7 @@ impl<Prev: Rec> PushExprFlowOffloadAttrs<Prev> {
         }
         prev
     }
-    #[doc = "Flow offload table name"]
+    #[doc = "Flow offload table name\n"]
     pub fn push_name(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -15071,7 +15545,7 @@ impl<Prev: Rec> PushExprFlowOffloadAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "Flow offload table name"]
+    #[doc = "Flow offload table name\n"]
     pub fn push_name_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
@@ -15162,7 +15636,7 @@ impl<Prev: Rec> PushExprLookupAttrs<Prev> {
         }
         prev
     }
-    #[doc = "Name of set to use"]
+    #[doc = "Name of set to use\n"]
     pub fn push_set(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -15172,14 +15646,14 @@ impl<Prev: Rec> PushExprLookupAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "Name of set to use"]
+    #[doc = "Name of set to use\n"]
     pub fn push_set_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "ID of set to use"]
+    #[doc = "ID of set to use\n"]
     pub fn push_set_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -15415,49 +15889,49 @@ impl<Prev: Rec> PushExprPayloadAttrs<Prev> {
         }
         prev
     }
-    #[doc = "destination register to load data into\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "destination register to load data into\n\nAssociated type: [`Registers`] (enum)"]
     pub fn push_dreg(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "payload base\nAssociated type: [`PayloadBase`] (enum)"]
+    #[doc = "payload base\n\nAssociated type: [`PayloadBase`] (enum)"]
     pub fn push_base(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "payload offset relative to base"]
+    #[doc = "payload offset relative to base\n"]
     pub fn push_offset(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "payload length"]
+    #[doc = "payload length\n"]
     pub fn push_len(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "source register to load data from\nAssociated type: [`Registers`] (enum)"]
+    #[doc = "source register to load data from\n\nAssociated type: [`Registers`] (enum)"]
     pub fn push_sreg(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "checksum type"]
+    #[doc = "checksum type\n"]
     pub fn push_csum_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "checksum offset relative to base"]
+    #[doc = "checksum offset relative to base\n"]
     pub fn push_csum_offset(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "checksum flags"]
+    #[doc = "checksum flags\n"]
     pub fn push_csum_flags(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -15566,6 +16040,7 @@ impl<Prev: Rec> PushExprTargetAttrs<Prev> {
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
+    #[doc = "Grep for `static struct xt_target` in `linux/net/nftables`. This field\nis usually a struct:\n\n- Name\n- Revision number\n- IP version (4/6)\n- Size of provided struct\n"]
     pub fn push_info(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 3u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -15663,7 +16138,7 @@ impl<Prev: Rec> PushExprObjrefAttrs<Prev> {
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "object name"]
+    #[doc = "object name\n"]
     pub fn push_imm_name(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -15673,7 +16148,7 @@ impl<Prev: Rec> PushExprObjrefAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "object name"]
+    #[doc = "object name\n"]
     pub fn push_imm_name_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 2u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
@@ -15685,7 +16160,7 @@ impl<Prev: Rec> PushExprObjrefAttrs<Prev> {
         self.as_rec_mut().extend(value.to_be_bytes());
         self
     }
-    #[doc = "name of object map"]
+    #[doc = "name of object map\n"]
     pub fn push_set_name(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -15695,14 +16170,14 @@ impl<Prev: Rec> PushExprObjrefAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "name of object map"]
+    #[doc = "name of object map\n"]
     pub fn push_set_name_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 4u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "id of object map"]
+    #[doc = "id of object map\n"]
     pub fn push_set_id(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_be_bytes());
@@ -15901,7 +16376,7 @@ impl<Prev: Rec> Drop for PushCompatAttrs<Prev> {
         }
     }
 }
-#[doc = "Start a batch of operations\nRequest attributes:\n- [.push_genid()](PushBatchAttrs::push_genid)\n\nReply attributes:\n- [.get_genid()](IterableBatchAttrs::get_genid)\n"]
+#[doc = "Start a batch of operations\n\nRequest attributes:\n- [.push_genid()](PushBatchAttrs::push_genid)\n\nReply attributes:\n- [.get_genid()](IterableBatchAttrs::get_genid)\n\n"]
 #[derive(Debug)]
 pub struct OpBatchBeginDo<'r> {
     request: Request<'r>,
@@ -15962,7 +16437,7 @@ impl NetlinkRequest for OpBatchBeginDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Finish a batch of operations\nRequest attributes:\n- [.push_genid()](PushBatchAttrs::push_genid)\n"]
+#[doc = "Finish a batch of operations\n\nRequest attributes:\n- [.push_genid()](PushBatchAttrs::push_genid)\n\n"]
 #[derive(Debug)]
 pub struct OpBatchEndDo<'r> {
     request: Request<'r>,
@@ -16023,7 +16498,7 @@ impl NetlinkRequest for OpBatchEndDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create a new table\\.\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_flags()](PushTableAttrs::push_flags)\n- [.push_userdata()](PushTableAttrs::push_userdata)\n"]
+#[doc = "Create a new table.\n\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_flags()](PushTableAttrs::push_flags)\n- [.push_userdata()](PushTableAttrs::push_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpNewtableDo<'r> {
     request: Request<'r>,
@@ -16084,7 +16559,7 @@ impl NetlinkRequest for OpNewtableDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tables\\.\n\nReply attributes:\n- [.get_name()](IterableTableAttrs::get_name)\n- [.get_flags()](IterableTableAttrs::get_flags)\n- [.get_use()](IterableTableAttrs::get_use)\n- [.get_handle()](IterableTableAttrs::get_handle)\n- [.get_userdata()](IterableTableAttrs::get_userdata)\n- [.get_owner()](IterableTableAttrs::get_owner)\n"]
+#[doc = "Get / dump tables.\n\nReply attributes:\n- [.get_name()](IterableTableAttrs::get_name)\n- [.get_flags()](IterableTableAttrs::get_flags)\n- [.get_use()](IterableTableAttrs::get_use)\n- [.get_handle()](IterableTableAttrs::get_handle)\n- [.get_userdata()](IterableTableAttrs::get_userdata)\n- [.get_owner()](IterableTableAttrs::get_owner)\n\n"]
 #[derive(Debug)]
 pub struct OpGettableDump<'r> {
     request: Request<'r>,
@@ -16147,7 +16622,7 @@ impl NetlinkRequest for OpGettableDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tables\\.\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n\nReply attributes:\n- [.get_name()](IterableTableAttrs::get_name)\n- [.get_flags()](IterableTableAttrs::get_flags)\n- [.get_use()](IterableTableAttrs::get_use)\n- [.get_handle()](IterableTableAttrs::get_handle)\n- [.get_userdata()](IterableTableAttrs::get_userdata)\n- [.get_owner()](IterableTableAttrs::get_owner)\n"]
+#[doc = "Get / dump tables.\n\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n\nReply attributes:\n- [.get_name()](IterableTableAttrs::get_name)\n- [.get_flags()](IterableTableAttrs::get_flags)\n- [.get_use()](IterableTableAttrs::get_use)\n- [.get_handle()](IterableTableAttrs::get_handle)\n- [.get_userdata()](IterableTableAttrs::get_userdata)\n- [.get_owner()](IterableTableAttrs::get_owner)\n\n"]
 #[derive(Debug)]
 pub struct OpGettableDo<'r> {
     request: Request<'r>,
@@ -16208,7 +16683,7 @@ impl NetlinkRequest for OpGettableDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing table\\.\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_handle()](PushTableAttrs::push_handle)\n"]
+#[doc = "Delete an existing table.\n\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_handle()](PushTableAttrs::push_handle)\n\n"]
 #[derive(Debug)]
 pub struct OpDeltableDo<'r> {
     request: Request<'r>,
@@ -16269,7 +16744,7 @@ impl NetlinkRequest for OpDeltableDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing table with destroy semantics (ignoring ENOENT\nerrors)\\.\n\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_handle()](PushTableAttrs::push_handle)\n"]
+#[doc = "Delete an existing table with destroy semantics (ignoring ENOENT\nerrors).\n\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_handle()](PushTableAttrs::push_handle)\n\n"]
 #[derive(Debug)]
 pub struct OpDestroytableDo<'r> {
     request: Request<'r>,
@@ -16330,7 +16805,7 @@ impl NetlinkRequest for OpDestroytableDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create a new chain\\.\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n- [.push_policy()](PushChainAttrs::push_policy)\n- [.push_type()](PushChainAttrs::push_type)\n- [.nested_counters()](PushChainAttrs::nested_counters)\n- [.push_flags()](PushChainAttrs::push_flags)\n- [.push_userdata()](PushChainAttrs::push_userdata)\n"]
+#[doc = "Create a new chain.\n\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n- [.push_policy()](PushChainAttrs::push_policy)\n- [.push_type()](PushChainAttrs::push_type)\n- [.nested_counters()](PushChainAttrs::nested_counters)\n- [.push_flags()](PushChainAttrs::push_flags)\n- [.push_userdata()](PushChainAttrs::push_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpNewchainDo<'r> {
     request: Request<'r>,
@@ -16391,7 +16866,7 @@ impl NetlinkRequest for OpNewchainDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump chains\\.\n\nReply attributes:\n- [.get_table()](IterableChainAttrs::get_table)\n- [.get_handle()](IterableChainAttrs::get_handle)\n- [.get_name()](IterableChainAttrs::get_name)\n- [.get_hook()](IterableChainAttrs::get_hook)\n- [.get_policy()](IterableChainAttrs::get_policy)\n- [.get_use()](IterableChainAttrs::get_use)\n- [.get_type()](IterableChainAttrs::get_type)\n- [.get_counters()](IterableChainAttrs::get_counters)\n- [.get_flags()](IterableChainAttrs::get_flags)\n- [.get_id()](IterableChainAttrs::get_id)\n- [.get_userdata()](IterableChainAttrs::get_userdata)\n"]
+#[doc = "Get / dump chains.\n\nReply attributes:\n- [.get_table()](IterableChainAttrs::get_table)\n- [.get_handle()](IterableChainAttrs::get_handle)\n- [.get_name()](IterableChainAttrs::get_name)\n- [.get_hook()](IterableChainAttrs::get_hook)\n- [.get_policy()](IterableChainAttrs::get_policy)\n- [.get_use()](IterableChainAttrs::get_use)\n- [.get_type()](IterableChainAttrs::get_type)\n- [.get_counters()](IterableChainAttrs::get_counters)\n- [.get_flags()](IterableChainAttrs::get_flags)\n- [.get_id()](IterableChainAttrs::get_id)\n- [.get_userdata()](IterableChainAttrs::get_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpGetchainDump<'r> {
     request: Request<'r>,
@@ -16454,7 +16929,7 @@ impl NetlinkRequest for OpGetchainDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump chains\\.\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_name()](PushChainAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableChainAttrs::get_table)\n- [.get_handle()](IterableChainAttrs::get_handle)\n- [.get_name()](IterableChainAttrs::get_name)\n- [.get_hook()](IterableChainAttrs::get_hook)\n- [.get_policy()](IterableChainAttrs::get_policy)\n- [.get_use()](IterableChainAttrs::get_use)\n- [.get_type()](IterableChainAttrs::get_type)\n- [.get_counters()](IterableChainAttrs::get_counters)\n- [.get_flags()](IterableChainAttrs::get_flags)\n- [.get_id()](IterableChainAttrs::get_id)\n- [.get_userdata()](IterableChainAttrs::get_userdata)\n"]
+#[doc = "Get / dump chains.\n\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_name()](PushChainAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableChainAttrs::get_table)\n- [.get_handle()](IterableChainAttrs::get_handle)\n- [.get_name()](IterableChainAttrs::get_name)\n- [.get_hook()](IterableChainAttrs::get_hook)\n- [.get_policy()](IterableChainAttrs::get_policy)\n- [.get_use()](IterableChainAttrs::get_use)\n- [.get_type()](IterableChainAttrs::get_type)\n- [.get_counters()](IterableChainAttrs::get_counters)\n- [.get_flags()](IterableChainAttrs::get_flags)\n- [.get_id()](IterableChainAttrs::get_id)\n- [.get_userdata()](IterableChainAttrs::get_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpGetchainDo<'r> {
     request: Request<'r>,
@@ -16515,7 +16990,7 @@ impl NetlinkRequest for OpGetchainDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing chain\\.\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n"]
+#[doc = "Delete an existing chain.\n\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n\n"]
 #[derive(Debug)]
 pub struct OpDelchainDo<'r> {
     request: Request<'r>,
@@ -16576,7 +17051,7 @@ impl NetlinkRequest for OpDelchainDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing chain with destroy semantics (ignoring ENOENT\nerrors)\\.\n\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n"]
+#[doc = "Delete an existing chain with destroy semantics (ignoring ENOENT\nerrors).\n\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n\n"]
 #[derive(Debug)]
 pub struct OpDestroychainDo<'r> {
     request: Request<'r>,
@@ -16637,7 +17112,7 @@ impl NetlinkRequest for OpDestroychainDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create a new rule\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.nested_expressions()](PushRuleAttrs::nested_expressions)\n- [.nested_compat()](PushRuleAttrs::nested_compat)\n- [.push_position()](PushRuleAttrs::push_position)\n- [.push_userdata()](PushRuleAttrs::push_userdata)\n- [.push_position_id()](PushRuleAttrs::push_position_id)\n- [.push_chain_id()](PushRuleAttrs::push_chain_id)\n"]
+#[doc = "Create a new rule.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.nested_expressions()](PushRuleAttrs::nested_expressions)\n- [.nested_compat()](PushRuleAttrs::nested_compat)\n- [.push_position()](PushRuleAttrs::push_position)\n- [.push_userdata()](PushRuleAttrs::push_userdata)\n- [.push_position_id()](PushRuleAttrs::push_position_id)\n- [.push_chain_id()](PushRuleAttrs::push_chain_id)\n\n"]
 #[derive(Debug)]
 pub struct OpNewruleDo<'r> {
     request: Request<'r>,
@@ -16698,7 +17173,7 @@ impl NetlinkRequest for OpNewruleDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump rules\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n"]
+#[doc = "Get / dump rules.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpGetruleDump<'r> {
     request: Request<'r>,
@@ -16761,7 +17236,7 @@ impl NetlinkRequest for OpGetruleDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump rules\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n"]
+#[doc = "Get / dump rules.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpGetruleDo<'r> {
     request: Request<'r>,
@@ -16822,7 +17297,7 @@ impl NetlinkRequest for OpGetruleDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump rules and reset stateful expressions\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n"]
+#[doc = "Get / dump rules and reset stateful expressions.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpGetruleResetDump<'r> {
     request: Request<'r>,
@@ -16885,7 +17360,7 @@ impl NetlinkRequest for OpGetruleResetDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump rules and reset stateful expressions\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n"]
+#[doc = "Get / dump rules and reset stateful expressions.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpGetruleResetDo<'r> {
     request: Request<'r>,
@@ -16946,7 +17421,7 @@ impl NetlinkRequest for OpGetruleResetDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing rule\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.push_id()](PushRuleAttrs::push_id)\n"]
+#[doc = "Delete an existing rule.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.push_id()](PushRuleAttrs::push_id)\n\n"]
 #[derive(Debug)]
 pub struct OpDelruleDo<'r> {
     request: Request<'r>,
@@ -17007,7 +17482,7 @@ impl NetlinkRequest for OpDelruleDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing rule with destroy semantics (ignoring ENOENT errors)\\.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.push_id()](PushRuleAttrs::push_id)\n"]
+#[doc = "Delete an existing rule with destroy semantics (ignoring ENOENT errors).\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.push_id()](PushRuleAttrs::push_id)\n\n"]
 #[derive(Debug)]
 pub struct OpDestroyruleDo<'r> {
     request: Request<'r>,
@@ -17068,7 +17543,7 @@ impl NetlinkRequest for OpDestroyruleDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create a new set\\.\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_flags()](PushSetAttrs::push_flags)\n- [.push_key_type()](PushSetAttrs::push_key_type)\n- [.push_key_len()](PushSetAttrs::push_key_len)\n- [.push_data_type()](PushSetAttrs::push_data_type)\n- [.push_data_len()](PushSetAttrs::push_data_len)\n- [.push_policy()](PushSetAttrs::push_policy)\n- [.nested_desc()](PushSetAttrs::nested_desc)\n- [.push_id()](PushSetAttrs::push_id)\n- [.push_timeout()](PushSetAttrs::push_timeout)\n- [.push_gc_interval()](PushSetAttrs::push_gc_interval)\n- [.push_userdata()](PushSetAttrs::push_userdata)\n- [.push_obj_type()](PushSetAttrs::push_obj_type)\n"]
+#[doc = "Create a new set.\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_flags()](PushSetAttrs::push_flags)\n- [.push_key_type()](PushSetAttrs::push_key_type)\n- [.push_key_len()](PushSetAttrs::push_key_len)\n- [.push_data_type()](PushSetAttrs::push_data_type)\n- [.push_data_len()](PushSetAttrs::push_data_len)\n- [.push_policy()](PushSetAttrs::push_policy)\n- [.nested_desc()](PushSetAttrs::nested_desc)\n- [.push_id()](PushSetAttrs::push_id)\n- [.push_timeout()](PushSetAttrs::push_timeout)\n- [.push_gc_interval()](PushSetAttrs::push_gc_interval)\n- [.push_userdata()](PushSetAttrs::push_userdata)\n- [.push_obj_type()](PushSetAttrs::push_obj_type)\n\n"]
 #[derive(Debug)]
 pub struct OpNewsetDo<'r> {
     request: Request<'r>,
@@ -17129,7 +17604,7 @@ impl NetlinkRequest for OpNewsetDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump sets\\.\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n\nReply attributes:\n- [.get_table()](IterableSetAttrs::get_table)\n- [.get_name()](IterableSetAttrs::get_name)\n- [.get_flags()](IterableSetAttrs::get_flags)\n- [.get_key_type()](IterableSetAttrs::get_key_type)\n- [.get_key_len()](IterableSetAttrs::get_key_len)\n- [.get_data_type()](IterableSetAttrs::get_data_type)\n- [.get_data_len()](IterableSetAttrs::get_data_len)\n- [.get_policy()](IterableSetAttrs::get_policy)\n- [.get_desc()](IterableSetAttrs::get_desc)\n- [.get_gc_interval()](IterableSetAttrs::get_gc_interval)\n- [.get_userdata()](IterableSetAttrs::get_userdata)\n- [.get_obj_type()](IterableSetAttrs::get_obj_type)\n- [.get_handle()](IterableSetAttrs::get_handle)\n- [.get_expr()](IterableSetAttrs::get_expr)\n- [.get_expressions()](IterableSetAttrs::get_expressions)\n"]
+#[doc = "Get / dump sets.\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n\nReply attributes:\n- [.get_table()](IterableSetAttrs::get_table)\n- [.get_name()](IterableSetAttrs::get_name)\n- [.get_flags()](IterableSetAttrs::get_flags)\n- [.get_key_type()](IterableSetAttrs::get_key_type)\n- [.get_key_len()](IterableSetAttrs::get_key_len)\n- [.get_data_type()](IterableSetAttrs::get_data_type)\n- [.get_data_len()](IterableSetAttrs::get_data_len)\n- [.get_policy()](IterableSetAttrs::get_policy)\n- [.get_desc()](IterableSetAttrs::get_desc)\n- [.get_gc_interval()](IterableSetAttrs::get_gc_interval)\n- [.get_userdata()](IterableSetAttrs::get_userdata)\n- [.get_obj_type()](IterableSetAttrs::get_obj_type)\n- [.get_handle()](IterableSetAttrs::get_handle)\n- [.get_expr()](IterableSetAttrs::get_expr)\n- [.get_expressions()](IterableSetAttrs::get_expressions)\n\n"]
 #[derive(Debug)]
 pub struct OpGetsetDump<'r> {
     request: Request<'r>,
@@ -17192,7 +17667,7 @@ impl NetlinkRequest for OpGetsetDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump sets\\.\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableSetAttrs::get_table)\n- [.get_name()](IterableSetAttrs::get_name)\n- [.get_flags()](IterableSetAttrs::get_flags)\n- [.get_key_type()](IterableSetAttrs::get_key_type)\n- [.get_key_len()](IterableSetAttrs::get_key_len)\n- [.get_data_type()](IterableSetAttrs::get_data_type)\n- [.get_data_len()](IterableSetAttrs::get_data_len)\n- [.get_policy()](IterableSetAttrs::get_policy)\n- [.get_desc()](IterableSetAttrs::get_desc)\n- [.get_gc_interval()](IterableSetAttrs::get_gc_interval)\n- [.get_userdata()](IterableSetAttrs::get_userdata)\n- [.get_obj_type()](IterableSetAttrs::get_obj_type)\n- [.get_handle()](IterableSetAttrs::get_handle)\n- [.get_expr()](IterableSetAttrs::get_expr)\n- [.get_expressions()](IterableSetAttrs::get_expressions)\n"]
+#[doc = "Get / dump sets.\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableSetAttrs::get_table)\n- [.get_name()](IterableSetAttrs::get_name)\n- [.get_flags()](IterableSetAttrs::get_flags)\n- [.get_key_type()](IterableSetAttrs::get_key_type)\n- [.get_key_len()](IterableSetAttrs::get_key_len)\n- [.get_data_type()](IterableSetAttrs::get_data_type)\n- [.get_data_len()](IterableSetAttrs::get_data_len)\n- [.get_policy()](IterableSetAttrs::get_policy)\n- [.get_desc()](IterableSetAttrs::get_desc)\n- [.get_gc_interval()](IterableSetAttrs::get_gc_interval)\n- [.get_userdata()](IterableSetAttrs::get_userdata)\n- [.get_obj_type()](IterableSetAttrs::get_obj_type)\n- [.get_handle()](IterableSetAttrs::get_handle)\n- [.get_expr()](IterableSetAttrs::get_expr)\n- [.get_expressions()](IterableSetAttrs::get_expressions)\n\n"]
 #[derive(Debug)]
 pub struct OpGetsetDo<'r> {
     request: Request<'r>,
@@ -17253,7 +17728,7 @@ impl NetlinkRequest for OpGetsetDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing set\\.\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_handle()](PushSetAttrs::push_handle)\n"]
+#[doc = "Delete an existing set.\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_handle()](PushSetAttrs::push_handle)\n\n"]
 #[derive(Debug)]
 pub struct OpDelsetDo<'r> {
     request: Request<'r>,
@@ -17314,7 +17789,7 @@ impl NetlinkRequest for OpDelsetDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing set with destroy semantics (ignoring ENOENT errors)\\.\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_handle()](PushSetAttrs::push_handle)\n"]
+#[doc = "Delete an existing set with destroy semantics (ignoring ENOENT errors).\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_handle()](PushSetAttrs::push_handle)\n\n"]
 #[derive(Debug)]
 pub struct OpDestroysetDo<'r> {
     request: Request<'r>,
@@ -17375,7 +17850,7 @@ impl NetlinkRequest for OpDestroysetDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create a new set element\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n- [.push_set_id()](PushSetelemListAttrs::push_set_id)\n"]
+#[doc = "Create a new set element.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n- [.push_set_id()](PushSetelemListAttrs::push_set_id)\n\n"]
 #[derive(Debug)]
 pub struct OpNewsetelemDo<'r> {
     request: Request<'r>,
@@ -17436,7 +17911,7 @@ impl NetlinkRequest for OpNewsetelemDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump set elements\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n"]
+#[doc = "Get / dump set elements.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n\n"]
 #[derive(Debug)]
 pub struct OpGetsetelemDump<'r> {
     request: Request<'r>,
@@ -17499,7 +17974,7 @@ impl NetlinkRequest for OpGetsetelemDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump set elements\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\nReply attributes:\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n"]
+#[doc = "Get / dump set elements.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\nReply attributes:\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n\n"]
 #[derive(Debug)]
 pub struct OpGetsetelemDo<'r> {
     request: Request<'r>,
@@ -17560,7 +18035,7 @@ impl NetlinkRequest for OpGetsetelemDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump set elements and reset stateful expressions\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n"]
+#[doc = "Get / dump set elements and reset stateful expressions.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n\n"]
 #[derive(Debug)]
 pub struct OpGetsetelemResetDump<'r> {
     request: Request<'r>,
@@ -17623,7 +18098,7 @@ impl NetlinkRequest for OpGetsetelemResetDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump set elements and reset stateful expressions\\.\nRequest attributes:\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n"]
+#[doc = "Get / dump set elements and reset stateful expressions.\n\nRequest attributes:\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n\n"]
 #[derive(Debug)]
 pub struct OpGetsetelemResetDo<'r> {
     request: Request<'r>,
@@ -17684,7 +18159,7 @@ impl NetlinkRequest for OpGetsetelemResetDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing set element\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n"]
+#[doc = "Delete an existing set element.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\n"]
 #[derive(Debug)]
 pub struct OpDelsetelemDo<'r> {
     request: Request<'r>,
@@ -17745,7 +18220,7 @@ impl NetlinkRequest for OpDelsetelemDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing set element with destroy semantics\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n"]
+#[doc = "Delete an existing set element with destroy semantics.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\n"]
 #[derive(Debug)]
 pub struct OpDestroysetelemDo<'r> {
     request: Request<'r>,
@@ -17806,7 +18281,7 @@ impl NetlinkRequest for OpDestroysetelemDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump rule\\-set generation\\.\n\nReply attributes:\n- [.get_id()](IterableGenAttrs::get_id)\n- [.get_proc_pid()](IterableGenAttrs::get_proc_pid)\n- [.get_proc_name()](IterableGenAttrs::get_proc_name)\n"]
+#[doc = "Get / dump rule-set generation.\n\nReply attributes:\n- [.get_id()](IterableGenAttrs::get_id)\n- [.get_proc_pid()](IterableGenAttrs::get_proc_pid)\n- [.get_proc_name()](IterableGenAttrs::get_proc_name)\n\n"]
 #[derive(Debug)]
 pub struct OpGetgenDump<'r> {
     request: Request<'r>,
@@ -17869,7 +18344,7 @@ impl NetlinkRequest for OpGetgenDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump rule\\-set generation\\.\n\nReply attributes:\n- [.get_id()](IterableGenAttrs::get_id)\n- [.get_proc_pid()](IterableGenAttrs::get_proc_pid)\n- [.get_proc_name()](IterableGenAttrs::get_proc_name)\n"]
+#[doc = "Get / dump rule-set generation.\n\nReply attributes:\n- [.get_id()](IterableGenAttrs::get_id)\n- [.get_proc_pid()](IterableGenAttrs::get_proc_pid)\n- [.get_proc_name()](IterableGenAttrs::get_proc_name)\n\n"]
 #[derive(Debug)]
 pub struct OpGetgenDo<'r> {
     request: Request<'r>,
@@ -17930,7 +18405,7 @@ impl NetlinkRequest for OpGetgenDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create a new stateful object\\.\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.nested_data_counter()](PushObjAttrs::nested_data_counter)\n- [.nested_data_quota()](PushObjAttrs::nested_data_quota)\n- [.push_userdata()](PushObjAttrs::push_userdata)\n"]
+#[doc = "Create a new stateful object.\n\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.nested_data_counter()](PushObjAttrs::nested_data_counter)\n- [.nested_data_quota()](PushObjAttrs::nested_data_quota)\n- [.push_userdata()](PushObjAttrs::push_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpNewobjDo<'r> {
     request: Request<'r>,
@@ -17991,7 +18466,7 @@ impl NetlinkRequest for OpNewobjDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump stateful objects\\.\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_type()](PushObjAttrs::push_type)\n\nReply attributes:\n- [.get_table()](IterableObjAttrs::get_table)\n- [.get_name()](IterableObjAttrs::get_name)\n- [.get_type()](IterableObjAttrs::get_type)\n- [.get_data()](IterableObjAttrs::get_data)\n- [.get_use()](IterableObjAttrs::get_use)\n- [.get_handle()](IterableObjAttrs::get_handle)\n- [.get_userdata()](IterableObjAttrs::get_userdata)\n"]
+#[doc = "Get / dump stateful objects.\n\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_type()](PushObjAttrs::push_type)\n\nReply attributes:\n- [.get_table()](IterableObjAttrs::get_table)\n- [.get_name()](IterableObjAttrs::get_name)\n- [.get_type()](IterableObjAttrs::get_type)\n- [.get_data()](IterableObjAttrs::get_data)\n- [.get_use()](IterableObjAttrs::get_use)\n- [.get_handle()](IterableObjAttrs::get_handle)\n- [.get_userdata()](IterableObjAttrs::get_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpGetobjDump<'r> {
     request: Request<'r>,
@@ -18054,7 +18529,7 @@ impl NetlinkRequest for OpGetobjDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump stateful objects\\.\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n\nReply attributes:\n- [.get_table()](IterableObjAttrs::get_table)\n- [.get_name()](IterableObjAttrs::get_name)\n- [.get_type()](IterableObjAttrs::get_type)\n- [.get_data()](IterableObjAttrs::get_data)\n- [.get_use()](IterableObjAttrs::get_use)\n- [.get_handle()](IterableObjAttrs::get_handle)\n- [.get_userdata()](IterableObjAttrs::get_userdata)\n"]
+#[doc = "Get / dump stateful objects.\n\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n\nReply attributes:\n- [.get_table()](IterableObjAttrs::get_table)\n- [.get_name()](IterableObjAttrs::get_name)\n- [.get_type()](IterableObjAttrs::get_type)\n- [.get_data()](IterableObjAttrs::get_data)\n- [.get_use()](IterableObjAttrs::get_use)\n- [.get_handle()](IterableObjAttrs::get_handle)\n- [.get_userdata()](IterableObjAttrs::get_userdata)\n\n"]
 #[derive(Debug)]
 pub struct OpGetobjDo<'r> {
     request: Request<'r>,
@@ -18115,7 +18590,7 @@ impl NetlinkRequest for OpGetobjDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing stateful object\\.\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.push_handle()](PushObjAttrs::push_handle)\n"]
+#[doc = "Delete an existing stateful object.\n\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.push_handle()](PushObjAttrs::push_handle)\n\n"]
 #[derive(Debug)]
 pub struct OpDelobjDo<'r> {
     request: Request<'r>,
@@ -18176,7 +18651,7 @@ impl NetlinkRequest for OpDelobjDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing stateful object with destroy semantics\\.\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.push_handle()](PushObjAttrs::push_handle)\n"]
+#[doc = "Delete an existing stateful object with destroy semantics.\n\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.push_handle()](PushObjAttrs::push_handle)\n\n"]
 #[derive(Debug)]
 pub struct OpDestroyobjDo<'r> {
     request: Request<'r>,
@@ -18237,7 +18712,7 @@ impl NetlinkRequest for OpDestroyobjDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create a new flow table\\.\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_flags()](PushFlowtableAttrs::push_flags)\n"]
+#[doc = "Create a new flow table.\n\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_flags()](PushFlowtableAttrs::push_flags)\n\n"]
 #[derive(Debug)]
 pub struct OpNewflowtableDo<'r> {
     request: Request<'r>,
@@ -18298,7 +18773,7 @@ impl NetlinkRequest for OpNewflowtableDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump flow tables\\.\n\nReply attributes:\n- [.get_table()](IterableFlowtableAttrs::get_table)\n- [.get_name()](IterableFlowtableAttrs::get_name)\n- [.get_hook()](IterableFlowtableAttrs::get_hook)\n- [.get_use()](IterableFlowtableAttrs::get_use)\n- [.get_handle()](IterableFlowtableAttrs::get_handle)\n- [.get_flags()](IterableFlowtableAttrs::get_flags)\n"]
+#[doc = "Get / dump flow tables.\n\nReply attributes:\n- [.get_table()](IterableFlowtableAttrs::get_table)\n- [.get_name()](IterableFlowtableAttrs::get_name)\n- [.get_hook()](IterableFlowtableAttrs::get_hook)\n- [.get_use()](IterableFlowtableAttrs::get_use)\n- [.get_handle()](IterableFlowtableAttrs::get_handle)\n- [.get_flags()](IterableFlowtableAttrs::get_flags)\n\n"]
 #[derive(Debug)]
 pub struct OpGetflowtableDump<'r> {
     request: Request<'r>,
@@ -18361,7 +18836,7 @@ impl NetlinkRequest for OpGetflowtableDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump flow tables\\.\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableFlowtableAttrs::get_table)\n- [.get_name()](IterableFlowtableAttrs::get_name)\n- [.get_hook()](IterableFlowtableAttrs::get_hook)\n- [.get_use()](IterableFlowtableAttrs::get_use)\n- [.get_handle()](IterableFlowtableAttrs::get_handle)\n- [.get_flags()](IterableFlowtableAttrs::get_flags)\n"]
+#[doc = "Get / dump flow tables.\n\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableFlowtableAttrs::get_table)\n- [.get_name()](IterableFlowtableAttrs::get_name)\n- [.get_hook()](IterableFlowtableAttrs::get_hook)\n- [.get_use()](IterableFlowtableAttrs::get_use)\n- [.get_handle()](IterableFlowtableAttrs::get_handle)\n- [.get_flags()](IterableFlowtableAttrs::get_flags)\n\n"]
 #[derive(Debug)]
 pub struct OpGetflowtableDo<'r> {
     request: Request<'r>,
@@ -18422,7 +18897,7 @@ impl NetlinkRequest for OpGetflowtableDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing flow table\\.\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_handle()](PushFlowtableAttrs::push_handle)\n"]
+#[doc = "Delete an existing flow table.\n\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_handle()](PushFlowtableAttrs::push_handle)\n\n"]
 #[derive(Debug)]
 pub struct OpDelflowtableDo<'r> {
     request: Request<'r>,
@@ -18483,7 +18958,7 @@ impl NetlinkRequest for OpDelflowtableDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete an existing flow table with destroy semantics\\.\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_handle()](PushFlowtableAttrs::push_handle)\n"]
+#[doc = "Delete an existing flow table with destroy semantics.\n\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_handle()](PushFlowtableAttrs::push_handle)\n\n"]
 #[derive(Debug)]
 pub struct OpDestroyflowtableDo<'r> {
     request: Request<'r>,
@@ -18544,7 +19019,7 @@ impl NetlinkRequest for OpDestroyflowtableDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump nft\\_compat info\n\nReply attributes:\n- [.get_name()](IterableCompatAttrs::get_name)\n- [.get_rev()](IterableCompatAttrs::get_rev)\n- [.get_type()](IterableCompatAttrs::get_type)\n"]
+#[doc = "Get / dump nft_compat info\n\nReply attributes:\n- [.get_name()](IterableCompatAttrs::get_name)\n- [.get_rev()](IterableCompatAttrs::get_rev)\n- [.get_type()](IterableCompatAttrs::get_type)\n\n"]
 #[derive(Debug)]
 pub struct OpGetcompatDump<'r> {
     request: Request<'r>,
@@ -18607,7 +19082,7 @@ impl NetlinkRequest for OpGetcompatDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump nft\\_compat info\nRequest attributes:\n- [.push_name()](PushCompatAttrs::push_name)\n- [.push_rev()](PushCompatAttrs::push_rev)\n- [.push_type()](PushCompatAttrs::push_type)\n\nReply attributes:\n- [.get_name()](IterableCompatAttrs::get_name)\n- [.get_rev()](IterableCompatAttrs::get_rev)\n- [.get_type()](IterableCompatAttrs::get_type)\n"]
+#[doc = "Get / dump nft_compat info\n\nRequest attributes:\n- [.push_name()](PushCompatAttrs::push_name)\n- [.push_rev()](PushCompatAttrs::push_rev)\n- [.push_type()](PushCompatAttrs::push_type)\n\nReply attributes:\n- [.get_name()](IterableCompatAttrs::get_name)\n- [.get_rev()](IterableCompatAttrs::get_rev)\n- [.get_type()](IterableCompatAttrs::get_type)\n\n"]
 #[derive(Debug)]
 pub struct OpGetcompatDo<'r> {
     request: Request<'r>,
@@ -18916,49 +19391,49 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Start a batch of operations\nRequest attributes:\n- [.push_genid()](PushBatchAttrs::push_genid)\n\nReply attributes:\n- [.get_genid()](IterableBatchAttrs::get_genid)\n"]
+    #[doc = "Start a batch of operations\n\nRequest attributes:\n- [.push_genid()](PushBatchAttrs::push_genid)\n\nReply attributes:\n- [.get_genid()](IterableBatchAttrs::get_genid)\n\n"]
     pub fn op_batch_begin_do(self, header: &Nfgenmsg) -> OpBatchBeginDo<'buf> {
         let mut res = OpBatchBeginDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-batch-begin-do", OpBatchBeginDo::lookup);
         res
     }
-    #[doc = "Finish a batch of operations\nRequest attributes:\n- [.push_genid()](PushBatchAttrs::push_genid)\n"]
+    #[doc = "Finish a batch of operations\n\nRequest attributes:\n- [.push_genid()](PushBatchAttrs::push_genid)\n\n"]
     pub fn op_batch_end_do(self, header: &Nfgenmsg) -> OpBatchEndDo<'buf> {
         let mut res = OpBatchEndDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-batch-end-do", OpBatchEndDo::lookup);
         res
     }
-    #[doc = "Create a new table\\.\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_flags()](PushTableAttrs::push_flags)\n- [.push_userdata()](PushTableAttrs::push_userdata)\n"]
+    #[doc = "Create a new table.\n\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_flags()](PushTableAttrs::push_flags)\n- [.push_userdata()](PushTableAttrs::push_userdata)\n\n"]
     pub fn op_newtable_do(self, header: &Nfgenmsg) -> OpNewtableDo<'buf> {
         let mut res = OpNewtableDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newtable-do", OpNewtableDo::lookup);
         res
     }
-    #[doc = "Get / dump tables\\.\n\nReply attributes:\n- [.get_name()](IterableTableAttrs::get_name)\n- [.get_flags()](IterableTableAttrs::get_flags)\n- [.get_use()](IterableTableAttrs::get_use)\n- [.get_handle()](IterableTableAttrs::get_handle)\n- [.get_userdata()](IterableTableAttrs::get_userdata)\n- [.get_owner()](IterableTableAttrs::get_owner)\n"]
+    #[doc = "Get / dump tables.\n\nReply attributes:\n- [.get_name()](IterableTableAttrs::get_name)\n- [.get_flags()](IterableTableAttrs::get_flags)\n- [.get_use()](IterableTableAttrs::get_use)\n- [.get_handle()](IterableTableAttrs::get_handle)\n- [.get_userdata()](IterableTableAttrs::get_userdata)\n- [.get_owner()](IterableTableAttrs::get_owner)\n\n"]
     pub fn op_gettable_dump(self, header: &Nfgenmsg) -> OpGettableDump<'buf> {
         let mut res = OpGettableDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-gettable-dump", OpGettableDump::lookup);
         res
     }
-    #[doc = "Get / dump tables\\.\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n\nReply attributes:\n- [.get_name()](IterableTableAttrs::get_name)\n- [.get_flags()](IterableTableAttrs::get_flags)\n- [.get_use()](IterableTableAttrs::get_use)\n- [.get_handle()](IterableTableAttrs::get_handle)\n- [.get_userdata()](IterableTableAttrs::get_userdata)\n- [.get_owner()](IterableTableAttrs::get_owner)\n"]
+    #[doc = "Get / dump tables.\n\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n\nReply attributes:\n- [.get_name()](IterableTableAttrs::get_name)\n- [.get_flags()](IterableTableAttrs::get_flags)\n- [.get_use()](IterableTableAttrs::get_use)\n- [.get_handle()](IterableTableAttrs::get_handle)\n- [.get_userdata()](IterableTableAttrs::get_userdata)\n- [.get_owner()](IterableTableAttrs::get_owner)\n\n"]
     pub fn op_gettable_do(self, header: &Nfgenmsg) -> OpGettableDo<'buf> {
         let mut res = OpGettableDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-gettable-do", OpGettableDo::lookup);
         res
     }
-    #[doc = "Delete an existing table\\.\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_handle()](PushTableAttrs::push_handle)\n"]
+    #[doc = "Delete an existing table.\n\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_handle()](PushTableAttrs::push_handle)\n\n"]
     pub fn op_deltable_do(self, header: &Nfgenmsg) -> OpDeltableDo<'buf> {
         let mut res = OpDeltableDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-deltable-do", OpDeltableDo::lookup);
         res
     }
-    #[doc = "Delete an existing table with destroy semantics (ignoring ENOENT\nerrors)\\.\n\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_handle()](PushTableAttrs::push_handle)\n"]
+    #[doc = "Delete an existing table with destroy semantics (ignoring ENOENT\nerrors).\n\nRequest attributes:\n- [.push_name()](PushTableAttrs::push_name)\n- [.push_handle()](PushTableAttrs::push_handle)\n\n"]
     pub fn op_destroytable_do(self, header: &Nfgenmsg) -> OpDestroytableDo<'buf> {
         let mut res = OpDestroytableDo::new(self, header);
         res.request.do_writeback(
@@ -18968,35 +19443,35 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Create a new chain\\.\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n- [.push_policy()](PushChainAttrs::push_policy)\n- [.push_type()](PushChainAttrs::push_type)\n- [.nested_counters()](PushChainAttrs::nested_counters)\n- [.push_flags()](PushChainAttrs::push_flags)\n- [.push_userdata()](PushChainAttrs::push_userdata)\n"]
+    #[doc = "Create a new chain.\n\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n- [.push_policy()](PushChainAttrs::push_policy)\n- [.push_type()](PushChainAttrs::push_type)\n- [.nested_counters()](PushChainAttrs::nested_counters)\n- [.push_flags()](PushChainAttrs::push_flags)\n- [.push_userdata()](PushChainAttrs::push_userdata)\n\n"]
     pub fn op_newchain_do(self, header: &Nfgenmsg) -> OpNewchainDo<'buf> {
         let mut res = OpNewchainDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newchain-do", OpNewchainDo::lookup);
         res
     }
-    #[doc = "Get / dump chains\\.\n\nReply attributes:\n- [.get_table()](IterableChainAttrs::get_table)\n- [.get_handle()](IterableChainAttrs::get_handle)\n- [.get_name()](IterableChainAttrs::get_name)\n- [.get_hook()](IterableChainAttrs::get_hook)\n- [.get_policy()](IterableChainAttrs::get_policy)\n- [.get_use()](IterableChainAttrs::get_use)\n- [.get_type()](IterableChainAttrs::get_type)\n- [.get_counters()](IterableChainAttrs::get_counters)\n- [.get_flags()](IterableChainAttrs::get_flags)\n- [.get_id()](IterableChainAttrs::get_id)\n- [.get_userdata()](IterableChainAttrs::get_userdata)\n"]
+    #[doc = "Get / dump chains.\n\nReply attributes:\n- [.get_table()](IterableChainAttrs::get_table)\n- [.get_handle()](IterableChainAttrs::get_handle)\n- [.get_name()](IterableChainAttrs::get_name)\n- [.get_hook()](IterableChainAttrs::get_hook)\n- [.get_policy()](IterableChainAttrs::get_policy)\n- [.get_use()](IterableChainAttrs::get_use)\n- [.get_type()](IterableChainAttrs::get_type)\n- [.get_counters()](IterableChainAttrs::get_counters)\n- [.get_flags()](IterableChainAttrs::get_flags)\n- [.get_id()](IterableChainAttrs::get_id)\n- [.get_userdata()](IterableChainAttrs::get_userdata)\n\n"]
     pub fn op_getchain_dump(self, header: &Nfgenmsg) -> OpGetchainDump<'buf> {
         let mut res = OpGetchainDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getchain-dump", OpGetchainDump::lookup);
         res
     }
-    #[doc = "Get / dump chains\\.\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_name()](PushChainAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableChainAttrs::get_table)\n- [.get_handle()](IterableChainAttrs::get_handle)\n- [.get_name()](IterableChainAttrs::get_name)\n- [.get_hook()](IterableChainAttrs::get_hook)\n- [.get_policy()](IterableChainAttrs::get_policy)\n- [.get_use()](IterableChainAttrs::get_use)\n- [.get_type()](IterableChainAttrs::get_type)\n- [.get_counters()](IterableChainAttrs::get_counters)\n- [.get_flags()](IterableChainAttrs::get_flags)\n- [.get_id()](IterableChainAttrs::get_id)\n- [.get_userdata()](IterableChainAttrs::get_userdata)\n"]
+    #[doc = "Get / dump chains.\n\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_name()](PushChainAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableChainAttrs::get_table)\n- [.get_handle()](IterableChainAttrs::get_handle)\n- [.get_name()](IterableChainAttrs::get_name)\n- [.get_hook()](IterableChainAttrs::get_hook)\n- [.get_policy()](IterableChainAttrs::get_policy)\n- [.get_use()](IterableChainAttrs::get_use)\n- [.get_type()](IterableChainAttrs::get_type)\n- [.get_counters()](IterableChainAttrs::get_counters)\n- [.get_flags()](IterableChainAttrs::get_flags)\n- [.get_id()](IterableChainAttrs::get_id)\n- [.get_userdata()](IterableChainAttrs::get_userdata)\n\n"]
     pub fn op_getchain_do(self, header: &Nfgenmsg) -> OpGetchainDo<'buf> {
         let mut res = OpGetchainDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getchain-do", OpGetchainDo::lookup);
         res
     }
-    #[doc = "Delete an existing chain\\.\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n"]
+    #[doc = "Delete an existing chain.\n\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n\n"]
     pub fn op_delchain_do(self, header: &Nfgenmsg) -> OpDelchainDo<'buf> {
         let mut res = OpDelchainDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-delchain-do", OpDelchainDo::lookup);
         res
     }
-    #[doc = "Delete an existing chain with destroy semantics (ignoring ENOENT\nerrors)\\.\n\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n"]
+    #[doc = "Delete an existing chain with destroy semantics (ignoring ENOENT\nerrors).\n\nRequest attributes:\n- [.push_table()](PushChainAttrs::push_table)\n- [.push_handle()](PushChainAttrs::push_handle)\n- [.push_name()](PushChainAttrs::push_name)\n- [.nested_hook()](PushChainAttrs::nested_hook)\n\n"]
     pub fn op_destroychain_do(self, header: &Nfgenmsg) -> OpDestroychainDo<'buf> {
         let mut res = OpDestroychainDo::new(self, header);
         res.request.do_writeback(
@@ -19006,28 +19481,28 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Create a new rule\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.nested_expressions()](PushRuleAttrs::nested_expressions)\n- [.nested_compat()](PushRuleAttrs::nested_compat)\n- [.push_position()](PushRuleAttrs::push_position)\n- [.push_userdata()](PushRuleAttrs::push_userdata)\n- [.push_position_id()](PushRuleAttrs::push_position_id)\n- [.push_chain_id()](PushRuleAttrs::push_chain_id)\n"]
+    #[doc = "Create a new rule.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.nested_expressions()](PushRuleAttrs::nested_expressions)\n- [.nested_compat()](PushRuleAttrs::nested_compat)\n- [.push_position()](PushRuleAttrs::push_position)\n- [.push_userdata()](PushRuleAttrs::push_userdata)\n- [.push_position_id()](PushRuleAttrs::push_position_id)\n- [.push_chain_id()](PushRuleAttrs::push_chain_id)\n\n"]
     pub fn op_newrule_do(self, header: &Nfgenmsg) -> OpNewruleDo<'buf> {
         let mut res = OpNewruleDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newrule-do", OpNewruleDo::lookup);
         res
     }
-    #[doc = "Get / dump rules\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n"]
+    #[doc = "Get / dump rules.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n\n"]
     pub fn op_getrule_dump(self, header: &Nfgenmsg) -> OpGetruleDump<'buf> {
         let mut res = OpGetruleDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getrule-dump", OpGetruleDump::lookup);
         res
     }
-    #[doc = "Get / dump rules\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n"]
+    #[doc = "Get / dump rules.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n\n"]
     pub fn op_getrule_do(self, header: &Nfgenmsg) -> OpGetruleDo<'buf> {
         let mut res = OpGetruleDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getrule-do", OpGetruleDo::lookup);
         res
     }
-    #[doc = "Get / dump rules and reset stateful expressions\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n"]
+    #[doc = "Get / dump rules and reset stateful expressions.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n\n"]
     pub fn op_getrule_reset_dump(self, header: &Nfgenmsg) -> OpGetruleResetDump<'buf> {
         let mut res = OpGetruleResetDump::new(self, header);
         res.request.do_writeback(
@@ -19037,7 +19512,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get / dump rules and reset stateful expressions\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n"]
+    #[doc = "Get / dump rules and reset stateful expressions.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n\nReply attributes:\n- [.get_table()](IterableRuleAttrs::get_table)\n- [.get_chain()](IterableRuleAttrs::get_chain)\n- [.get_handle()](IterableRuleAttrs::get_handle)\n- [.get_expressions()](IterableRuleAttrs::get_expressions)\n- [.get_position()](IterableRuleAttrs::get_position)\n- [.get_userdata()](IterableRuleAttrs::get_userdata)\n\n"]
     pub fn op_getrule_reset_do(self, header: &Nfgenmsg) -> OpGetruleResetDo<'buf> {
         let mut res = OpGetruleResetDo::new(self, header);
         res.request.do_writeback(
@@ -19047,63 +19522,63 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Delete an existing rule\\.\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.push_id()](PushRuleAttrs::push_id)\n"]
+    #[doc = "Delete an existing rule.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.push_id()](PushRuleAttrs::push_id)\n\n"]
     pub fn op_delrule_do(self, header: &Nfgenmsg) -> OpDelruleDo<'buf> {
         let mut res = OpDelruleDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-delrule-do", OpDelruleDo::lookup);
         res
     }
-    #[doc = "Delete an existing rule with destroy semantics (ignoring ENOENT errors)\\.\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.push_id()](PushRuleAttrs::push_id)\n"]
+    #[doc = "Delete an existing rule with destroy semantics (ignoring ENOENT errors).\n\nRequest attributes:\n- [.push_table()](PushRuleAttrs::push_table)\n- [.push_chain()](PushRuleAttrs::push_chain)\n- [.push_handle()](PushRuleAttrs::push_handle)\n- [.push_id()](PushRuleAttrs::push_id)\n\n"]
     pub fn op_destroyrule_do(self, header: &Nfgenmsg) -> OpDestroyruleDo<'buf> {
         let mut res = OpDestroyruleDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-destroyrule-do", OpDestroyruleDo::lookup);
         res
     }
-    #[doc = "Create a new set\\.\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_flags()](PushSetAttrs::push_flags)\n- [.push_key_type()](PushSetAttrs::push_key_type)\n- [.push_key_len()](PushSetAttrs::push_key_len)\n- [.push_data_type()](PushSetAttrs::push_data_type)\n- [.push_data_len()](PushSetAttrs::push_data_len)\n- [.push_policy()](PushSetAttrs::push_policy)\n- [.nested_desc()](PushSetAttrs::nested_desc)\n- [.push_id()](PushSetAttrs::push_id)\n- [.push_timeout()](PushSetAttrs::push_timeout)\n- [.push_gc_interval()](PushSetAttrs::push_gc_interval)\n- [.push_userdata()](PushSetAttrs::push_userdata)\n- [.push_obj_type()](PushSetAttrs::push_obj_type)\n"]
+    #[doc = "Create a new set.\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_flags()](PushSetAttrs::push_flags)\n- [.push_key_type()](PushSetAttrs::push_key_type)\n- [.push_key_len()](PushSetAttrs::push_key_len)\n- [.push_data_type()](PushSetAttrs::push_data_type)\n- [.push_data_len()](PushSetAttrs::push_data_len)\n- [.push_policy()](PushSetAttrs::push_policy)\n- [.nested_desc()](PushSetAttrs::nested_desc)\n- [.push_id()](PushSetAttrs::push_id)\n- [.push_timeout()](PushSetAttrs::push_timeout)\n- [.push_gc_interval()](PushSetAttrs::push_gc_interval)\n- [.push_userdata()](PushSetAttrs::push_userdata)\n- [.push_obj_type()](PushSetAttrs::push_obj_type)\n\n"]
     pub fn op_newset_do(self, header: &Nfgenmsg) -> OpNewsetDo<'buf> {
         let mut res = OpNewsetDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newset-do", OpNewsetDo::lookup);
         res
     }
-    #[doc = "Get / dump sets\\.\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n\nReply attributes:\n- [.get_table()](IterableSetAttrs::get_table)\n- [.get_name()](IterableSetAttrs::get_name)\n- [.get_flags()](IterableSetAttrs::get_flags)\n- [.get_key_type()](IterableSetAttrs::get_key_type)\n- [.get_key_len()](IterableSetAttrs::get_key_len)\n- [.get_data_type()](IterableSetAttrs::get_data_type)\n- [.get_data_len()](IterableSetAttrs::get_data_len)\n- [.get_policy()](IterableSetAttrs::get_policy)\n- [.get_desc()](IterableSetAttrs::get_desc)\n- [.get_gc_interval()](IterableSetAttrs::get_gc_interval)\n- [.get_userdata()](IterableSetAttrs::get_userdata)\n- [.get_obj_type()](IterableSetAttrs::get_obj_type)\n- [.get_handle()](IterableSetAttrs::get_handle)\n- [.get_expr()](IterableSetAttrs::get_expr)\n- [.get_expressions()](IterableSetAttrs::get_expressions)\n"]
+    #[doc = "Get / dump sets.\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n\nReply attributes:\n- [.get_table()](IterableSetAttrs::get_table)\n- [.get_name()](IterableSetAttrs::get_name)\n- [.get_flags()](IterableSetAttrs::get_flags)\n- [.get_key_type()](IterableSetAttrs::get_key_type)\n- [.get_key_len()](IterableSetAttrs::get_key_len)\n- [.get_data_type()](IterableSetAttrs::get_data_type)\n- [.get_data_len()](IterableSetAttrs::get_data_len)\n- [.get_policy()](IterableSetAttrs::get_policy)\n- [.get_desc()](IterableSetAttrs::get_desc)\n- [.get_gc_interval()](IterableSetAttrs::get_gc_interval)\n- [.get_userdata()](IterableSetAttrs::get_userdata)\n- [.get_obj_type()](IterableSetAttrs::get_obj_type)\n- [.get_handle()](IterableSetAttrs::get_handle)\n- [.get_expr()](IterableSetAttrs::get_expr)\n- [.get_expressions()](IterableSetAttrs::get_expressions)\n\n"]
     pub fn op_getset_dump(self, header: &Nfgenmsg) -> OpGetsetDump<'buf> {
         let mut res = OpGetsetDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getset-dump", OpGetsetDump::lookup);
         res
     }
-    #[doc = "Get / dump sets\\.\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableSetAttrs::get_table)\n- [.get_name()](IterableSetAttrs::get_name)\n- [.get_flags()](IterableSetAttrs::get_flags)\n- [.get_key_type()](IterableSetAttrs::get_key_type)\n- [.get_key_len()](IterableSetAttrs::get_key_len)\n- [.get_data_type()](IterableSetAttrs::get_data_type)\n- [.get_data_len()](IterableSetAttrs::get_data_len)\n- [.get_policy()](IterableSetAttrs::get_policy)\n- [.get_desc()](IterableSetAttrs::get_desc)\n- [.get_gc_interval()](IterableSetAttrs::get_gc_interval)\n- [.get_userdata()](IterableSetAttrs::get_userdata)\n- [.get_obj_type()](IterableSetAttrs::get_obj_type)\n- [.get_handle()](IterableSetAttrs::get_handle)\n- [.get_expr()](IterableSetAttrs::get_expr)\n- [.get_expressions()](IterableSetAttrs::get_expressions)\n"]
+    #[doc = "Get / dump sets.\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableSetAttrs::get_table)\n- [.get_name()](IterableSetAttrs::get_name)\n- [.get_flags()](IterableSetAttrs::get_flags)\n- [.get_key_type()](IterableSetAttrs::get_key_type)\n- [.get_key_len()](IterableSetAttrs::get_key_len)\n- [.get_data_type()](IterableSetAttrs::get_data_type)\n- [.get_data_len()](IterableSetAttrs::get_data_len)\n- [.get_policy()](IterableSetAttrs::get_policy)\n- [.get_desc()](IterableSetAttrs::get_desc)\n- [.get_gc_interval()](IterableSetAttrs::get_gc_interval)\n- [.get_userdata()](IterableSetAttrs::get_userdata)\n- [.get_obj_type()](IterableSetAttrs::get_obj_type)\n- [.get_handle()](IterableSetAttrs::get_handle)\n- [.get_expr()](IterableSetAttrs::get_expr)\n- [.get_expressions()](IterableSetAttrs::get_expressions)\n\n"]
     pub fn op_getset_do(self, header: &Nfgenmsg) -> OpGetsetDo<'buf> {
         let mut res = OpGetsetDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getset-do", OpGetsetDo::lookup);
         res
     }
-    #[doc = "Delete an existing set\\.\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_handle()](PushSetAttrs::push_handle)\n"]
+    #[doc = "Delete an existing set.\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_handle()](PushSetAttrs::push_handle)\n\n"]
     pub fn op_delset_do(self, header: &Nfgenmsg) -> OpDelsetDo<'buf> {
         let mut res = OpDelsetDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-delset-do", OpDelsetDo::lookup);
         res
     }
-    #[doc = "Delete an existing set with destroy semantics (ignoring ENOENT errors)\\.\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_handle()](PushSetAttrs::push_handle)\n"]
+    #[doc = "Delete an existing set with destroy semantics (ignoring ENOENT errors).\n\nRequest attributes:\n- [.push_table()](PushSetAttrs::push_table)\n- [.push_name()](PushSetAttrs::push_name)\n- [.push_handle()](PushSetAttrs::push_handle)\n\n"]
     pub fn op_destroyset_do(self, header: &Nfgenmsg) -> OpDestroysetDo<'buf> {
         let mut res = OpDestroysetDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-destroyset-do", OpDestroysetDo::lookup);
         res
     }
-    #[doc = "Create a new set element\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n- [.push_set_id()](PushSetelemListAttrs::push_set_id)\n"]
+    #[doc = "Create a new set element.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n- [.push_set_id()](PushSetelemListAttrs::push_set_id)\n\n"]
     pub fn op_newsetelem_do(self, header: &Nfgenmsg) -> OpNewsetelemDo<'buf> {
         let mut res = OpNewsetelemDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newsetelem-do", OpNewsetelemDo::lookup);
         res
     }
-    #[doc = "Get / dump set elements\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n"]
+    #[doc = "Get / dump set elements.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n\n"]
     pub fn op_getsetelem_dump(self, header: &Nfgenmsg) -> OpGetsetelemDump<'buf> {
         let mut res = OpGetsetelemDump::new(self, header);
         res.request.do_writeback(
@@ -19113,14 +19588,14 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get / dump set elements\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\nReply attributes:\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n"]
+    #[doc = "Get / dump set elements.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\nReply attributes:\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n\n"]
     pub fn op_getsetelem_do(self, header: &Nfgenmsg) -> OpGetsetelemDo<'buf> {
         let mut res = OpGetsetelemDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getsetelem-do", OpGetsetelemDo::lookup);
         res
     }
-    #[doc = "Get / dump set elements and reset stateful expressions\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n"]
+    #[doc = "Get / dump set elements and reset stateful expressions.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n\n"]
     pub fn op_getsetelem_reset_dump(self, header: &Nfgenmsg) -> OpGetsetelemResetDump<'buf> {
         let mut res = OpGetsetelemResetDump::new(self, header);
         res.request.do_writeback(
@@ -19130,7 +19605,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get / dump set elements and reset stateful expressions\\.\nRequest attributes:\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n"]
+    #[doc = "Get / dump set elements and reset stateful expressions.\n\nRequest attributes:\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\nReply attributes:\n- [.get_table()](IterableSetelemListAttrs::get_table)\n- [.get_set()](IterableSetelemListAttrs::get_set)\n- [.get_elements()](IterableSetelemListAttrs::get_elements)\n\n"]
     pub fn op_getsetelem_reset_do(self, header: &Nfgenmsg) -> OpGetsetelemResetDo<'buf> {
         let mut res = OpGetsetelemResetDo::new(self, header);
         res.request.do_writeback(
@@ -19140,14 +19615,14 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Delete an existing set element\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n"]
+    #[doc = "Delete an existing set element.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\n"]
     pub fn op_delsetelem_do(self, header: &Nfgenmsg) -> OpDelsetelemDo<'buf> {
         let mut res = OpDelsetelemDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-delsetelem-do", OpDelsetelemDo::lookup);
         res
     }
-    #[doc = "Delete an existing set element with destroy semantics\\.\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n"]
+    #[doc = "Delete an existing set element with destroy semantics.\n\nRequest attributes:\n- [.push_table()](PushSetelemListAttrs::push_table)\n- [.push_set()](PushSetelemListAttrs::push_set)\n- [.nested_elements()](PushSetelemListAttrs::nested_elements)\n\n"]
     pub fn op_destroysetelem_do(self, header: &Nfgenmsg) -> OpDestroysetelemDo<'buf> {
         let mut res = OpDestroysetelemDo::new(self, header);
         res.request.do_writeback(
@@ -19157,56 +19632,56 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get / dump rule\\-set generation\\.\n\nReply attributes:\n- [.get_id()](IterableGenAttrs::get_id)\n- [.get_proc_pid()](IterableGenAttrs::get_proc_pid)\n- [.get_proc_name()](IterableGenAttrs::get_proc_name)\n"]
+    #[doc = "Get / dump rule-set generation.\n\nReply attributes:\n- [.get_id()](IterableGenAttrs::get_id)\n- [.get_proc_pid()](IterableGenAttrs::get_proc_pid)\n- [.get_proc_name()](IterableGenAttrs::get_proc_name)\n\n"]
     pub fn op_getgen_dump(self, header: &Nfgenmsg) -> OpGetgenDump<'buf> {
         let mut res = OpGetgenDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getgen-dump", OpGetgenDump::lookup);
         res
     }
-    #[doc = "Get / dump rule\\-set generation\\.\n\nReply attributes:\n- [.get_id()](IterableGenAttrs::get_id)\n- [.get_proc_pid()](IterableGenAttrs::get_proc_pid)\n- [.get_proc_name()](IterableGenAttrs::get_proc_name)\n"]
+    #[doc = "Get / dump rule-set generation.\n\nReply attributes:\n- [.get_id()](IterableGenAttrs::get_id)\n- [.get_proc_pid()](IterableGenAttrs::get_proc_pid)\n- [.get_proc_name()](IterableGenAttrs::get_proc_name)\n\n"]
     pub fn op_getgen_do(self, header: &Nfgenmsg) -> OpGetgenDo<'buf> {
         let mut res = OpGetgenDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getgen-do", OpGetgenDo::lookup);
         res
     }
-    #[doc = "Create a new stateful object\\.\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.nested_data_counter()](PushObjAttrs::nested_data_counter)\n- [.nested_data_quota()](PushObjAttrs::nested_data_quota)\n- [.push_userdata()](PushObjAttrs::push_userdata)\n"]
+    #[doc = "Create a new stateful object.\n\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.nested_data_counter()](PushObjAttrs::nested_data_counter)\n- [.nested_data_quota()](PushObjAttrs::nested_data_quota)\n- [.push_userdata()](PushObjAttrs::push_userdata)\n\n"]
     pub fn op_newobj_do(self, header: &Nfgenmsg) -> OpNewobjDo<'buf> {
         let mut res = OpNewobjDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newobj-do", OpNewobjDo::lookup);
         res
     }
-    #[doc = "Get / dump stateful objects\\.\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_type()](PushObjAttrs::push_type)\n\nReply attributes:\n- [.get_table()](IterableObjAttrs::get_table)\n- [.get_name()](IterableObjAttrs::get_name)\n- [.get_type()](IterableObjAttrs::get_type)\n- [.get_data()](IterableObjAttrs::get_data)\n- [.get_use()](IterableObjAttrs::get_use)\n- [.get_handle()](IterableObjAttrs::get_handle)\n- [.get_userdata()](IterableObjAttrs::get_userdata)\n"]
+    #[doc = "Get / dump stateful objects.\n\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_type()](PushObjAttrs::push_type)\n\nReply attributes:\n- [.get_table()](IterableObjAttrs::get_table)\n- [.get_name()](IterableObjAttrs::get_name)\n- [.get_type()](IterableObjAttrs::get_type)\n- [.get_data()](IterableObjAttrs::get_data)\n- [.get_use()](IterableObjAttrs::get_use)\n- [.get_handle()](IterableObjAttrs::get_handle)\n- [.get_userdata()](IterableObjAttrs::get_userdata)\n\n"]
     pub fn op_getobj_dump(self, header: &Nfgenmsg) -> OpGetobjDump<'buf> {
         let mut res = OpGetobjDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getobj-dump", OpGetobjDump::lookup);
         res
     }
-    #[doc = "Get / dump stateful objects\\.\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n\nReply attributes:\n- [.get_table()](IterableObjAttrs::get_table)\n- [.get_name()](IterableObjAttrs::get_name)\n- [.get_type()](IterableObjAttrs::get_type)\n- [.get_data()](IterableObjAttrs::get_data)\n- [.get_use()](IterableObjAttrs::get_use)\n- [.get_handle()](IterableObjAttrs::get_handle)\n- [.get_userdata()](IterableObjAttrs::get_userdata)\n"]
+    #[doc = "Get / dump stateful objects.\n\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n\nReply attributes:\n- [.get_table()](IterableObjAttrs::get_table)\n- [.get_name()](IterableObjAttrs::get_name)\n- [.get_type()](IterableObjAttrs::get_type)\n- [.get_data()](IterableObjAttrs::get_data)\n- [.get_use()](IterableObjAttrs::get_use)\n- [.get_handle()](IterableObjAttrs::get_handle)\n- [.get_userdata()](IterableObjAttrs::get_userdata)\n\n"]
     pub fn op_getobj_do(self, header: &Nfgenmsg) -> OpGetobjDo<'buf> {
         let mut res = OpGetobjDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getobj-do", OpGetobjDo::lookup);
         res
     }
-    #[doc = "Delete an existing stateful object\\.\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.push_handle()](PushObjAttrs::push_handle)\n"]
+    #[doc = "Delete an existing stateful object.\n\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.push_handle()](PushObjAttrs::push_handle)\n\n"]
     pub fn op_delobj_do(self, header: &Nfgenmsg) -> OpDelobjDo<'buf> {
         let mut res = OpDelobjDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-delobj-do", OpDelobjDo::lookup);
         res
     }
-    #[doc = "Delete an existing stateful object with destroy semantics\\.\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.push_handle()](PushObjAttrs::push_handle)\n"]
+    #[doc = "Delete an existing stateful object with destroy semantics.\n\nRequest attributes:\n- [.push_table()](PushObjAttrs::push_table)\n- [.push_name()](PushObjAttrs::push_name)\n- [.push_type()](PushObjAttrs::push_type)\n- [.push_handle()](PushObjAttrs::push_handle)\n\n"]
     pub fn op_destroyobj_do(self, header: &Nfgenmsg) -> OpDestroyobjDo<'buf> {
         let mut res = OpDestroyobjDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-destroyobj-do", OpDestroyobjDo::lookup);
         res
     }
-    #[doc = "Create a new flow table\\.\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_flags()](PushFlowtableAttrs::push_flags)\n"]
+    #[doc = "Create a new flow table.\n\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_flags()](PushFlowtableAttrs::push_flags)\n\n"]
     pub fn op_newflowtable_do(self, header: &Nfgenmsg) -> OpNewflowtableDo<'buf> {
         let mut res = OpNewflowtableDo::new(self, header);
         res.request.do_writeback(
@@ -19216,7 +19691,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get / dump flow tables\\.\n\nReply attributes:\n- [.get_table()](IterableFlowtableAttrs::get_table)\n- [.get_name()](IterableFlowtableAttrs::get_name)\n- [.get_hook()](IterableFlowtableAttrs::get_hook)\n- [.get_use()](IterableFlowtableAttrs::get_use)\n- [.get_handle()](IterableFlowtableAttrs::get_handle)\n- [.get_flags()](IterableFlowtableAttrs::get_flags)\n"]
+    #[doc = "Get / dump flow tables.\n\nReply attributes:\n- [.get_table()](IterableFlowtableAttrs::get_table)\n- [.get_name()](IterableFlowtableAttrs::get_name)\n- [.get_hook()](IterableFlowtableAttrs::get_hook)\n- [.get_use()](IterableFlowtableAttrs::get_use)\n- [.get_handle()](IterableFlowtableAttrs::get_handle)\n- [.get_flags()](IterableFlowtableAttrs::get_flags)\n\n"]
     pub fn op_getflowtable_dump(self, header: &Nfgenmsg) -> OpGetflowtableDump<'buf> {
         let mut res = OpGetflowtableDump::new(self, header);
         res.request.do_writeback(
@@ -19226,7 +19701,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get / dump flow tables\\.\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableFlowtableAttrs::get_table)\n- [.get_name()](IterableFlowtableAttrs::get_name)\n- [.get_hook()](IterableFlowtableAttrs::get_hook)\n- [.get_use()](IterableFlowtableAttrs::get_use)\n- [.get_handle()](IterableFlowtableAttrs::get_handle)\n- [.get_flags()](IterableFlowtableAttrs::get_flags)\n"]
+    #[doc = "Get / dump flow tables.\n\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n\nReply attributes:\n- [.get_table()](IterableFlowtableAttrs::get_table)\n- [.get_name()](IterableFlowtableAttrs::get_name)\n- [.get_hook()](IterableFlowtableAttrs::get_hook)\n- [.get_use()](IterableFlowtableAttrs::get_use)\n- [.get_handle()](IterableFlowtableAttrs::get_handle)\n- [.get_flags()](IterableFlowtableAttrs::get_flags)\n\n"]
     pub fn op_getflowtable_do(self, header: &Nfgenmsg) -> OpGetflowtableDo<'buf> {
         let mut res = OpGetflowtableDo::new(self, header);
         res.request.do_writeback(
@@ -19236,7 +19711,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Delete an existing flow table\\.\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_handle()](PushFlowtableAttrs::push_handle)\n"]
+    #[doc = "Delete an existing flow table.\n\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_handle()](PushFlowtableAttrs::push_handle)\n\n"]
     pub fn op_delflowtable_do(self, header: &Nfgenmsg) -> OpDelflowtableDo<'buf> {
         let mut res = OpDelflowtableDo::new(self, header);
         res.request.do_writeback(
@@ -19246,7 +19721,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Delete an existing flow table with destroy semantics\\.\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_handle()](PushFlowtableAttrs::push_handle)\n"]
+    #[doc = "Delete an existing flow table with destroy semantics.\n\nRequest attributes:\n- [.push_table()](PushFlowtableAttrs::push_table)\n- [.push_name()](PushFlowtableAttrs::push_name)\n- [.nested_hook()](PushFlowtableAttrs::nested_hook)\n- [.push_handle()](PushFlowtableAttrs::push_handle)\n\n"]
     pub fn op_destroyflowtable_do(self, header: &Nfgenmsg) -> OpDestroyflowtableDo<'buf> {
         let mut res = OpDestroyflowtableDo::new(self, header);
         res.request.do_writeback(
@@ -19256,14 +19731,14 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get / dump nft\\_compat info\n\nReply attributes:\n- [.get_name()](IterableCompatAttrs::get_name)\n- [.get_rev()](IterableCompatAttrs::get_rev)\n- [.get_type()](IterableCompatAttrs::get_type)\n"]
+    #[doc = "Get / dump nft_compat info\n\nReply attributes:\n- [.get_name()](IterableCompatAttrs::get_name)\n- [.get_rev()](IterableCompatAttrs::get_rev)\n- [.get_type()](IterableCompatAttrs::get_type)\n\n"]
     pub fn op_getcompat_dump(self, header: &Nfgenmsg) -> OpGetcompatDump<'buf> {
         let mut res = OpGetcompatDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getcompat-dump", OpGetcompatDump::lookup);
         res
     }
-    #[doc = "Get / dump nft\\_compat info\nRequest attributes:\n- [.push_name()](PushCompatAttrs::push_name)\n- [.push_rev()](PushCompatAttrs::push_rev)\n- [.push_type()](PushCompatAttrs::push_type)\n\nReply attributes:\n- [.get_name()](IterableCompatAttrs::get_name)\n- [.get_rev()](IterableCompatAttrs::get_rev)\n- [.get_type()](IterableCompatAttrs::get_type)\n"]
+    #[doc = "Get / dump nft_compat info\n\nRequest attributes:\n- [.push_name()](PushCompatAttrs::push_name)\n- [.push_rev()](PushCompatAttrs::push_rev)\n- [.push_type()](PushCompatAttrs::push_type)\n\nReply attributes:\n- [.get_name()](IterableCompatAttrs::get_name)\n- [.get_rev()](IterableCompatAttrs::get_rev)\n- [.get_type()](IterableCompatAttrs::get_type)\n\n"]
     pub fn op_getcompat_do(self, header: &Nfgenmsg) -> OpGetcompatDo<'buf> {
         let mut res = OpGetcompatDo::new(self, header);
         res.request

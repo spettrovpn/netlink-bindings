@@ -27,6 +27,7 @@ conntrack = []
 dev-energymodel = []
 devlink = []
 dpll = []
+drm-ras = []
 ethtool = []
 fou = []
 handshake = []
@@ -42,6 +43,7 @@ nlctrl = []
 ovpn = []
 ovs_datapath = []
 ovs_flow = []
+ovs_packet = []
 ovs_vport = []
 psp = []
 rt-addr = []
@@ -61,6 +63,7 @@ all-subsystems = [
   "dev-energymodel",
   "devlink",
   "dpll",
+  "drm-ras",
   "ethtool",
   "fou",
   "handshake",
@@ -76,6 +79,7 @@ all-subsystems = [
   "ovpn",
   "ovs_datapath",
   "ovs_flow",
+  "ovs_packet",
   "ovs_vport",
   "psp",
   "rt-addr",

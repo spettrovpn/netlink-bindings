@@ -1,4 +1,4 @@
-#![doc = "IP neighbour management over rtnetlink\\."]
+#![doc = "IP neighbour management over rtnetlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -550,7 +550,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Unspec(val) = attr? {
+            if let Ok(NeighbourAttrs::Unspec(val)) = attr {
                 return Ok(val);
             }
         }
@@ -565,7 +565,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Dst(val) = attr? {
+            if let Ok(NeighbourAttrs::Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -580,7 +580,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Lladdr(val) = attr? {
+            if let Ok(NeighbourAttrs::Lladdr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -595,7 +595,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Cacheinfo(val) = attr? {
+            if let Ok(NeighbourAttrs::Cacheinfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -610,7 +610,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Probes(val) = attr? {
+            if let Ok(NeighbourAttrs::Probes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -625,7 +625,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Vlan(val) = attr? {
+            if let Ok(NeighbourAttrs::Vlan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -640,7 +640,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Port(val) = attr? {
+            if let Ok(NeighbourAttrs::Port(val)) = attr {
                 return Ok(val);
             }
         }
@@ -655,7 +655,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Vni(val) = attr? {
+            if let Ok(NeighbourAttrs::Vni(val)) = attr {
                 return Ok(val);
             }
         }
@@ -670,7 +670,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Ifindex(val) = attr? {
+            if let Ok(NeighbourAttrs::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -685,7 +685,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Master(val) = attr? {
+            if let Ok(NeighbourAttrs::Master(val)) = attr {
                 return Ok(val);
             }
         }
@@ -700,7 +700,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::LinkNetnsid(val) = attr? {
+            if let Ok(NeighbourAttrs::LinkNetnsid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -715,7 +715,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::SrcVni(val) = attr? {
+            if let Ok(NeighbourAttrs::SrcVni(val)) = attr {
                 return Ok(val);
             }
         }
@@ -730,7 +730,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::Protocol(val) = attr? {
+            if let Ok(NeighbourAttrs::Protocol(val)) = attr {
                 return Ok(val);
             }
         }
@@ -745,7 +745,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::NhId(val) = attr? {
+            if let Ok(NeighbourAttrs::NhId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -760,7 +760,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::FdbExtAttrs(val) = attr? {
+            if let Ok(NeighbourAttrs::FdbExtAttrs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -776,7 +776,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::FlagsExt(val) = attr? {
+            if let Ok(NeighbourAttrs::FlagsExt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -791,7 +791,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::NdmStateMask(val) = attr? {
+            if let Ok(NeighbourAttrs::NdmStateMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -806,7 +806,7 @@ impl<'a> IterableNeighbourAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NeighbourAttrs::NdmFlagsMask(val) = attr? {
+            if let Ok(NeighbourAttrs::NdmFlagsMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -868,14 +868,16 @@ impl<'a> IterableNeighbourAttrs<'a> {
 impl<'a> Iterator for IterableNeighbourAttrs<'a> {
     type Item = Result<NeighbourAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1181,7 +1183,7 @@ impl<'a> IterableNdtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtAttrs::Name(val) = attr? {
+            if let Ok(NdtAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1196,7 +1198,7 @@ impl<'a> IterableNdtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtAttrs::Thresh1(val) = attr? {
+            if let Ok(NdtAttrs::Thresh1(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1211,7 +1213,7 @@ impl<'a> IterableNdtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtAttrs::Thresh2(val) = attr? {
+            if let Ok(NdtAttrs::Thresh2(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1226,7 +1228,7 @@ impl<'a> IterableNdtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtAttrs::Thresh3(val) = attr? {
+            if let Ok(NdtAttrs::Thresh3(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1241,7 +1243,7 @@ impl<'a> IterableNdtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtAttrs::Config(val) = attr? {
+            if let Ok(NdtAttrs::Config(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1256,7 +1258,7 @@ impl<'a> IterableNdtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtAttrs::Parms(val) = attr? {
+            if let Ok(NdtAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1271,7 +1273,7 @@ impl<'a> IterableNdtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtAttrs::Stats(val) = attr? {
+            if let Ok(NdtAttrs::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1286,7 +1288,7 @@ impl<'a> IterableNdtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtAttrs::GcInterval(val) = attr? {
+            if let Ok(NdtAttrs::GcInterval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1301,7 +1303,7 @@ impl<'a> IterableNdtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtAttrs::Pad(val) = attr? {
+            if let Ok(NdtAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1354,14 +1356,16 @@ impl<'a> IterableNdtAttrs<'a> {
 impl<'a> Iterator for IterableNdtAttrs<'a> {
     type Item = Result<NdtAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1567,7 +1571,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::Ifindex(val) = attr? {
+            if let Ok(NdtpaAttrs::Ifindex(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1582,7 +1586,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::Refcnt(val) = attr? {
+            if let Ok(NdtpaAttrs::Refcnt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1597,7 +1601,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::ReachableTime(val) = attr? {
+            if let Ok(NdtpaAttrs::ReachableTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1612,7 +1616,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::BaseReachableTime(val) = attr? {
+            if let Ok(NdtpaAttrs::BaseReachableTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1627,7 +1631,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::RetransTime(val) = attr? {
+            if let Ok(NdtpaAttrs::RetransTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1642,7 +1646,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::GcStaletime(val) = attr? {
+            if let Ok(NdtpaAttrs::GcStaletime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1657,7 +1661,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::DelayProbeTime(val) = attr? {
+            if let Ok(NdtpaAttrs::DelayProbeTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1672,7 +1676,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::QueueLen(val) = attr? {
+            if let Ok(NdtpaAttrs::QueueLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1687,7 +1691,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::AppProbes(val) = attr? {
+            if let Ok(NdtpaAttrs::AppProbes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1702,7 +1706,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::UcastProbes(val) = attr? {
+            if let Ok(NdtpaAttrs::UcastProbes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1717,7 +1721,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::McastProbes(val) = attr? {
+            if let Ok(NdtpaAttrs::McastProbes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1732,7 +1736,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::AnycastDelay(val) = attr? {
+            if let Ok(NdtpaAttrs::AnycastDelay(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1747,7 +1751,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::ProxyDelay(val) = attr? {
+            if let Ok(NdtpaAttrs::ProxyDelay(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1762,7 +1766,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::ProxyQlen(val) = attr? {
+            if let Ok(NdtpaAttrs::ProxyQlen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1777,7 +1781,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::Locktime(val) = attr? {
+            if let Ok(NdtpaAttrs::Locktime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1792,7 +1796,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::QueueLenbytes(val) = attr? {
+            if let Ok(NdtpaAttrs::QueueLenbytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1807,7 +1811,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::McastReprobes(val) = attr? {
+            if let Ok(NdtpaAttrs::McastReprobes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1822,7 +1826,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::Pad(val) = attr? {
+            if let Ok(NdtpaAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1837,7 +1841,7 @@ impl<'a> IterableNdtpaAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NdtpaAttrs::IntervalProbeTimeMs(val) = attr? {
+            if let Ok(NdtpaAttrs::IntervalProbeTimeMs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1900,14 +1904,16 @@ impl<'a> IterableNdtpaAttrs<'a> {
 impl<'a> Iterator for IterableNdtpaAttrs<'a> {
     type Item = Result<NdtpaAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2561,7 +2567,7 @@ impl<Prev: Rec> Drop for PushNdtpaAttrs<Prev> {
         }
     }
 }
-#[doc = "Add new neighbour entry\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n- [.push_lladdr()](PushNeighbourAttrs::push_lladdr)\n- [.push_probes()](PushNeighbourAttrs::push_probes)\n- [.push_vlan()](PushNeighbourAttrs::push_vlan)\n- [.push_port()](PushNeighbourAttrs::push_port)\n- [.push_vni()](PushNeighbourAttrs::push_vni)\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n- [.push_master()](PushNeighbourAttrs::push_master)\n- [.push_protocol()](PushNeighbourAttrs::push_protocol)\n- [.push_nh_id()](PushNeighbourAttrs::push_nh_id)\n- [.push_fdb_ext_attrs()](PushNeighbourAttrs::push_fdb_ext_attrs)\n- [.push_flags_ext()](PushNeighbourAttrs::push_flags_ext)\n"]
+#[doc = "Add new neighbour entry\n\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n- [.push_lladdr()](PushNeighbourAttrs::push_lladdr)\n- [.push_probes()](PushNeighbourAttrs::push_probes)\n- [.push_vlan()](PushNeighbourAttrs::push_vlan)\n- [.push_port()](PushNeighbourAttrs::push_port)\n- [.push_vni()](PushNeighbourAttrs::push_vni)\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n- [.push_master()](PushNeighbourAttrs::push_master)\n- [.push_protocol()](PushNeighbourAttrs::push_protocol)\n- [.push_nh_id()](PushNeighbourAttrs::push_nh_id)\n- [.push_fdb_ext_attrs()](PushNeighbourAttrs::push_fdb_ext_attrs)\n- [.push_flags_ext()](PushNeighbourAttrs::push_flags_ext)\n\n"]
 #[derive(Debug)]
 pub struct OpNewneighDo<'r> {
     request: Request<'r>,
@@ -2622,7 +2628,7 @@ impl NetlinkRequest for OpNewneighDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Remove an existing neighbour entry\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n"]
+#[doc = "Remove an existing neighbour entry\n\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n\n"]
 #[derive(Debug)]
 pub struct OpDelneighDo<'r> {
     request: Request<'r>,
@@ -2683,7 +2689,7 @@ impl NetlinkRequest for OpDelneighDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get or dump neighbour entries\nRequest attributes:\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n- [.push_master()](PushNeighbourAttrs::push_master)\n\nReply attributes:\n- [.get_dst()](IterableNeighbourAttrs::get_dst)\n- [.get_lladdr()](IterableNeighbourAttrs::get_lladdr)\n- [.get_probes()](IterableNeighbourAttrs::get_probes)\n- [.get_vlan()](IterableNeighbourAttrs::get_vlan)\n- [.get_port()](IterableNeighbourAttrs::get_port)\n- [.get_vni()](IterableNeighbourAttrs::get_vni)\n- [.get_ifindex()](IterableNeighbourAttrs::get_ifindex)\n- [.get_master()](IterableNeighbourAttrs::get_master)\n- [.get_protocol()](IterableNeighbourAttrs::get_protocol)\n- [.get_nh_id()](IterableNeighbourAttrs::get_nh_id)\n- [.get_fdb_ext_attrs()](IterableNeighbourAttrs::get_fdb_ext_attrs)\n- [.get_flags_ext()](IterableNeighbourAttrs::get_flags_ext)\n"]
+#[doc = "Get or dump neighbour entries\n\nRequest attributes:\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n- [.push_master()](PushNeighbourAttrs::push_master)\n\nReply attributes:\n- [.get_dst()](IterableNeighbourAttrs::get_dst)\n- [.get_lladdr()](IterableNeighbourAttrs::get_lladdr)\n- [.get_probes()](IterableNeighbourAttrs::get_probes)\n- [.get_vlan()](IterableNeighbourAttrs::get_vlan)\n- [.get_port()](IterableNeighbourAttrs::get_port)\n- [.get_vni()](IterableNeighbourAttrs::get_vni)\n- [.get_ifindex()](IterableNeighbourAttrs::get_ifindex)\n- [.get_master()](IterableNeighbourAttrs::get_master)\n- [.get_protocol()](IterableNeighbourAttrs::get_protocol)\n- [.get_nh_id()](IterableNeighbourAttrs::get_nh_id)\n- [.get_fdb_ext_attrs()](IterableNeighbourAttrs::get_fdb_ext_attrs)\n- [.get_flags_ext()](IterableNeighbourAttrs::get_flags_ext)\n\n"]
 #[derive(Debug)]
 pub struct OpGetneighDump<'r> {
     request: Request<'r>,
@@ -2746,7 +2752,7 @@ impl NetlinkRequest for OpGetneighDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get or dump neighbour entries\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n\nReply attributes:\n- [.get_dst()](IterableNeighbourAttrs::get_dst)\n- [.get_lladdr()](IterableNeighbourAttrs::get_lladdr)\n- [.get_probes()](IterableNeighbourAttrs::get_probes)\n- [.get_vlan()](IterableNeighbourAttrs::get_vlan)\n- [.get_port()](IterableNeighbourAttrs::get_port)\n- [.get_vni()](IterableNeighbourAttrs::get_vni)\n- [.get_ifindex()](IterableNeighbourAttrs::get_ifindex)\n- [.get_master()](IterableNeighbourAttrs::get_master)\n- [.get_protocol()](IterableNeighbourAttrs::get_protocol)\n- [.get_nh_id()](IterableNeighbourAttrs::get_nh_id)\n- [.get_fdb_ext_attrs()](IterableNeighbourAttrs::get_fdb_ext_attrs)\n- [.get_flags_ext()](IterableNeighbourAttrs::get_flags_ext)\n"]
+#[doc = "Get or dump neighbour entries\n\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n\nReply attributes:\n- [.get_dst()](IterableNeighbourAttrs::get_dst)\n- [.get_lladdr()](IterableNeighbourAttrs::get_lladdr)\n- [.get_probes()](IterableNeighbourAttrs::get_probes)\n- [.get_vlan()](IterableNeighbourAttrs::get_vlan)\n- [.get_port()](IterableNeighbourAttrs::get_port)\n- [.get_vni()](IterableNeighbourAttrs::get_vni)\n- [.get_ifindex()](IterableNeighbourAttrs::get_ifindex)\n- [.get_master()](IterableNeighbourAttrs::get_master)\n- [.get_protocol()](IterableNeighbourAttrs::get_protocol)\n- [.get_nh_id()](IterableNeighbourAttrs::get_nh_id)\n- [.get_fdb_ext_attrs()](IterableNeighbourAttrs::get_fdb_ext_attrs)\n- [.get_flags_ext()](IterableNeighbourAttrs::get_flags_ext)\n\n"]
 #[derive(Debug)]
 pub struct OpGetneighDo<'r> {
     request: Request<'r>,
@@ -2807,7 +2813,7 @@ impl NetlinkRequest for OpGetneighDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get or dump neighbour tables\n\nReply attributes:\n- [.get_name()](IterableNdtAttrs::get_name)\n- [.get_thresh1()](IterableNdtAttrs::get_thresh1)\n- [.get_thresh2()](IterableNdtAttrs::get_thresh2)\n- [.get_thresh3()](IterableNdtAttrs::get_thresh3)\n- [.get_config()](IterableNdtAttrs::get_config)\n- [.get_parms()](IterableNdtAttrs::get_parms)\n- [.get_stats()](IterableNdtAttrs::get_stats)\n- [.get_gc_interval()](IterableNdtAttrs::get_gc_interval)\n"]
+#[doc = "Get or dump neighbour tables\n\nReply attributes:\n- [.get_name()](IterableNdtAttrs::get_name)\n- [.get_thresh1()](IterableNdtAttrs::get_thresh1)\n- [.get_thresh2()](IterableNdtAttrs::get_thresh2)\n- [.get_thresh3()](IterableNdtAttrs::get_thresh3)\n- [.get_config()](IterableNdtAttrs::get_config)\n- [.get_parms()](IterableNdtAttrs::get_parms)\n- [.get_stats()](IterableNdtAttrs::get_stats)\n- [.get_gc_interval()](IterableNdtAttrs::get_gc_interval)\n\n"]
 #[derive(Debug)]
 pub struct OpGetneightblDump<'r> {
     request: Request<'r>,
@@ -2870,7 +2876,7 @@ impl NetlinkRequest for OpGetneightblDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set neighbour tables\nRequest attributes:\n- [.push_name()](PushNdtAttrs::push_name)\n- [.push_thresh1()](PushNdtAttrs::push_thresh1)\n- [.push_thresh2()](PushNdtAttrs::push_thresh2)\n- [.push_thresh3()](PushNdtAttrs::push_thresh3)\n- [.nested_parms()](PushNdtAttrs::nested_parms)\n- [.push_gc_interval()](PushNdtAttrs::push_gc_interval)\n"]
+#[doc = "Set neighbour tables\n\nRequest attributes:\n- [.push_name()](PushNdtAttrs::push_name)\n- [.push_thresh1()](PushNdtAttrs::push_thresh1)\n- [.push_thresh2()](PushNdtAttrs::push_thresh2)\n- [.push_thresh3()](PushNdtAttrs::push_thresh3)\n- [.nested_parms()](PushNdtAttrs::nested_parms)\n- [.push_gc_interval()](PushNdtAttrs::push_gc_interval)\n\n"]
 #[derive(Debug)]
 pub struct OpSetneightblDo<'r> {
     request: Request<'r>,
@@ -3172,35 +3178,35 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Add new neighbour entry\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n- [.push_lladdr()](PushNeighbourAttrs::push_lladdr)\n- [.push_probes()](PushNeighbourAttrs::push_probes)\n- [.push_vlan()](PushNeighbourAttrs::push_vlan)\n- [.push_port()](PushNeighbourAttrs::push_port)\n- [.push_vni()](PushNeighbourAttrs::push_vni)\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n- [.push_master()](PushNeighbourAttrs::push_master)\n- [.push_protocol()](PushNeighbourAttrs::push_protocol)\n- [.push_nh_id()](PushNeighbourAttrs::push_nh_id)\n- [.push_fdb_ext_attrs()](PushNeighbourAttrs::push_fdb_ext_attrs)\n- [.push_flags_ext()](PushNeighbourAttrs::push_flags_ext)\n"]
+    #[doc = "Add new neighbour entry\n\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n- [.push_lladdr()](PushNeighbourAttrs::push_lladdr)\n- [.push_probes()](PushNeighbourAttrs::push_probes)\n- [.push_vlan()](PushNeighbourAttrs::push_vlan)\n- [.push_port()](PushNeighbourAttrs::push_port)\n- [.push_vni()](PushNeighbourAttrs::push_vni)\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n- [.push_master()](PushNeighbourAttrs::push_master)\n- [.push_protocol()](PushNeighbourAttrs::push_protocol)\n- [.push_nh_id()](PushNeighbourAttrs::push_nh_id)\n- [.push_fdb_ext_attrs()](PushNeighbourAttrs::push_fdb_ext_attrs)\n- [.push_flags_ext()](PushNeighbourAttrs::push_flags_ext)\n\n"]
     pub fn op_newneigh_do(self, header: &Ndmsg) -> OpNewneighDo<'buf> {
         let mut res = OpNewneighDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newneigh-do", OpNewneighDo::lookup);
         res
     }
-    #[doc = "Remove an existing neighbour entry\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n"]
+    #[doc = "Remove an existing neighbour entry\n\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n\n"]
     pub fn op_delneigh_do(self, header: &Ndmsg) -> OpDelneighDo<'buf> {
         let mut res = OpDelneighDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-delneigh-do", OpDelneighDo::lookup);
         res
     }
-    #[doc = "Get or dump neighbour entries\nRequest attributes:\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n- [.push_master()](PushNeighbourAttrs::push_master)\n\nReply attributes:\n- [.get_dst()](IterableNeighbourAttrs::get_dst)\n- [.get_lladdr()](IterableNeighbourAttrs::get_lladdr)\n- [.get_probes()](IterableNeighbourAttrs::get_probes)\n- [.get_vlan()](IterableNeighbourAttrs::get_vlan)\n- [.get_port()](IterableNeighbourAttrs::get_port)\n- [.get_vni()](IterableNeighbourAttrs::get_vni)\n- [.get_ifindex()](IterableNeighbourAttrs::get_ifindex)\n- [.get_master()](IterableNeighbourAttrs::get_master)\n- [.get_protocol()](IterableNeighbourAttrs::get_protocol)\n- [.get_nh_id()](IterableNeighbourAttrs::get_nh_id)\n- [.get_fdb_ext_attrs()](IterableNeighbourAttrs::get_fdb_ext_attrs)\n- [.get_flags_ext()](IterableNeighbourAttrs::get_flags_ext)\n"]
+    #[doc = "Get or dump neighbour entries\n\nRequest attributes:\n- [.push_ifindex()](PushNeighbourAttrs::push_ifindex)\n- [.push_master()](PushNeighbourAttrs::push_master)\n\nReply attributes:\n- [.get_dst()](IterableNeighbourAttrs::get_dst)\n- [.get_lladdr()](IterableNeighbourAttrs::get_lladdr)\n- [.get_probes()](IterableNeighbourAttrs::get_probes)\n- [.get_vlan()](IterableNeighbourAttrs::get_vlan)\n- [.get_port()](IterableNeighbourAttrs::get_port)\n- [.get_vni()](IterableNeighbourAttrs::get_vni)\n- [.get_ifindex()](IterableNeighbourAttrs::get_ifindex)\n- [.get_master()](IterableNeighbourAttrs::get_master)\n- [.get_protocol()](IterableNeighbourAttrs::get_protocol)\n- [.get_nh_id()](IterableNeighbourAttrs::get_nh_id)\n- [.get_fdb_ext_attrs()](IterableNeighbourAttrs::get_fdb_ext_attrs)\n- [.get_flags_ext()](IterableNeighbourAttrs::get_flags_ext)\n\n"]
     pub fn op_getneigh_dump(self, header: &Ndmsg) -> OpGetneighDump<'buf> {
         let mut res = OpGetneighDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getneigh-dump", OpGetneighDump::lookup);
         res
     }
-    #[doc = "Get or dump neighbour entries\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n\nReply attributes:\n- [.get_dst()](IterableNeighbourAttrs::get_dst)\n- [.get_lladdr()](IterableNeighbourAttrs::get_lladdr)\n- [.get_probes()](IterableNeighbourAttrs::get_probes)\n- [.get_vlan()](IterableNeighbourAttrs::get_vlan)\n- [.get_port()](IterableNeighbourAttrs::get_port)\n- [.get_vni()](IterableNeighbourAttrs::get_vni)\n- [.get_ifindex()](IterableNeighbourAttrs::get_ifindex)\n- [.get_master()](IterableNeighbourAttrs::get_master)\n- [.get_protocol()](IterableNeighbourAttrs::get_protocol)\n- [.get_nh_id()](IterableNeighbourAttrs::get_nh_id)\n- [.get_fdb_ext_attrs()](IterableNeighbourAttrs::get_fdb_ext_attrs)\n- [.get_flags_ext()](IterableNeighbourAttrs::get_flags_ext)\n"]
+    #[doc = "Get or dump neighbour entries\n\nRequest attributes:\n- [.push_dst()](PushNeighbourAttrs::push_dst)\n\nReply attributes:\n- [.get_dst()](IterableNeighbourAttrs::get_dst)\n- [.get_lladdr()](IterableNeighbourAttrs::get_lladdr)\n- [.get_probes()](IterableNeighbourAttrs::get_probes)\n- [.get_vlan()](IterableNeighbourAttrs::get_vlan)\n- [.get_port()](IterableNeighbourAttrs::get_port)\n- [.get_vni()](IterableNeighbourAttrs::get_vni)\n- [.get_ifindex()](IterableNeighbourAttrs::get_ifindex)\n- [.get_master()](IterableNeighbourAttrs::get_master)\n- [.get_protocol()](IterableNeighbourAttrs::get_protocol)\n- [.get_nh_id()](IterableNeighbourAttrs::get_nh_id)\n- [.get_fdb_ext_attrs()](IterableNeighbourAttrs::get_fdb_ext_attrs)\n- [.get_flags_ext()](IterableNeighbourAttrs::get_flags_ext)\n\n"]
     pub fn op_getneigh_do(self, header: &Ndmsg) -> OpGetneighDo<'buf> {
         let mut res = OpGetneighDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getneigh-do", OpGetneighDo::lookup);
         res
     }
-    #[doc = "Get or dump neighbour tables\n\nReply attributes:\n- [.get_name()](IterableNdtAttrs::get_name)\n- [.get_thresh1()](IterableNdtAttrs::get_thresh1)\n- [.get_thresh2()](IterableNdtAttrs::get_thresh2)\n- [.get_thresh3()](IterableNdtAttrs::get_thresh3)\n- [.get_config()](IterableNdtAttrs::get_config)\n- [.get_parms()](IterableNdtAttrs::get_parms)\n- [.get_stats()](IterableNdtAttrs::get_stats)\n- [.get_gc_interval()](IterableNdtAttrs::get_gc_interval)\n"]
+    #[doc = "Get or dump neighbour tables\n\nReply attributes:\n- [.get_name()](IterableNdtAttrs::get_name)\n- [.get_thresh1()](IterableNdtAttrs::get_thresh1)\n- [.get_thresh2()](IterableNdtAttrs::get_thresh2)\n- [.get_thresh3()](IterableNdtAttrs::get_thresh3)\n- [.get_config()](IterableNdtAttrs::get_config)\n- [.get_parms()](IterableNdtAttrs::get_parms)\n- [.get_stats()](IterableNdtAttrs::get_stats)\n- [.get_gc_interval()](IterableNdtAttrs::get_gc_interval)\n\n"]
     pub fn op_getneightbl_dump(self, header: &Ndtmsg) -> OpGetneightblDump<'buf> {
         let mut res = OpGetneightblDump::new(self, header);
         res.request.do_writeback(
@@ -3210,7 +3216,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Set neighbour tables\nRequest attributes:\n- [.push_name()](PushNdtAttrs::push_name)\n- [.push_thresh1()](PushNdtAttrs::push_thresh1)\n- [.push_thresh2()](PushNdtAttrs::push_thresh2)\n- [.push_thresh3()](PushNdtAttrs::push_thresh3)\n- [.nested_parms()](PushNdtAttrs::nested_parms)\n- [.push_gc_interval()](PushNdtAttrs::push_gc_interval)\n"]
+    #[doc = "Set neighbour tables\n\nRequest attributes:\n- [.push_name()](PushNdtAttrs::push_name)\n- [.push_thresh1()](PushNdtAttrs::push_thresh1)\n- [.push_thresh2()](PushNdtAttrs::push_thresh2)\n- [.push_thresh3()](PushNdtAttrs::push_thresh3)\n- [.nested_parms()](PushNdtAttrs::nested_parms)\n- [.push_gc_interval()](PushNdtAttrs::push_gc_interval)\n\n"]
     pub fn op_setneightbl_do(self, header: &Ndtmsg) -> OpSetneightblDo<'buf> {
         let mut res = OpSetneightblDo::new(self, header);
         res.request

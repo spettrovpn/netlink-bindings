@@ -1,4 +1,4 @@
-#![doc = "Netlink raw family for tc qdisc, chain, class and filter configuration over rtnetlink\\."]
+#![doc = "Netlink raw family for tc qdisc, chain, class and filter configuration\nover rtnetlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -124,8 +124,6 @@ impl Dualpi2SplitGso {
         })
     }
 }
-#[doc = "State transition probabilities for 4 state model"]
-#[doc = "Gilbert\\-Elliot models"]
 #[repr(C, packed(4))]
 pub struct Tcmsg {
     pub family: u8,
@@ -209,17 +207,17 @@ impl std::fmt::Debug for Tcmsg {
 }
 #[repr(C, packed(4))]
 pub struct TcStats {
-    #[doc = "Number of enqueued bytes"]
+    #[doc = "Number of enqueued bytes\n"]
     pub bytes: u64,
-    #[doc = "Number of enqueued packets"]
+    #[doc = "Number of enqueued packets\n"]
     pub packets: u32,
-    #[doc = "Packets dropped because of lack of resources"]
+    #[doc = "Packets dropped because of lack of resources\n"]
     pub drops: u32,
-    #[doc = "Number of throttle events when this flow goes out of allocated\nbandwidth\n"]
+    #[doc = "Number of throttle events when this flow goes out of allocated bandwidth\n"]
     pub overlimits: u32,
-    #[doc = "Current flow byte rate"]
+    #[doc = "Current flow byte rate\n"]
     pub bps: u32,
-    #[doc = "Current flow packet rate"]
+    #[doc = "Current flow packet rate\n"]
     pub pps: u32,
     pub qlen: u32,
     pub backlog: u32,
@@ -452,7 +450,7 @@ impl TcEtfQopt {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcFifoQopt {
-    #[doc = "Queue length; bytes for bfifo, packets for pfifo"]
+    #[doc = "Queue length; bytes for bfifo, packets for pfifo\n"]
     pub limit: u32,
 }
 impl Clone for TcFifoQopt {
@@ -604,13 +602,13 @@ impl std::fmt::Debug for TcHtbOpt {
 #[repr(C, packed(4))]
 pub struct TcHtbGlob {
     pub version: u32,
-    #[doc = "bps\\->quantum divisor"]
+    #[doc = "bps-\\>quantum divisor\n"]
     pub rate2quantum: u32,
-    #[doc = "Default class number"]
+    #[doc = "Default class number\n"]
     pub defcls: u32,
-    #[doc = "Debug flags"]
+    #[doc = "Debug flags\n"]
     pub debug: u32,
-    #[doc = "Count of non shaped packets"]
+    #[doc = "Count of non shaped packets\n"]
     pub direct_pkts: u32,
 }
 impl Clone for TcHtbGlob {
@@ -677,13 +675,13 @@ impl TcHtbGlob {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcGredQopt {
-    #[doc = "HARD maximal queue length in bytes"]
+    #[doc = "HARD maximal queue length in bytes\n"]
     pub limit: u32,
-    #[doc = "Min average length threshold in bytes"]
+    #[doc = "Min average length threshold in bytes\n"]
     pub qth_min: u32,
-    #[doc = "Max average length threshold in bytes"]
+    #[doc = "Max average length threshold in bytes\n"]
     pub qth_max: u32,
-    #[doc = "Up to 2^32 DPs"]
+    #[doc = "Up to 2\\^32 DPs\n"]
     pub DP: u32,
     pub backlog: u32,
     pub qave: u32,
@@ -691,13 +689,13 @@ pub struct TcGredQopt {
     pub early: u32,
     pub other: u32,
     pub pdrop: u32,
-    #[doc = "log(W)"]
+    #[doc = "log(W)\n"]
     pub Wlog: u8,
-    #[doc = "log(P\\_max / (qth\\-max \\- qth\\-min))"]
+    #[doc = "log(P_max / (qth-max - qth-min))\n"]
     pub Plog: u8,
-    #[doc = "cell size for idle damping"]
+    #[doc = "cell size for idle damping\n"]
     pub Scell_log: u8,
-    #[doc = "Priority of this VQ"]
+    #[doc = "Priority of this VQ\n"]
     pub prio: u8,
     pub packets: u32,
     pub bytesin: u32,
@@ -981,9 +979,9 @@ impl TcMqprioQopt {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcMultiqQopt {
-    #[doc = "Number of bands"]
+    #[doc = "Number of bands\n"]
     pub bands: u16,
-    #[doc = "Maximum number of queues"]
+    #[doc = "Maximum number of queues\n"]
     pub max_bands: u16,
 }
 impl Clone for TcMultiqQopt {
@@ -1050,17 +1048,17 @@ impl TcMultiqQopt {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcNetemQopt {
-    #[doc = "Added delay in microseconds"]
+    #[doc = "Added delay in microseconds\n"]
     pub latency: u32,
-    #[doc = "Fifo limit in packets"]
+    #[doc = "Fifo limit in packets\n"]
     pub limit: u32,
-    #[doc = "Random packet loss (0=none, \\~0=100%)"]
+    #[doc = "Random packet loss (0=none, \\~0=100%)\n"]
     pub loss: u32,
-    #[doc = "Re\\-ordering gap (0 for none)"]
+    #[doc = "Re-ordering gap (0 for none)\n"]
     pub gap: u32,
-    #[doc = "Random packet duplication (0=none, \\~0=100%)"]
+    #[doc = "Random packet duplication (0=none, \\~0=100%)\n"]
     pub duplicate: u32,
-    #[doc = "Random jitter latency in microseconds"]
+    #[doc = "Random jitter latency in microseconds\n"]
     pub jitter: u32,
 }
 impl Clone for TcNetemQopt {
@@ -1125,6 +1123,7 @@ impl TcNetemQopt {
     }
 }
 #[derive(Debug)]
+#[doc = "State transition probabilities for 4 state model\n"]
 #[repr(C, packed(4))]
 pub struct TcNetemGimodel {
     pub p13: u32,
@@ -1195,6 +1194,7 @@ impl TcNetemGimodel {
     }
 }
 #[derive(Debug)]
+#[doc = "Gilbert-Elliot models\n"]
 #[repr(C, packed(4))]
 pub struct TcNetemGemodel {
     pub p: u32,
@@ -1266,11 +1266,11 @@ impl TcNetemGemodel {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcNetemCorr {
-    #[doc = "Delay correlation"]
+    #[doc = "Delay correlation\n"]
     pub delay_corr: u32,
-    #[doc = "Packet loss correlation"]
+    #[doc = "Packet loss correlation\n"]
     pub loss_corr: u32,
-    #[doc = "Duplicate correlation"]
+    #[doc = "Duplicate correlation\n"]
     pub dup_corr: u32,
 }
 impl Clone for TcNetemCorr {
@@ -1689,9 +1689,9 @@ impl TcPlugQopt {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcPrioQopt {
-    #[doc = "Number of bands"]
+    #[doc = "Number of bands\n"]
     pub bands: u32,
-    #[doc = "Map of logical priority \\-> PRIO band"]
+    #[doc = "Map of logical priority -\\> PRIO band\n"]
     pub priomap: [u8; 16usize],
 }
 impl Clone for TcPrioQopt {
@@ -1758,17 +1758,17 @@ impl TcPrioQopt {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcRedQopt {
-    #[doc = "Hard queue length in packets"]
+    #[doc = "Hard queue length in packets\n"]
     pub limit: u32,
-    #[doc = "Min average threshold in packets"]
+    #[doc = "Min average threshold in packets\n"]
     pub qth_min: u32,
-    #[doc = "Max average threshold in packets"]
+    #[doc = "Max average threshold in packets\n"]
     pub qth_max: u32,
-    #[doc = "log(W)"]
+    #[doc = "log(W)\n"]
     pub Wlog: u8,
-    #[doc = "log(P\\_max / (qth\\-max \\- qth\\-min))"]
+    #[doc = "log(P_max / (qth-max - qth-min))\n"]
     pub Plog: u8,
-    #[doc = "Cell size for idle damping"]
+    #[doc = "Cell size for idle damping\n"]
     pub Scell_log: u8,
     pub flags: u8,
 }
@@ -1910,15 +1910,15 @@ impl TcSfbQopt {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcSfqQopt {
-    #[doc = "Bytes per round allocated to flow"]
+    #[doc = "Bytes per round allocated to flow\n"]
     pub quantum: u32,
-    #[doc = "Period of hash perturbation"]
+    #[doc = "Period of hash perturbation\n"]
     pub perturb_period: i32,
-    #[doc = "Maximal packets in queue"]
+    #[doc = "Maximal packets in queue\n"]
     pub limit: u32,
-    #[doc = "Hash divisor"]
+    #[doc = "Hash divisor\n"]
     pub divisor: u32,
-    #[doc = "Maximal number of flows"]
+    #[doc = "Maximal number of flows\n"]
     pub flows: u32,
 }
 impl Clone for TcSfqQopt {
@@ -1985,17 +1985,17 @@ impl TcSfqQopt {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcSfqredStats {
-    #[doc = "Early drops, below max threshold"]
+    #[doc = "Early drops, below max threshold\n"]
     pub prob_drop: u32,
-    #[doc = "Early drops, after max threshold"]
+    #[doc = "Early drops, after max threshold\n"]
     pub forced_drop: u32,
-    #[doc = "Marked packets, below max threshold"]
+    #[doc = "Marked packets, below max threshold\n"]
     pub prob_mark: u32,
-    #[doc = "Marked packets, after max threshold"]
+    #[doc = "Marked packets, after max threshold\n"]
     pub forced_mark: u32,
-    #[doc = "Marked packets, below max threshold"]
+    #[doc = "Marked packets, below max threshold\n"]
     pub prob_mark_head: u32,
-    #[doc = "Marked packets, after max threshold"]
+    #[doc = "Marked packets, after max threshold\n"]
     pub forced_mark_head: u32,
 }
 impl Clone for TcSfqredStats {
@@ -2062,23 +2062,23 @@ impl TcSfqredStats {
 #[repr(C, packed(4))]
 pub struct TcSfqQoptV1 {
     pub v0: TcSfqQopt,
-    #[doc = "Maximum number of packets per flow"]
+    #[doc = "Maximum number of packets per flow\n"]
     pub depth: u32,
     pub headdrop: u32,
-    #[doc = "HARD maximal flow queue length in bytes"]
+    #[doc = "HARD maximal flow queue length in bytes\n"]
     pub limit: u32,
-    #[doc = "Min average length threshold in bytes"]
+    #[doc = "Min average length threshold in bytes\n"]
     pub qth_min: u32,
-    #[doc = "Max average length threshold in bytes"]
+    #[doc = "Max average length threshold in bytes\n"]
     pub qth_max: u32,
-    #[doc = "log(W)"]
+    #[doc = "log(W)\n"]
     pub Wlog: u8,
-    #[doc = "log(P\\_max / (qth\\-max \\- qth\\-min))"]
+    #[doc = "log(P_max / (qth-max - qth-min))\n"]
     pub Plog: u8,
-    #[doc = "Cell size for idle damping"]
+    #[doc = "Cell size for idle damping\n"]
     pub Scell_log: u8,
     pub flags: u8,
-    #[doc = "probability, high resolution"]
+    #[doc = "probability, high resolution\n"]
     pub max_P: u32,
     pub stats: TcSfqredStats,
 }
@@ -2400,9 +2400,9 @@ impl TcSizespec {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct GnetEstimator {
-    #[doc = "Sampling period"]
+    #[doc = "Sampling period\n"]
     pub interval: i8,
-    #[doc = "The log() of measurement window weight"]
+    #[doc = "The log() of measurement window weight\n"]
     pub ewma_log: u8,
 }
 impl Clone for GnetEstimator {
@@ -2469,15 +2469,15 @@ impl GnetEstimator {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcChokeXstats {
-    #[doc = "Early drops"]
+    #[doc = "Early drops\n"]
     pub early: u32,
-    #[doc = "Drops due to queue limits"]
+    #[doc = "Drops due to queue limits\n"]
     pub pdrop: u32,
-    #[doc = "Drops due to drop() calls"]
+    #[doc = "Drops due to drop() calls\n"]
     pub other: u32,
-    #[doc = "Marked packets"]
+    #[doc = "Marked packets\n"]
     pub marked: u32,
-    #[doc = "Drops due to flow match"]
+    #[doc = "Drops due to flow match\n"]
     pub matched: u32,
 }
 impl Clone for TcChokeXstats {
@@ -2544,23 +2544,23 @@ impl TcChokeXstats {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcCodelXstats {
-    #[doc = "Largest packet we've seen so far"]
+    #[doc = "Largest packet we\\'ve seen so far\n"]
     pub maxpacket: u32,
-    #[doc = "How many drops we've done since the last time we entered dropping\nstate\n"]
+    #[doc = "How many drops we\\'ve done since the last time we entered dropping state\n"]
     pub count: u32,
-    #[doc = "Count at entry to dropping state"]
+    #[doc = "Count at entry to dropping state\n"]
     pub lastcount: u32,
-    #[doc = "in\\-queue delay seen by most recently dequeued packet"]
+    #[doc = "in-queue delay seen by most recently dequeued packet\n"]
     pub ldelay: u32,
-    #[doc = "Time to drop next packet"]
+    #[doc = "Time to drop next packet\n"]
     pub drop_next: i32,
-    #[doc = "Number of times max qdisc packet limit was hit"]
+    #[doc = "Number of times max qdisc packet limit was hit\n"]
     pub drop_overlimit: u32,
-    #[doc = "Number of packets we've ECN marked instead of dropped"]
+    #[doc = "Number of packets we\\'ve ECN marked instead of dropped\n"]
     pub ecn_mark: u32,
-    #[doc = "Are we in a dropping state?"]
+    #[doc = "Are we in a dropping state?\n"]
     pub dropping: u32,
-    #[doc = "Number of CE marked packets because of ce\\-threshold"]
+    #[doc = "Number of CE marked packets because of ce-threshold\n"]
     pub ce_mark: u32,
 }
 impl Clone for TcCodelXstats {
@@ -2628,21 +2628,21 @@ impl TcCodelXstats {
 #[repr(C, packed(4))]
 pub struct TcFqCodelXstats {
     pub r#type: u32,
-    #[doc = "Largest packet we've seen so far"]
+    #[doc = "Largest packet we\\'ve seen so far\n"]
     pub maxpacket: u32,
-    #[doc = "Number of times max qdisc packet limit was hit"]
+    #[doc = "Number of times max qdisc packet limit was hit\n"]
     pub drop_overlimit: u32,
-    #[doc = "Number of packets we ECN marked instead of being dropped"]
+    #[doc = "Number of packets we ECN marked instead of being dropped\n"]
     pub ecn_mark: u32,
-    #[doc = "Number of times packets created a new flow"]
+    #[doc = "Number of times packets created a new flow\n"]
     pub new_flow_count: u32,
-    #[doc = "Count of flows in new list"]
+    #[doc = "Count of flows in new list\n"]
     pub new_flows_len: u32,
-    #[doc = "Count of flows in old list"]
+    #[doc = "Count of flows in old list\n"]
     pub old_flows_len: u32,
-    #[doc = "Packets above ce\\-threshold"]
+    #[doc = "Packets above ce-threshold\n"]
     pub ce_mark: u32,
-    #[doc = "Memory usage in bytes"]
+    #[doc = "Memory usage in bytes\n"]
     pub memory_usage: u32,
     pub drop_overmemory: u32,
 }
@@ -2710,29 +2710,29 @@ impl TcFqCodelXstats {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcDualpi2Xstats {
-    #[doc = "Current base PI probability"]
+    #[doc = "Current base PI probability\n"]
     pub prob: u32,
-    #[doc = "Current C\\-queue delay in microseconds"]
+    #[doc = "Current C-queue delay in microseconds\n"]
     pub delay_c: u32,
-    #[doc = "Current L\\-queue delay in microseconds"]
+    #[doc = "Current L-queue delay in microseconds\n"]
     pub delay_l: u32,
-    #[doc = "Number of packets enqueued in the C\\-queue"]
+    #[doc = "Number of packets enqueued in the C-queue\n"]
     pub pkts_in_c: u32,
-    #[doc = "Number of packets enqueued in the L\\-queue"]
+    #[doc = "Number of packets enqueued in the L-queue\n"]
     pub pkts_in_l: u32,
-    #[doc = "Maximum number of packets seen by the DualPI2"]
+    #[doc = "Maximum number of packets seen by the DualPI2\n"]
     pub maxq: u32,
-    #[doc = "All packets marked with ECN"]
+    #[doc = "All packets marked with ECN\n"]
     pub ecn_mark: u32,
-    #[doc = "Only packets marked with ECN due to L\\-queue step AQM"]
+    #[doc = "Only packets marked with ECN due to L-queue step AQM\n"]
     pub step_mark: u32,
-    #[doc = "Current credit value for WRR"]
+    #[doc = "Current credit value for WRR\n"]
     pub credit: i32,
-    #[doc = "Memory used in bytes by the DualPI2"]
+    #[doc = "Memory used in bytes by the DualPI2\n"]
     pub memory_used: u32,
-    #[doc = "Maximum memory used in bytes by the DualPI2"]
+    #[doc = "Maximum memory used in bytes by the DualPI2\n"]
     pub max_memory_used: u32,
-    #[doc = "Memory limit in bytes"]
+    #[doc = "Memory limit in bytes\n"]
     pub memory_limit: u32,
 }
 impl Clone for TcDualpi2Xstats {
@@ -2799,23 +2799,23 @@ impl TcDualpi2Xstats {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcFqPieXstats {
-    #[doc = "Total number of packets enqueued"]
+    #[doc = "Total number of packets enqueued\n"]
     pub packets_in: u32,
-    #[doc = "Packets dropped due to fq\\_pie\\_action"]
+    #[doc = "Packets dropped due to fq_pie_action\n"]
     pub dropped: u32,
-    #[doc = "Dropped due to lack of space in queue"]
+    #[doc = "Dropped due to lack of space in queue\n"]
     pub overlimit: u32,
-    #[doc = "Dropped due to lack of memory in queue"]
+    #[doc = "Dropped due to lack of memory in queue\n"]
     pub overmemory: u32,
-    #[doc = "Packets marked with ECN"]
+    #[doc = "Packets marked with ECN\n"]
     pub ecn_mark: u32,
-    #[doc = "Count of new flows created by packets"]
+    #[doc = "Count of new flows created by packets\n"]
     pub new_flow_count: u32,
-    #[doc = "Count of flows in new list"]
+    #[doc = "Count of flows in new list\n"]
     pub new_flows_len: u32,
-    #[doc = "Count of flows in old list"]
+    #[doc = "Count of flows in old list\n"]
     pub old_flows_len: u32,
-    #[doc = "Total memory across all queues"]
+    #[doc = "Total memory across all queues\n"]
     pub memory_usage: u32,
 }
 impl Clone for TcFqPieXstats {
@@ -2882,9 +2882,9 @@ impl TcFqPieXstats {
 #[repr(C, packed(4))]
 pub struct TcFqQdStats {
     pub gc_flows: u64,
-    #[doc = "obsolete"]
+    #[doc = "obsolete\n"]
     pub highprio_packets: u64,
-    #[doc = "obsolete"]
+    #[doc = "obsolete\n"]
     pub tcp_retrans: u64,
     pub throttled: u64,
     pub flows_plimit: u64,
@@ -2895,7 +2895,7 @@ pub struct TcFqQdStats {
     pub inactive_flows: u32,
     pub throttled_flows: u32,
     pub unthrottle_latency_ns: u32,
-    #[doc = "Packets above ce\\-threshold"]
+    #[doc = "Packets above ce-threshold\n"]
     pub ce_mark: u64,
     pub horizon_drops: u64,
     pub horizon_caps: u64,
@@ -2992,13 +2992,13 @@ impl std::fmt::Debug for TcFqQdStats {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcHhfXstats {
-    #[doc = "Number of times max qdisc packet limit was hit"]
+    #[doc = "Number of times max qdisc packet limit was hit\n"]
     pub drop_overlimit: u32,
-    #[doc = "Number of times max heavy\\-hitters was hit"]
+    #[doc = "Number of times max heavy-hitters was hit\n"]
     pub hh_overlimit: u32,
-    #[doc = "Number of captured heavy\\-hitters so far"]
+    #[doc = "Number of captured heavy-hitters so far\n"]
     pub hh_tot_count: u32,
-    #[doc = "Number of current heavy\\-hitters"]
+    #[doc = "Number of current heavy-hitters\n"]
     pub hh_cur_count: u32,
 }
 impl Clone for TcHhfXstats {
@@ -3064,23 +3064,23 @@ impl TcHhfXstats {
 }
 #[repr(C, packed(4))]
 pub struct TcPieXstats {
-    #[doc = "Current probability"]
+    #[doc = "Current probability\n"]
     pub prob: u64,
-    #[doc = "Current delay in ms"]
+    #[doc = "Current delay in ms\n"]
     pub delay: u32,
-    #[doc = "Current average dq rate in bits/pie\\-time"]
+    #[doc = "Current average dq rate in bits/pie-time\n"]
     pub avg_dq_rate: u32,
-    #[doc = "Is avg\\-dq\\-rate being calculated?"]
+    #[doc = "Is avg-dq-rate being calculated?\n"]
     pub dq_rate_estimating: u32,
-    #[doc = "Total number of packets enqueued"]
+    #[doc = "Total number of packets enqueued\n"]
     pub packets_in: u32,
-    #[doc = "Packets dropped due to pie action"]
+    #[doc = "Packets dropped due to pie action\n"]
     pub dropped: u32,
-    #[doc = "Dropped due to lack of space in queue"]
+    #[doc = "Dropped due to lack of space in queue\n"]
     pub overlimit: u32,
-    #[doc = "Maximum queue size"]
+    #[doc = "Maximum queue size\n"]
     pub maxq: u32,
-    #[doc = "Packets marked with ECN"]
+    #[doc = "Packets marked with ECN\n"]
     pub ecn_mark: u32,
 }
 impl Clone for TcPieXstats {
@@ -3162,13 +3162,13 @@ impl std::fmt::Debug for TcPieXstats {
 #[derive(Debug)]
 #[repr(C, packed(4))]
 pub struct TcRedXstats {
-    #[doc = "Early drops"]
+    #[doc = "Early drops\n"]
     pub early: u32,
-    #[doc = "Drops due to queue limits"]
+    #[doc = "Drops due to queue limits\n"]
     pub pdrop: u32,
-    #[doc = "Drops due to drop() calls"]
+    #[doc = "Drops due to drop() calls\n"]
     pub other: u32,
-    #[doc = "Marked packets"]
+    #[doc = "Marked packets\n"]
     pub marked: u32,
 }
 impl Clone for TcRedXstats {
@@ -3239,7 +3239,7 @@ pub struct TcSfbXstats {
     pub penaltydrop: u32,
     pub bucketdrop: u32,
     pub queuedrop: u32,
-    #[doc = "drops in child qdisc"]
+    #[doc = "drops in child qdisc\n"]
     pub childdrop: u32,
     pub marked: u32,
     pub maxqlen: u32,
@@ -4837,7 +4837,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::Kind(val) = attr? {
+            if let Ok(Attrs::Kind(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4852,7 +4852,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::Options(val) = attr? {
+            if let Ok(Attrs::Options(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4867,7 +4867,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::Stats(val) = attr? {
+            if let Ok(Attrs::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4882,7 +4882,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::Xstats(val) = attr? {
+            if let Ok(Attrs::Xstats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4897,7 +4897,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::Rate(val) = attr? {
+            if let Ok(Attrs::Rate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4912,7 +4912,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::Fcnt(val) = attr? {
+            if let Ok(Attrs::Fcnt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4927,7 +4927,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::Stats2(val) = attr? {
+            if let Ok(Attrs::Stats2(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4942,7 +4942,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::Stab(val) = attr? {
+            if let Ok(Attrs::Stab(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4957,7 +4957,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::Pad(val) = attr? {
+            if let Ok(Attrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4972,7 +4972,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::DumpInvisible(val) = attr? {
+            if let Ok(Attrs::DumpInvisible(val)) = attr {
                 return Ok(val);
             }
         }
@@ -4987,7 +4987,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::Chain(val) = attr? {
+            if let Ok(Attrs::Chain(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5002,7 +5002,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::HwOffload(val) = attr? {
+            if let Ok(Attrs::HwOffload(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5017,7 +5017,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::IngressBlock(val) = attr? {
+            if let Ok(Attrs::IngressBlock(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5032,7 +5032,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::EgressBlock(val) = attr? {
+            if let Ok(Attrs::EgressBlock(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5047,7 +5047,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::DumpFlags(val) = attr? {
+            if let Ok(Attrs::DumpFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5062,7 +5062,7 @@ impl<'a> IterableAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attrs::ExtWarnMsg(val) = attr? {
+            if let Ok(Attrs::ExtWarnMsg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5270,14 +5270,16 @@ impl<'a> IterableAttrs<'a> {
 impl<'a> Iterator for IterableAttrs<'a> {
     type Item = Result<Attrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -5565,7 +5567,7 @@ impl<'a> IterableActAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActAttrs::Kind(val) = attr? {
+            if let Ok(ActAttrs::Kind(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5580,7 +5582,7 @@ impl<'a> IterableActAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActAttrs::Options(val) = attr? {
+            if let Ok(ActAttrs::Options(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5595,7 +5597,7 @@ impl<'a> IterableActAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActAttrs::Index(val) = attr? {
+            if let Ok(ActAttrs::Index(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5610,7 +5612,7 @@ impl<'a> IterableActAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActAttrs::Stats(val) = attr? {
+            if let Ok(ActAttrs::Stats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5625,7 +5627,7 @@ impl<'a> IterableActAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActAttrs::Pad(val) = attr? {
+            if let Ok(ActAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5640,7 +5642,7 @@ impl<'a> IterableActAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActAttrs::Cookie(val) = attr? {
+            if let Ok(ActAttrs::Cookie(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5655,7 +5657,7 @@ impl<'a> IterableActAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActAttrs::Flags(val) = attr? {
+            if let Ok(ActAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5670,7 +5672,7 @@ impl<'a> IterableActAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActAttrs::HwStats(val) = attr? {
+            if let Ok(ActAttrs::HwStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5685,7 +5687,7 @@ impl<'a> IterableActAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActAttrs::UsedHwStats(val) = attr? {
+            if let Ok(ActAttrs::UsedHwStats(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5700,7 +5702,7 @@ impl<'a> IterableActAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActAttrs::InHwCount(val) = attr? {
+            if let Ok(ActAttrs::InHwCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -5832,14 +5834,16 @@ impl<'a> IterableActAttrs<'a> {
 impl<'a> Iterator for IterableActAttrs<'a> {
     type Item = Result<ActAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6054,7 +6058,7 @@ impl<'a> IterableActBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActBpfAttrs::Tm(val) = attr? {
+            if let Ok(ActBpfAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6069,7 +6073,7 @@ impl<'a> IterableActBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActBpfAttrs::Parms(val) = attr? {
+            if let Ok(ActBpfAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6084,7 +6088,7 @@ impl<'a> IterableActBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActBpfAttrs::OpsLen(val) = attr? {
+            if let Ok(ActBpfAttrs::OpsLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6099,7 +6103,7 @@ impl<'a> IterableActBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActBpfAttrs::Ops(val) = attr? {
+            if let Ok(ActBpfAttrs::Ops(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6114,7 +6118,7 @@ impl<'a> IterableActBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActBpfAttrs::Fd(val) = attr? {
+            if let Ok(ActBpfAttrs::Fd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6129,7 +6133,7 @@ impl<'a> IterableActBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActBpfAttrs::Name(val) = attr? {
+            if let Ok(ActBpfAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6144,7 +6148,7 @@ impl<'a> IterableActBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActBpfAttrs::Pad(val) = attr? {
+            if let Ok(ActBpfAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6159,7 +6163,7 @@ impl<'a> IterableActBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActBpfAttrs::Tag(val) = attr? {
+            if let Ok(ActBpfAttrs::Tag(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6174,7 +6178,7 @@ impl<'a> IterableActBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActBpfAttrs::Id(val) = attr? {
+            if let Ok(ActBpfAttrs::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6227,14 +6231,16 @@ impl<'a> IterableActBpfAttrs<'a> {
 impl<'a> Iterator for IterableActBpfAttrs<'a> {
     type Item = Result<ActBpfAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6423,7 +6429,7 @@ impl<'a> IterableActConnmarkAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActConnmarkAttrs::Parms(val) = attr? {
+            if let Ok(ActConnmarkAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6438,7 +6444,7 @@ impl<'a> IterableActConnmarkAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActConnmarkAttrs::Tm(val) = attr? {
+            if let Ok(ActConnmarkAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6453,7 +6459,7 @@ impl<'a> IterableActConnmarkAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActConnmarkAttrs::Pad(val) = attr? {
+            if let Ok(ActConnmarkAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6500,14 +6506,16 @@ impl<'a> IterableActConnmarkAttrs<'a> {
 impl<'a> Iterator for IterableActConnmarkAttrs<'a> {
     type Item = Result<ActConnmarkAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6624,7 +6632,7 @@ impl<'a> IterableActCsumAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCsumAttrs::Parms(val) = attr? {
+            if let Ok(ActCsumAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6639,7 +6647,7 @@ impl<'a> IterableActCsumAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCsumAttrs::Tm(val) = attr? {
+            if let Ok(ActCsumAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6654,7 +6662,7 @@ impl<'a> IterableActCsumAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCsumAttrs::Pad(val) = attr? {
+            if let Ok(ActCsumAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6701,14 +6709,16 @@ impl<'a> IterableActCsumAttrs<'a> {
 impl<'a> Iterator for IterableActCsumAttrs<'a> {
     type Item = Result<ActCsumAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -6840,7 +6850,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::Parms(val) = attr? {
+            if let Ok(ActCtAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6855,7 +6865,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::Tm(val) = attr? {
+            if let Ok(ActCtAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6870,7 +6880,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::Action(val) = attr? {
+            if let Ok(ActCtAttrs::Action(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6885,7 +6895,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::Zone(val) = attr? {
+            if let Ok(ActCtAttrs::Zone(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6900,7 +6910,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::Mark(val) = attr? {
+            if let Ok(ActCtAttrs::Mark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6915,7 +6925,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::MarkMask(val) = attr? {
+            if let Ok(ActCtAttrs::MarkMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6930,7 +6940,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::Labels(val) = attr? {
+            if let Ok(ActCtAttrs::Labels(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6945,7 +6955,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::LabelsMask(val) = attr? {
+            if let Ok(ActCtAttrs::LabelsMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6960,7 +6970,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::NatIpv4Min(val) = attr? {
+            if let Ok(ActCtAttrs::NatIpv4Min(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6975,7 +6985,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::NatIpv4Max(val) = attr? {
+            if let Ok(ActCtAttrs::NatIpv4Max(val)) = attr {
                 return Ok(val);
             }
         }
@@ -6990,7 +7000,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::NatIpv6Min(val) = attr? {
+            if let Ok(ActCtAttrs::NatIpv6Min(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7005,7 +7015,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::NatIpv6Max(val) = attr? {
+            if let Ok(ActCtAttrs::NatIpv6Max(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7020,7 +7030,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::NatPortMin(val) = attr? {
+            if let Ok(ActCtAttrs::NatPortMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7035,7 +7045,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::NatPortMax(val) = attr? {
+            if let Ok(ActCtAttrs::NatPortMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7050,7 +7060,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::Pad(val) = attr? {
+            if let Ok(ActCtAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7065,7 +7075,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::HelperName(val) = attr? {
+            if let Ok(ActCtAttrs::HelperName(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7080,7 +7090,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::HelperFamily(val) = attr? {
+            if let Ok(ActCtAttrs::HelperFamily(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7095,7 +7105,7 @@ impl<'a> IterableActCtAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtAttrs::HelperProto(val) = attr? {
+            if let Ok(ActCtAttrs::HelperProto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7157,14 +7167,16 @@ impl<'a> IterableActCtAttrs<'a> {
 impl<'a> Iterator for IterableActCtAttrs<'a> {
     type Item = Result<ActCtAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7468,7 +7480,7 @@ impl<'a> IterableActCtinfoAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtinfoAttrs::Pad(val) = attr? {
+            if let Ok(ActCtinfoAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7483,7 +7495,7 @@ impl<'a> IterableActCtinfoAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtinfoAttrs::Tm(val) = attr? {
+            if let Ok(ActCtinfoAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7498,7 +7510,7 @@ impl<'a> IterableActCtinfoAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtinfoAttrs::Act(val) = attr? {
+            if let Ok(ActCtinfoAttrs::Act(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7513,7 +7525,7 @@ impl<'a> IterableActCtinfoAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtinfoAttrs::Zone(val) = attr? {
+            if let Ok(ActCtinfoAttrs::Zone(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7528,7 +7540,7 @@ impl<'a> IterableActCtinfoAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtinfoAttrs::ParmsDscpMask(val) = attr? {
+            if let Ok(ActCtinfoAttrs::ParmsDscpMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7543,7 +7555,7 @@ impl<'a> IterableActCtinfoAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtinfoAttrs::ParmsDscpStatemask(val) = attr? {
+            if let Ok(ActCtinfoAttrs::ParmsDscpStatemask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7558,7 +7570,7 @@ impl<'a> IterableActCtinfoAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtinfoAttrs::ParmsCpmarkMask(val) = attr? {
+            if let Ok(ActCtinfoAttrs::ParmsCpmarkMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7573,7 +7585,7 @@ impl<'a> IterableActCtinfoAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtinfoAttrs::StatsDscpSet(val) = attr? {
+            if let Ok(ActCtinfoAttrs::StatsDscpSet(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7588,7 +7600,7 @@ impl<'a> IterableActCtinfoAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtinfoAttrs::StatsDscpError(val) = attr? {
+            if let Ok(ActCtinfoAttrs::StatsDscpError(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7603,7 +7615,7 @@ impl<'a> IterableActCtinfoAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActCtinfoAttrs::StatsCpmarkSet(val) = attr? {
+            if let Ok(ActCtinfoAttrs::StatsCpmarkSet(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7657,14 +7669,16 @@ impl<'a> IterableActCtinfoAttrs<'a> {
 impl<'a> Iterator for IterableActCtinfoAttrs<'a> {
     type Item = Result<ActCtinfoAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -7872,7 +7886,7 @@ impl<'a> IterableActGateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGateAttrs::Tm(val) = attr? {
+            if let Ok(ActGateAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7887,7 +7901,7 @@ impl<'a> IterableActGateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGateAttrs::Parms(val) = attr? {
+            if let Ok(ActGateAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7902,7 +7916,7 @@ impl<'a> IterableActGateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGateAttrs::Pad(val) = attr? {
+            if let Ok(ActGateAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7917,7 +7931,7 @@ impl<'a> IterableActGateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGateAttrs::Priority(val) = attr? {
+            if let Ok(ActGateAttrs::Priority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7932,7 +7946,7 @@ impl<'a> IterableActGateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGateAttrs::EntryList(val) = attr? {
+            if let Ok(ActGateAttrs::EntryList(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7947,7 +7961,7 @@ impl<'a> IterableActGateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGateAttrs::BaseTime(val) = attr? {
+            if let Ok(ActGateAttrs::BaseTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7962,7 +7976,7 @@ impl<'a> IterableActGateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGateAttrs::CycleTime(val) = attr? {
+            if let Ok(ActGateAttrs::CycleTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7977,7 +7991,7 @@ impl<'a> IterableActGateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGateAttrs::CycleTimeExt(val) = attr? {
+            if let Ok(ActGateAttrs::CycleTimeExt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -7992,7 +8006,7 @@ impl<'a> IterableActGateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGateAttrs::Flags(val) = attr? {
+            if let Ok(ActGateAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8007,7 +8021,7 @@ impl<'a> IterableActGateAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGateAttrs::Clockid(val) = attr? {
+            if let Ok(ActGateAttrs::Clockid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8061,14 +8075,16 @@ impl<'a> IterableActGateAttrs<'a> {
 impl<'a> Iterator for IterableActGateAttrs<'a> {
     type Item = Result<ActGateAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8273,7 +8289,7 @@ impl<'a> IterableActIfeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActIfeAttrs::Parms(val) = attr? {
+            if let Ok(ActIfeAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8288,7 +8304,7 @@ impl<'a> IterableActIfeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActIfeAttrs::Tm(val) = attr? {
+            if let Ok(ActIfeAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8303,7 +8319,7 @@ impl<'a> IterableActIfeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActIfeAttrs::Dmac(val) = attr? {
+            if let Ok(ActIfeAttrs::Dmac(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8318,7 +8334,7 @@ impl<'a> IterableActIfeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActIfeAttrs::Smac(val) = attr? {
+            if let Ok(ActIfeAttrs::Smac(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8333,7 +8349,7 @@ impl<'a> IterableActIfeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActIfeAttrs::Type(val) = attr? {
+            if let Ok(ActIfeAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8348,7 +8364,7 @@ impl<'a> IterableActIfeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActIfeAttrs::Metalst(val) = attr? {
+            if let Ok(ActIfeAttrs::Metalst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8363,7 +8379,7 @@ impl<'a> IterableActIfeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActIfeAttrs::Pad(val) = attr? {
+            if let Ok(ActIfeAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8414,14 +8430,16 @@ impl<'a> IterableActIfeAttrs<'a> {
 impl<'a> Iterator for IterableActIfeAttrs<'a> {
     type Item = Result<ActIfeAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8587,7 +8605,7 @@ impl<'a> IterableActMirredAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMirredAttrs::Tm(val) = attr? {
+            if let Ok(ActMirredAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8602,7 +8620,7 @@ impl<'a> IterableActMirredAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMirredAttrs::Parms(val) = attr? {
+            if let Ok(ActMirredAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8617,7 +8635,7 @@ impl<'a> IterableActMirredAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMirredAttrs::Pad(val) = attr? {
+            if let Ok(ActMirredAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8632,7 +8650,7 @@ impl<'a> IterableActMirredAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMirredAttrs::Blockid(val) = attr? {
+            if let Ok(ActMirredAttrs::Blockid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8680,14 +8698,16 @@ impl<'a> IterableActMirredAttrs<'a> {
 impl<'a> Iterator for IterableActMirredAttrs<'a> {
     type Item = Result<ActMirredAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -8821,7 +8841,7 @@ impl<'a> IterableActMplsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMplsAttrs::Tm(val) = attr? {
+            if let Ok(ActMplsAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8836,7 +8856,7 @@ impl<'a> IterableActMplsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMplsAttrs::Parms(val) = attr? {
+            if let Ok(ActMplsAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8851,7 +8871,7 @@ impl<'a> IterableActMplsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMplsAttrs::Pad(val) = attr? {
+            if let Ok(ActMplsAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8866,7 +8886,7 @@ impl<'a> IterableActMplsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMplsAttrs::Proto(val) = attr? {
+            if let Ok(ActMplsAttrs::Proto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8881,7 +8901,7 @@ impl<'a> IterableActMplsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMplsAttrs::Label(val) = attr? {
+            if let Ok(ActMplsAttrs::Label(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8896,7 +8916,7 @@ impl<'a> IterableActMplsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMplsAttrs::Tc(val) = attr? {
+            if let Ok(ActMplsAttrs::Tc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8911,7 +8931,7 @@ impl<'a> IterableActMplsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMplsAttrs::Ttl(val) = attr? {
+            if let Ok(ActMplsAttrs::Ttl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8926,7 +8946,7 @@ impl<'a> IterableActMplsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActMplsAttrs::Bos(val) = attr? {
+            if let Ok(ActMplsAttrs::Bos(val)) = attr {
                 return Ok(val);
             }
         }
@@ -8978,14 +8998,16 @@ impl<'a> IterableActMplsAttrs<'a> {
 impl<'a> Iterator for IterableActMplsAttrs<'a> {
     type Item = Result<ActMplsAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9162,7 +9184,7 @@ impl<'a> IterableActNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActNatAttrs::Parms(val) = attr? {
+            if let Ok(ActNatAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9177,7 +9199,7 @@ impl<'a> IterableActNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActNatAttrs::Tm(val) = attr? {
+            if let Ok(ActNatAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9192,7 +9214,7 @@ impl<'a> IterableActNatAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActNatAttrs::Pad(val) = attr? {
+            if let Ok(ActNatAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9239,14 +9261,16 @@ impl<'a> IterableActNatAttrs<'a> {
 impl<'a> Iterator for IterableActNatAttrs<'a> {
     type Item = Result<ActNatAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9366,7 +9390,7 @@ impl<'a> IterableActPeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActPeditAttrs::Tm(val) = attr? {
+            if let Ok(ActPeditAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9381,7 +9405,7 @@ impl<'a> IterableActPeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActPeditAttrs::Parms(val) = attr? {
+            if let Ok(ActPeditAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9396,7 +9420,7 @@ impl<'a> IterableActPeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActPeditAttrs::Pad(val) = attr? {
+            if let Ok(ActPeditAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9411,7 +9435,7 @@ impl<'a> IterableActPeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActPeditAttrs::ParmsEx(val) = attr? {
+            if let Ok(ActPeditAttrs::ParmsEx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9426,7 +9450,7 @@ impl<'a> IterableActPeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActPeditAttrs::KeysEx(val) = attr? {
+            if let Ok(ActPeditAttrs::KeysEx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9441,7 +9465,7 @@ impl<'a> IterableActPeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActPeditAttrs::KeyEx(val) = attr? {
+            if let Ok(ActPeditAttrs::KeyEx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9491,14 +9515,16 @@ impl<'a> IterableActPeditAttrs<'a> {
 impl<'a> Iterator for IterableActPeditAttrs<'a> {
     type Item = Result<ActPeditAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9652,7 +9678,7 @@ impl<'a> IterableActSimpleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSimpleAttrs::Tm(val) = attr? {
+            if let Ok(ActSimpleAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9667,7 +9693,7 @@ impl<'a> IterableActSimpleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSimpleAttrs::Parms(val) = attr? {
+            if let Ok(ActSimpleAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9682,7 +9708,7 @@ impl<'a> IterableActSimpleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSimpleAttrs::Data(val) = attr? {
+            if let Ok(ActSimpleAttrs::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9697,7 +9723,7 @@ impl<'a> IterableActSimpleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSimpleAttrs::Pad(val) = attr? {
+            if let Ok(ActSimpleAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9745,14 +9771,16 @@ impl<'a> IterableActSimpleAttrs<'a> {
 impl<'a> Iterator for IterableActSimpleAttrs<'a> {
     type Item = Result<ActSimpleAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -9888,7 +9916,7 @@ impl<'a> IterableActSkbeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbeditAttrs::Tm(val) = attr? {
+            if let Ok(ActSkbeditAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9903,7 +9931,7 @@ impl<'a> IterableActSkbeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbeditAttrs::Parms(val) = attr? {
+            if let Ok(ActSkbeditAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9918,7 +9946,7 @@ impl<'a> IterableActSkbeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbeditAttrs::Priority(val) = attr? {
+            if let Ok(ActSkbeditAttrs::Priority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9933,7 +9961,7 @@ impl<'a> IterableActSkbeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbeditAttrs::QueueMapping(val) = attr? {
+            if let Ok(ActSkbeditAttrs::QueueMapping(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9948,7 +9976,7 @@ impl<'a> IterableActSkbeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbeditAttrs::Mark(val) = attr? {
+            if let Ok(ActSkbeditAttrs::Mark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9963,7 +9991,7 @@ impl<'a> IterableActSkbeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbeditAttrs::Pad(val) = attr? {
+            if let Ok(ActSkbeditAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9978,7 +10006,7 @@ impl<'a> IterableActSkbeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbeditAttrs::Ptype(val) = attr? {
+            if let Ok(ActSkbeditAttrs::Ptype(val)) = attr {
                 return Ok(val);
             }
         }
@@ -9993,7 +10021,7 @@ impl<'a> IterableActSkbeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbeditAttrs::Mask(val) = attr? {
+            if let Ok(ActSkbeditAttrs::Mask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10008,7 +10036,7 @@ impl<'a> IterableActSkbeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbeditAttrs::Flags(val) = attr? {
+            if let Ok(ActSkbeditAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10023,7 +10051,7 @@ impl<'a> IterableActSkbeditAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbeditAttrs::QueueMappingMax(val) = attr? {
+            if let Ok(ActSkbeditAttrs::QueueMappingMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10077,14 +10105,16 @@ impl<'a> IterableActSkbeditAttrs<'a> {
 impl<'a> Iterator for IterableActSkbeditAttrs<'a> {
     type Item = Result<ActSkbeditAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10288,7 +10318,7 @@ impl<'a> IterableActSkbmodAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbmodAttrs::Tm(val) = attr? {
+            if let Ok(ActSkbmodAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10303,7 +10333,7 @@ impl<'a> IterableActSkbmodAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbmodAttrs::Parms(val) = attr? {
+            if let Ok(ActSkbmodAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10318,7 +10348,7 @@ impl<'a> IterableActSkbmodAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbmodAttrs::Dmac(val) = attr? {
+            if let Ok(ActSkbmodAttrs::Dmac(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10333,7 +10363,7 @@ impl<'a> IterableActSkbmodAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbmodAttrs::Smac(val) = attr? {
+            if let Ok(ActSkbmodAttrs::Smac(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10348,7 +10378,7 @@ impl<'a> IterableActSkbmodAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbmodAttrs::Etype(val) = attr? {
+            if let Ok(ActSkbmodAttrs::Etype(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10363,7 +10393,7 @@ impl<'a> IterableActSkbmodAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSkbmodAttrs::Pad(val) = attr? {
+            if let Ok(ActSkbmodAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10413,14 +10443,16 @@ impl<'a> IterableActSkbmodAttrs<'a> {
 impl<'a> Iterator for IterableActSkbmodAttrs<'a> {
     type Item = Result<ActSkbmodAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -10584,7 +10616,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::Tm(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10599,7 +10631,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::Parms(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10614,7 +10646,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::EncIpv4Src(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::EncIpv4Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10629,7 +10661,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::EncIpv4Dst(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::EncIpv4Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10644,7 +10676,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::EncIpv6Src(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::EncIpv6Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10659,7 +10691,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::EncIpv6Dst(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::EncIpv6Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10674,7 +10706,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::EncKeyId(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::EncKeyId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10689,7 +10721,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::Pad(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10704,7 +10736,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::EncDstPort(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::EncDstPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10719,7 +10751,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::NoCsum(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::NoCsum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10734,7 +10766,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::EncOpts(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::EncOpts(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10749,7 +10781,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::EncTos(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::EncTos(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10764,7 +10796,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::EncTtl(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::EncTtl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10779,7 +10811,7 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActTunnelKeyAttrs::NoFrag(val) = attr? {
+            if let Ok(ActTunnelKeyAttrs::NoFrag(val)) = attr {
                 return Ok(val);
             }
         }
@@ -10837,14 +10869,16 @@ impl<'a> IterableActTunnelKeyAttrs<'a> {
 impl<'a> Iterator for IterableActTunnelKeyAttrs<'a> {
     type Item = Result<ActTunnelKeyAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11094,7 +11128,7 @@ impl<'a> IterableActVlanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActVlanAttrs::Tm(val) = attr? {
+            if let Ok(ActVlanAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11109,7 +11143,7 @@ impl<'a> IterableActVlanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActVlanAttrs::Parms(val) = attr? {
+            if let Ok(ActVlanAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11124,7 +11158,7 @@ impl<'a> IterableActVlanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActVlanAttrs::PushVlanId(val) = attr? {
+            if let Ok(ActVlanAttrs::PushVlanId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11139,7 +11173,7 @@ impl<'a> IterableActVlanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActVlanAttrs::PushVlanProtocol(val) = attr? {
+            if let Ok(ActVlanAttrs::PushVlanProtocol(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11154,7 +11188,7 @@ impl<'a> IterableActVlanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActVlanAttrs::Pad(val) = attr? {
+            if let Ok(ActVlanAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11169,7 +11203,7 @@ impl<'a> IterableActVlanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActVlanAttrs::PushVlanPriority(val) = attr? {
+            if let Ok(ActVlanAttrs::PushVlanPriority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11184,7 +11218,7 @@ impl<'a> IterableActVlanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActVlanAttrs::PushEthDst(val) = attr? {
+            if let Ok(ActVlanAttrs::PushEthDst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11199,7 +11233,7 @@ impl<'a> IterableActVlanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActVlanAttrs::PushEthSrc(val) = attr? {
+            if let Ok(ActVlanAttrs::PushEthSrc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11251,14 +11285,16 @@ impl<'a> IterableActVlanAttrs<'a> {
 impl<'a> Iterator for IterableActVlanAttrs<'a> {
     type Item = Result<ActVlanAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11438,7 +11474,7 @@ impl<'a> IterableBasicAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BasicAttrs::Classid(val) = attr? {
+            if let Ok(BasicAttrs::Classid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11453,7 +11489,7 @@ impl<'a> IterableBasicAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BasicAttrs::Ematches(val) = attr? {
+            if let Ok(BasicAttrs::Ematches(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11468,7 +11504,7 @@ impl<'a> IterableBasicAttrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayActAttrs<'a>, IterableActAttrs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let BasicAttrs::Act(val) = attr? {
+            if let Ok(BasicAttrs::Act(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -11483,7 +11519,7 @@ impl<'a> IterableBasicAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BasicAttrs::Police(val) = attr? {
+            if let Ok(BasicAttrs::Police(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11498,7 +11534,7 @@ impl<'a> IterableBasicAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BasicAttrs::Pcnt(val) = attr? {
+            if let Ok(BasicAttrs::Pcnt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11513,7 +11549,7 @@ impl<'a> IterableBasicAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BasicAttrs::Pad(val) = attr? {
+            if let Ok(BasicAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11559,11 +11595,13 @@ impl<'a> Iterator for IterableArrayActAttrs<'a> {
                 return Some(Ok(IterableActAttrs::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "ActAttrs",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -11605,14 +11643,16 @@ impl<'a> IterableBasicAttrs<'a> {
 impl<'a> Iterator for IterableBasicAttrs<'a> {
     type Item = Result<BasicAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -11788,7 +11828,7 @@ impl<'a> IterableBpfAttrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayActAttrs<'a>, IterableActAttrs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let BpfAttrs::Act(val) = attr? {
+            if let Ok(BpfAttrs::Act(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -11803,7 +11843,7 @@ impl<'a> IterableBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfAttrs::Police(val) = attr? {
+            if let Ok(BpfAttrs::Police(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11818,7 +11858,7 @@ impl<'a> IterableBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfAttrs::Classid(val) = attr? {
+            if let Ok(BpfAttrs::Classid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11833,7 +11873,7 @@ impl<'a> IterableBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfAttrs::OpsLen(val) = attr? {
+            if let Ok(BpfAttrs::OpsLen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11848,7 +11888,7 @@ impl<'a> IterableBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfAttrs::Ops(val) = attr? {
+            if let Ok(BpfAttrs::Ops(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11863,7 +11903,7 @@ impl<'a> IterableBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfAttrs::Fd(val) = attr? {
+            if let Ok(BpfAttrs::Fd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11878,7 +11918,7 @@ impl<'a> IterableBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfAttrs::Name(val) = attr? {
+            if let Ok(BpfAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11893,7 +11933,7 @@ impl<'a> IterableBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfAttrs::Flags(val) = attr? {
+            if let Ok(BpfAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11908,7 +11948,7 @@ impl<'a> IterableBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfAttrs::FlagsGen(val) = attr? {
+            if let Ok(BpfAttrs::FlagsGen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11923,7 +11963,7 @@ impl<'a> IterableBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfAttrs::Tag(val) = attr? {
+            if let Ok(BpfAttrs::Tag(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11938,7 +11978,7 @@ impl<'a> IterableBpfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let BpfAttrs::Id(val) = attr? {
+            if let Ok(BpfAttrs::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -11993,14 +12033,16 @@ impl<'a> IterableBpfAttrs<'a> {
 impl<'a> Iterator for IterableBpfAttrs<'a> {
     type Item = Result<BpfAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12236,7 +12278,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Pad(val) = attr? {
+            if let Ok(CakeAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12251,7 +12293,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::BaseRate64(val) = attr? {
+            if let Ok(CakeAttrs::BaseRate64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12266,7 +12308,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::DiffservMode(val) = attr? {
+            if let Ok(CakeAttrs::DiffservMode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12281,7 +12323,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Atm(val) = attr? {
+            if let Ok(CakeAttrs::Atm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12296,7 +12338,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::FlowMode(val) = attr? {
+            if let Ok(CakeAttrs::FlowMode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12311,7 +12353,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Overhead(val) = attr? {
+            if let Ok(CakeAttrs::Overhead(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12326,7 +12368,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Rtt(val) = attr? {
+            if let Ok(CakeAttrs::Rtt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12341,7 +12383,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Target(val) = attr? {
+            if let Ok(CakeAttrs::Target(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12356,7 +12398,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Autorate(val) = attr? {
+            if let Ok(CakeAttrs::Autorate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12371,7 +12413,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Memory(val) = attr? {
+            if let Ok(CakeAttrs::Memory(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12386,7 +12428,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Nat(val) = attr? {
+            if let Ok(CakeAttrs::Nat(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12401,7 +12443,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Raw(val) = attr? {
+            if let Ok(CakeAttrs::Raw(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12416,7 +12458,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Wash(val) = attr? {
+            if let Ok(CakeAttrs::Wash(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12431,7 +12473,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Mpu(val) = attr? {
+            if let Ok(CakeAttrs::Mpu(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12446,7 +12488,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Ingress(val) = attr? {
+            if let Ok(CakeAttrs::Ingress(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12461,7 +12503,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::AckFilter(val) = attr? {
+            if let Ok(CakeAttrs::AckFilter(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12476,7 +12518,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::SplitGso(val) = attr? {
+            if let Ok(CakeAttrs::SplitGso(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12491,7 +12533,7 @@ impl<'a> IterableCakeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeAttrs::Fwmark(val) = attr? {
+            if let Ok(CakeAttrs::Fwmark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12553,14 +12595,16 @@ impl<'a> IterableCakeAttrs<'a> {
 impl<'a> Iterator for IterableCakeAttrs<'a> {
     type Item = Result<CakeAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -12871,7 +12915,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::Pad(val) = attr? {
+            if let Ok(CakeStatsAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12886,7 +12930,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::CapacityEstimate64(val) = attr? {
+            if let Ok(CakeStatsAttrs::CapacityEstimate64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12901,7 +12945,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::MemoryLimit(val) = attr? {
+            if let Ok(CakeStatsAttrs::MemoryLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12916,7 +12960,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::MemoryUsed(val) = attr? {
+            if let Ok(CakeStatsAttrs::MemoryUsed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12931,7 +12975,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::AvgNetoff(val) = attr? {
+            if let Ok(CakeStatsAttrs::AvgNetoff(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12946,7 +12990,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::MinNetlen(val) = attr? {
+            if let Ok(CakeStatsAttrs::MinNetlen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12961,7 +13005,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::MaxNetlen(val) = attr? {
+            if let Ok(CakeStatsAttrs::MaxNetlen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12976,7 +13020,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::MinAdjlen(val) = attr? {
+            if let Ok(CakeStatsAttrs::MinAdjlen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -12991,7 +13035,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::MaxAdjlen(val) = attr? {
+            if let Ok(CakeStatsAttrs::MaxAdjlen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13009,7 +13053,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         ErrorContext,
     > {
         for attr in self.clone() {
-            if let CakeStatsAttrs::TinStats(val) = attr? {
+            if let Ok(CakeStatsAttrs::TinStats(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -13024,7 +13068,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::Deficit(val) = attr? {
+            if let Ok(CakeStatsAttrs::Deficit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13039,7 +13083,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::CobaltCount(val) = attr? {
+            if let Ok(CakeStatsAttrs::CobaltCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13054,7 +13098,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::Dropping(val) = attr? {
+            if let Ok(CakeStatsAttrs::Dropping(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13069,7 +13113,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::DropNextUs(val) = attr? {
+            if let Ok(CakeStatsAttrs::DropNextUs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13084,7 +13128,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::PDrop(val) = attr? {
+            if let Ok(CakeStatsAttrs::PDrop(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13099,7 +13143,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::BlueTimerUs(val) = attr? {
+            if let Ok(CakeStatsAttrs::BlueTimerUs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13114,7 +13158,7 @@ impl<'a> IterableCakeStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeStatsAttrs::ActiveQueues(val) = attr? {
+            if let Ok(CakeStatsAttrs::ActiveQueues(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13160,11 +13204,13 @@ impl<'a> Iterator for IterableArrayCakeTinStatsAttrs<'a> {
                 return Some(Ok(IterableCakeTinStatsAttrs::with_loc(next, self.orig_loc)));
             }
         }
+        let pos = self.pos;
+        self.pos = self.buf.len();
         Some(Err(ErrorContext::new(
             "CakeTinStatsAttrs",
             None,
             self.orig_loc,
-            self.buf.as_ptr().wrapping_add(self.pos) as usize,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
         )))
     }
 }
@@ -13217,14 +13263,16 @@ impl<'a> IterableCakeStatsAttrs<'a> {
 impl<'a> Iterator for IterableCakeStatsAttrs<'a> {
     type Item = Result<CakeStatsAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -13549,7 +13597,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::Pad(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13564,7 +13612,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::SentPackets(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::SentPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13579,7 +13627,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::SentBytes64(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::SentBytes64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13594,7 +13642,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::DroppedPackets(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::DroppedPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13609,7 +13657,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::DroppedBytes64(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::DroppedBytes64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13624,7 +13672,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::AcksDroppedPackets(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::AcksDroppedPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13639,7 +13687,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::AcksDroppedBytes64(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::AcksDroppedBytes64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13654,7 +13702,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::EcnMarkedPackets(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::EcnMarkedPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13669,7 +13717,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::EcnMarkedBytes64(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::EcnMarkedBytes64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13684,7 +13732,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::BacklogPackets(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::BacklogPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13699,7 +13747,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::BacklogBytes(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::BacklogBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13714,7 +13762,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::ThresholdRate64(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::ThresholdRate64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13729,7 +13777,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::TargetUs(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::TargetUs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13744,7 +13792,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::IntervalUs(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::IntervalUs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13759,7 +13807,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::WayIndirectHits(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::WayIndirectHits(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13774,7 +13822,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::WayMisses(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::WayMisses(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13789,7 +13837,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::WayCollisions(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::WayCollisions(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13804,7 +13852,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::PeakDelayUs(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::PeakDelayUs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13819,7 +13867,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::AvgDelayUs(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::AvgDelayUs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13834,7 +13882,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::BaseDelayUs(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::BaseDelayUs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13849,7 +13897,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::SparseFlows(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::SparseFlows(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13864,7 +13912,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::BulkFlows(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::BulkFlows(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13879,7 +13927,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::UnresponsiveFlows(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::UnresponsiveFlows(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13894,7 +13942,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::MaxSkblen(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::MaxSkblen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13909,7 +13957,7 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CakeTinStatsAttrs::FlowQuantum(val) = attr? {
+            if let Ok(CakeTinStatsAttrs::FlowQuantum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -13978,14 +14026,16 @@ impl<'a> IterableCakeTinStatsAttrs<'a> {
 impl<'a> Iterator for IterableCakeTinStatsAttrs<'a> {
     type Item = Result<CakeTinStatsAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -14364,7 +14414,7 @@ impl<'a> IterableCbsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CbsAttrs::Parms(val) = attr? {
+            if let Ok(CbsAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14409,14 +14459,16 @@ impl<'a> IterableCbsAttrs<'a> {
 impl<'a> Iterator for IterableCbsAttrs<'a> {
     type Item = Result<CbsAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -14509,7 +14561,7 @@ impl<'a> IterableCgroupAttrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayActAttrs<'a>, IterableActAttrs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let CgroupAttrs::Act(val) = attr? {
+            if let Ok(CgroupAttrs::Act(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -14524,7 +14576,7 @@ impl<'a> IterableCgroupAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CgroupAttrs::Police(val) = attr? {
+            if let Ok(CgroupAttrs::Police(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14539,7 +14591,7 @@ impl<'a> IterableCgroupAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CgroupAttrs::Ematches(val) = attr? {
+            if let Ok(CgroupAttrs::Ematches(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14586,14 +14638,16 @@ impl<'a> IterableCgroupAttrs<'a> {
 impl<'a> Iterator for IterableCgroupAttrs<'a> {
     type Item = Result<CgroupAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -14718,7 +14772,7 @@ impl<'a> IterableChokeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChokeAttrs::Parms(val) = attr? {
+            if let Ok(ChokeAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14733,7 +14787,7 @@ impl<'a> IterableChokeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChokeAttrs::Stab(val) = attr? {
+            if let Ok(ChokeAttrs::Stab(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14748,7 +14802,7 @@ impl<'a> IterableChokeAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ChokeAttrs::MaxP(val) = attr? {
+            if let Ok(ChokeAttrs::MaxP(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14795,14 +14849,16 @@ impl<'a> IterableChokeAttrs<'a> {
 impl<'a> Iterator for IterableChokeAttrs<'a> {
     type Item = Result<ChokeAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -14921,7 +14977,7 @@ impl<'a> IterableCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CodelAttrs::Target(val) = attr? {
+            if let Ok(CodelAttrs::Target(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14936,7 +14992,7 @@ impl<'a> IterableCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CodelAttrs::Limit(val) = attr? {
+            if let Ok(CodelAttrs::Limit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14951,7 +15007,7 @@ impl<'a> IterableCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CodelAttrs::Interval(val) = attr? {
+            if let Ok(CodelAttrs::Interval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14966,7 +15022,7 @@ impl<'a> IterableCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CodelAttrs::Ecn(val) = attr? {
+            if let Ok(CodelAttrs::Ecn(val)) = attr {
                 return Ok(val);
             }
         }
@@ -14981,7 +15037,7 @@ impl<'a> IterableCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let CodelAttrs::CeThreshold(val) = attr? {
+            if let Ok(CodelAttrs::CeThreshold(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15030,14 +15086,16 @@ impl<'a> IterableCodelAttrs<'a> {
 impl<'a> Iterator for IterableCodelAttrs<'a> {
     type Item = Result<CodelAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -15176,7 +15234,7 @@ impl<'a> IterableDrrAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let DrrAttrs::Quantum(val) = attr? {
+            if let Ok(DrrAttrs::Quantum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15221,14 +15279,16 @@ impl<'a> IterableDrrAttrs<'a> {
 impl<'a> Iterator for IterableDrrAttrs<'a> {
     type Item = Result<DrrAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -15312,44 +15372,44 @@ impl IterableDrrAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum Dualpi2Attrs {
-    #[doc = "Limit of total number of packets in queue"]
+    #[doc = "Limit of total number of packets in queue\n"]
     Limit(u32),
-    #[doc = "Memory limit of total number of packets in queue"]
+    #[doc = "Memory limit of total number of packets in queue\n"]
     MemoryLimit(u32),
-    #[doc = "Classic target delay in microseconds"]
+    #[doc = "Classic target delay in microseconds\n"]
     Target(u32),
-    #[doc = "Drop probability update interval time in microseconds"]
+    #[doc = "Drop probability update interval time in microseconds\n"]
     Tupdate(u32),
-    #[doc = "Integral gain factor in Hz for PI controller"]
+    #[doc = "Integral gain factor in Hz for PI controller\n"]
     Alpha(u32),
-    #[doc = "Proportional gain factor in Hz for PI controller"]
+    #[doc = "Proportional gain factor in Hz for PI controller\n"]
     Beta(u32),
-    #[doc = "L4S step marking threshold in packets"]
+    #[doc = "L4S step marking threshold in packets\n"]
     StepThreshPkts(u32),
-    #[doc = "L4S Step marking threshold in microseconds"]
+    #[doc = "L4S Step marking threshold in microseconds\n"]
     StepThreshUs(u32),
-    #[doc = "Packets enqueued to the L\\-queue can apply the step threshold when the queue length of L\\-queue is larger than this value\\. (0 is recommended)"]
+    #[doc = "Packets enqueued to the L-queue can apply the step threshold when the\nqueue length of L-queue is larger than this value. (0 is recommended)\n"]
     MinQlenStep(u32),
-    #[doc = "Probability coupling factor between Classic and L4S (2 is recommended)"]
+    #[doc = "Probability coupling factor between Classic and L4S (2 is recommended)\n"]
     Coupling(u8),
-    #[doc = "Control the overload strategy (drop to preserve latency or let the queue overflow)\nAssociated type: [`Dualpi2DropOverload`] (enum)"]
+    #[doc = "Control the overload strategy (drop to preserve latency or let the queue\noverflow)\n\nAssociated type: [`Dualpi2DropOverload`] (enum)"]
     DropOverload(u8),
-    #[doc = "Decide where the Classic packets are PI\\-based dropped or marked\nAssociated type: [`Dualpi2DropEarly`] (enum)"]
+    #[doc = "Decide where the Classic packets are PI-based dropped or marked\n\nAssociated type: [`Dualpi2DropEarly`] (enum)"]
     DropEarly(u8),
-    #[doc = "Classic WRR weight in percentage (from 0 to 100)"]
+    #[doc = "Classic WRR weight in percentage (from 0 to 100)\n"]
     CProtection(u8),
-    #[doc = "Configure the L\\-queue ECN classifier\nAssociated type: [`Dualpi2EcnMask`] (enum)"]
+    #[doc = "Configure the L-queue ECN classifier\n\nAssociated type: [`Dualpi2EcnMask`] (enum)"]
     EcnMask(u8),
-    #[doc = "Split aggregated skb or not\nAssociated type: [`Dualpi2SplitGso`] (enum)"]
+    #[doc = "Split aggregated skb or not\n\nAssociated type: [`Dualpi2SplitGso`] (enum)"]
     SplitGso(u8),
 }
 impl<'a> IterableDualpi2Attrs<'a> {
-    #[doc = "Limit of total number of packets in queue"]
+    #[doc = "Limit of total number of packets in queue\n"]
     pub fn get_limit(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::Limit(val) = attr? {
+            if let Ok(Dualpi2Attrs::Limit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15360,12 +15420,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Memory limit of total number of packets in queue"]
+    #[doc = "Memory limit of total number of packets in queue\n"]
     pub fn get_memory_limit(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::MemoryLimit(val) = attr? {
+            if let Ok(Dualpi2Attrs::MemoryLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15376,12 +15436,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Classic target delay in microseconds"]
+    #[doc = "Classic target delay in microseconds\n"]
     pub fn get_target(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::Target(val) = attr? {
+            if let Ok(Dualpi2Attrs::Target(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15392,12 +15452,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Drop probability update interval time in microseconds"]
+    #[doc = "Drop probability update interval time in microseconds\n"]
     pub fn get_tupdate(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::Tupdate(val) = attr? {
+            if let Ok(Dualpi2Attrs::Tupdate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15408,12 +15468,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Integral gain factor in Hz for PI controller"]
+    #[doc = "Integral gain factor in Hz for PI controller\n"]
     pub fn get_alpha(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::Alpha(val) = attr? {
+            if let Ok(Dualpi2Attrs::Alpha(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15424,12 +15484,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Proportional gain factor in Hz for PI controller"]
+    #[doc = "Proportional gain factor in Hz for PI controller\n"]
     pub fn get_beta(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::Beta(val) = attr? {
+            if let Ok(Dualpi2Attrs::Beta(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15440,12 +15500,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "L4S step marking threshold in packets"]
+    #[doc = "L4S step marking threshold in packets\n"]
     pub fn get_step_thresh_pkts(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::StepThreshPkts(val) = attr? {
+            if let Ok(Dualpi2Attrs::StepThreshPkts(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15456,12 +15516,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "L4S Step marking threshold in microseconds"]
+    #[doc = "L4S Step marking threshold in microseconds\n"]
     pub fn get_step_thresh_us(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::StepThreshUs(val) = attr? {
+            if let Ok(Dualpi2Attrs::StepThreshUs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15472,12 +15532,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Packets enqueued to the L\\-queue can apply the step threshold when the queue length of L\\-queue is larger than this value\\. (0 is recommended)"]
+    #[doc = "Packets enqueued to the L-queue can apply the step threshold when the\nqueue length of L-queue is larger than this value. (0 is recommended)\n"]
     pub fn get_min_qlen_step(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::MinQlenStep(val) = attr? {
+            if let Ok(Dualpi2Attrs::MinQlenStep(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15488,12 +15548,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Probability coupling factor between Classic and L4S (2 is recommended)"]
+    #[doc = "Probability coupling factor between Classic and L4S (2 is recommended)\n"]
     pub fn get_coupling(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::Coupling(val) = attr? {
+            if let Ok(Dualpi2Attrs::Coupling(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15504,12 +15564,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Control the overload strategy (drop to preserve latency or let the queue overflow)\nAssociated type: [`Dualpi2DropOverload`] (enum)"]
+    #[doc = "Control the overload strategy (drop to preserve latency or let the queue\noverflow)\n\nAssociated type: [`Dualpi2DropOverload`] (enum)"]
     pub fn get_drop_overload(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::DropOverload(val) = attr? {
+            if let Ok(Dualpi2Attrs::DropOverload(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15520,12 +15580,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Decide where the Classic packets are PI\\-based dropped or marked\nAssociated type: [`Dualpi2DropEarly`] (enum)"]
+    #[doc = "Decide where the Classic packets are PI-based dropped or marked\n\nAssociated type: [`Dualpi2DropEarly`] (enum)"]
     pub fn get_drop_early(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::DropEarly(val) = attr? {
+            if let Ok(Dualpi2Attrs::DropEarly(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15536,12 +15596,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Classic WRR weight in percentage (from 0 to 100)"]
+    #[doc = "Classic WRR weight in percentage (from 0 to 100)\n"]
     pub fn get_c_protection(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::CProtection(val) = attr? {
+            if let Ok(Dualpi2Attrs::CProtection(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15552,12 +15612,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Configure the L\\-queue ECN classifier\nAssociated type: [`Dualpi2EcnMask`] (enum)"]
+    #[doc = "Configure the L-queue ECN classifier\n\nAssociated type: [`Dualpi2EcnMask`] (enum)"]
     pub fn get_ecn_mask(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::EcnMask(val) = attr? {
+            if let Ok(Dualpi2Attrs::EcnMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15568,12 +15628,12 @@ impl<'a> IterableDualpi2Attrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Split aggregated skb or not\nAssociated type: [`Dualpi2SplitGso`] (enum)"]
+    #[doc = "Split aggregated skb or not\n\nAssociated type: [`Dualpi2SplitGso`] (enum)"]
     pub fn get_split_gso(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Dualpi2Attrs::SplitGso(val) = attr? {
+            if let Ok(Dualpi2Attrs::SplitGso(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15632,14 +15692,16 @@ impl<'a> IterableDualpi2Attrs<'a> {
 impl<'a> Iterator for IterableDualpi2Attrs<'a> {
     type Item = Result<Dualpi2Attrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -15911,7 +15973,7 @@ impl<'a> IterableEmatchAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EmatchAttrs::TreeHdr(val) = attr? {
+            if let Ok(EmatchAttrs::TreeHdr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15926,7 +15988,7 @@ impl<'a> IterableEmatchAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EmatchAttrs::TreeList(val) = attr? {
+            if let Ok(EmatchAttrs::TreeList(val)) = attr {
                 return Ok(val);
             }
         }
@@ -15972,14 +16034,16 @@ impl<'a> IterableEmatchAttrs<'a> {
 impl<'a> Iterator for IterableEmatchAttrs<'a> {
     type Item = Result<EmatchAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -16093,7 +16157,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Keys(val) = attr? {
+            if let Ok(FlowAttrs::Keys(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16108,7 +16172,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Mode(val) = attr? {
+            if let Ok(FlowAttrs::Mode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16123,7 +16187,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Baseclass(val) = attr? {
+            if let Ok(FlowAttrs::Baseclass(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16138,7 +16202,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Rshift(val) = attr? {
+            if let Ok(FlowAttrs::Rshift(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16153,7 +16217,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Addend(val) = attr? {
+            if let Ok(FlowAttrs::Addend(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16168,7 +16232,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Mask(val) = attr? {
+            if let Ok(FlowAttrs::Mask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16183,7 +16247,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Xor(val) = attr? {
+            if let Ok(FlowAttrs::Xor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16198,7 +16262,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Divisor(val) = attr? {
+            if let Ok(FlowAttrs::Divisor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16213,7 +16277,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Act(val) = attr? {
+            if let Ok(FlowAttrs::Act(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16228,7 +16292,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Police(val) = attr? {
+            if let Ok(FlowAttrs::Police(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16243,7 +16307,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Ematches(val) = attr? {
+            if let Ok(FlowAttrs::Ematches(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16258,7 +16322,7 @@ impl<'a> IterableFlowAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowAttrs::Perturb(val) = attr? {
+            if let Ok(FlowAttrs::Perturb(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16314,14 +16378,16 @@ impl<'a> IterableFlowAttrs<'a> {
 impl<'a> Iterator for IterableFlowAttrs<'a> {
     type Item = Result<FlowAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -16660,7 +16726,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::Classid(val) = attr? {
+            if let Ok(FlowerAttrs::Classid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16675,7 +16741,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::Indev(val) = attr? {
+            if let Ok(FlowerAttrs::Indev(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16690,7 +16756,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayActAttrs<'a>, IterableActAttrs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let FlowerAttrs::Act(val) = attr? {
+            if let Ok(FlowerAttrs::Act(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -16705,7 +16771,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEthDst(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEthDst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16720,7 +16786,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEthDstMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEthDstMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16735,7 +16801,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEthSrc(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEthSrc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16750,7 +16816,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEthSrcMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEthSrcMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16765,7 +16831,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEthType(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEthType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16780,7 +16846,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpProto(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpProto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16795,7 +16861,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpv4Src(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpv4Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16810,7 +16876,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpv4SrcMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpv4SrcMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16825,7 +16891,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpv4Dst(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpv4Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16840,7 +16906,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpv4DstMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpv4DstMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16855,7 +16921,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpv6Src(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpv6Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16870,7 +16936,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpv6SrcMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpv6SrcMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16885,7 +16951,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpv6Dst(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpv6Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16900,7 +16966,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpv6DstMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpv6DstMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16915,7 +16981,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyTcpSrc(val) = attr? {
+            if let Ok(FlowerAttrs::KeyTcpSrc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16930,7 +16996,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyTcpDst(val) = attr? {
+            if let Ok(FlowerAttrs::KeyTcpDst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16945,7 +17011,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyUdpSrc(val) = attr? {
+            if let Ok(FlowerAttrs::KeyUdpSrc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16960,7 +17026,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyUdpDst(val) = attr? {
+            if let Ok(FlowerAttrs::KeyUdpDst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16976,7 +17042,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::Flags(val) = attr? {
+            if let Ok(FlowerAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -16991,7 +17057,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyVlanId(val) = attr? {
+            if let Ok(FlowerAttrs::KeyVlanId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17006,7 +17072,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyVlanPrio(val) = attr? {
+            if let Ok(FlowerAttrs::KeyVlanPrio(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17021,7 +17087,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyVlanEthType(val) = attr? {
+            if let Ok(FlowerAttrs::KeyVlanEthType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17036,7 +17102,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncKeyId(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncKeyId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17051,7 +17117,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpv4Src(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpv4Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17066,7 +17132,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpv4SrcMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpv4SrcMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17081,7 +17147,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpv4Dst(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpv4Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17096,7 +17162,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpv4DstMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpv4DstMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17111,7 +17177,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpv6Src(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpv6Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17126,7 +17192,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpv6SrcMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpv6SrcMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17141,7 +17207,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpv6Dst(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpv6Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17156,7 +17222,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpv6DstMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpv6DstMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17171,7 +17237,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyTcpSrcMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyTcpSrcMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17186,7 +17252,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyTcpDstMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyTcpDstMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17201,7 +17267,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyUdpSrcMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyUdpSrcMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17216,7 +17282,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyUdpDstMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyUdpDstMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17231,7 +17297,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeySctpSrcMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeySctpSrcMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17246,7 +17312,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeySctpDstMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeySctpDstMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17261,7 +17327,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeySctpSrc(val) = attr? {
+            if let Ok(FlowerAttrs::KeySctpSrc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17276,7 +17342,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeySctpDst(val) = attr? {
+            if let Ok(FlowerAttrs::KeySctpDst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17291,7 +17357,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncUdpSrcPort(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncUdpSrcPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17306,7 +17372,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncUdpSrcPortMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncUdpSrcPortMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17321,7 +17387,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncUdpDstPort(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncUdpDstPort(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17336,7 +17402,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncUdpDstPortMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncUdpDstPortMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17352,7 +17418,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyFlags(val) = attr? {
+            if let Ok(FlowerAttrs::KeyFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17368,7 +17434,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyFlagsMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyFlagsMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17383,7 +17449,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIcmpv4Code(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIcmpv4Code(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17398,7 +17464,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIcmpv4CodeMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIcmpv4CodeMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17413,7 +17479,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIcmpv4Type(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIcmpv4Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17428,7 +17494,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIcmpv4TypeMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIcmpv4TypeMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17443,7 +17509,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIcmpv6Code(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIcmpv6Code(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17458,7 +17524,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIcmpv6CodeMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIcmpv6CodeMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17473,7 +17539,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIcmpv6Type(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIcmpv6Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17488,7 +17554,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIcmpv6TypeMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIcmpv6TypeMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17503,7 +17569,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyArpSip(val) = attr? {
+            if let Ok(FlowerAttrs::KeyArpSip(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17518,7 +17584,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyArpSipMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyArpSipMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17533,7 +17599,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyArpTip(val) = attr? {
+            if let Ok(FlowerAttrs::KeyArpTip(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17548,7 +17614,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyArpTipMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyArpTipMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17563,7 +17629,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyArpOp(val) = attr? {
+            if let Ok(FlowerAttrs::KeyArpOp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17578,7 +17644,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyArpOpMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyArpOpMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17593,7 +17659,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyArpSha(val) = attr? {
+            if let Ok(FlowerAttrs::KeyArpSha(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17608,7 +17674,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyArpShaMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyArpShaMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17623,7 +17689,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyArpTha(val) = attr? {
+            if let Ok(FlowerAttrs::KeyArpTha(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17638,7 +17704,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyArpThaMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyArpThaMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17653,7 +17719,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyMplsTtl(val) = attr? {
+            if let Ok(FlowerAttrs::KeyMplsTtl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17668,7 +17734,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyMplsBos(val) = attr? {
+            if let Ok(FlowerAttrs::KeyMplsBos(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17683,7 +17749,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyMplsTc(val) = attr? {
+            if let Ok(FlowerAttrs::KeyMplsTc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17698,7 +17764,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyMplsLabel(val) = attr? {
+            if let Ok(FlowerAttrs::KeyMplsLabel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17713,7 +17779,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyTcpFlags(val) = attr? {
+            if let Ok(FlowerAttrs::KeyTcpFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17728,7 +17794,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyTcpFlagsMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyTcpFlagsMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17743,7 +17809,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpTos(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpTos(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17758,7 +17824,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpTosMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpTosMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17773,7 +17839,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpTtl(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpTtl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17788,7 +17854,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyIpTtlMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyIpTtlMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17803,7 +17869,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCvlanId(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCvlanId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17818,7 +17884,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCvlanPrio(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCvlanPrio(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17833,7 +17899,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCvlanEthType(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCvlanEthType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17848,7 +17914,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpTos(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpTos(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17863,7 +17929,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpTosMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpTosMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17878,7 +17944,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpTtl(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpTtl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17893,7 +17959,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncIpTtlMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncIpTtlMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17908,7 +17974,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncOpts(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncOpts(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17923,7 +17989,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncOptsMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncOptsMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17938,7 +18004,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::InHwCount(val) = attr? {
+            if let Ok(FlowerAttrs::InHwCount(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17953,7 +18019,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyPortSrcMin(val) = attr? {
+            if let Ok(FlowerAttrs::KeyPortSrcMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17968,7 +18034,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyPortSrcMax(val) = attr? {
+            if let Ok(FlowerAttrs::KeyPortSrcMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17983,7 +18049,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyPortDstMin(val) = attr? {
+            if let Ok(FlowerAttrs::KeyPortDstMin(val)) = attr {
                 return Ok(val);
             }
         }
@@ -17998,7 +18064,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyPortDstMax(val) = attr? {
+            if let Ok(FlowerAttrs::KeyPortDstMax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18013,7 +18079,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCtState(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCtState(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18028,7 +18094,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCtStateMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCtStateMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18043,7 +18109,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCtZone(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCtZone(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18058,7 +18124,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCtZoneMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCtZoneMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18073,7 +18139,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCtMark(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCtMark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18088,7 +18154,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCtMarkMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCtMarkMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18103,7 +18169,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCtLabels(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCtLabels(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18118,7 +18184,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCtLabelsMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCtLabelsMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18133,7 +18199,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyMplsOpts(val) = attr? {
+            if let Ok(FlowerAttrs::KeyMplsOpts(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18148,7 +18214,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyHash(val) = attr? {
+            if let Ok(FlowerAttrs::KeyHash(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18163,7 +18229,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyHashMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyHashMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18178,7 +18244,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyNumOfVlans(val) = attr? {
+            if let Ok(FlowerAttrs::KeyNumOfVlans(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18193,7 +18259,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyPppoeSid(val) = attr? {
+            if let Ok(FlowerAttrs::KeyPppoeSid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18208,7 +18274,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyPppProto(val) = attr? {
+            if let Ok(FlowerAttrs::KeyPppProto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18223,7 +18289,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyL2tpv3Sid(val) = attr? {
+            if let Ok(FlowerAttrs::KeyL2tpv3Sid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18238,7 +18304,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::L2Miss(val) = attr? {
+            if let Ok(FlowerAttrs::L2Miss(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18253,7 +18319,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyCfm(val) = attr? {
+            if let Ok(FlowerAttrs::KeyCfm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18268,7 +18334,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeySpi(val) = attr? {
+            if let Ok(FlowerAttrs::KeySpi(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18283,7 +18349,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeySpiMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeySpiMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18299,7 +18365,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncFlags(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18315,7 +18381,7 @@ impl<'a> IterableFlowerAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerAttrs::KeyEncFlagsMask(val) = attr? {
+            if let Ok(FlowerAttrs::KeyEncFlagsMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -18470,14 +18536,16 @@ impl<'a> IterableFlowerAttrs<'a> {
 impl<'a> Iterator for IterableFlowerAttrs<'a> {
     type Item = Result<FlowerAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -19913,7 +19981,7 @@ impl<'a> IterableFlowerKeyEncOptsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptsAttrs::Geneve(val) = attr? {
+            if let Ok(FlowerKeyEncOptsAttrs::Geneve(val)) = attr {
                 return Ok(val);
             }
         }
@@ -19928,7 +19996,7 @@ impl<'a> IterableFlowerKeyEncOptsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptsAttrs::Vxlan(val) = attr? {
+            if let Ok(FlowerKeyEncOptsAttrs::Vxlan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -19943,7 +20011,7 @@ impl<'a> IterableFlowerKeyEncOptsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptsAttrs::Erspan(val) = attr? {
+            if let Ok(FlowerKeyEncOptsAttrs::Erspan(val)) = attr {
                 return Ok(val);
             }
         }
@@ -19958,7 +20026,7 @@ impl<'a> IterableFlowerKeyEncOptsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptsAttrs::Gtp(val) = attr? {
+            if let Ok(FlowerKeyEncOptsAttrs::Gtp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20006,14 +20074,16 @@ impl<'a> IterableFlowerKeyEncOptsAttrs<'a> {
 impl<'a> Iterator for IterableFlowerKeyEncOptsAttrs<'a> {
     type Item = Result<FlowerKeyEncOptsAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -20155,7 +20225,7 @@ impl<'a> IterableFlowerKeyEncOptGeneveAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptGeneveAttrs::Class(val) = attr? {
+            if let Ok(FlowerKeyEncOptGeneveAttrs::Class(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20170,7 +20240,7 @@ impl<'a> IterableFlowerKeyEncOptGeneveAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptGeneveAttrs::Type(val) = attr? {
+            if let Ok(FlowerKeyEncOptGeneveAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20185,7 +20255,7 @@ impl<'a> IterableFlowerKeyEncOptGeneveAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptGeneveAttrs::Data(val) = attr? {
+            if let Ok(FlowerKeyEncOptGeneveAttrs::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20232,14 +20302,16 @@ impl<'a> IterableFlowerKeyEncOptGeneveAttrs<'a> {
 impl<'a> Iterator for IterableFlowerKeyEncOptGeneveAttrs<'a> {
     type Item = Result<FlowerKeyEncOptGeneveAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -20354,7 +20426,7 @@ impl<'a> IterableFlowerKeyEncOptVxlanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptVxlanAttrs::Gbp(val) = attr? {
+            if let Ok(FlowerKeyEncOptVxlanAttrs::Gbp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20399,14 +20471,16 @@ impl<'a> IterableFlowerKeyEncOptVxlanAttrs<'a> {
 impl<'a> Iterator for IterableFlowerKeyEncOptVxlanAttrs<'a> {
     type Item = Result<FlowerKeyEncOptVxlanAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -20500,7 +20574,7 @@ impl<'a> IterableFlowerKeyEncOptErspanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptErspanAttrs::Ver(val) = attr? {
+            if let Ok(FlowerKeyEncOptErspanAttrs::Ver(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20515,7 +20589,7 @@ impl<'a> IterableFlowerKeyEncOptErspanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptErspanAttrs::Index(val) = attr? {
+            if let Ok(FlowerKeyEncOptErspanAttrs::Index(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20530,7 +20604,7 @@ impl<'a> IterableFlowerKeyEncOptErspanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptErspanAttrs::Dir(val) = attr? {
+            if let Ok(FlowerKeyEncOptErspanAttrs::Dir(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20545,7 +20619,7 @@ impl<'a> IterableFlowerKeyEncOptErspanAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptErspanAttrs::Hwid(val) = attr? {
+            if let Ok(FlowerKeyEncOptErspanAttrs::Hwid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20593,14 +20667,16 @@ impl<'a> IterableFlowerKeyEncOptErspanAttrs<'a> {
 impl<'a> Iterator for IterableFlowerKeyEncOptErspanAttrs<'a> {
     type Item = Result<FlowerKeyEncOptErspanAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -20728,7 +20804,7 @@ impl<'a> IterableFlowerKeyEncOptGtpAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptGtpAttrs::PduType(val) = attr? {
+            if let Ok(FlowerKeyEncOptGtpAttrs::PduType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20743,7 +20819,7 @@ impl<'a> IterableFlowerKeyEncOptGtpAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyEncOptGtpAttrs::Qfi(val) = attr? {
+            if let Ok(FlowerKeyEncOptGtpAttrs::Qfi(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20789,14 +20865,16 @@ impl<'a> IterableFlowerKeyEncOptGtpAttrs<'a> {
 impl<'a> Iterator for IterableFlowerKeyEncOptGtpAttrs<'a> {
     type Item = Result<FlowerKeyEncOptGtpAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -20903,7 +20981,7 @@ impl<'a> IterableFlowerKeyMplsOptAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyMplsOptAttrs::LseDepth(val) = attr? {
+            if let Ok(FlowerKeyMplsOptAttrs::LseDepth(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20918,7 +20996,7 @@ impl<'a> IterableFlowerKeyMplsOptAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyMplsOptAttrs::LseTtl(val) = attr? {
+            if let Ok(FlowerKeyMplsOptAttrs::LseTtl(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20933,7 +21011,7 @@ impl<'a> IterableFlowerKeyMplsOptAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyMplsOptAttrs::LseBos(val) = attr? {
+            if let Ok(FlowerKeyMplsOptAttrs::LseBos(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20948,7 +21026,7 @@ impl<'a> IterableFlowerKeyMplsOptAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyMplsOptAttrs::LseTc(val) = attr? {
+            if let Ok(FlowerKeyMplsOptAttrs::LseTc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -20963,7 +21041,7 @@ impl<'a> IterableFlowerKeyMplsOptAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyMplsOptAttrs::LseLabel(val) = attr? {
+            if let Ok(FlowerKeyMplsOptAttrs::LseLabel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21012,14 +21090,16 @@ impl<'a> IterableFlowerKeyMplsOptAttrs<'a> {
 impl<'a> Iterator for IterableFlowerKeyMplsOptAttrs<'a> {
     type Item = Result<FlowerKeyMplsOptAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -21159,7 +21239,7 @@ impl<'a> IterableFlowerKeyCfmAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyCfmAttrs::MdLevel(val) = attr? {
+            if let Ok(FlowerKeyCfmAttrs::MdLevel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21174,7 +21254,7 @@ impl<'a> IterableFlowerKeyCfmAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FlowerKeyCfmAttrs::Opcode(val) = attr? {
+            if let Ok(FlowerKeyCfmAttrs::Opcode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21220,14 +21300,16 @@ impl<'a> IterableFlowerKeyCfmAttrs<'a> {
 impl<'a> Iterator for IterableFlowerKeyCfmAttrs<'a> {
     type Item = Result<FlowerKeyCfmAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -21334,7 +21416,7 @@ impl<'a> IterableFwAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FwAttrs::Classid(val) = attr? {
+            if let Ok(FwAttrs::Classid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21349,7 +21431,7 @@ impl<'a> IterableFwAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FwAttrs::Police(val) = attr? {
+            if let Ok(FwAttrs::Police(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21364,7 +21446,7 @@ impl<'a> IterableFwAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FwAttrs::Indev(val) = attr? {
+            if let Ok(FwAttrs::Indev(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21379,7 +21461,7 @@ impl<'a> IterableFwAttrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayActAttrs<'a>, IterableActAttrs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let FwAttrs::Act(val) = attr? {
+            if let Ok(FwAttrs::Act(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -21394,7 +21476,7 @@ impl<'a> IterableFwAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FwAttrs::Mask(val) = attr? {
+            if let Ok(FwAttrs::Mask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21443,14 +21525,16 @@ impl<'a> IterableFwAttrs<'a> {
 impl<'a> Iterator for IterableFwAttrs<'a> {
     type Item = Result<FwAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -21599,7 +21683,7 @@ impl<'a> IterableGredAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let GredAttrs::Parms(val) = attr? {
+            if let Ok(GredAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21614,7 +21698,7 @@ impl<'a> IterableGredAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let GredAttrs::Stab(val) = attr? {
+            if let Ok(GredAttrs::Stab(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21629,7 +21713,7 @@ impl<'a> IterableGredAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let GredAttrs::Dps(val) = attr? {
+            if let Ok(GredAttrs::Dps(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21644,7 +21728,7 @@ impl<'a> IterableGredAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let GredAttrs::MaxP(val) = attr? {
+            if let Ok(GredAttrs::MaxP(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21659,7 +21743,7 @@ impl<'a> IterableGredAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let GredAttrs::Limit(val) = attr? {
+            if let Ok(GredAttrs::Limit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21674,7 +21758,7 @@ impl<'a> IterableGredAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let GredAttrs::VqList(val) = attr? {
+            if let Ok(GredAttrs::VqList(val)) = attr {
                 return Ok(val);
             }
         }
@@ -21724,14 +21808,16 @@ impl<'a> IterableGredAttrs<'a> {
 impl<'a> Iterator for IterableGredAttrs<'a> {
     type Item = Result<GredAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -21926,14 +22012,16 @@ impl<'a> IterableTcaGredVqListAttrs<'a> {
 impl<'a> Iterator for IterableTcaGredVqListAttrs<'a> {
     type Item = Result<TcaGredVqListAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -22036,7 +22124,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::Pad(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22051,7 +22139,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::Dp(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::Dp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22066,7 +22154,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::StatBytes(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::StatBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22081,7 +22169,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::StatPackets(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::StatPackets(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22096,7 +22184,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::StatBacklog(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::StatBacklog(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22111,7 +22199,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::StatProbDrop(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::StatProbDrop(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22126,7 +22214,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::StatProbMark(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::StatProbMark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22141,7 +22229,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::StatForcedDrop(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::StatForcedDrop(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22156,7 +22244,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::StatForcedMark(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::StatForcedMark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22171,7 +22259,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::StatPdrop(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::StatPdrop(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22186,7 +22274,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::StatOther(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::StatOther(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22201,7 +22289,7 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaGredVqEntryAttrs::Flags(val) = attr? {
+            if let Ok(TcaGredVqEntryAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22257,14 +22345,16 @@ impl<'a> IterableTcaGredVqEntryAttrs<'a> {
 impl<'a> Iterator for IterableTcaGredVqEntryAttrs<'a> {
     type Item = Result<TcaGredVqEntryAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -22489,7 +22579,7 @@ impl<'a> IterableHfscAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HfscAttrs::Rsc(val) = attr? {
+            if let Ok(HfscAttrs::Rsc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22504,7 +22594,7 @@ impl<'a> IterableHfscAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HfscAttrs::Fsc(val) = attr? {
+            if let Ok(HfscAttrs::Fsc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22519,7 +22609,7 @@ impl<'a> IterableHfscAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HfscAttrs::Usc(val) = attr? {
+            if let Ok(HfscAttrs::Usc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22566,14 +22656,16 @@ impl<'a> IterableHfscAttrs<'a> {
 impl<'a> Iterator for IterableHfscAttrs<'a> {
     type Item = Result<HfscAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -22694,7 +22786,7 @@ impl<'a> IterableHhfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HhfAttrs::BacklogLimit(val) = attr? {
+            if let Ok(HhfAttrs::BacklogLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22709,7 +22801,7 @@ impl<'a> IterableHhfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HhfAttrs::Quantum(val) = attr? {
+            if let Ok(HhfAttrs::Quantum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22724,7 +22816,7 @@ impl<'a> IterableHhfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HhfAttrs::HhFlowsLimit(val) = attr? {
+            if let Ok(HhfAttrs::HhFlowsLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22739,7 +22831,7 @@ impl<'a> IterableHhfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HhfAttrs::ResetTimeout(val) = attr? {
+            if let Ok(HhfAttrs::ResetTimeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22754,7 +22846,7 @@ impl<'a> IterableHhfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HhfAttrs::AdmitBytes(val) = attr? {
+            if let Ok(HhfAttrs::AdmitBytes(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22769,7 +22861,7 @@ impl<'a> IterableHhfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HhfAttrs::EvictTimeout(val) = attr? {
+            if let Ok(HhfAttrs::EvictTimeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22784,7 +22876,7 @@ impl<'a> IterableHhfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HhfAttrs::NonHhWeight(val) = attr? {
+            if let Ok(HhfAttrs::NonHhWeight(val)) = attr {
                 return Ok(val);
             }
         }
@@ -22835,14 +22927,16 @@ impl<'a> IterableHhfAttrs<'a> {
 impl<'a> Iterator for IterableHhfAttrs<'a> {
     type Item = Result<HhfAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -23013,7 +23107,7 @@ impl<'a> IterableHtbAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HtbAttrs::Parms(val) = attr? {
+            if let Ok(HtbAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23028,7 +23122,7 @@ impl<'a> IterableHtbAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HtbAttrs::Init(val) = attr? {
+            if let Ok(HtbAttrs::Init(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23043,7 +23137,7 @@ impl<'a> IterableHtbAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HtbAttrs::Ctab(val) = attr? {
+            if let Ok(HtbAttrs::Ctab(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23058,7 +23152,7 @@ impl<'a> IterableHtbAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HtbAttrs::Rtab(val) = attr? {
+            if let Ok(HtbAttrs::Rtab(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23073,7 +23167,7 @@ impl<'a> IterableHtbAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HtbAttrs::DirectQlen(val) = attr? {
+            if let Ok(HtbAttrs::DirectQlen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23088,7 +23182,7 @@ impl<'a> IterableHtbAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HtbAttrs::Rate64(val) = attr? {
+            if let Ok(HtbAttrs::Rate64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23103,7 +23197,7 @@ impl<'a> IterableHtbAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HtbAttrs::Ceil64(val) = attr? {
+            if let Ok(HtbAttrs::Ceil64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23118,7 +23212,7 @@ impl<'a> IterableHtbAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HtbAttrs::Pad(val) = attr? {
+            if let Ok(HtbAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23133,7 +23227,7 @@ impl<'a> IterableHtbAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let HtbAttrs::Offload(val) = attr? {
+            if let Ok(HtbAttrs::Offload(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23186,14 +23280,16 @@ impl<'a> IterableHtbAttrs<'a> {
 impl<'a> Iterator for IterableHtbAttrs<'a> {
     type Item = Result<HtbAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -23380,7 +23476,7 @@ impl<'a> IterableMatchallAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MatchallAttrs::Classid(val) = attr? {
+            if let Ok(MatchallAttrs::Classid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23395,7 +23491,7 @@ impl<'a> IterableMatchallAttrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayActAttrs<'a>, IterableActAttrs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let MatchallAttrs::Act(val) = attr? {
+            if let Ok(MatchallAttrs::Act(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -23410,7 +23506,7 @@ impl<'a> IterableMatchallAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MatchallAttrs::Flags(val) = attr? {
+            if let Ok(MatchallAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23425,7 +23521,7 @@ impl<'a> IterableMatchallAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MatchallAttrs::Pcnt(val) = attr? {
+            if let Ok(MatchallAttrs::Pcnt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23440,7 +23536,7 @@ impl<'a> IterableMatchallAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let MatchallAttrs::Pad(val) = attr? {
+            if let Ok(MatchallAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23489,14 +23585,16 @@ impl<'a> IterableMatchallAttrs<'a> {
 impl<'a> Iterator for IterableMatchallAttrs<'a> {
     type Item = Result<MatchallAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -23643,7 +23741,7 @@ impl<'a> IterableEtfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EtfAttrs::Parms(val) = attr? {
+            if let Ok(EtfAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23688,14 +23786,16 @@ impl<'a> IterableEtfAttrs<'a> {
 impl<'a> Iterator for IterableEtfAttrs<'a> {
     type Item = Result<EtfAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -23793,7 +23893,7 @@ impl<'a> IterableEtsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EtsAttrs::Nbands(val) = attr? {
+            if let Ok(EtsAttrs::Nbands(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23808,7 +23908,7 @@ impl<'a> IterableEtsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EtsAttrs::Nstrict(val) = attr? {
+            if let Ok(EtsAttrs::Nstrict(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23823,7 +23923,7 @@ impl<'a> IterableEtsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EtsAttrs::Quanta(val) = attr? {
+            if let Ok(EtsAttrs::Quanta(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23848,7 +23948,7 @@ impl<'a> IterableEtsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EtsAttrs::Priomap(val) = attr? {
+            if let Ok(EtsAttrs::Priomap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -23908,14 +24008,16 @@ impl<'a> IterableEtsAttrs<'a> {
 impl<'a> Iterator for IterableEtsAttrs<'a> {
     type Item = Result<EtsAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -24060,46 +24162,46 @@ impl IterableEtsAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum FqAttrs<'a> {
-    #[doc = "Limit of total number of packets in queue"]
+    #[doc = "Limit of total number of packets in queue\n"]
     Plimit(u32),
-    #[doc = "Limit of packets per flow"]
+    #[doc = "Limit of packets per flow\n"]
     FlowPlimit(u32),
-    #[doc = "RR quantum"]
+    #[doc = "RR quantum\n"]
     Quantum(u32),
-    #[doc = "RR quantum for new flow"]
+    #[doc = "RR quantum for new flow\n"]
     InitialQuantum(u32),
-    #[doc = "Enable / disable rate limiting"]
+    #[doc = "Enable / disable rate limiting\n"]
     RateEnable(u32),
-    #[doc = "Obsolete, do not use"]
+    #[doc = "Obsolete, do not use\n"]
     FlowDefaultRate(u32),
-    #[doc = "Per flow max rate"]
+    #[doc = "Per flow max rate\n"]
     FlowMaxRate(u32),
-    #[doc = "log2(number of buckets)"]
+    #[doc = "log2(number of buckets)\n"]
     BucketsLog(u32),
-    #[doc = "Flow credit refill delay in usec"]
+    #[doc = "Flow credit refill delay in usec\n"]
     FlowRefillDelay(u32),
-    #[doc = "Mask applied to orphaned skb hashes"]
+    #[doc = "Mask applied to orphaned skb hashes\n"]
     OrphanMask(u32),
-    #[doc = "Per packet delay under this rate"]
+    #[doc = "Per packet delay under this rate\n"]
     LowRateThreshold(u32),
-    #[doc = "DCTCP\\-like CE marking threshold"]
+    #[doc = "DCTCP-like CE marking threshold\n"]
     CeThreshold(u32),
     TimerSlack(u32),
-    #[doc = "Time horizon in usec"]
+    #[doc = "Time horizon in usec\n"]
     Horizon(u32),
-    #[doc = "Drop packets beyond horizon, or cap their EDT"]
+    #[doc = "Drop packets beyond horizon, or cap their EDT\n"]
     HorizonDrop(u8),
     Priomap(TcPrioQopt),
-    #[doc = "Weights for each band"]
+    #[doc = "Weights for each band\n"]
     Weights(&'a [u8]),
 }
 impl<'a> IterableFqAttrs<'a> {
-    #[doc = "Limit of total number of packets in queue"]
+    #[doc = "Limit of total number of packets in queue\n"]
     pub fn get_plimit(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::Plimit(val) = attr? {
+            if let Ok(FqAttrs::Plimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24110,12 +24212,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Limit of packets per flow"]
+    #[doc = "Limit of packets per flow\n"]
     pub fn get_flow_plimit(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::FlowPlimit(val) = attr? {
+            if let Ok(FqAttrs::FlowPlimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24126,12 +24228,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "RR quantum"]
+    #[doc = "RR quantum\n"]
     pub fn get_quantum(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::Quantum(val) = attr? {
+            if let Ok(FqAttrs::Quantum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24142,12 +24244,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "RR quantum for new flow"]
+    #[doc = "RR quantum for new flow\n"]
     pub fn get_initial_quantum(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::InitialQuantum(val) = attr? {
+            if let Ok(FqAttrs::InitialQuantum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24158,12 +24260,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Enable / disable rate limiting"]
+    #[doc = "Enable / disable rate limiting\n"]
     pub fn get_rate_enable(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::RateEnable(val) = attr? {
+            if let Ok(FqAttrs::RateEnable(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24174,12 +24276,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Obsolete, do not use"]
+    #[doc = "Obsolete, do not use\n"]
     pub fn get_flow_default_rate(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::FlowDefaultRate(val) = attr? {
+            if let Ok(FqAttrs::FlowDefaultRate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24190,12 +24292,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Per flow max rate"]
+    #[doc = "Per flow max rate\n"]
     pub fn get_flow_max_rate(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::FlowMaxRate(val) = attr? {
+            if let Ok(FqAttrs::FlowMaxRate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24206,12 +24308,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "log2(number of buckets)"]
+    #[doc = "log2(number of buckets)\n"]
     pub fn get_buckets_log(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::BucketsLog(val) = attr? {
+            if let Ok(FqAttrs::BucketsLog(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24222,12 +24324,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Flow credit refill delay in usec"]
+    #[doc = "Flow credit refill delay in usec\n"]
     pub fn get_flow_refill_delay(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::FlowRefillDelay(val) = attr? {
+            if let Ok(FqAttrs::FlowRefillDelay(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24238,12 +24340,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Mask applied to orphaned skb hashes"]
+    #[doc = "Mask applied to orphaned skb hashes\n"]
     pub fn get_orphan_mask(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::OrphanMask(val) = attr? {
+            if let Ok(FqAttrs::OrphanMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24254,12 +24356,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Per packet delay under this rate"]
+    #[doc = "Per packet delay under this rate\n"]
     pub fn get_low_rate_threshold(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::LowRateThreshold(val) = attr? {
+            if let Ok(FqAttrs::LowRateThreshold(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24270,12 +24372,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "DCTCP\\-like CE marking threshold"]
+    #[doc = "DCTCP-like CE marking threshold\n"]
     pub fn get_ce_threshold(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::CeThreshold(val) = attr? {
+            if let Ok(FqAttrs::CeThreshold(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24290,7 +24392,7 @@ impl<'a> IterableFqAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::TimerSlack(val) = attr? {
+            if let Ok(FqAttrs::TimerSlack(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24301,12 +24403,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Time horizon in usec"]
+    #[doc = "Time horizon in usec\n"]
     pub fn get_horizon(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::Horizon(val) = attr? {
+            if let Ok(FqAttrs::Horizon(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24317,12 +24419,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Drop packets beyond horizon, or cap their EDT"]
+    #[doc = "Drop packets beyond horizon, or cap their EDT\n"]
     pub fn get_horizon_drop(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::HorizonDrop(val) = attr? {
+            if let Ok(FqAttrs::HorizonDrop(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24337,7 +24439,7 @@ impl<'a> IterableFqAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::Priomap(val) = attr? {
+            if let Ok(FqAttrs::Priomap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24348,12 +24450,12 @@ impl<'a> IterableFqAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Weights for each band"]
+    #[doc = "Weights for each band\n"]
     pub fn get_weights(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqAttrs::Weights(val) = attr? {
+            if let Ok(FqAttrs::Weights(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24414,14 +24516,16 @@ impl<'a> IterableFqAttrs<'a> {
 impl<'a> Iterator for IterableFqAttrs<'a> {
     type Item = Result<FqAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -24711,7 +24815,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::Target(val) = attr? {
+            if let Ok(FqCodelAttrs::Target(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24726,7 +24830,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::Limit(val) = attr? {
+            if let Ok(FqCodelAttrs::Limit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24741,7 +24845,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::Interval(val) = attr? {
+            if let Ok(FqCodelAttrs::Interval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24756,7 +24860,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::Ecn(val) = attr? {
+            if let Ok(FqCodelAttrs::Ecn(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24771,7 +24875,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::Flows(val) = attr? {
+            if let Ok(FqCodelAttrs::Flows(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24786,7 +24890,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::Quantum(val) = attr? {
+            if let Ok(FqCodelAttrs::Quantum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24801,7 +24905,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::CeThreshold(val) = attr? {
+            if let Ok(FqCodelAttrs::CeThreshold(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24816,7 +24920,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::DropBatchSize(val) = attr? {
+            if let Ok(FqCodelAttrs::DropBatchSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24831,7 +24935,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::MemoryLimit(val) = attr? {
+            if let Ok(FqCodelAttrs::MemoryLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24846,7 +24950,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::CeThresholdSelector(val) = attr? {
+            if let Ok(FqCodelAttrs::CeThresholdSelector(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24861,7 +24965,7 @@ impl<'a> IterableFqCodelAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqCodelAttrs::CeThresholdMask(val) = attr? {
+            if let Ok(FqCodelAttrs::CeThresholdMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -24916,14 +25020,16 @@ impl<'a> IterableFqCodelAttrs<'a> {
 impl<'a> Iterator for IterableFqCodelAttrs<'a> {
     type Item = Result<FqCodelAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -25145,7 +25251,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::Limit(val) = attr? {
+            if let Ok(FqPieAttrs::Limit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25160,7 +25266,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::Flows(val) = attr? {
+            if let Ok(FqPieAttrs::Flows(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25175,7 +25281,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::Target(val) = attr? {
+            if let Ok(FqPieAttrs::Target(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25190,7 +25296,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::Tupdate(val) = attr? {
+            if let Ok(FqPieAttrs::Tupdate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25205,7 +25311,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::Alpha(val) = attr? {
+            if let Ok(FqPieAttrs::Alpha(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25220,7 +25326,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::Beta(val) = attr? {
+            if let Ok(FqPieAttrs::Beta(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25235,7 +25341,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::Quantum(val) = attr? {
+            if let Ok(FqPieAttrs::Quantum(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25250,7 +25356,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::MemoryLimit(val) = attr? {
+            if let Ok(FqPieAttrs::MemoryLimit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25265,7 +25371,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::EcnProb(val) = attr? {
+            if let Ok(FqPieAttrs::EcnProb(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25280,7 +25386,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::Ecn(val) = attr? {
+            if let Ok(FqPieAttrs::Ecn(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25295,7 +25401,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::Bytemode(val) = attr? {
+            if let Ok(FqPieAttrs::Bytemode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25310,7 +25416,7 @@ impl<'a> IterableFqPieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FqPieAttrs::DqRateEstimator(val) = attr? {
+            if let Ok(FqPieAttrs::DqRateEstimator(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25366,14 +25472,16 @@ impl<'a> IterableFqPieAttrs<'a> {
 impl<'a> Iterator for IterableFqPieAttrs<'a> {
     type Item = Result<FqPieAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -25609,7 +25717,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Corr(val) = attr? {
+            if let Ok(NetemAttrs::Corr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25624,7 +25732,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::DelayDist(val) = attr? {
+            if let Ok(NetemAttrs::DelayDist(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25639,7 +25747,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Reorder(val) = attr? {
+            if let Ok(NetemAttrs::Reorder(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25654,7 +25762,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Corrupt(val) = attr? {
+            if let Ok(NetemAttrs::Corrupt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25669,7 +25777,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Loss(val) = attr? {
+            if let Ok(NetemAttrs::Loss(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25684,7 +25792,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Rate(val) = attr? {
+            if let Ok(NetemAttrs::Rate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25699,7 +25807,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Ecn(val) = attr? {
+            if let Ok(NetemAttrs::Ecn(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25714,7 +25822,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Rate64(val) = attr? {
+            if let Ok(NetemAttrs::Rate64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25729,7 +25837,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Pad(val) = attr? {
+            if let Ok(NetemAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25744,7 +25852,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Latency64(val) = attr? {
+            if let Ok(NetemAttrs::Latency64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25759,7 +25867,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Jitter64(val) = attr? {
+            if let Ok(NetemAttrs::Jitter64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25774,7 +25882,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::Slot(val) = attr? {
+            if let Ok(NetemAttrs::Slot(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25789,7 +25897,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::SlotDist(val) = attr? {
+            if let Ok(NetemAttrs::SlotDist(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25804,7 +25912,7 @@ impl<'a> IterableNetemAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemAttrs::PrngSeed(val) = attr? {
+            if let Ok(NetemAttrs::PrngSeed(val)) = attr {
                 return Ok(val);
             }
         }
@@ -25862,14 +25970,16 @@ impl<'a> IterableNetemAttrs<'a> {
 impl<'a> Iterator for IterableNetemAttrs<'a> {
     type Item = Result<NetemAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -26110,18 +26220,18 @@ impl IterableNetemAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum NetemLossAttrs {
-    #[doc = "General Intuitive \\- 4 state model"]
+    #[doc = "General Intuitive - 4 state model\n"]
     Gi(TcNetemGimodel),
-    #[doc = "Gilbert Elliot models"]
+    #[doc = "Gilbert Elliot models\n"]
     Ge(TcNetemGemodel),
 }
 impl<'a> IterableNetemLossAttrs<'a> {
-    #[doc = "General Intuitive \\- 4 state model"]
+    #[doc = "General Intuitive - 4 state model\n"]
     pub fn get_gi(&self) -> Result<TcNetemGimodel, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemLossAttrs::Gi(val) = attr? {
+            if let Ok(NetemLossAttrs::Gi(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26132,12 +26242,12 @@ impl<'a> IterableNetemLossAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Gilbert Elliot models"]
+    #[doc = "Gilbert Elliot models\n"]
     pub fn get_ge(&self) -> Result<TcNetemGemodel, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NetemLossAttrs::Ge(val) = attr? {
+            if let Ok(NetemLossAttrs::Ge(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26183,14 +26293,16 @@ impl<'a> IterableNetemLossAttrs<'a> {
 impl<'a> Iterator for IterableNetemLossAttrs<'a> {
     type Item = Result<NetemLossAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -26300,7 +26412,7 @@ impl<'a> IterablePieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PieAttrs::Target(val) = attr? {
+            if let Ok(PieAttrs::Target(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26315,7 +26427,7 @@ impl<'a> IterablePieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PieAttrs::Limit(val) = attr? {
+            if let Ok(PieAttrs::Limit(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26330,7 +26442,7 @@ impl<'a> IterablePieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PieAttrs::Tupdate(val) = attr? {
+            if let Ok(PieAttrs::Tupdate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26345,7 +26457,7 @@ impl<'a> IterablePieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PieAttrs::Alpha(val) = attr? {
+            if let Ok(PieAttrs::Alpha(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26360,7 +26472,7 @@ impl<'a> IterablePieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PieAttrs::Beta(val) = attr? {
+            if let Ok(PieAttrs::Beta(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26375,7 +26487,7 @@ impl<'a> IterablePieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PieAttrs::Ecn(val) = attr? {
+            if let Ok(PieAttrs::Ecn(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26390,7 +26502,7 @@ impl<'a> IterablePieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PieAttrs::Bytemode(val) = attr? {
+            if let Ok(PieAttrs::Bytemode(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26405,7 +26517,7 @@ impl<'a> IterablePieAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PieAttrs::DqRateEstimator(val) = attr? {
+            if let Ok(PieAttrs::DqRateEstimator(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26457,14 +26569,16 @@ impl<'a> IterablePieAttrs<'a> {
 impl<'a> Iterator for IterablePieAttrs<'a> {
     type Item = Result<PieAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -26649,7 +26763,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Tbf(val) = attr? {
+            if let Ok(PoliceAttrs::Tbf(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26664,7 +26778,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Rate(val) = attr? {
+            if let Ok(PoliceAttrs::Rate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26679,7 +26793,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Peakrate(val) = attr? {
+            if let Ok(PoliceAttrs::Peakrate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26694,7 +26808,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Avrate(val) = attr? {
+            if let Ok(PoliceAttrs::Avrate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26709,7 +26823,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Result(val) = attr? {
+            if let Ok(PoliceAttrs::Result(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26724,7 +26838,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Tm(val) = attr? {
+            if let Ok(PoliceAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26739,7 +26853,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Pad(val) = attr? {
+            if let Ok(PoliceAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26754,7 +26868,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Rate64(val) = attr? {
+            if let Ok(PoliceAttrs::Rate64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26769,7 +26883,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Peakrate64(val) = attr? {
+            if let Ok(PoliceAttrs::Peakrate64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26784,7 +26898,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Pktrate64(val) = attr? {
+            if let Ok(PoliceAttrs::Pktrate64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26799,7 +26913,7 @@ impl<'a> IterablePoliceAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PoliceAttrs::Pktburst64(val) = attr? {
+            if let Ok(PoliceAttrs::Pktburst64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -26854,14 +26968,16 @@ impl<'a> IterablePoliceAttrs<'a> {
 impl<'a> Iterator for IterablePoliceAttrs<'a> {
     type Item = Result<PoliceAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -27073,7 +27189,7 @@ impl<'a> IterableQfqAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let QfqAttrs::Weight(val) = attr? {
+            if let Ok(QfqAttrs::Weight(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27088,7 +27204,7 @@ impl<'a> IterableQfqAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let QfqAttrs::Lmax(val) = attr? {
+            if let Ok(QfqAttrs::Lmax(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27134,14 +27250,16 @@ impl<'a> IterableQfqAttrs<'a> {
 impl<'a> Iterator for IterableQfqAttrs<'a> {
     type Item = Result<QfqAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -27249,7 +27367,7 @@ impl<'a> IterableRedAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RedAttrs::Parms(val) = attr? {
+            if let Ok(RedAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27264,7 +27382,7 @@ impl<'a> IterableRedAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RedAttrs::Stab(val) = attr? {
+            if let Ok(RedAttrs::Stab(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27279,7 +27397,7 @@ impl<'a> IterableRedAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RedAttrs::MaxP(val) = attr? {
+            if let Ok(RedAttrs::MaxP(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27294,7 +27412,7 @@ impl<'a> IterableRedAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RedAttrs::Flags(val) = attr? {
+            if let Ok(RedAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27309,7 +27427,7 @@ impl<'a> IterableRedAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RedAttrs::EarlyDropBlock(val) = attr? {
+            if let Ok(RedAttrs::EarlyDropBlock(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27324,7 +27442,7 @@ impl<'a> IterableRedAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RedAttrs::MarkBlock(val) = attr? {
+            if let Ok(RedAttrs::MarkBlock(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27374,14 +27492,16 @@ impl<'a> IterableRedAttrs<'a> {
 impl<'a> Iterator for IterableRedAttrs<'a> {
     type Item = Result<RedAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -27537,7 +27657,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Classid(val) = attr? {
+            if let Ok(RouteAttrs::Classid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27552,7 +27672,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::To(val) = attr? {
+            if let Ok(RouteAttrs::To(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27567,7 +27687,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::From(val) = attr? {
+            if let Ok(RouteAttrs::From(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27582,7 +27702,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Iif(val) = attr? {
+            if let Ok(RouteAttrs::Iif(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27597,7 +27717,7 @@ impl<'a> IterableRouteAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let RouteAttrs::Police(val) = attr? {
+            if let Ok(RouteAttrs::Police(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27612,7 +27732,7 @@ impl<'a> IterableRouteAttrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayActAttrs<'a>, IterableActAttrs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let RouteAttrs::Act(val) = attr? {
+            if let Ok(RouteAttrs::Act(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -27662,14 +27782,16 @@ impl<'a> IterableRouteAttrs<'a> {
 impl<'a> Iterator for IterableRouteAttrs<'a> {
     type Item = Result<RouteAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -27839,7 +27961,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::Priomap(val) = attr? {
+            if let Ok(TaprioAttrs::Priomap(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27854,7 +27976,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::SchedEntryList(val) = attr? {
+            if let Ok(TaprioAttrs::SchedEntryList(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27869,7 +27991,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::SchedBaseTime(val) = attr? {
+            if let Ok(TaprioAttrs::SchedBaseTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27884,7 +28006,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::SchedSingleEntry(val) = attr? {
+            if let Ok(TaprioAttrs::SchedSingleEntry(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27899,7 +28021,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::SchedClockid(val) = attr? {
+            if let Ok(TaprioAttrs::SchedClockid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27914,7 +28036,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::Pad(val) = attr? {
+            if let Ok(TaprioAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27929,7 +28051,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::AdminSched(val) = attr? {
+            if let Ok(TaprioAttrs::AdminSched(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27944,7 +28066,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::SchedCycleTime(val) = attr? {
+            if let Ok(TaprioAttrs::SchedCycleTime(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27959,7 +28081,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::SchedCycleTimeExtension(val) = attr? {
+            if let Ok(TaprioAttrs::SchedCycleTimeExtension(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27974,7 +28096,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::Flags(val) = attr? {
+            if let Ok(TaprioAttrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -27989,7 +28111,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::TxtimeDelay(val) = attr? {
+            if let Ok(TaprioAttrs::TxtimeDelay(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28004,7 +28126,7 @@ impl<'a> IterableTaprioAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioAttrs::TcEntry(val) = attr? {
+            if let Ok(TaprioAttrs::TcEntry(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28060,14 +28182,16 @@ impl<'a> IterableTaprioAttrs<'a> {
 impl<'a> Iterator for IterableTaprioAttrs<'a> {
     type Item = Result<TaprioAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -28336,14 +28460,16 @@ impl<'a> IterableTaprioSchedEntryList<'a> {
 impl<'a> Iterator for IterableTaprioSchedEntryList<'a> {
     type Item = Result<TaprioSchedEntryList<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -28438,7 +28564,7 @@ impl<'a> IterableTaprioSchedEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioSchedEntry::Index(val) = attr? {
+            if let Ok(TaprioSchedEntry::Index(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28453,7 +28579,7 @@ impl<'a> IterableTaprioSchedEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioSchedEntry::Cmd(val) = attr? {
+            if let Ok(TaprioSchedEntry::Cmd(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28468,7 +28594,7 @@ impl<'a> IterableTaprioSchedEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioSchedEntry::GateMask(val) = attr? {
+            if let Ok(TaprioSchedEntry::GateMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28483,7 +28609,7 @@ impl<'a> IterableTaprioSchedEntry<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioSchedEntry::Interval(val) = attr? {
+            if let Ok(TaprioSchedEntry::Interval(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28531,14 +28657,16 @@ impl<'a> IterableTaprioSchedEntry<'a> {
 impl<'a> Iterator for IterableTaprioSchedEntry<'a> {
     type Item = Result<TaprioSchedEntry, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -28667,7 +28795,7 @@ impl<'a> IterableTaprioTcEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioTcEntryAttrs::Index(val) = attr? {
+            if let Ok(TaprioTcEntryAttrs::Index(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28682,7 +28810,7 @@ impl<'a> IterableTaprioTcEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioTcEntryAttrs::MaxSdu(val) = attr? {
+            if let Ok(TaprioTcEntryAttrs::MaxSdu(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28697,7 +28825,7 @@ impl<'a> IterableTaprioTcEntryAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TaprioTcEntryAttrs::Fp(val) = attr? {
+            if let Ok(TaprioTcEntryAttrs::Fp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28744,14 +28872,16 @@ impl<'a> IterableTaprioTcEntryAttrs<'a> {
 impl<'a> Iterator for IterableTaprioTcEntryAttrs<'a> {
     type Item = Result<TaprioTcEntryAttrs, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -28873,7 +29003,7 @@ impl<'a> IterableTbfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TbfAttrs::Parms(val) = attr? {
+            if let Ok(TbfAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28888,7 +29018,7 @@ impl<'a> IterableTbfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TbfAttrs::Rtab(val) = attr? {
+            if let Ok(TbfAttrs::Rtab(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28903,7 +29033,7 @@ impl<'a> IterableTbfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TbfAttrs::Ptab(val) = attr? {
+            if let Ok(TbfAttrs::Ptab(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28918,7 +29048,7 @@ impl<'a> IterableTbfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TbfAttrs::Rate64(val) = attr? {
+            if let Ok(TbfAttrs::Rate64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28933,7 +29063,7 @@ impl<'a> IterableTbfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TbfAttrs::Prate64(val) = attr? {
+            if let Ok(TbfAttrs::Prate64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28948,7 +29078,7 @@ impl<'a> IterableTbfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TbfAttrs::Burst(val) = attr? {
+            if let Ok(TbfAttrs::Burst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28963,7 +29093,7 @@ impl<'a> IterableTbfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TbfAttrs::Pburst(val) = attr? {
+            if let Ok(TbfAttrs::Pburst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -28978,7 +29108,7 @@ impl<'a> IterableTbfAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TbfAttrs::Pad(val) = attr? {
+            if let Ok(TbfAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29030,14 +29160,16 @@ impl<'a> IterableTbfAttrs<'a> {
 impl<'a> Iterator for IterableTbfAttrs<'a> {
     type Item = Result<TbfAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -29217,7 +29349,7 @@ impl<'a> IterableActSampleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSampleAttrs::Tm(val) = attr? {
+            if let Ok(ActSampleAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29232,7 +29364,7 @@ impl<'a> IterableActSampleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSampleAttrs::Parms(val) = attr? {
+            if let Ok(ActSampleAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29247,7 +29379,7 @@ impl<'a> IterableActSampleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSampleAttrs::Rate(val) = attr? {
+            if let Ok(ActSampleAttrs::Rate(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29262,7 +29394,7 @@ impl<'a> IterableActSampleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSampleAttrs::TruncSize(val) = attr? {
+            if let Ok(ActSampleAttrs::TruncSize(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29277,7 +29409,7 @@ impl<'a> IterableActSampleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSampleAttrs::PsampleGroup(val) = attr? {
+            if let Ok(ActSampleAttrs::PsampleGroup(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29292,7 +29424,7 @@ impl<'a> IterableActSampleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActSampleAttrs::Pad(val) = attr? {
+            if let Ok(ActSampleAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29342,14 +29474,16 @@ impl<'a> IterableActSampleAttrs<'a> {
 impl<'a> Iterator for IterableActSampleAttrs<'a> {
     type Item = Result<ActSampleAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -29503,7 +29637,7 @@ impl<'a> IterableActGactAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGactAttrs::Tm(val) = attr? {
+            if let Ok(ActGactAttrs::Tm(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29518,7 +29652,7 @@ impl<'a> IterableActGactAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGactAttrs::Parms(val) = attr? {
+            if let Ok(ActGactAttrs::Parms(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29533,7 +29667,7 @@ impl<'a> IterableActGactAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGactAttrs::Prob(val) = attr? {
+            if let Ok(ActGactAttrs::Prob(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29548,7 +29682,7 @@ impl<'a> IterableActGactAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let ActGactAttrs::Pad(val) = attr? {
+            if let Ok(ActGactAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29596,14 +29730,16 @@ impl<'a> IterableActGactAttrs<'a> {
 impl<'a> Iterator for IterableActGactAttrs<'a> {
     type Item = Result<ActGactAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -29731,7 +29867,7 @@ impl<'a> IterableTcaStabAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaStabAttrs::Base(val) = attr? {
+            if let Ok(TcaStabAttrs::Base(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29746,7 +29882,7 @@ impl<'a> IterableTcaStabAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaStabAttrs::Data(val) = attr? {
+            if let Ok(TcaStabAttrs::Data(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29792,14 +29928,16 @@ impl<'a> IterableTcaStabAttrs<'a> {
 impl<'a> Iterator for IterableTcaStabAttrs<'a> {
     type Item = Result<TcaStabAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -29909,7 +30047,7 @@ impl<'a> IterableTcaStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaStatsAttrs::Basic(val) = attr? {
+            if let Ok(TcaStatsAttrs::Basic(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29924,7 +30062,7 @@ impl<'a> IterableTcaStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaStatsAttrs::RateEst(val) = attr? {
+            if let Ok(TcaStatsAttrs::RateEst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29939,7 +30077,7 @@ impl<'a> IterableTcaStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaStatsAttrs::Queue(val) = attr? {
+            if let Ok(TcaStatsAttrs::Queue(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29954,7 +30092,7 @@ impl<'a> IterableTcaStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaStatsAttrs::App(val) = attr? {
+            if let Ok(TcaStatsAttrs::App(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29969,7 +30107,7 @@ impl<'a> IterableTcaStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaStatsAttrs::RateEst64(val) = attr? {
+            if let Ok(TcaStatsAttrs::RateEst64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29984,7 +30122,7 @@ impl<'a> IterableTcaStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaStatsAttrs::Pad(val) = attr? {
+            if let Ok(TcaStatsAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -29999,7 +30137,7 @@ impl<'a> IterableTcaStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaStatsAttrs::BasicHw(val) = attr? {
+            if let Ok(TcaStatsAttrs::BasicHw(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30014,7 +30152,7 @@ impl<'a> IterableTcaStatsAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let TcaStatsAttrs::Pkt64(val) = attr? {
+            if let Ok(TcaStatsAttrs::Pkt64(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30066,14 +30204,16 @@ impl<'a> IterableTcaStatsAttrs<'a> {
 impl<'a> Iterator for IterableTcaStatsAttrs<'a> {
     type Item = Result<TcaStatsAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -30254,7 +30394,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Classid(val) = attr? {
+            if let Ok(U32Attrs::Classid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30269,7 +30409,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Hash(val) = attr? {
+            if let Ok(U32Attrs::Hash(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30284,7 +30424,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Link(val) = attr? {
+            if let Ok(U32Attrs::Link(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30299,7 +30439,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Divisor(val) = attr? {
+            if let Ok(U32Attrs::Divisor(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30314,7 +30454,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Sel(val) = attr? {
+            if let Ok(U32Attrs::Sel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30329,7 +30469,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Police(val) = attr? {
+            if let Ok(U32Attrs::Police(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30344,7 +30484,7 @@ impl<'a> IterableU32Attrs<'a> {
         &self,
     ) -> Result<ArrayIterable<IterableArrayActAttrs<'a>, IterableActAttrs<'a>>, ErrorContext> {
         for attr in self.clone() {
-            if let U32Attrs::Act(val) = attr? {
+            if let Ok(U32Attrs::Act(val)) = attr {
                 return Ok(ArrayIterable::new(val));
             }
         }
@@ -30359,7 +30499,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Indev(val) = attr? {
+            if let Ok(U32Attrs::Indev(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30374,7 +30514,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Pcnt(val) = attr? {
+            if let Ok(U32Attrs::Pcnt(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30389,7 +30529,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Mark(val) = attr? {
+            if let Ok(U32Attrs::Mark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30404,7 +30544,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Flags(val) = attr? {
+            if let Ok(U32Attrs::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30419,7 +30559,7 @@ impl<'a> IterableU32Attrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let U32Attrs::Pad(val) = attr? {
+            if let Ok(U32Attrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -30475,14 +30615,16 @@ impl<'a> IterableU32Attrs<'a> {
 impl<'a> Iterator for IterableU32Attrs<'a> {
     type Item = Result<U32Attrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -30745,7 +30887,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_basic(mut self) -> PushBasicAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"basic");
@@ -30759,7 +30901,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_bpf(mut self) -> PushBpfAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"bpf");
@@ -30773,7 +30915,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_bfifo(mut self, fixed_header: &TcFifoQopt) -> Self {
         self = self.push_kind(c"bfifo");
@@ -30781,7 +30923,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_cake(mut self) -> PushCakeAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"cake");
@@ -30795,7 +30937,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_cbs(mut self) -> PushCbsAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"cbs");
@@ -30809,7 +30951,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_cgroup(mut self) -> PushCgroupAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"cgroup");
@@ -30823,7 +30965,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_choke(mut self) -> PushChokeAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"choke");
@@ -30837,14 +30979,14 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_clsact(mut self) -> Self {
         self = self.push_kind(c"clsact");
         self.header_offset = Some(push_nested_header(self.as_rec_mut(), 2u16));
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_codel(mut self) -> PushCodelAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"codel");
@@ -30858,7 +31000,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_drr(mut self) -> PushDrrAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"drr");
@@ -30872,7 +31014,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_dualpi2(mut self) -> PushDualpi2Attrs<PushDummy<Prev>> {
         self = self.push_kind(c"dualpi2");
@@ -30886,7 +31028,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_etf(mut self) -> PushEtfAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"etf");
@@ -30900,7 +31042,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_ets(mut self) -> PushEtsAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"ets");
@@ -30914,7 +31056,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_flow(mut self) -> PushFlowAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"flow");
@@ -30928,7 +31070,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_flower(mut self) -> PushFlowerAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"flower");
@@ -30942,7 +31084,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_fq(mut self) -> PushFqAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"fq");
@@ -30956,7 +31098,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_fq_codel(mut self) -> PushFqCodelAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"fq_codel");
@@ -30970,7 +31112,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_fq_pie(mut self) -> PushFqPieAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"fq_pie");
@@ -30984,7 +31126,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_fw(mut self) -> PushFwAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"fw");
@@ -30998,7 +31140,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_gred(mut self) -> PushGredAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"gred");
@@ -31012,7 +31154,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_hfsc(mut self, fixed_header: &TcHfscQopt) -> Self {
         self = self.push_kind(c"hfsc");
@@ -31020,7 +31162,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_hhf(mut self) -> PushHhfAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"hhf");
@@ -31034,7 +31176,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_htb(mut self) -> PushHtbAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"htb");
@@ -31048,14 +31190,14 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_ingress(mut self) -> Self {
         self = self.push_kind(c"ingress");
         self.header_offset = Some(push_nested_header(self.as_rec_mut(), 2u16));
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_matchall(mut self) -> PushMatchallAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"matchall");
@@ -31069,14 +31211,14 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_mq(mut self) -> Self {
         self = self.push_kind(c"mq");
         self.header_offset = Some(push_nested_header(self.as_rec_mut(), 2u16));
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_mqprio(mut self, fixed_header: &TcMqprioQopt) -> Self {
         self = self.push_kind(c"mqprio");
@@ -31084,7 +31226,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_multiq(mut self, fixed_header: &TcMultiqQopt) -> Self {
         self = self.push_kind(c"multiq");
@@ -31092,7 +31234,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_netem(
         mut self,
@@ -31110,7 +31252,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_pfifo(mut self, fixed_header: &TcFifoQopt) -> Self {
         self = self.push_kind(c"pfifo");
@@ -31118,7 +31260,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_pfifo_fast(mut self, fixed_header: &TcPrioQopt) -> Self {
         self = self.push_kind(c"pfifo_fast");
@@ -31126,7 +31268,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_pfifo_head_drop(mut self, fixed_header: &TcFifoQopt) -> Self {
         self = self.push_kind(c"pfifo_head_drop");
@@ -31134,7 +31276,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_pie(mut self) -> PushPieAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"pie");
@@ -31148,7 +31290,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_plug(mut self, fixed_header: &TcPlugQopt) -> Self {
         self = self.push_kind(c"plug");
@@ -31156,7 +31298,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_prio(mut self, fixed_header: &TcPrioQopt) -> Self {
         self = self.push_kind(c"prio");
@@ -31164,7 +31306,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_qfq(mut self) -> PushQfqAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"qfq");
@@ -31178,7 +31320,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_red(mut self) -> PushRedAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"red");
@@ -31192,7 +31334,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_route(mut self) -> PushRouteAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"route");
@@ -31206,7 +31348,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_sfb(mut self, fixed_header: &TcSfbQopt) -> Self {
         self = self.push_kind(c"sfb");
@@ -31214,7 +31356,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_sfq(mut self, fixed_header: &TcSfqQoptV1) -> Self {
         self = self.push_kind(c"sfq");
@@ -31222,7 +31364,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_taprio(mut self) -> PushTaprioAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"taprio");
@@ -31236,7 +31378,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_tbf(mut self) -> PushTbfAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"tbf");
@@ -31250,7 +31392,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_u32(mut self) -> PushU32Attrs<PushDummy<Prev>> {
         self = self.push_kind(c"u32");
@@ -31269,7 +31411,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_cake(mut self) -> PushCakeStatsAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"cake");
@@ -31283,7 +31425,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_choke(mut self, fixed_header: &TcChokeXstats) -> Self {
         self = self.push_kind(c"choke");
@@ -31291,7 +31433,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_codel(mut self, fixed_header: &TcCodelXstats) -> Self {
         self = self.push_kind(c"codel");
@@ -31299,7 +31441,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_dualpi2(mut self, fixed_header: &TcDualpi2Xstats) -> Self {
         self = self.push_kind(c"dualpi2");
@@ -31307,7 +31449,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_fq(mut self, fixed_header: &TcFqQdStats) -> Self {
         self = self.push_kind(c"fq");
@@ -31315,7 +31457,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_fq_codel(mut self, fixed_header: &TcFqCodelXstats) -> Self {
         self = self.push_kind(c"fq_codel");
@@ -31323,7 +31465,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_fq_pie(mut self, fixed_header: &TcFqPieXstats) -> Self {
         self = self.push_kind(c"fq_pie");
@@ -31331,7 +31473,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_hhf(mut self, fixed_header: &TcHhfXstats) -> Self {
         self = self.push_kind(c"hhf");
@@ -31339,7 +31481,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_pie(mut self, fixed_header: &TcPieXstats) -> Self {
         self = self.push_kind(c"pie");
@@ -31347,7 +31489,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_red(mut self, fixed_header: &TcRedXstats) -> Self {
         self = self.push_kind(c"red");
@@ -31355,7 +31497,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_sfb(mut self, fixed_header: &TcSfbXstats) -> Self {
         self = self.push_kind(c"sfb");
@@ -31363,7 +31505,7 @@ impl<Prev: Rec> PushAttrs<Prev> {
         self.as_rec_mut().extend(fixed_header.as_slice());
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_xstats_sfq(mut self, fixed_header: &TcSfqXstats) -> Self {
         self = self.push_kind(c"sfq");
@@ -31495,7 +31637,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_bpf(mut self) -> PushActBpfAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"bpf");
@@ -31509,7 +31651,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_connmark(mut self) -> PushActConnmarkAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"connmark");
@@ -31523,7 +31665,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_csum(mut self) -> PushActCsumAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"csum");
@@ -31537,7 +31679,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_ct(mut self) -> PushActCtAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"ct");
@@ -31551,7 +31693,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_ctinfo(mut self) -> PushActCtinfoAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"ctinfo");
@@ -31565,7 +31707,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_gact(mut self) -> PushActGactAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"gact");
@@ -31579,7 +31721,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_gate(mut self) -> PushActGateAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"gate");
@@ -31593,7 +31735,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_ife(mut self) -> PushActIfeAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"ife");
@@ -31607,7 +31749,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_mirred(mut self) -> PushActMirredAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"mirred");
@@ -31621,7 +31763,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_mpls(mut self) -> PushActMplsAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"mpls");
@@ -31635,7 +31777,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_nat(mut self) -> PushActNatAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"nat");
@@ -31649,7 +31791,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_pedit(mut self) -> PushActPeditAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"pedit");
@@ -31663,7 +31805,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_police(mut self) -> PushPoliceAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"police");
@@ -31677,7 +31819,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_sample(mut self) -> PushActSampleAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"sample");
@@ -31691,7 +31833,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_simple(mut self) -> PushActSimpleAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"simple");
@@ -31705,7 +31847,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_skbedit(mut self) -> PushActSkbeditAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"skbedit");
@@ -31719,7 +31861,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_skbmod(mut self) -> PushActSkbmodAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"skbmod");
@@ -31733,7 +31875,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_tunnel_key(mut self) -> PushActTunnelKeyAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"tunnel_key");
@@ -31747,7 +31889,7 @@ impl<Prev: Rec> PushActAttrs<Prev> {
             header_offset: Some(new_header_offset),
         }
     }
-    #[doc = "Selector attribute is inserted automatically."]
+    #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_options_vlan(mut self) -> PushActVlanAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"vlan");
@@ -33983,91 +34125,91 @@ impl<Prev: Rec> PushDualpi2Attrs<Prev> {
         }
         prev
     }
-    #[doc = "Limit of total number of packets in queue"]
+    #[doc = "Limit of total number of packets in queue\n"]
     pub fn push_limit(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Memory limit of total number of packets in queue"]
+    #[doc = "Memory limit of total number of packets in queue\n"]
     pub fn push_memory_limit(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Classic target delay in microseconds"]
+    #[doc = "Classic target delay in microseconds\n"]
     pub fn push_target(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Drop probability update interval time in microseconds"]
+    #[doc = "Drop probability update interval time in microseconds\n"]
     pub fn push_tupdate(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Integral gain factor in Hz for PI controller"]
+    #[doc = "Integral gain factor in Hz for PI controller\n"]
     pub fn push_alpha(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Proportional gain factor in Hz for PI controller"]
+    #[doc = "Proportional gain factor in Hz for PI controller\n"]
     pub fn push_beta(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "L4S step marking threshold in packets"]
+    #[doc = "L4S step marking threshold in packets\n"]
     pub fn push_step_thresh_pkts(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "L4S Step marking threshold in microseconds"]
+    #[doc = "L4S Step marking threshold in microseconds\n"]
     pub fn push_step_thresh_us(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Packets enqueued to the L\\-queue can apply the step threshold when the queue length of L\\-queue is larger than this value\\. (0 is recommended)"]
+    #[doc = "Packets enqueued to the L-queue can apply the step threshold when the\nqueue length of L-queue is larger than this value. (0 is recommended)\n"]
     pub fn push_min_qlen_step(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 9u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Probability coupling factor between Classic and L4S (2 is recommended)"]
+    #[doc = "Probability coupling factor between Classic and L4S (2 is recommended)\n"]
     pub fn push_coupling(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 10u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Control the overload strategy (drop to preserve latency or let the queue overflow)\nAssociated type: [`Dualpi2DropOverload`] (enum)"]
+    #[doc = "Control the overload strategy (drop to preserve latency or let the queue\noverflow)\n\nAssociated type: [`Dualpi2DropOverload`] (enum)"]
     pub fn push_drop_overload(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 11u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Decide where the Classic packets are PI\\-based dropped or marked\nAssociated type: [`Dualpi2DropEarly`] (enum)"]
+    #[doc = "Decide where the Classic packets are PI-based dropped or marked\n\nAssociated type: [`Dualpi2DropEarly`] (enum)"]
     pub fn push_drop_early(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 12u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Classic WRR weight in percentage (from 0 to 100)"]
+    #[doc = "Classic WRR weight in percentage (from 0 to 100)\n"]
     pub fn push_c_protection(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 13u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Configure the L\\-queue ECN classifier\nAssociated type: [`Dualpi2EcnMask`] (enum)"]
+    #[doc = "Configure the L-queue ECN classifier\n\nAssociated type: [`Dualpi2EcnMask`] (enum)"]
     pub fn push_ecn_mask(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 14u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Split aggregated skb or not\nAssociated type: [`Dualpi2SplitGso`] (enum)"]
+    #[doc = "Split aggregated skb or not\n\nAssociated type: [`Dualpi2SplitGso`] (enum)"]
     pub fn push_split_gso(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 15u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -35898,73 +36040,73 @@ impl<Prev: Rec> PushFqAttrs<Prev> {
         }
         prev
     }
-    #[doc = "Limit of total number of packets in queue"]
+    #[doc = "Limit of total number of packets in queue\n"]
     pub fn push_plimit(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Limit of packets per flow"]
+    #[doc = "Limit of packets per flow\n"]
     pub fn push_flow_plimit(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "RR quantum"]
+    #[doc = "RR quantum\n"]
     pub fn push_quantum(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 3u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "RR quantum for new flow"]
+    #[doc = "RR quantum for new flow\n"]
     pub fn push_initial_quantum(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 4u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Enable / disable rate limiting"]
+    #[doc = "Enable / disable rate limiting\n"]
     pub fn push_rate_enable(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 5u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Obsolete, do not use"]
+    #[doc = "Obsolete, do not use\n"]
     pub fn push_flow_default_rate(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Per flow max rate"]
+    #[doc = "Per flow max rate\n"]
     pub fn push_flow_max_rate(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "log2(number of buckets)"]
+    #[doc = "log2(number of buckets)\n"]
     pub fn push_buckets_log(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Flow credit refill delay in usec"]
+    #[doc = "Flow credit refill delay in usec\n"]
     pub fn push_flow_refill_delay(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 9u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Mask applied to orphaned skb hashes"]
+    #[doc = "Mask applied to orphaned skb hashes\n"]
     pub fn push_orphan_mask(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Per packet delay under this rate"]
+    #[doc = "Per packet delay under this rate\n"]
     pub fn push_low_rate_threshold(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 11u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "DCTCP\\-like CE marking threshold"]
+    #[doc = "DCTCP-like CE marking threshold\n"]
     pub fn push_ce_threshold(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 12u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -35975,13 +36117,13 @@ impl<Prev: Rec> PushFqAttrs<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Time horizon in usec"]
+    #[doc = "Time horizon in usec\n"]
     pub fn push_horizon(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 14u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Drop packets beyond horizon, or cap their EDT"]
+    #[doc = "Drop packets beyond horizon, or cap their EDT\n"]
     pub fn push_horizon_drop(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 15u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -35992,7 +36134,7 @@ impl<Prev: Rec> PushFqAttrs<Prev> {
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "Weights for each band"]
+    #[doc = "Weights for each band\n"]
     pub fn push_weights(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 17u16, value.len() as u16);
         self.as_rec_mut().extend(value);
@@ -36329,13 +36471,13 @@ impl<Prev: Rec> PushNetemLossAttrs<Prev> {
         }
         prev
     }
-    #[doc = "General Intuitive \\- 4 state model"]
+    #[doc = "General Intuitive - 4 state model\n"]
     pub fn push_gi(mut self, value: TcNetemGimodel) -> Self {
         push_header(self.as_rec_mut(), 1u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
         self
     }
-    #[doc = "Gilbert Elliot models"]
+    #[doc = "Gilbert Elliot models\n"]
     pub fn push_ge(mut self, value: TcNetemGemodel) -> Self {
         push_header(self.as_rec_mut(), 2u16, value.as_slice().len() as u16);
         self.as_rec_mut().extend(value.as_slice());
@@ -37380,7 +37522,7 @@ impl<Prev: Rec> Drop for PushU32Attrs<Prev> {
         }
     }
 }
-#[doc = "Create new tc qdisc\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n"]
+#[doc = "Create new tc qdisc.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n\n"]
 #[derive(Debug)]
 pub struct OpNewqdiscDo<'r> {
     request: Request<'r>,
@@ -37441,7 +37583,7 @@ impl NetlinkRequest for OpNewqdiscDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete existing tc qdisc\\.\n"]
+#[doc = "Delete existing tc qdisc.\n\n"]
 #[derive(Debug)]
 pub struct OpDelqdiscDo<'r> {
     request: Request<'r>,
@@ -37502,7 +37644,7 @@ impl NetlinkRequest for OpDelqdiscDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc qdisc information\\.\nRequest attributes:\n- [.push_dump_invisible()](PushAttrs::push_dump_invisible)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+#[doc = "Get / dump tc qdisc information.\n\nRequest attributes:\n- [.push_dump_invisible()](PushAttrs::push_dump_invisible)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
 #[derive(Debug)]
 pub struct OpGetqdiscDump<'r> {
     request: Request<'r>,
@@ -37565,7 +37707,7 @@ impl NetlinkRequest for OpGetqdiscDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc qdisc information\\.\nRequest attributes:\n- [.push_dump_invisible()](PushAttrs::push_dump_invisible)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+#[doc = "Get / dump tc qdisc information.\n\nRequest attributes:\n- [.push_dump_invisible()](PushAttrs::push_dump_invisible)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
 #[derive(Debug)]
 pub struct OpGetqdiscDo<'r> {
     request: Request<'r>,
@@ -37626,7 +37768,7 @@ impl NetlinkRequest for OpGetqdiscDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc traffic class information\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n"]
+#[doc = "Get / dump tc traffic class information.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n\n"]
 #[derive(Debug)]
 pub struct OpNewtclassDo<'r> {
     request: Request<'r>,
@@ -37687,7 +37829,7 @@ impl NetlinkRequest for OpNewtclassDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc traffic class information\\.\n"]
+#[doc = "Get / dump tc traffic class information.\n\n"]
 #[derive(Debug)]
 pub struct OpDeltclassDo<'r> {
     request: Request<'r>,
@@ -37748,7 +37890,7 @@ impl NetlinkRequest for OpDeltclassDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc traffic class information\\.\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+#[doc = "Get / dump tc traffic class information.\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
 #[derive(Debug)]
 pub struct OpGettclassDo<'r> {
     request: Request<'r>,
@@ -37809,7 +37951,7 @@ impl NetlinkRequest for OpGettclassDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc filter information\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n"]
+#[doc = "Get / dump tc filter information.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n\n"]
 #[derive(Debug)]
 pub struct OpNewtfilterDo<'r> {
     request: Request<'r>,
@@ -37870,7 +38012,7 @@ impl NetlinkRequest for OpNewtfilterDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc filter information\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.push_chain()](PushAttrs::push_chain)\n"]
+#[doc = "Get / dump tc filter information.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.push_chain()](PushAttrs::push_chain)\n\n"]
 #[derive(Debug)]
 pub struct OpDeltfilterDo<'r> {
     request: Request<'r>,
@@ -37931,7 +38073,7 @@ impl NetlinkRequest for OpDeltfilterDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc filter information\\.\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_dump_flags()](PushAttrs::push_dump_flags)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+#[doc = "Get / dump tc filter information.\n\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_dump_flags()](PushAttrs::push_dump_flags)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
 #[derive(Debug)]
 pub struct OpGettfilterDump<'r> {
     request: Request<'r>,
@@ -37994,7 +38136,7 @@ impl NetlinkRequest for OpGettfilterDump<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc filter information\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.push_chain()](PushAttrs::push_chain)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+#[doc = "Get / dump tc filter information.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.push_chain()](PushAttrs::push_chain)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
 #[derive(Debug)]
 pub struct OpGettfilterDo<'r> {
     request: Request<'r>,
@@ -38055,7 +38197,7 @@ impl NetlinkRequest for OpGettfilterDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc chain information\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n"]
+#[doc = "Get / dump tc chain information.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n\n"]
 #[derive(Debug)]
 pub struct OpNewchainDo<'r> {
     request: Request<'r>,
@@ -38116,7 +38258,7 @@ impl NetlinkRequest for OpNewchainDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc chain information\\.\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n"]
+#[doc = "Get / dump tc chain information.\n\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n\n"]
 #[derive(Debug)]
 pub struct OpDelchainDo<'r> {
     request: Request<'r>,
@@ -38177,7 +38319,7 @@ impl NetlinkRequest for OpDelchainDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump tc chain information\\.\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+#[doc = "Get / dump tc chain information.\n\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
 #[derive(Debug)]
 pub struct OpGetchainDo<'r> {
     request: Request<'r>,
@@ -38479,70 +38621,70 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Create new tc qdisc\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n"]
+    #[doc = "Create new tc qdisc.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n\n"]
     pub fn op_newqdisc_do(self, header: &Tcmsg) -> OpNewqdiscDo<'buf> {
         let mut res = OpNewqdiscDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newqdisc-do", OpNewqdiscDo::lookup);
         res
     }
-    #[doc = "Delete existing tc qdisc\\.\n"]
+    #[doc = "Delete existing tc qdisc.\n\n"]
     pub fn op_delqdisc_do(self, header: &Tcmsg) -> OpDelqdiscDo<'buf> {
         let mut res = OpDelqdiscDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-delqdisc-do", OpDelqdiscDo::lookup);
         res
     }
-    #[doc = "Get / dump tc qdisc information\\.\nRequest attributes:\n- [.push_dump_invisible()](PushAttrs::push_dump_invisible)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+    #[doc = "Get / dump tc qdisc information.\n\nRequest attributes:\n- [.push_dump_invisible()](PushAttrs::push_dump_invisible)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
     pub fn op_getqdisc_dump(self, header: &Tcmsg) -> OpGetqdiscDump<'buf> {
         let mut res = OpGetqdiscDump::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getqdisc-dump", OpGetqdiscDump::lookup);
         res
     }
-    #[doc = "Get / dump tc qdisc information\\.\nRequest attributes:\n- [.push_dump_invisible()](PushAttrs::push_dump_invisible)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+    #[doc = "Get / dump tc qdisc information.\n\nRequest attributes:\n- [.push_dump_invisible()](PushAttrs::push_dump_invisible)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
     pub fn op_getqdisc_do(self, header: &Tcmsg) -> OpGetqdiscDo<'buf> {
         let mut res = OpGetqdiscDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-getqdisc-do", OpGetqdiscDo::lookup);
         res
     }
-    #[doc = "Get / dump tc traffic class information\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n"]
+    #[doc = "Get / dump tc traffic class information.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n\n"]
     pub fn op_newtclass_do(self, header: &Tcmsg) -> OpNewtclassDo<'buf> {
         let mut res = OpNewtclassDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newtclass-do", OpNewtclassDo::lookup);
         res
     }
-    #[doc = "Get / dump tc traffic class information\\.\n"]
+    #[doc = "Get / dump tc traffic class information.\n\n"]
     pub fn op_deltclass_do(self, header: &Tcmsg) -> OpDeltclassDo<'buf> {
         let mut res = OpDeltclassDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-deltclass-do", OpDeltclassDo::lookup);
         res
     }
-    #[doc = "Get / dump tc traffic class information\\.\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+    #[doc = "Get / dump tc traffic class information.\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
     pub fn op_gettclass_do(self, header: &Tcmsg) -> OpGettclassDo<'buf> {
         let mut res = OpGettclassDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-gettclass-do", OpGettclassDo::lookup);
         res
     }
-    #[doc = "Get / dump tc filter information\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n"]
+    #[doc = "Get / dump tc filter information.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n\n"]
     pub fn op_newtfilter_do(self, header: &Tcmsg) -> OpNewtfilterDo<'buf> {
         let mut res = OpNewtfilterDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newtfilter-do", OpNewtfilterDo::lookup);
         res
     }
-    #[doc = "Get / dump tc filter information\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.push_chain()](PushAttrs::push_chain)\n"]
+    #[doc = "Get / dump tc filter information.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.push_chain()](PushAttrs::push_chain)\n\n"]
     pub fn op_deltfilter_do(self, header: &Tcmsg) -> OpDeltfilterDo<'buf> {
         let mut res = OpDeltfilterDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-deltfilter-do", OpDeltfilterDo::lookup);
         res
     }
-    #[doc = "Get / dump tc filter information\\.\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_dump_flags()](PushAttrs::push_dump_flags)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+    #[doc = "Get / dump tc filter information.\n\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_dump_flags()](PushAttrs::push_dump_flags)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
     pub fn op_gettfilter_dump(self, header: &Tcmsg) -> OpGettfilterDump<'buf> {
         let mut res = OpGettfilterDump::new(self, header);
         res.request.do_writeback(
@@ -38552,28 +38694,28 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Get / dump tc filter information\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.push_chain()](PushAttrs::push_chain)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+    #[doc = "Get / dump tc filter information.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.push_chain()](PushAttrs::push_chain)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
     pub fn op_gettfilter_do(self, header: &Tcmsg) -> OpGettfilterDo<'buf> {
         let mut res = OpGettfilterDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-gettfilter-do", OpGettfilterDo::lookup);
         res
     }
-    #[doc = "Get / dump tc chain information\\.\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n"]
+    #[doc = "Get / dump tc chain information.\n\nRequest attributes:\n- [.push_kind()](PushAttrs::push_kind)\n- [.nested_options_basic()](PushAttrs::nested_options_basic)\n- [.nested_options_bpf()](PushAttrs::nested_options_bpf)\n- [.nested_options_bfifo()](PushAttrs::nested_options_bfifo)\n- [.nested_options_cake()](PushAttrs::nested_options_cake)\n- [.nested_options_cbs()](PushAttrs::nested_options_cbs)\n- [.nested_options_cgroup()](PushAttrs::nested_options_cgroup)\n- [.nested_options_choke()](PushAttrs::nested_options_choke)\n- [.nested_options_clsact()](PushAttrs::nested_options_clsact)\n- [.nested_options_codel()](PushAttrs::nested_options_codel)\n- [.nested_options_drr()](PushAttrs::nested_options_drr)\n- [.nested_options_dualpi2()](PushAttrs::nested_options_dualpi2)\n- [.nested_options_etf()](PushAttrs::nested_options_etf)\n- [.nested_options_ets()](PushAttrs::nested_options_ets)\n- [.nested_options_flow()](PushAttrs::nested_options_flow)\n- [.nested_options_flower()](PushAttrs::nested_options_flower)\n- [.nested_options_fq()](PushAttrs::nested_options_fq)\n- [.nested_options_fq_codel()](PushAttrs::nested_options_fq_codel)\n- [.nested_options_fq_pie()](PushAttrs::nested_options_fq_pie)\n- [.nested_options_fw()](PushAttrs::nested_options_fw)\n- [.nested_options_gred()](PushAttrs::nested_options_gred)\n- [.nested_options_hfsc()](PushAttrs::nested_options_hfsc)\n- [.nested_options_hhf()](PushAttrs::nested_options_hhf)\n- [.nested_options_htb()](PushAttrs::nested_options_htb)\n- [.nested_options_ingress()](PushAttrs::nested_options_ingress)\n- [.nested_options_matchall()](PushAttrs::nested_options_matchall)\n- [.nested_options_mq()](PushAttrs::nested_options_mq)\n- [.nested_options_mqprio()](PushAttrs::nested_options_mqprio)\n- [.nested_options_multiq()](PushAttrs::nested_options_multiq)\n- [.nested_options_netem()](PushAttrs::nested_options_netem)\n- [.nested_options_pfifo()](PushAttrs::nested_options_pfifo)\n- [.nested_options_pfifo_fast()](PushAttrs::nested_options_pfifo_fast)\n- [.nested_options_pfifo_head_drop()](PushAttrs::nested_options_pfifo_head_drop)\n- [.nested_options_pie()](PushAttrs::nested_options_pie)\n- [.nested_options_plug()](PushAttrs::nested_options_plug)\n- [.nested_options_prio()](PushAttrs::nested_options_prio)\n- [.nested_options_qfq()](PushAttrs::nested_options_qfq)\n- [.nested_options_red()](PushAttrs::nested_options_red)\n- [.nested_options_route()](PushAttrs::nested_options_route)\n- [.nested_options_sfb()](PushAttrs::nested_options_sfb)\n- [.nested_options_sfq()](PushAttrs::nested_options_sfq)\n- [.nested_options_taprio()](PushAttrs::nested_options_taprio)\n- [.nested_options_tbf()](PushAttrs::nested_options_tbf)\n- [.nested_options_u32()](PushAttrs::nested_options_u32)\n- [.push_rate()](PushAttrs::push_rate)\n- [.push_chain()](PushAttrs::push_chain)\n- [.push_ingress_block()](PushAttrs::push_ingress_block)\n- [.push_egress_block()](PushAttrs::push_egress_block)\n\n"]
     pub fn op_newchain_do(self, header: &Tcmsg) -> OpNewchainDo<'buf> {
         let mut res = OpNewchainDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newchain-do", OpNewchainDo::lookup);
         res
     }
-    #[doc = "Get / dump tc chain information\\.\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n"]
+    #[doc = "Get / dump tc chain information.\n\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n\n"]
     pub fn op_delchain_do(self, header: &Tcmsg) -> OpDelchainDo<'buf> {
         let mut res = OpDelchainDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-delchain-do", OpDelchainDo::lookup);
         res
     }
-    #[doc = "Get / dump tc chain information\\.\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n"]
+    #[doc = "Get / dump tc chain information.\n\nRequest attributes:\n- [.push_chain()](PushAttrs::push_chain)\n\nReply attributes:\n- [.get_kind()](IterableAttrs::get_kind)\n- [.get_options()](IterableAttrs::get_options)\n- [.get_stats()](IterableAttrs::get_stats)\n- [.get_xstats()](IterableAttrs::get_xstats)\n- [.get_rate()](IterableAttrs::get_rate)\n- [.get_fcnt()](IterableAttrs::get_fcnt)\n- [.get_stats2()](IterableAttrs::get_stats2)\n- [.get_stab()](IterableAttrs::get_stab)\n- [.get_chain()](IterableAttrs::get_chain)\n- [.get_ingress_block()](IterableAttrs::get_ingress_block)\n- [.get_egress_block()](IterableAttrs::get_egress_block)\n\n"]
     pub fn op_getchain_do(self, header: &Tcmsg) -> OpGetchainDo<'buf> {
         let mut res = OpGetchainDo::new(self, header);
         res.request

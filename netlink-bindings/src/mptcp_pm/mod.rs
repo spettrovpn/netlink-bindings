@@ -1,4 +1,4 @@
-#![doc = "Multipath TCP\\."]
+#![doc = "Multipath TCP.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -15,31 +15,31 @@ use crate::{
 };
 pub const PROTONAME: &str = "mptcp_pm";
 pub const PROTONAME_CSTR: &CStr = c"mptcp_pm";
-#[doc = "Netlink MPTCP event types"]
+#[doc = "Netlink MPTCP event types\n"]
 #[doc = "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)"]
 #[derive(Debug, Clone, Copy)]
 pub enum EventType {
-    #[doc = "unused event"]
+    #[doc = "unused event\n"]
     Unspec = 0,
-    #[doc = "A new MPTCP connection has been created\\. It is the good time to allocate memory and send ADD\\_ADDR if needed\\. Depending on the traffic\\-patterns it can take a long time until the MPTCP\\_EVENT\\_ESTABLISHED is sent\\. Attributes: token, family, saddr4 | saddr6, daddr4 | daddr6, sport, dport, \\[server\\-side\\], \\[flags\\]\\."]
+    #[doc = "A new MPTCP connection has been created. It is the good time to allocate\nmemory and send ADD_ADDR if needed. Depending on the traffic-patterns it\ncan take a long time until the MPTCP_EVENT_ESTABLISHED is sent.\nAttributes: token, family, saddr4 \\| saddr6, daddr4 \\| daddr6, sport,\ndport, \\[server-side\\], \\[flags\\].\n"]
     Created = 1,
-    #[doc = "A MPTCP connection is established (can start new subflows)\\. Attributes: token, family, saddr4 | saddr6, daddr4 | daddr6, sport, dport, \\[server\\-side\\], \\[flags\\]\\."]
+    #[doc = "A MPTCP connection is established (can start new subflows). Attributes:\ntoken, family, saddr4 \\| saddr6, daddr4 \\| daddr6, sport, dport,\n\\[server-side\\], \\[flags\\].\n"]
     Established = 2,
-    #[doc = "A MPTCP connection has stopped\\. Attribute: token\\."]
+    #[doc = "A MPTCP connection has stopped. Attribute: token.\n"]
     Closed = 3,
-    #[doc = "A new address has been announced by the peer\\. Attributes: token, rem\\_id, family, daddr4 | daddr6 \\[, dport\\]\\."]
+    #[doc = "A new address has been announced by the peer. Attributes: token, rem_id,\nfamily, daddr4 \\| daddr6 \\[, dport\\].\n"]
     Announced = 6,
-    #[doc = "An address has been lost by the peer\\. Attributes: token, rem\\_id\\."]
+    #[doc = "An address has been lost by the peer. Attributes: token, rem_id.\n"]
     Removed = 7,
-    #[doc = "A new subflow has been established\\. 'error' should not be set\\. Attributes: token, family, loc\\_id, rem\\_id, saddr4 | saddr6, daddr4 | daddr6, sport, dport, backup, if\\-idx \\[, error\\]\\."]
+    #[doc = "A new subflow has been established. \\'error\\' should not be set.\nAttributes: token, family, loc_id, rem_id, saddr4 \\| saddr6, daddr4 \\|\ndaddr6, sport, dport, backup, if-idx \\[, error\\].\n"]
     SubEstablished = 10,
-    #[doc = "A subflow has been closed\\. An error (copy of sk\\_err) could be set if an error has been detected for this subflow\\. Attributes: token, family, loc\\_id, rem\\_id, saddr4 | saddr6, daddr4 | daddr6, sport, dport, backup, if\\-idx \\[, error\\]\\."]
+    #[doc = "A subflow has been closed. An error (copy of sk_err) could be set if an\nerror has been detected for this subflow. Attributes: token, family,\nloc_id, rem_id, saddr4 \\| saddr6, daddr4 \\| daddr6, sport, dport,\nbackup, if-idx \\[, error\\].\n"]
     SubClosed = 11,
-    #[doc = "The priority of a subflow has changed\\. 'error' should not be set\\. Attributes: token, family, loc\\_id, rem\\_id, saddr4 | saddr6, daddr4 | daddr6, sport, dport, backup, if\\-idx \\[, error\\]\\."]
+    #[doc = "The priority of a subflow has changed. \\'error\\' should not be set.\nAttributes: token, family, loc_id, rem_id, saddr4 \\| saddr6, daddr4 \\|\ndaddr6, sport, dport, backup, if-idx \\[, error\\].\n"]
     SubPriority = 13,
-    #[doc = "A new PM listener is created\\. Attributes: family, sport, saddr4 | saddr6\\."]
+    #[doc = "A new PM listener is created. Attributes: family, sport, saddr4 \\|\nsaddr6.\n"]
     ListenerCreated = 15,
-    #[doc = "A PM listener is closed\\. Attributes: family, sport, saddr4 | saddr6\\."]
+    #[doc = "A PM listener is closed. Attributes: family, sport, saddr4 \\| saddr6.\n"]
     ListenerClosed = 16,
 }
 impl EventType {
@@ -75,7 +75,7 @@ impl<'a> IterableAddress<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Address::Family(val) = attr? {
+            if let Ok(Address::Family(val)) = attr {
                 return Ok(val);
             }
         }
@@ -90,7 +90,7 @@ impl<'a> IterableAddress<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Address::Id(val) = attr? {
+            if let Ok(Address::Id(val)) = attr {
                 return Ok(val);
             }
         }
@@ -105,7 +105,7 @@ impl<'a> IterableAddress<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Address::Addr4(val) = attr? {
+            if let Ok(Address::Addr4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -120,7 +120,7 @@ impl<'a> IterableAddress<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Address::Addr6(val) = attr? {
+            if let Ok(Address::Addr6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -135,7 +135,7 @@ impl<'a> IterableAddress<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Address::Port(val) = attr? {
+            if let Ok(Address::Port(val)) = attr {
                 return Ok(val);
             }
         }
@@ -150,7 +150,7 @@ impl<'a> IterableAddress<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Address::Flags(val) = attr? {
+            if let Ok(Address::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -165,7 +165,7 @@ impl<'a> IterableAddress<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Address::IfIdx(val) = attr? {
+            if let Ok(Address::IfIdx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -217,14 +217,16 @@ impl<'a> IterableAddress<'a> {
 impl<'a> Iterator for IterableAddress<'a> {
     type Item = Result<Address<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -394,7 +396,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::TokenRem(val) = attr? {
+            if let Ok(SubflowAttribute::TokenRem(val)) = attr {
                 return Ok(val);
             }
         }
@@ -409,7 +411,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::TokenLoc(val) = attr? {
+            if let Ok(SubflowAttribute::TokenLoc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -424,7 +426,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::RelwriteSeq(val) = attr? {
+            if let Ok(SubflowAttribute::RelwriteSeq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -439,7 +441,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::MapSeq(val) = attr? {
+            if let Ok(SubflowAttribute::MapSeq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -454,7 +456,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::MapSfseq(val) = attr? {
+            if let Ok(SubflowAttribute::MapSfseq(val)) = attr {
                 return Ok(val);
             }
         }
@@ -469,7 +471,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::SsnOffset(val) = attr? {
+            if let Ok(SubflowAttribute::SsnOffset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -484,7 +486,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::MapDatalen(val) = attr? {
+            if let Ok(SubflowAttribute::MapDatalen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -499,7 +501,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::Flags(val) = attr? {
+            if let Ok(SubflowAttribute::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -514,7 +516,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::IdRem(val) = attr? {
+            if let Ok(SubflowAttribute::IdRem(val)) = attr {
                 return Ok(val);
             }
         }
@@ -529,7 +531,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::IdLoc(val) = attr? {
+            if let Ok(SubflowAttribute::IdLoc(val)) = attr {
                 return Ok(val);
             }
         }
@@ -544,7 +546,7 @@ impl<'a> IterableSubflowAttribute<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let SubflowAttribute::Pad(val) = attr? {
+            if let Ok(SubflowAttribute::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -600,14 +602,16 @@ impl<'a> IterableSubflowAttribute<'a> {
 impl<'a> Iterator for IterableSubflowAttribute<'a> {
     type Item = Result<SubflowAttribute<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -818,7 +822,7 @@ impl<'a> IterableEndpoint<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Endpoint::Addr(val) = attr? {
+            if let Ok(Endpoint::Addr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -863,14 +867,16 @@ impl<'a> IterableEndpoint<'a> {
 impl<'a> Iterator for IterableEndpoint<'a> {
     type Item = Result<Endpoint<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -967,7 +973,7 @@ impl<'a> IterableAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attr::Addr(val) = attr? {
+            if let Ok(Attr::Addr(val)) = attr {
                 return Ok(val);
             }
         }
@@ -982,7 +988,7 @@ impl<'a> IterableAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attr::RcvAddAddrs(val) = attr? {
+            if let Ok(Attr::RcvAddAddrs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -997,7 +1003,7 @@ impl<'a> IterableAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attr::Subflows(val) = attr? {
+            if let Ok(Attr::Subflows(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1012,7 +1018,7 @@ impl<'a> IterableAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attr::Token(val) = attr? {
+            if let Ok(Attr::Token(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1027,7 +1033,7 @@ impl<'a> IterableAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attr::LocId(val) = attr? {
+            if let Ok(Attr::LocId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1042,7 +1048,7 @@ impl<'a> IterableAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let Attr::AddrRemote(val) = attr? {
+            if let Ok(Attr::AddrRemote(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1093,14 +1099,16 @@ impl<'a> IterableAttr<'a> {
 impl<'a> Iterator for IterableAttr<'a> {
     type Item = Result<Attr<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1259,7 +1267,7 @@ pub enum EventAttr<'a> {
     IfIdx(i32),
     ResetReason(u32),
     ResetFlags(u32),
-    #[doc = "Deprecated: use 'flags'"]
+    #[doc = "Deprecated: use \\'flags\\'\n"]
     ServerSide(u8),
 }
 impl<'a> IterableEventAttr<'a> {
@@ -1267,7 +1275,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Token(val) = attr? {
+            if let Ok(EventAttr::Token(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1282,7 +1290,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Family(val) = attr? {
+            if let Ok(EventAttr::Family(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1297,7 +1305,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::LocId(val) = attr? {
+            if let Ok(EventAttr::LocId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1312,7 +1320,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::RemId(val) = attr? {
+            if let Ok(EventAttr::RemId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1327,7 +1335,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Saddr4(val) = attr? {
+            if let Ok(EventAttr::Saddr4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1342,7 +1350,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Saddr6(val) = attr? {
+            if let Ok(EventAttr::Saddr6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1357,7 +1365,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Daddr4(val) = attr? {
+            if let Ok(EventAttr::Daddr4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1372,7 +1380,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Daddr6(val) = attr? {
+            if let Ok(EventAttr::Daddr6(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1387,7 +1395,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Sport(val) = attr? {
+            if let Ok(EventAttr::Sport(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1402,7 +1410,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Dport(val) = attr? {
+            if let Ok(EventAttr::Dport(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1417,7 +1425,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Backup(val) = attr? {
+            if let Ok(EventAttr::Backup(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1432,7 +1440,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Error(val) = attr? {
+            if let Ok(EventAttr::Error(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1447,7 +1455,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Flags(val) = attr? {
+            if let Ok(EventAttr::Flags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1462,7 +1470,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::Timeout(val) = attr? {
+            if let Ok(EventAttr::Timeout(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1477,7 +1485,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::IfIdx(val) = attr? {
+            if let Ok(EventAttr::IfIdx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1492,7 +1500,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::ResetReason(val) = attr? {
+            if let Ok(EventAttr::ResetReason(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1507,7 +1515,7 @@ impl<'a> IterableEventAttr<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::ResetFlags(val) = attr? {
+            if let Ok(EventAttr::ResetFlags(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1518,12 +1526,12 @@ impl<'a> IterableEventAttr<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "Deprecated: use 'flags'"]
+    #[doc = "Deprecated: use \\'flags\\'\n"]
     pub fn get_server_side(&self) -> Result<u8, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let EventAttr::ServerSide(val) = attr? {
+            if let Ok(EventAttr::ServerSide(val)) = attr {
                 return Ok(val);
             }
         }
@@ -1586,14 +1594,16 @@ impl<'a> IterableEventAttr<'a> {
 impl<'a> Iterator for IterableEventAttr<'a> {
     type Item = Result<EventAttr<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -2265,7 +2275,7 @@ impl<Prev: Rec> PushEventAttr<Prev> {
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "Deprecated: use 'flags'"]
+    #[doc = "Deprecated: use \\'flags\\'\n"]
     pub fn push_server_side(mut self, value: u8) -> Self {
         push_header(self.as_rec_mut(), 18u16, 1 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -2281,7 +2291,7 @@ impl<Prev: Rec> Drop for PushEventAttr<Prev> {
         }
     }
 }
-#[doc = "Add endpoint\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n"]
+#[doc = "Add endpoint\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n\n"]
 #[derive(Debug)]
 pub struct OpAddAddrDo<'r> {
     request: Request<'r>,
@@ -2334,7 +2344,7 @@ impl NetlinkRequest for OpAddAddrDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Delete endpoint\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n"]
+#[doc = "Delete endpoint\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n\n"]
 #[derive(Debug)]
 pub struct OpDelAddrDo<'r> {
     request: Request<'r>,
@@ -2387,7 +2397,7 @@ impl NetlinkRequest for OpDelAddrDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get endpoint information\n\nReply attributes:\n- [.get_addr()](IterableAttr::get_addr)\n"]
+#[doc = "Get endpoint information\n\nReply attributes:\n- [.get_addr()](IterableAttr::get_addr)\n\n"]
 #[derive(Debug)]
 pub struct OpGetAddrDump<'r> {
     request: Request<'r>,
@@ -2442,7 +2452,7 @@ impl NetlinkRequest for OpGetAddrDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get endpoint information\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n\nReply attributes:\n- [.get_addr()](IterableAttr::get_addr)\n"]
+#[doc = "Get endpoint information\n\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n\nReply attributes:\n- [.get_addr()](IterableAttr::get_addr)\n\n"]
 #[derive(Debug)]
 pub struct OpGetAddrDo<'r> {
     request: Request<'r>,
@@ -2495,7 +2505,7 @@ impl NetlinkRequest for OpGetAddrDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Flush addresses\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n"]
+#[doc = "Flush addresses\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n\n"]
 #[derive(Debug)]
 pub struct OpFlushAddrsDo<'r> {
     request: Request<'r>,
@@ -2548,7 +2558,7 @@ impl NetlinkRequest for OpFlushAddrsDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Set protocol limits\nFlags: uns-admin-perm\nRequest attributes:\n- [.push_rcv_add_addrs()](PushAttr::push_rcv_add_addrs)\n- [.push_subflows()](PushAttr::push_subflows)\n"]
+#[doc = "Set protocol limits\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.push_rcv_add_addrs()](PushAttr::push_rcv_add_addrs)\n- [.push_subflows()](PushAttr::push_subflows)\n\n"]
 #[derive(Debug)]
 pub struct OpSetLimitsDo<'r> {
     request: Request<'r>,
@@ -2601,7 +2611,7 @@ impl NetlinkRequest for OpSetLimitsDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get protocol limits\nRequest attributes:\n- [.push_rcv_add_addrs()](PushAttr::push_rcv_add_addrs)\n- [.push_subflows()](PushAttr::push_subflows)\n\nReply attributes:\n- [.get_rcv_add_addrs()](IterableAttr::get_rcv_add_addrs)\n- [.get_subflows()](IterableAttr::get_subflows)\n"]
+#[doc = "Get protocol limits\n\nRequest attributes:\n- [.push_rcv_add_addrs()](PushAttr::push_rcv_add_addrs)\n- [.push_subflows()](PushAttr::push_subflows)\n\nReply attributes:\n- [.get_rcv_add_addrs()](IterableAttr::get_rcv_add_addrs)\n- [.get_subflows()](IterableAttr::get_subflows)\n\n"]
 #[derive(Debug)]
 pub struct OpGetLimitsDo<'r> {
     request: Request<'r>,
@@ -2654,7 +2664,7 @@ impl NetlinkRequest for OpGetLimitsDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Change endpoint flags\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n"]
+#[doc = "Change endpoint flags\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n\n"]
 #[derive(Debug)]
 pub struct OpSetFlagsDo<'r> {
     request: Request<'r>,
@@ -2707,7 +2717,7 @@ impl NetlinkRequest for OpSetFlagsDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Announce new address\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n"]
+#[doc = "Announce new address\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n\n"]
 #[derive(Debug)]
 pub struct OpAnnounceDo<'r> {
     request: Request<'r>,
@@ -2760,7 +2770,7 @@ impl NetlinkRequest for OpAnnounceDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Announce removal\nFlags: uns-admin-perm\nRequest attributes:\n- [.push_token()](PushAttr::push_token)\n- [.push_loc_id()](PushAttr::push_loc_id)\n"]
+#[doc = "Announce removal\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.push_token()](PushAttr::push_token)\n- [.push_loc_id()](PushAttr::push_loc_id)\n\n"]
 #[derive(Debug)]
 pub struct OpRemoveDo<'r> {
     request: Request<'r>,
@@ -2813,7 +2823,7 @@ impl NetlinkRequest for OpRemoveDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Create subflow\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n"]
+#[doc = "Create subflow\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n\n"]
 #[derive(Debug)]
 pub struct OpSubflowCreateDo<'r> {
     request: Request<'r>,
@@ -2866,7 +2876,7 @@ impl NetlinkRequest for OpSubflowCreateDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Destroy subflow\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n"]
+#[doc = "Destroy subflow\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n\n"]
 #[derive(Debug)]
 pub struct OpSubflowDestroyDo<'r> {
     request: Request<'r>,
@@ -3021,77 +3031,77 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Add endpoint\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n"]
+    #[doc = "Add endpoint\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n\n"]
     pub fn op_add_addr_do(self) -> OpAddAddrDo<'buf> {
         let mut res = OpAddAddrDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-add-addr-do", OpAddAddrDo::lookup);
         res
     }
-    #[doc = "Delete endpoint\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n"]
+    #[doc = "Delete endpoint\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n\n"]
     pub fn op_del_addr_do(self) -> OpDelAddrDo<'buf> {
         let mut res = OpDelAddrDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-del-addr-do", OpDelAddrDo::lookup);
         res
     }
-    #[doc = "Get endpoint information\n\nReply attributes:\n- [.get_addr()](IterableAttr::get_addr)\n"]
+    #[doc = "Get endpoint information\n\nReply attributes:\n- [.get_addr()](IterableAttr::get_addr)\n\n"]
     pub fn op_get_addr_dump(self) -> OpGetAddrDump<'buf> {
         let mut res = OpGetAddrDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-addr-dump", OpGetAddrDump::lookup);
         res
     }
-    #[doc = "Get endpoint information\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n\nReply attributes:\n- [.get_addr()](IterableAttr::get_addr)\n"]
+    #[doc = "Get endpoint information\n\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n\nReply attributes:\n- [.get_addr()](IterableAttr::get_addr)\n\n"]
     pub fn op_get_addr_do(self) -> OpGetAddrDo<'buf> {
         let mut res = OpGetAddrDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-addr-do", OpGetAddrDo::lookup);
         res
     }
-    #[doc = "Flush addresses\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n"]
+    #[doc = "Flush addresses\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushEndpoint::nested_addr)\n\n"]
     pub fn op_flush_addrs_do(self) -> OpFlushAddrsDo<'buf> {
         let mut res = OpFlushAddrsDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-flush-addrs-do", OpFlushAddrsDo::lookup);
         res
     }
-    #[doc = "Set protocol limits\nFlags: uns-admin-perm\nRequest attributes:\n- [.push_rcv_add_addrs()](PushAttr::push_rcv_add_addrs)\n- [.push_subflows()](PushAttr::push_subflows)\n"]
+    #[doc = "Set protocol limits\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.push_rcv_add_addrs()](PushAttr::push_rcv_add_addrs)\n- [.push_subflows()](PushAttr::push_subflows)\n\n"]
     pub fn op_set_limits_do(self) -> OpSetLimitsDo<'buf> {
         let mut res = OpSetLimitsDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-set-limits-do", OpSetLimitsDo::lookup);
         res
     }
-    #[doc = "Get protocol limits\nRequest attributes:\n- [.push_rcv_add_addrs()](PushAttr::push_rcv_add_addrs)\n- [.push_subflows()](PushAttr::push_subflows)\n\nReply attributes:\n- [.get_rcv_add_addrs()](IterableAttr::get_rcv_add_addrs)\n- [.get_subflows()](IterableAttr::get_subflows)\n"]
+    #[doc = "Get protocol limits\n\nRequest attributes:\n- [.push_rcv_add_addrs()](PushAttr::push_rcv_add_addrs)\n- [.push_subflows()](PushAttr::push_subflows)\n\nReply attributes:\n- [.get_rcv_add_addrs()](IterableAttr::get_rcv_add_addrs)\n- [.get_subflows()](IterableAttr::get_subflows)\n\n"]
     pub fn op_get_limits_do(self) -> OpGetLimitsDo<'buf> {
         let mut res = OpGetLimitsDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-get-limits-do", OpGetLimitsDo::lookup);
         res
     }
-    #[doc = "Change endpoint flags\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n"]
+    #[doc = "Change endpoint flags\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n\n"]
     pub fn op_set_flags_do(self) -> OpSetFlagsDo<'buf> {
         let mut res = OpSetFlagsDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-set-flags-do", OpSetFlagsDo::lookup);
         res
     }
-    #[doc = "Announce new address\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n"]
+    #[doc = "Announce new address\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n\n"]
     pub fn op_announce_do(self) -> OpAnnounceDo<'buf> {
         let mut res = OpAnnounceDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-announce-do", OpAnnounceDo::lookup);
         res
     }
-    #[doc = "Announce removal\nFlags: uns-admin-perm\nRequest attributes:\n- [.push_token()](PushAttr::push_token)\n- [.push_loc_id()](PushAttr::push_loc_id)\n"]
+    #[doc = "Announce removal\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.push_token()](PushAttr::push_token)\n- [.push_loc_id()](PushAttr::push_loc_id)\n\n"]
     pub fn op_remove_do(self) -> OpRemoveDo<'buf> {
         let mut res = OpRemoveDo::new(self);
         res.request
             .do_writeback(res.protocol(), "op-remove-do", OpRemoveDo::lookup);
         res
     }
-    #[doc = "Create subflow\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n"]
+    #[doc = "Create subflow\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n\n"]
     pub fn op_subflow_create_do(self) -> OpSubflowCreateDo<'buf> {
         let mut res = OpSubflowCreateDo::new(self);
         res.request.do_writeback(
@@ -3101,7 +3111,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Destroy subflow\nFlags: uns-admin-perm\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n"]
+    #[doc = "Destroy subflow\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.nested_addr()](PushAttr::nested_addr)\n- [.push_token()](PushAttr::push_token)\n- [.nested_addr_remote()](PushAttr::nested_addr_remote)\n\n"]
     pub fn op_subflow_destroy_do(self) -> OpSubflowDestroyDo<'buf> {
         let mut res = OpSubflowDestroyDo::new(self);
         res.request.do_writeback(

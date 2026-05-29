@@ -1,4 +1,4 @@
-#![doc = "FIB rule management over rtnetlink\\."]
+#![doc = "FIB rule management over rtnetlink.\n"]
 #![allow(clippy::all)]
 #![allow(unused_imports)]
 #![allow(unused_assignments)]
@@ -377,7 +377,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Dst(val) = attr? {
+            if let Ok(FibRuleAttrs::Dst(val)) = attr {
                 return Ok(val);
             }
         }
@@ -392,7 +392,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Src(val) = attr? {
+            if let Ok(FibRuleAttrs::Src(val)) = attr {
                 return Ok(val);
             }
         }
@@ -407,7 +407,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Iifname(val) = attr? {
+            if let Ok(FibRuleAttrs::Iifname(val)) = attr {
                 return Ok(val);
             }
         }
@@ -422,7 +422,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Goto(val) = attr? {
+            if let Ok(FibRuleAttrs::Goto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -437,7 +437,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Unused2(val) = attr? {
+            if let Ok(FibRuleAttrs::Unused2(val)) = attr {
                 return Ok(val);
             }
         }
@@ -452,7 +452,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Priority(val) = attr? {
+            if let Ok(FibRuleAttrs::Priority(val)) = attr {
                 return Ok(val);
             }
         }
@@ -467,7 +467,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Unused3(val) = attr? {
+            if let Ok(FibRuleAttrs::Unused3(val)) = attr {
                 return Ok(val);
             }
         }
@@ -482,7 +482,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Unused4(val) = attr? {
+            if let Ok(FibRuleAttrs::Unused4(val)) = attr {
                 return Ok(val);
             }
         }
@@ -497,7 +497,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Unused5(val) = attr? {
+            if let Ok(FibRuleAttrs::Unused5(val)) = attr {
                 return Ok(val);
             }
         }
@@ -512,7 +512,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Fwmark(val) = attr? {
+            if let Ok(FibRuleAttrs::Fwmark(val)) = attr {
                 return Ok(val);
             }
         }
@@ -527,7 +527,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Flow(val) = attr? {
+            if let Ok(FibRuleAttrs::Flow(val)) = attr {
                 return Ok(val);
             }
         }
@@ -542,7 +542,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::TunId(val) = attr? {
+            if let Ok(FibRuleAttrs::TunId(val)) = attr {
                 return Ok(val);
             }
         }
@@ -557,7 +557,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::SuppressIfgroup(val) = attr? {
+            if let Ok(FibRuleAttrs::SuppressIfgroup(val)) = attr {
                 return Ok(val);
             }
         }
@@ -572,7 +572,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::SuppressPrefixlen(val) = attr? {
+            if let Ok(FibRuleAttrs::SuppressPrefixlen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -587,7 +587,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Table(val) = attr? {
+            if let Ok(FibRuleAttrs::Table(val)) = attr {
                 return Ok(val);
             }
         }
@@ -602,7 +602,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Fwmask(val) = attr? {
+            if let Ok(FibRuleAttrs::Fwmask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -617,7 +617,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Oifname(val) = attr? {
+            if let Ok(FibRuleAttrs::Oifname(val)) = attr {
                 return Ok(val);
             }
         }
@@ -632,7 +632,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Pad(val) = attr? {
+            if let Ok(FibRuleAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -647,7 +647,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::L3mdev(val) = attr? {
+            if let Ok(FibRuleAttrs::L3mdev(val)) = attr {
                 return Ok(val);
             }
         }
@@ -662,7 +662,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::UidRange(val) = attr? {
+            if let Ok(FibRuleAttrs::UidRange(val)) = attr {
                 return Ok(val);
             }
         }
@@ -677,7 +677,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Protocol(val) = attr? {
+            if let Ok(FibRuleAttrs::Protocol(val)) = attr {
                 return Ok(val);
             }
         }
@@ -692,7 +692,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::IpProto(val) = attr? {
+            if let Ok(FibRuleAttrs::IpProto(val)) = attr {
                 return Ok(val);
             }
         }
@@ -707,7 +707,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::SportRange(val) = attr? {
+            if let Ok(FibRuleAttrs::SportRange(val)) = attr {
                 return Ok(val);
             }
         }
@@ -722,7 +722,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::DportRange(val) = attr? {
+            if let Ok(FibRuleAttrs::DportRange(val)) = attr {
                 return Ok(val);
             }
         }
@@ -737,7 +737,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Dscp(val) = attr? {
+            if let Ok(FibRuleAttrs::Dscp(val)) = attr {
                 return Ok(val);
             }
         }
@@ -752,7 +752,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::Flowlabel(val) = attr? {
+            if let Ok(FibRuleAttrs::Flowlabel(val)) = attr {
                 return Ok(val);
             }
         }
@@ -767,7 +767,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::FlowlabelMask(val) = attr? {
+            if let Ok(FibRuleAttrs::FlowlabelMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -782,7 +782,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::SportMask(val) = attr? {
+            if let Ok(FibRuleAttrs::SportMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -797,7 +797,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::DportMask(val) = attr? {
+            if let Ok(FibRuleAttrs::DportMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -812,7 +812,7 @@ impl<'a> IterableFibRuleAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let FibRuleAttrs::DscpMask(val) = attr? {
+            if let Ok(FibRuleAttrs::DscpMask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -886,14 +886,16 @@ impl<'a> IterableFibRuleAttrs<'a> {
 impl<'a> Iterator for IterableFibRuleAttrs<'a> {
     type Item = Result<FibRuleAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1539,7 +1541,7 @@ impl<Prev: Rec> Drop for PushFibRuleAttrs<Prev> {
         }
     }
 }
-#[doc = "Add new FIB rule\nRequest attributes:\n- [.push_iifname()](PushFibRuleAttrs::push_iifname)\n- [.push_goto()](PushFibRuleAttrs::push_goto)\n- [.push_priority()](PushFibRuleAttrs::push_priority)\n- [.push_fwmark()](PushFibRuleAttrs::push_fwmark)\n- [.push_flow()](PushFibRuleAttrs::push_flow)\n- [.push_tun_id()](PushFibRuleAttrs::push_tun_id)\n- [.push_suppress_ifgroup()](PushFibRuleAttrs::push_suppress_ifgroup)\n- [.push_suppress_prefixlen()](PushFibRuleAttrs::push_suppress_prefixlen)\n- [.push_table()](PushFibRuleAttrs::push_table)\n- [.push_fwmask()](PushFibRuleAttrs::push_fwmask)\n- [.push_oifname()](PushFibRuleAttrs::push_oifname)\n- [.push_l3mdev()](PushFibRuleAttrs::push_l3mdev)\n- [.push_uid_range()](PushFibRuleAttrs::push_uid_range)\n- [.push_protocol()](PushFibRuleAttrs::push_protocol)\n- [.push_ip_proto()](PushFibRuleAttrs::push_ip_proto)\n- [.push_sport_range()](PushFibRuleAttrs::push_sport_range)\n- [.push_dport_range()](PushFibRuleAttrs::push_dport_range)\n- [.push_dscp()](PushFibRuleAttrs::push_dscp)\n- [.push_flowlabel()](PushFibRuleAttrs::push_flowlabel)\n- [.push_flowlabel_mask()](PushFibRuleAttrs::push_flowlabel_mask)\n- [.push_sport_mask()](PushFibRuleAttrs::push_sport_mask)\n- [.push_dport_mask()](PushFibRuleAttrs::push_dport_mask)\n- [.push_dscp_mask()](PushFibRuleAttrs::push_dscp_mask)\n"]
+#[doc = "Add new FIB rule\n\nRequest attributes:\n- [.push_iifname()](PushFibRuleAttrs::push_iifname)\n- [.push_goto()](PushFibRuleAttrs::push_goto)\n- [.push_priority()](PushFibRuleAttrs::push_priority)\n- [.push_fwmark()](PushFibRuleAttrs::push_fwmark)\n- [.push_flow()](PushFibRuleAttrs::push_flow)\n- [.push_tun_id()](PushFibRuleAttrs::push_tun_id)\n- [.push_suppress_ifgroup()](PushFibRuleAttrs::push_suppress_ifgroup)\n- [.push_suppress_prefixlen()](PushFibRuleAttrs::push_suppress_prefixlen)\n- [.push_table()](PushFibRuleAttrs::push_table)\n- [.push_fwmask()](PushFibRuleAttrs::push_fwmask)\n- [.push_oifname()](PushFibRuleAttrs::push_oifname)\n- [.push_l3mdev()](PushFibRuleAttrs::push_l3mdev)\n- [.push_uid_range()](PushFibRuleAttrs::push_uid_range)\n- [.push_protocol()](PushFibRuleAttrs::push_protocol)\n- [.push_ip_proto()](PushFibRuleAttrs::push_ip_proto)\n- [.push_sport_range()](PushFibRuleAttrs::push_sport_range)\n- [.push_dport_range()](PushFibRuleAttrs::push_dport_range)\n- [.push_dscp()](PushFibRuleAttrs::push_dscp)\n- [.push_flowlabel()](PushFibRuleAttrs::push_flowlabel)\n- [.push_flowlabel_mask()](PushFibRuleAttrs::push_flowlabel_mask)\n- [.push_sport_mask()](PushFibRuleAttrs::push_sport_mask)\n- [.push_dport_mask()](PushFibRuleAttrs::push_dport_mask)\n- [.push_dscp_mask()](PushFibRuleAttrs::push_dscp_mask)\n\n"]
 #[derive(Debug)]
 pub struct OpNewruleDo<'r> {
     request: Request<'r>,
@@ -1600,7 +1602,7 @@ impl NetlinkRequest for OpNewruleDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Remove an existing FIB rule\nRequest attributes:\n- [.push_iifname()](PushFibRuleAttrs::push_iifname)\n- [.push_goto()](PushFibRuleAttrs::push_goto)\n- [.push_priority()](PushFibRuleAttrs::push_priority)\n- [.push_fwmark()](PushFibRuleAttrs::push_fwmark)\n- [.push_flow()](PushFibRuleAttrs::push_flow)\n- [.push_tun_id()](PushFibRuleAttrs::push_tun_id)\n- [.push_suppress_ifgroup()](PushFibRuleAttrs::push_suppress_ifgroup)\n- [.push_suppress_prefixlen()](PushFibRuleAttrs::push_suppress_prefixlen)\n- [.push_table()](PushFibRuleAttrs::push_table)\n- [.push_fwmask()](PushFibRuleAttrs::push_fwmask)\n- [.push_oifname()](PushFibRuleAttrs::push_oifname)\n- [.push_l3mdev()](PushFibRuleAttrs::push_l3mdev)\n- [.push_uid_range()](PushFibRuleAttrs::push_uid_range)\n- [.push_protocol()](PushFibRuleAttrs::push_protocol)\n- [.push_ip_proto()](PushFibRuleAttrs::push_ip_proto)\n- [.push_sport_range()](PushFibRuleAttrs::push_sport_range)\n- [.push_dport_range()](PushFibRuleAttrs::push_dport_range)\n- [.push_dscp()](PushFibRuleAttrs::push_dscp)\n- [.push_flowlabel()](PushFibRuleAttrs::push_flowlabel)\n- [.push_flowlabel_mask()](PushFibRuleAttrs::push_flowlabel_mask)\n- [.push_sport_mask()](PushFibRuleAttrs::push_sport_mask)\n- [.push_dport_mask()](PushFibRuleAttrs::push_dport_mask)\n- [.push_dscp_mask()](PushFibRuleAttrs::push_dscp_mask)\n"]
+#[doc = "Remove an existing FIB rule\n\nRequest attributes:\n- [.push_iifname()](PushFibRuleAttrs::push_iifname)\n- [.push_goto()](PushFibRuleAttrs::push_goto)\n- [.push_priority()](PushFibRuleAttrs::push_priority)\n- [.push_fwmark()](PushFibRuleAttrs::push_fwmark)\n- [.push_flow()](PushFibRuleAttrs::push_flow)\n- [.push_tun_id()](PushFibRuleAttrs::push_tun_id)\n- [.push_suppress_ifgroup()](PushFibRuleAttrs::push_suppress_ifgroup)\n- [.push_suppress_prefixlen()](PushFibRuleAttrs::push_suppress_prefixlen)\n- [.push_table()](PushFibRuleAttrs::push_table)\n- [.push_fwmask()](PushFibRuleAttrs::push_fwmask)\n- [.push_oifname()](PushFibRuleAttrs::push_oifname)\n- [.push_l3mdev()](PushFibRuleAttrs::push_l3mdev)\n- [.push_uid_range()](PushFibRuleAttrs::push_uid_range)\n- [.push_protocol()](PushFibRuleAttrs::push_protocol)\n- [.push_ip_proto()](PushFibRuleAttrs::push_ip_proto)\n- [.push_sport_range()](PushFibRuleAttrs::push_sport_range)\n- [.push_dport_range()](PushFibRuleAttrs::push_dport_range)\n- [.push_dscp()](PushFibRuleAttrs::push_dscp)\n- [.push_flowlabel()](PushFibRuleAttrs::push_flowlabel)\n- [.push_flowlabel_mask()](PushFibRuleAttrs::push_flowlabel_mask)\n- [.push_sport_mask()](PushFibRuleAttrs::push_sport_mask)\n- [.push_dport_mask()](PushFibRuleAttrs::push_dport_mask)\n- [.push_dscp_mask()](PushFibRuleAttrs::push_dscp_mask)\n\n"]
 #[derive(Debug)]
 pub struct OpDelruleDo<'r> {
     request: Request<'r>,
@@ -1661,7 +1663,7 @@ impl NetlinkRequest for OpDelruleDo<'_> {
             .lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Dump all FIB rules\n\nReply attributes:\n- [.get_iifname()](IterableFibRuleAttrs::get_iifname)\n- [.get_goto()](IterableFibRuleAttrs::get_goto)\n- [.get_priority()](IterableFibRuleAttrs::get_priority)\n- [.get_fwmark()](IterableFibRuleAttrs::get_fwmark)\n- [.get_flow()](IterableFibRuleAttrs::get_flow)\n- [.get_tun_id()](IterableFibRuleAttrs::get_tun_id)\n- [.get_suppress_ifgroup()](IterableFibRuleAttrs::get_suppress_ifgroup)\n- [.get_suppress_prefixlen()](IterableFibRuleAttrs::get_suppress_prefixlen)\n- [.get_table()](IterableFibRuleAttrs::get_table)\n- [.get_fwmask()](IterableFibRuleAttrs::get_fwmask)\n- [.get_oifname()](IterableFibRuleAttrs::get_oifname)\n- [.get_l3mdev()](IterableFibRuleAttrs::get_l3mdev)\n- [.get_uid_range()](IterableFibRuleAttrs::get_uid_range)\n- [.get_protocol()](IterableFibRuleAttrs::get_protocol)\n- [.get_ip_proto()](IterableFibRuleAttrs::get_ip_proto)\n- [.get_sport_range()](IterableFibRuleAttrs::get_sport_range)\n- [.get_dport_range()](IterableFibRuleAttrs::get_dport_range)\n- [.get_dscp()](IterableFibRuleAttrs::get_dscp)\n- [.get_flowlabel()](IterableFibRuleAttrs::get_flowlabel)\n- [.get_flowlabel_mask()](IterableFibRuleAttrs::get_flowlabel_mask)\n- [.get_sport_mask()](IterableFibRuleAttrs::get_sport_mask)\n- [.get_dport_mask()](IterableFibRuleAttrs::get_dport_mask)\n- [.get_dscp_mask()](IterableFibRuleAttrs::get_dscp_mask)\n"]
+#[doc = "Dump all FIB rules\n\nReply attributes:\n- [.get_iifname()](IterableFibRuleAttrs::get_iifname)\n- [.get_goto()](IterableFibRuleAttrs::get_goto)\n- [.get_priority()](IterableFibRuleAttrs::get_priority)\n- [.get_fwmark()](IterableFibRuleAttrs::get_fwmark)\n- [.get_flow()](IterableFibRuleAttrs::get_flow)\n- [.get_tun_id()](IterableFibRuleAttrs::get_tun_id)\n- [.get_suppress_ifgroup()](IterableFibRuleAttrs::get_suppress_ifgroup)\n- [.get_suppress_prefixlen()](IterableFibRuleAttrs::get_suppress_prefixlen)\n- [.get_table()](IterableFibRuleAttrs::get_table)\n- [.get_fwmask()](IterableFibRuleAttrs::get_fwmask)\n- [.get_oifname()](IterableFibRuleAttrs::get_oifname)\n- [.get_l3mdev()](IterableFibRuleAttrs::get_l3mdev)\n- [.get_uid_range()](IterableFibRuleAttrs::get_uid_range)\n- [.get_protocol()](IterableFibRuleAttrs::get_protocol)\n- [.get_ip_proto()](IterableFibRuleAttrs::get_ip_proto)\n- [.get_sport_range()](IterableFibRuleAttrs::get_sport_range)\n- [.get_dport_range()](IterableFibRuleAttrs::get_dport_range)\n- [.get_dscp()](IterableFibRuleAttrs::get_dscp)\n- [.get_flowlabel()](IterableFibRuleAttrs::get_flowlabel)\n- [.get_flowlabel_mask()](IterableFibRuleAttrs::get_flowlabel_mask)\n- [.get_sport_mask()](IterableFibRuleAttrs::get_sport_mask)\n- [.get_dport_mask()](IterableFibRuleAttrs::get_dport_mask)\n- [.get_dscp_mask()](IterableFibRuleAttrs::get_dscp_mask)\n\n"]
 #[derive(Debug)]
 pub struct OpGetruleDump<'r> {
     request: Request<'r>,
@@ -1965,21 +1967,21 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Add new FIB rule\nRequest attributes:\n- [.push_iifname()](PushFibRuleAttrs::push_iifname)\n- [.push_goto()](PushFibRuleAttrs::push_goto)\n- [.push_priority()](PushFibRuleAttrs::push_priority)\n- [.push_fwmark()](PushFibRuleAttrs::push_fwmark)\n- [.push_flow()](PushFibRuleAttrs::push_flow)\n- [.push_tun_id()](PushFibRuleAttrs::push_tun_id)\n- [.push_suppress_ifgroup()](PushFibRuleAttrs::push_suppress_ifgroup)\n- [.push_suppress_prefixlen()](PushFibRuleAttrs::push_suppress_prefixlen)\n- [.push_table()](PushFibRuleAttrs::push_table)\n- [.push_fwmask()](PushFibRuleAttrs::push_fwmask)\n- [.push_oifname()](PushFibRuleAttrs::push_oifname)\n- [.push_l3mdev()](PushFibRuleAttrs::push_l3mdev)\n- [.push_uid_range()](PushFibRuleAttrs::push_uid_range)\n- [.push_protocol()](PushFibRuleAttrs::push_protocol)\n- [.push_ip_proto()](PushFibRuleAttrs::push_ip_proto)\n- [.push_sport_range()](PushFibRuleAttrs::push_sport_range)\n- [.push_dport_range()](PushFibRuleAttrs::push_dport_range)\n- [.push_dscp()](PushFibRuleAttrs::push_dscp)\n- [.push_flowlabel()](PushFibRuleAttrs::push_flowlabel)\n- [.push_flowlabel_mask()](PushFibRuleAttrs::push_flowlabel_mask)\n- [.push_sport_mask()](PushFibRuleAttrs::push_sport_mask)\n- [.push_dport_mask()](PushFibRuleAttrs::push_dport_mask)\n- [.push_dscp_mask()](PushFibRuleAttrs::push_dscp_mask)\n"]
+    #[doc = "Add new FIB rule\n\nRequest attributes:\n- [.push_iifname()](PushFibRuleAttrs::push_iifname)\n- [.push_goto()](PushFibRuleAttrs::push_goto)\n- [.push_priority()](PushFibRuleAttrs::push_priority)\n- [.push_fwmark()](PushFibRuleAttrs::push_fwmark)\n- [.push_flow()](PushFibRuleAttrs::push_flow)\n- [.push_tun_id()](PushFibRuleAttrs::push_tun_id)\n- [.push_suppress_ifgroup()](PushFibRuleAttrs::push_suppress_ifgroup)\n- [.push_suppress_prefixlen()](PushFibRuleAttrs::push_suppress_prefixlen)\n- [.push_table()](PushFibRuleAttrs::push_table)\n- [.push_fwmask()](PushFibRuleAttrs::push_fwmask)\n- [.push_oifname()](PushFibRuleAttrs::push_oifname)\n- [.push_l3mdev()](PushFibRuleAttrs::push_l3mdev)\n- [.push_uid_range()](PushFibRuleAttrs::push_uid_range)\n- [.push_protocol()](PushFibRuleAttrs::push_protocol)\n- [.push_ip_proto()](PushFibRuleAttrs::push_ip_proto)\n- [.push_sport_range()](PushFibRuleAttrs::push_sport_range)\n- [.push_dport_range()](PushFibRuleAttrs::push_dport_range)\n- [.push_dscp()](PushFibRuleAttrs::push_dscp)\n- [.push_flowlabel()](PushFibRuleAttrs::push_flowlabel)\n- [.push_flowlabel_mask()](PushFibRuleAttrs::push_flowlabel_mask)\n- [.push_sport_mask()](PushFibRuleAttrs::push_sport_mask)\n- [.push_dport_mask()](PushFibRuleAttrs::push_dport_mask)\n- [.push_dscp_mask()](PushFibRuleAttrs::push_dscp_mask)\n\n"]
     pub fn op_newrule_do(self, header: &FibRuleHdr) -> OpNewruleDo<'buf> {
         let mut res = OpNewruleDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-newrule-do", OpNewruleDo::lookup);
         res
     }
-    #[doc = "Remove an existing FIB rule\nRequest attributes:\n- [.push_iifname()](PushFibRuleAttrs::push_iifname)\n- [.push_goto()](PushFibRuleAttrs::push_goto)\n- [.push_priority()](PushFibRuleAttrs::push_priority)\n- [.push_fwmark()](PushFibRuleAttrs::push_fwmark)\n- [.push_flow()](PushFibRuleAttrs::push_flow)\n- [.push_tun_id()](PushFibRuleAttrs::push_tun_id)\n- [.push_suppress_ifgroup()](PushFibRuleAttrs::push_suppress_ifgroup)\n- [.push_suppress_prefixlen()](PushFibRuleAttrs::push_suppress_prefixlen)\n- [.push_table()](PushFibRuleAttrs::push_table)\n- [.push_fwmask()](PushFibRuleAttrs::push_fwmask)\n- [.push_oifname()](PushFibRuleAttrs::push_oifname)\n- [.push_l3mdev()](PushFibRuleAttrs::push_l3mdev)\n- [.push_uid_range()](PushFibRuleAttrs::push_uid_range)\n- [.push_protocol()](PushFibRuleAttrs::push_protocol)\n- [.push_ip_proto()](PushFibRuleAttrs::push_ip_proto)\n- [.push_sport_range()](PushFibRuleAttrs::push_sport_range)\n- [.push_dport_range()](PushFibRuleAttrs::push_dport_range)\n- [.push_dscp()](PushFibRuleAttrs::push_dscp)\n- [.push_flowlabel()](PushFibRuleAttrs::push_flowlabel)\n- [.push_flowlabel_mask()](PushFibRuleAttrs::push_flowlabel_mask)\n- [.push_sport_mask()](PushFibRuleAttrs::push_sport_mask)\n- [.push_dport_mask()](PushFibRuleAttrs::push_dport_mask)\n- [.push_dscp_mask()](PushFibRuleAttrs::push_dscp_mask)\n"]
+    #[doc = "Remove an existing FIB rule\n\nRequest attributes:\n- [.push_iifname()](PushFibRuleAttrs::push_iifname)\n- [.push_goto()](PushFibRuleAttrs::push_goto)\n- [.push_priority()](PushFibRuleAttrs::push_priority)\n- [.push_fwmark()](PushFibRuleAttrs::push_fwmark)\n- [.push_flow()](PushFibRuleAttrs::push_flow)\n- [.push_tun_id()](PushFibRuleAttrs::push_tun_id)\n- [.push_suppress_ifgroup()](PushFibRuleAttrs::push_suppress_ifgroup)\n- [.push_suppress_prefixlen()](PushFibRuleAttrs::push_suppress_prefixlen)\n- [.push_table()](PushFibRuleAttrs::push_table)\n- [.push_fwmask()](PushFibRuleAttrs::push_fwmask)\n- [.push_oifname()](PushFibRuleAttrs::push_oifname)\n- [.push_l3mdev()](PushFibRuleAttrs::push_l3mdev)\n- [.push_uid_range()](PushFibRuleAttrs::push_uid_range)\n- [.push_protocol()](PushFibRuleAttrs::push_protocol)\n- [.push_ip_proto()](PushFibRuleAttrs::push_ip_proto)\n- [.push_sport_range()](PushFibRuleAttrs::push_sport_range)\n- [.push_dport_range()](PushFibRuleAttrs::push_dport_range)\n- [.push_dscp()](PushFibRuleAttrs::push_dscp)\n- [.push_flowlabel()](PushFibRuleAttrs::push_flowlabel)\n- [.push_flowlabel_mask()](PushFibRuleAttrs::push_flowlabel_mask)\n- [.push_sport_mask()](PushFibRuleAttrs::push_sport_mask)\n- [.push_dport_mask()](PushFibRuleAttrs::push_dport_mask)\n- [.push_dscp_mask()](PushFibRuleAttrs::push_dscp_mask)\n\n"]
     pub fn op_delrule_do(self, header: &FibRuleHdr) -> OpDelruleDo<'buf> {
         let mut res = OpDelruleDo::new(self, header);
         res.request
             .do_writeback(res.protocol(), "op-delrule-do", OpDelruleDo::lookup);
         res
     }
-    #[doc = "Dump all FIB rules\n\nReply attributes:\n- [.get_iifname()](IterableFibRuleAttrs::get_iifname)\n- [.get_goto()](IterableFibRuleAttrs::get_goto)\n- [.get_priority()](IterableFibRuleAttrs::get_priority)\n- [.get_fwmark()](IterableFibRuleAttrs::get_fwmark)\n- [.get_flow()](IterableFibRuleAttrs::get_flow)\n- [.get_tun_id()](IterableFibRuleAttrs::get_tun_id)\n- [.get_suppress_ifgroup()](IterableFibRuleAttrs::get_suppress_ifgroup)\n- [.get_suppress_prefixlen()](IterableFibRuleAttrs::get_suppress_prefixlen)\n- [.get_table()](IterableFibRuleAttrs::get_table)\n- [.get_fwmask()](IterableFibRuleAttrs::get_fwmask)\n- [.get_oifname()](IterableFibRuleAttrs::get_oifname)\n- [.get_l3mdev()](IterableFibRuleAttrs::get_l3mdev)\n- [.get_uid_range()](IterableFibRuleAttrs::get_uid_range)\n- [.get_protocol()](IterableFibRuleAttrs::get_protocol)\n- [.get_ip_proto()](IterableFibRuleAttrs::get_ip_proto)\n- [.get_sport_range()](IterableFibRuleAttrs::get_sport_range)\n- [.get_dport_range()](IterableFibRuleAttrs::get_dport_range)\n- [.get_dscp()](IterableFibRuleAttrs::get_dscp)\n- [.get_flowlabel()](IterableFibRuleAttrs::get_flowlabel)\n- [.get_flowlabel_mask()](IterableFibRuleAttrs::get_flowlabel_mask)\n- [.get_sport_mask()](IterableFibRuleAttrs::get_sport_mask)\n- [.get_dport_mask()](IterableFibRuleAttrs::get_dport_mask)\n- [.get_dscp_mask()](IterableFibRuleAttrs::get_dscp_mask)\n"]
+    #[doc = "Dump all FIB rules\n\nReply attributes:\n- [.get_iifname()](IterableFibRuleAttrs::get_iifname)\n- [.get_goto()](IterableFibRuleAttrs::get_goto)\n- [.get_priority()](IterableFibRuleAttrs::get_priority)\n- [.get_fwmark()](IterableFibRuleAttrs::get_fwmark)\n- [.get_flow()](IterableFibRuleAttrs::get_flow)\n- [.get_tun_id()](IterableFibRuleAttrs::get_tun_id)\n- [.get_suppress_ifgroup()](IterableFibRuleAttrs::get_suppress_ifgroup)\n- [.get_suppress_prefixlen()](IterableFibRuleAttrs::get_suppress_prefixlen)\n- [.get_table()](IterableFibRuleAttrs::get_table)\n- [.get_fwmask()](IterableFibRuleAttrs::get_fwmask)\n- [.get_oifname()](IterableFibRuleAttrs::get_oifname)\n- [.get_l3mdev()](IterableFibRuleAttrs::get_l3mdev)\n- [.get_uid_range()](IterableFibRuleAttrs::get_uid_range)\n- [.get_protocol()](IterableFibRuleAttrs::get_protocol)\n- [.get_ip_proto()](IterableFibRuleAttrs::get_ip_proto)\n- [.get_sport_range()](IterableFibRuleAttrs::get_sport_range)\n- [.get_dport_range()](IterableFibRuleAttrs::get_dport_range)\n- [.get_dscp()](IterableFibRuleAttrs::get_dscp)\n- [.get_flowlabel()](IterableFibRuleAttrs::get_flowlabel)\n- [.get_flowlabel_mask()](IterableFibRuleAttrs::get_flowlabel_mask)\n- [.get_sport_mask()](IterableFibRuleAttrs::get_sport_mask)\n- [.get_dport_mask()](IterableFibRuleAttrs::get_dport_mask)\n- [.get_dscp_mask()](IterableFibRuleAttrs::get_dscp_mask)\n\n"]
     pub fn op_getrule_dump(self, header: &FibRuleHdr) -> OpGetruleDump<'buf> {
         let mut res = OpGetruleDump::new(self, header);
         res.request

@@ -16,10 +16,8 @@ use crate::{
 };
 pub const PROTONAME: &str = "builtin";
 pub const PROTONAME_CSTR: &CStr = c"builtin";
-#[doc = "Generic family header"]
-#[doc = "Wrapper for bitfield32 type"]
-#[doc = "Header of a Netlink message"]
 #[derive(Debug)]
+#[doc = "Generic family header\n"]
 #[repr(C, packed(4))]
 pub struct BuiltinNfgenmsg {
     pub cmd: u8,
@@ -88,6 +86,7 @@ impl BuiltinNfgenmsg {
     }
 }
 #[derive(Debug)]
+#[doc = "Wrapper for bitfield32 type\n"]
 #[repr(C, packed(4))]
 pub struct BuiltinBitfield32 {
     pub value: u32,
@@ -155,6 +154,7 @@ impl BuiltinBitfield32 {
     }
 }
 #[derive(Debug)]
+#[doc = "Header of a Netlink message\n"]
 #[repr(C, packed(4))]
 pub struct Nlmsghdr {
     pub len: u32,
@@ -256,14 +256,16 @@ impl<'a> IterableDummy<'a> {
 impl<'a> Iterator for IterableDummy<'a> {
     type Item = Result<Dummy, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -316,26 +318,26 @@ impl IterableDummy<'_> {
 }
 #[derive(Clone)]
 pub enum NlmsgerrAttrs<'a> {
-    #[doc = "error message string (string)"]
+    #[doc = "error message string (string)\n"]
     Msg(&'a CStr),
-    #[doc = "offset of the invalid attribute in the original message, counting from the beginning of the header (u32)"]
+    #[doc = "offset of the invalid attribute in the original message, counting from\nthe beginning of the header (u32)\n"]
     Offset(u32),
-    #[doc = "arbitrary subsystem specific cookie to be used \\- in the success case \\- to identify a created object or operation or similar (binary)"]
+    #[doc = "arbitrary subsystem specific cookie to be used - in the success case -\nto identify a created object or operation or similar (binary)\n"]
     Cookie(&'a [u8]),
-    #[doc = "policy for a rejected attribute"]
+    #[doc = "policy for a rejected attribute\n"]
     Policy(IterablePolicyTypeAttrs<'a>),
-    #[doc = "type of a missing required attribute, NLMSGERR\\_ATTR\\_MISS\\_NEST will not be present if the attribute was missing at the message level"]
+    #[doc = "type of a missing required attribute, NLMSGERR_ATTR_MISS_NEST will not\nbe present if the attribute was missing at the message level\n"]
     MissingType(u16),
-    #[doc = "offset of the nest where attribute was missing"]
+    #[doc = "offset of the nest where attribute was missing\n"]
     MissingNest(u32),
 }
 impl<'a> IterableNlmsgerrAttrs<'a> {
-    #[doc = "error message string (string)"]
+    #[doc = "error message string (string)\n"]
     pub fn get_msg(&self) -> Result<&'a CStr, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NlmsgerrAttrs::Msg(val) = attr? {
+            if let Ok(NlmsgerrAttrs::Msg(val)) = attr {
                 return Ok(val);
             }
         }
@@ -346,12 +348,12 @@ impl<'a> IterableNlmsgerrAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "offset of the invalid attribute in the original message, counting from the beginning of the header (u32)"]
+    #[doc = "offset of the invalid attribute in the original message, counting from\nthe beginning of the header (u32)\n"]
     pub fn get_offset(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NlmsgerrAttrs::Offset(val) = attr? {
+            if let Ok(NlmsgerrAttrs::Offset(val)) = attr {
                 return Ok(val);
             }
         }
@@ -362,12 +364,12 @@ impl<'a> IterableNlmsgerrAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "arbitrary subsystem specific cookie to be used \\- in the success case \\- to identify a created object or operation or similar (binary)"]
+    #[doc = "arbitrary subsystem specific cookie to be used - in the success case -\nto identify a created object or operation or similar (binary)\n"]
     pub fn get_cookie(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NlmsgerrAttrs::Cookie(val) = attr? {
+            if let Ok(NlmsgerrAttrs::Cookie(val)) = attr {
                 return Ok(val);
             }
         }
@@ -378,12 +380,12 @@ impl<'a> IterableNlmsgerrAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "policy for a rejected attribute"]
+    #[doc = "policy for a rejected attribute\n"]
     pub fn get_policy(&self) -> Result<IterablePolicyTypeAttrs<'a>, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NlmsgerrAttrs::Policy(val) = attr? {
+            if let Ok(NlmsgerrAttrs::Policy(val)) = attr {
                 return Ok(val);
             }
         }
@@ -394,12 +396,12 @@ impl<'a> IterableNlmsgerrAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "type of a missing required attribute, NLMSGERR\\_ATTR\\_MISS\\_NEST will not be present if the attribute was missing at the message level"]
+    #[doc = "type of a missing required attribute, NLMSGERR_ATTR_MISS_NEST will not\nbe present if the attribute was missing at the message level\n"]
     pub fn get_missing_type(&self) -> Result<u16, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NlmsgerrAttrs::MissingType(val) = attr? {
+            if let Ok(NlmsgerrAttrs::MissingType(val)) = attr {
                 return Ok(val);
             }
         }
@@ -410,12 +412,12 @@ impl<'a> IterableNlmsgerrAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "offset of the nest where attribute was missing"]
+    #[doc = "offset of the nest where attribute was missing\n"]
     pub fn get_missing_nest(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let NlmsgerrAttrs::MissingNest(val) = attr? {
+            if let Ok(NlmsgerrAttrs::MissingNest(val)) = attr {
                 return Ok(val);
             }
         }
@@ -466,14 +468,16 @@ impl<'a> IterableNlmsgerrAttrs<'a> {
 impl<'a> Iterator for IterableNlmsgerrAttrs<'a> {
     type Item = Result<NlmsgerrAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -618,38 +622,38 @@ impl IterableNlmsgerrAttrs<'_> {
 }
 #[derive(Clone)]
 pub enum PolicyTypeAttrs<'a> {
-    #[doc = "type of the attribute, enum netlink\\_attribute\\_type (U32)"]
+    #[doc = "type of the attribute, enum netlink_attribute_type (U32)\n"]
     Type(u32),
-    #[doc = "minimum value for signed integers (S64)"]
+    #[doc = "minimum value for signed integers (S64)\n"]
     MinValueSigned(i64),
-    #[doc = "maximum value for signed integers (S64)"]
+    #[doc = "maximum value for signed integers (S64)\n"]
     MaxValueSigned(i64),
-    #[doc = "minimum value for unsigned integers (U64)"]
+    #[doc = "minimum value for unsigned integers (U64)\n"]
     MinValueU(u64),
-    #[doc = "maximum value for unsigned integers (U64)"]
+    #[doc = "maximum value for unsigned integers (U64)\n"]
     MaxValueU(u64),
-    #[doc = "minimum length for binary attributes, no minimum if not given (U32)"]
+    #[doc = "minimum length for binary attributes, no minimum if not given (U32)\n"]
     MinLength(u32),
-    #[doc = "maximum length for binary attributes, no maximum if not given (U32)"]
+    #[doc = "maximum length for binary attributes, no maximum if not given (U32)\n"]
     MaxLength(u32),
-    #[doc = "sub policy for nested and nested array types (U32)"]
+    #[doc = "sub policy for nested and nested array types (U32)\n"]
     PolicyIdx(u32),
-    #[doc = "maximum sub policy attribute for nested and nested array types, this can in theory be < the size of the policy pointed to by the index, if limited inside the nesting (U32)"]
+    #[doc = "maximum sub policy attribute for nested and nested array types, this can\nin theory be \\< the size of the policy pointed to by the index, if\nlimited inside the nesting (U32)\n"]
     PolicyMaxtype(u32),
-    #[doc = "valid mask for the bitfield32 type (U32)"]
+    #[doc = "valid mask for the bitfield32 type (U32)\n"]
     Bitfield32Mask(u32),
-    #[doc = "pad attribute for 64\\-bit alignment"]
+    #[doc = "pad attribute for 64-bit alignment\n"]
     Pad(&'a [u8]),
-    #[doc = "mask of valid bits for unsigned integers (U64)"]
+    #[doc = "mask of valid bits for unsigned integers (U64)\n"]
     Mask(u64),
 }
 impl<'a> IterablePolicyTypeAttrs<'a> {
-    #[doc = "type of the attribute, enum netlink\\_attribute\\_type (U32)"]
+    #[doc = "type of the attribute, enum netlink_attribute_type (U32)\n"]
     pub fn get_type(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::Type(val) = attr? {
+            if let Ok(PolicyTypeAttrs::Type(val)) = attr {
                 return Ok(val);
             }
         }
@@ -660,12 +664,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "minimum value for signed integers (S64)"]
+    #[doc = "minimum value for signed integers (S64)\n"]
     pub fn get_min_value_signed(&self) -> Result<i64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::MinValueSigned(val) = attr? {
+            if let Ok(PolicyTypeAttrs::MinValueSigned(val)) = attr {
                 return Ok(val);
             }
         }
@@ -676,12 +680,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "maximum value for signed integers (S64)"]
+    #[doc = "maximum value for signed integers (S64)\n"]
     pub fn get_max_value_signed(&self) -> Result<i64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::MaxValueSigned(val) = attr? {
+            if let Ok(PolicyTypeAttrs::MaxValueSigned(val)) = attr {
                 return Ok(val);
             }
         }
@@ -692,12 +696,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "minimum value for unsigned integers (U64)"]
+    #[doc = "minimum value for unsigned integers (U64)\n"]
     pub fn get_min_value_u(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::MinValueU(val) = attr? {
+            if let Ok(PolicyTypeAttrs::MinValueU(val)) = attr {
                 return Ok(val);
             }
         }
@@ -708,12 +712,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "maximum value for unsigned integers (U64)"]
+    #[doc = "maximum value for unsigned integers (U64)\n"]
     pub fn get_max_value_u(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::MaxValueU(val) = attr? {
+            if let Ok(PolicyTypeAttrs::MaxValueU(val)) = attr {
                 return Ok(val);
             }
         }
@@ -724,12 +728,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "minimum length for binary attributes, no minimum if not given (U32)"]
+    #[doc = "minimum length for binary attributes, no minimum if not given (U32)\n"]
     pub fn get_min_length(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::MinLength(val) = attr? {
+            if let Ok(PolicyTypeAttrs::MinLength(val)) = attr {
                 return Ok(val);
             }
         }
@@ -740,12 +744,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "maximum length for binary attributes, no maximum if not given (U32)"]
+    #[doc = "maximum length for binary attributes, no maximum if not given (U32)\n"]
     pub fn get_max_length(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::MaxLength(val) = attr? {
+            if let Ok(PolicyTypeAttrs::MaxLength(val)) = attr {
                 return Ok(val);
             }
         }
@@ -756,12 +760,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "sub policy for nested and nested array types (U32)"]
+    #[doc = "sub policy for nested and nested array types (U32)\n"]
     pub fn get_policy_idx(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::PolicyIdx(val) = attr? {
+            if let Ok(PolicyTypeAttrs::PolicyIdx(val)) = attr {
                 return Ok(val);
             }
         }
@@ -772,12 +776,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "maximum sub policy attribute for nested and nested array types, this can in theory be < the size of the policy pointed to by the index, if limited inside the nesting (U32)"]
+    #[doc = "maximum sub policy attribute for nested and nested array types, this can\nin theory be \\< the size of the policy pointed to by the index, if\nlimited inside the nesting (U32)\n"]
     pub fn get_policy_maxtype(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::PolicyMaxtype(val) = attr? {
+            if let Ok(PolicyTypeAttrs::PolicyMaxtype(val)) = attr {
                 return Ok(val);
             }
         }
@@ -788,12 +792,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "valid mask for the bitfield32 type (U32)"]
+    #[doc = "valid mask for the bitfield32 type (U32)\n"]
     pub fn get_bitfield32_mask(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::Bitfield32Mask(val) = attr? {
+            if let Ok(PolicyTypeAttrs::Bitfield32Mask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -804,12 +808,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "pad attribute for 64\\-bit alignment"]
+    #[doc = "pad attribute for 64-bit alignment\n"]
     pub fn get_pad(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::Pad(val) = attr? {
+            if let Ok(PolicyTypeAttrs::Pad(val)) = attr {
                 return Ok(val);
             }
         }
@@ -820,12 +824,12 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "mask of valid bits for unsigned integers (U64)"]
+    #[doc = "mask of valid bits for unsigned integers (U64)\n"]
     pub fn get_mask(&self) -> Result<u64, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let PolicyTypeAttrs::Mask(val) = attr? {
+            if let Ok(PolicyTypeAttrs::Mask(val)) = attr {
                 return Ok(val);
             }
         }
@@ -882,14 +886,16 @@ impl<'a> IterablePolicyTypeAttrs<'a> {
 impl<'a> Iterator for IterablePolicyTypeAttrs<'a> {
     type Item = Result<PolicyTypeAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -1165,7 +1171,7 @@ impl<Prev: Rec> PushNlmsgerrAttrs<Prev> {
         }
         prev
     }
-    #[doc = "error message string (string)"]
+    #[doc = "error message string (string)\n"]
     pub fn push_msg(mut self, value: &CStr) -> Self {
         push_header(
             self.as_rec_mut(),
@@ -1175,26 +1181,26 @@ impl<Prev: Rec> PushNlmsgerrAttrs<Prev> {
         self.as_rec_mut().extend(value.to_bytes_with_nul());
         self
     }
-    #[doc = "error message string (string)"]
+    #[doc = "error message string (string)\n"]
     pub fn push_msg_bytes(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
         self.as_rec_mut().extend(value);
         self.as_rec_mut().push(0);
         self
     }
-    #[doc = "offset of the invalid attribute in the original message, counting from the beginning of the header (u32)"]
+    #[doc = "offset of the invalid attribute in the original message, counting from\nthe beginning of the header (u32)\n"]
     pub fn push_offset(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 2u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "arbitrary subsystem specific cookie to be used \\- in the success case \\- to identify a created object or operation or similar (binary)"]
+    #[doc = "arbitrary subsystem specific cookie to be used - in the success case -\nto identify a created object or operation or similar (binary)\n"]
     pub fn push_cookie(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 3u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "policy for a rejected attribute"]
+    #[doc = "policy for a rejected attribute\n"]
     pub fn nested_policy(mut self) -> PushPolicyTypeAttrs<Self> {
         let header_offset = push_nested_header(self.as_rec_mut(), 4u16);
         PushPolicyTypeAttrs {
@@ -1202,13 +1208,13 @@ impl<Prev: Rec> PushNlmsgerrAttrs<Prev> {
             header_offset: Some(header_offset),
         }
     }
-    #[doc = "type of a missing required attribute, NLMSGERR\\_ATTR\\_MISS\\_NEST will not be present if the attribute was missing at the message level"]
+    #[doc = "type of a missing required attribute, NLMSGERR_ATTR_MISS_NEST will not\nbe present if the attribute was missing at the message level\n"]
     pub fn push_missing_type(mut self, value: u16) -> Self {
         push_header(self.as_rec_mut(), 5u16, 2 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "offset of the nest where attribute was missing"]
+    #[doc = "offset of the nest where attribute was missing\n"]
     pub fn push_missing_nest(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
@@ -1250,73 +1256,73 @@ impl<Prev: Rec> PushPolicyTypeAttrs<Prev> {
         }
         prev
     }
-    #[doc = "type of the attribute, enum netlink\\_attribute\\_type (U32)"]
+    #[doc = "type of the attribute, enum netlink_attribute_type (U32)\n"]
     pub fn push_type(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 1u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "minimum value for signed integers (S64)"]
+    #[doc = "minimum value for signed integers (S64)\n"]
     pub fn push_min_value_signed(mut self, value: i64) -> Self {
         push_header(self.as_rec_mut(), 2u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "maximum value for signed integers (S64)"]
+    #[doc = "maximum value for signed integers (S64)\n"]
     pub fn push_max_value_signed(mut self, value: i64) -> Self {
         push_header(self.as_rec_mut(), 3u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "minimum value for unsigned integers (U64)"]
+    #[doc = "minimum value for unsigned integers (U64)\n"]
     pub fn push_min_value_u(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 4u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "maximum value for unsigned integers (U64)"]
+    #[doc = "maximum value for unsigned integers (U64)\n"]
     pub fn push_max_value_u(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 5u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "minimum length for binary attributes, no minimum if not given (U32)"]
+    #[doc = "minimum length for binary attributes, no minimum if not given (U32)\n"]
     pub fn push_min_length(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 6u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "maximum length for binary attributes, no maximum if not given (U32)"]
+    #[doc = "maximum length for binary attributes, no maximum if not given (U32)\n"]
     pub fn push_max_length(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 7u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "sub policy for nested and nested array types (U32)"]
+    #[doc = "sub policy for nested and nested array types (U32)\n"]
     pub fn push_policy_idx(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 8u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "maximum sub policy attribute for nested and nested array types, this can in theory be < the size of the policy pointed to by the index, if limited inside the nesting (U32)"]
+    #[doc = "maximum sub policy attribute for nested and nested array types, this can\nin theory be \\< the size of the policy pointed to by the index, if\nlimited inside the nesting (U32)\n"]
     pub fn push_policy_maxtype(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 9u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "valid mask for the bitfield32 type (U32)"]
+    #[doc = "valid mask for the bitfield32 type (U32)\n"]
     pub fn push_bitfield32_mask(mut self, value: u32) -> Self {
         push_header(self.as_rec_mut(), 10u16, 4 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "pad attribute for 64\\-bit alignment"]
+    #[doc = "pad attribute for 64-bit alignment\n"]
     pub fn push_pad(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 11u16, value.len() as u16);
         self.as_rec_mut().extend(value);
         self
     }
-    #[doc = "mask of valid bits for unsigned integers (U64)"]
+    #[doc = "mask of valid bits for unsigned integers (U64)\n"]
     pub fn push_mask(mut self, value: u64) -> Self {
         push_header(self.as_rec_mut(), 12u16, 8 as u16);
         self.as_rec_mut().extend(value.to_ne_bytes());

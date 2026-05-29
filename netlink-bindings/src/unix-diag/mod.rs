@@ -16,24 +16,22 @@ use crate::{
 pub const PROTONAME: &str = "unix-diag";
 pub const PROTONAME_CSTR: &CStr = c"unix-diag";
 pub const PROTONUM: u16 = 4u16;
-#[doc = "VFS inode info"]
-#[doc = "Receive queue length info"]
 #[doc = "Flags - defines an integer enumeration, with values for each entry occupying a bit, starting from bit 0, (e.g. 1, 2, 4, 8)"]
 #[derive(Debug, Clone, Copy)]
 pub enum ShowFlags {
-    #[doc = "show name (not path)"]
+    #[doc = "show name (not path)\n"]
     Name = 1 << 0,
-    #[doc = "show VFS inode info"]
+    #[doc = "show VFS inode info\n"]
     Vfs = 1 << 1,
-    #[doc = "show peer socket info"]
+    #[doc = "show peer socket info\n"]
     Peer = 1 << 2,
-    #[doc = "show pending connections"]
+    #[doc = "show pending connections\n"]
     Icons = 1 << 3,
-    #[doc = "show skb receive queue len"]
+    #[doc = "show skb receive queue len\n"]
     Rqlen = 1 << 4,
-    #[doc = "show memory info of a socket"]
+    #[doc = "show memory info of a socket\n"]
     Meminfo = 1 << 5,
-    #[doc = "show socket's UID"]
+    #[doc = "show socket\\'s UID\n"]
     Uid = 1 << 6,
 }
 impl ShowFlags {
@@ -55,10 +53,10 @@ pub struct Req {
     pub sdiag_family: u8,
     pub sdiag_protocol: u8,
     pub pad: u16,
-    #[doc = "States to dump"]
+    #[doc = "States to dump\n"]
     pub udiag_states: u32,
     pub udiag_ino: u32,
-    #[doc = "Show flags"]
+    #[doc = "Show flags\n"]
     pub udiag_show: u32,
     pub udiag_cookie: [u8; 8usize],
 }
@@ -219,6 +217,7 @@ impl std::fmt::Debug for Msg {
     }
 }
 #[derive(Debug)]
+#[doc = "VFS inode info\n"]
 #[repr(C, packed(4))]
 pub struct Vfs {
     pub udiag_vfs_ino: u32,
@@ -286,6 +285,7 @@ impl Vfs {
     }
 }
 #[derive(Debug)]
+#[doc = "Receive queue length info\n"]
 #[repr(C, packed(4))]
 pub struct Rqlen {
     pub udiag_rqueue: u32,
@@ -354,7 +354,7 @@ impl Rqlen {
 }
 #[derive(Clone)]
 pub enum UnixDiagAttrs<'a> {
-    #[doc = "Unix socket sun\\_path\\. May or may not contain '\\\\0'\\."]
+    #[doc = "Unix socket sun_path. May or may not contain \\'0\\'.\n"]
     Name(&'a [u8]),
     Vfs(Vfs),
     Peer(u32),
@@ -365,12 +365,12 @@ pub enum UnixDiagAttrs<'a> {
     Uid(u32),
 }
 impl<'a> IterableUnixDiagAttrs<'a> {
-    #[doc = "Unix socket sun\\_path\\. May or may not contain '\\\\0'\\."]
+    #[doc = "Unix socket sun_path. May or may not contain \\'0\\'.\n"]
     pub fn get_name(&self) -> Result<&'a [u8], ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UnixDiagAttrs::Name(val) = attr? {
+            if let Ok(UnixDiagAttrs::Name(val)) = attr {
                 return Ok(val);
             }
         }
@@ -385,7 +385,7 @@ impl<'a> IterableUnixDiagAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UnixDiagAttrs::Vfs(val) = attr? {
+            if let Ok(UnixDiagAttrs::Vfs(val)) = attr {
                 return Ok(val);
             }
         }
@@ -400,7 +400,7 @@ impl<'a> IterableUnixDiagAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UnixDiagAttrs::Peer(val) = attr? {
+            if let Ok(UnixDiagAttrs::Peer(val)) = attr {
                 return Ok(val);
             }
         }
@@ -415,7 +415,7 @@ impl<'a> IterableUnixDiagAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UnixDiagAttrs::Icons(val) = attr? {
+            if let Ok(UnixDiagAttrs::Icons(val)) = attr {
                 return Ok(val);
             }
         }
@@ -430,7 +430,7 @@ impl<'a> IterableUnixDiagAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UnixDiagAttrs::Rqlen(val) = attr? {
+            if let Ok(UnixDiagAttrs::Rqlen(val)) = attr {
                 return Ok(val);
             }
         }
@@ -445,7 +445,7 @@ impl<'a> IterableUnixDiagAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UnixDiagAttrs::Meminfo(val) = attr? {
+            if let Ok(UnixDiagAttrs::Meminfo(val)) = attr {
                 return Ok(val);
             }
         }
@@ -460,7 +460,7 @@ impl<'a> IterableUnixDiagAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UnixDiagAttrs::Shutdown(val) = attr? {
+            if let Ok(UnixDiagAttrs::Shutdown(val)) = attr {
                 return Ok(val);
             }
         }
@@ -475,7 +475,7 @@ impl<'a> IterableUnixDiagAttrs<'a> {
         let mut iter = self.clone();
         iter.pos = 0;
         for attr in iter {
-            if let UnixDiagAttrs::Uid(val) = attr? {
+            if let Ok(UnixDiagAttrs::Uid(val)) = attr {
                 return Ok(val);
             }
         }
@@ -527,14 +527,16 @@ impl<'a> IterableUnixDiagAttrs<'a> {
 impl<'a> Iterator for IterableUnixDiagAttrs<'a> {
     type Item = Result<UnixDiagAttrs<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
-        let pos = self.pos;
+        let mut pos;
         let mut r#type;
         loop {
+            pos = self.pos;
             r#type = None;
             if self.buf.len() == self.pos {
                 return None;
             }
             let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
                 break;
             };
             r#type = Some(header.r#type);
@@ -726,7 +728,7 @@ impl<Prev: Rec> PushUnixDiagAttrs<Prev> {
         }
         prev
     }
-    #[doc = "Unix socket sun\\_path\\. May or may not contain '\\\\0'\\."]
+    #[doc = "Unix socket sun_path. May or may not contain \\'0\\'.\n"]
     pub fn push_name(mut self, value: &[u8]) -> Self {
         push_header(self.as_rec_mut(), 0u16, value.len() as u16);
         self.as_rec_mut().extend(value);
