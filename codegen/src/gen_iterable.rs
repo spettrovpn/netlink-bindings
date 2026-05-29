@@ -5,8 +5,8 @@ use syn::Ident;
 use crate::{
     gen_attrs::GenAttrs,
     gen_attrs::{gen_attr_type, gen_attr_type_name},
+    gen_cstruct::struct_type,
     gen_ops::OpHeader,
-    gen_struct::struct_type,
     gen_sub_message::{self},
     gen_utils::{kebab_to_rust, kebab_to_type, lifetime_needed_attrs, sanitize_ident},
     parse_spec::{

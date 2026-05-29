@@ -34,8 +34,7 @@ use crate::{
     gen_defs::gen_defs,
     gen_notif::gen_notifs,
     gen_ops::gen_ops,
-    gen_struct::gen_struct,
-    gen_utils::escape_md,
+    gen_utils::{escape_md, Pandoc},
     gen_writable::gen_writable,
     parse_spec::{DefType, Spec},
 };
@@ -206,11 +205,7 @@ fn main() {
             continue;
         };
 
-        match spec.experimental.struct_type.as_deref() {
-            None | Some("buf") => gen_struct(&mut tokens, &spec, &def.name, members),
-            Some("cstruct") => gen_cstruct(&mut tokens, &spec, &def.name, members),
-            t => panic!("Unknown rfc struct type: {t:?}"),
-        }
+        gen_cstruct(&mut tokens, &spec, &mut ctx, def, members);
     }
     tokens.extend(gen_attrsets(&spec, &mut ctx));
     if !args.no_writable {

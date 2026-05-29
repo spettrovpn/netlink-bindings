@@ -5,8 +5,8 @@ use quote::{format_ident, quote, ToTokens};
 use syn::Ident;
 
 use crate::{
-    gen_ops::OpHeader,
-    gen_struct::{gen_struct_len, struct_type},
+    gen_cstruct::{gen_struct_len, struct_type},
+    gen_ops::{gen_op_header, OpHeader},
     gen_sub_message::{self, SelectorType},
     gen_utils::{doc_attr, kebab_to_rust, kebab_to_type},
     parse_spec::{AttrProp, AttrSet, AttrType, ByteOrder, IndexedArrayType, Spec},

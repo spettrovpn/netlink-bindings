@@ -3,9 +3,9 @@ use quote::{format_ident, quote};
 
 use crate::{
     gen_attrs::GenAttrs,
+    gen_cstruct::struct_type,
     gen_iterable::iterable_name,
     gen_ops::OpHeader,
-    gen_struct::struct_type,
     gen_utils::{kebab_to_type, sanitize_ident},
     parse_spec::{AttrSet, AttrType, IndexedArrayType, Spec},
     Context,

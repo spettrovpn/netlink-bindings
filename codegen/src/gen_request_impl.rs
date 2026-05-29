@@ -2,9 +2,9 @@ use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
 
 use crate::{
+    gen_cstruct::struct_type,
     gen_iterable::{gen_decoder_new_impl, iterable_name, DecoderNewImpl},
-    gen_ops::OpHeader,
-    gen_struct::struct_type,
+    gen_ops::{gen_op_header, OpHeader},
     gen_utils::{kebab_to_rust, kebab_to_type},
     gen_writable::writable_type,
     parse_spec::{AttrSet, Spec},

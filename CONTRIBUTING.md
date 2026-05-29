@@ -151,8 +151,6 @@ Needs `sub-type: {u8,u16,u32}` and `bits: <n>`.
 
 Experimental options:
 
-- `experimental.struct-type: {buf,cstruct}` - how to represent a struct: an
-opaque wrapper on \[u8; n\] buffer or a repr(C) struct.
 - `experimental.struct-prefix: false` - disable "Push" prefix for structs.
 - `experimental.struct-explicit-padding: true` - always add padding fields,
 even if it would otherwise be silently inserted due to alignment.

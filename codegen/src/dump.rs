@@ -2,13 +2,12 @@ use std::io::Write;
 
 use crate::{
     gen_attrs::shorthand_name,
-    gen_ops,
-    gen_struct::struct_type,
-    gen_sub_message,
+    gen_cstruct::struct_type,
+    gen_ops, gen_sub_message,
     gen_utils::{doc_attr, kebab_to_rust, kebab_to_type},
     gen_writable::writable_type,
     parse_spec::{AttrProp, AttrSet, AttrType, IndexedArrayType, Operation, Request, Spec},
-    WARNING,
+    Context, WARNING,
 };
 
 pub fn find_attr<'a>(attrset: &'a AttrSet, attr: &str) -> Option<&'a AttrProp> {

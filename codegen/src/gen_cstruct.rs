@@ -1,13 +1,80 @@
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
+use syn::Ident;
 
 use crate::{
     gen_defs::GenImplStruct,
-    gen_struct::{gen_struct_len, struct_type},
-    gen_utils::{align_up, doc_attr, kebab_to_rust, kebab_to_type},
-    parse_spec::{AttrProp, AttrSet, AttrType, ByteOrder, CBitFieldType, DefType, Spec},
-    WARNING,
+    gen_utils::{align_up, doc_attr, escape_md, kebab_to_rust, kebab_to_type},
+    parse_spec::{
+        AttrProp, AttrSet, AttrType, ByteOrder, CBitFieldType, DefType, Definition, Spec,
+    },
+    Context, WARNING,
 };
+
+pub fn struct_type(spec: &Spec, name: &str) -> Ident {
+    if spec.experimental.struct_prefix.is_some_and(|e| e == false) {
+        format_ident!("{}", kebab_to_type(name))
+    } else {
+        format_ident!("Push{}", kebab_to_type(name))
+    }
+}
+
+pub fn gen_struct_len(spec: &Spec, r#struct: &str) -> (usize, usize) {
+    match r#struct {
+        "builtin-bitfield32" => return (8, 4),
+        _ => {}
+    }
+
+    let DefType::Struct { members, .. } = &spec.find_def(r#struct).def else {
+        unreachable!("{:?}", r#struct);
+    };
+
+    let mut len = 0;
+    let mut alignment = 1;
+    let mut sub_bit_len = 0;
+    for member in members {
+        if let AttrType::CBitField { bits, .. } = member.r#type {
+            sub_bit_len += bits;
+            continue;
+        }
+
+        if sub_bit_len != 0 {
+            len += (sub_bit_len + 7) / 8;
+            sub_bit_len = 0;
+        }
+
+        let (member_len, member_alignment) = match &member.r#type {
+            AttrType::U8 => (1, 1),
+            AttrType::U16 => (2, 2),
+            AttrType::U32 => (4, 4),
+            AttrType::U64 => (8, 8),
+            AttrType::S8 => (1, 1),
+            AttrType::S16 => (2, 2),
+            AttrType::S32 => (4, 4),
+            AttrType::S64 => (8, 8),
+            AttrType::Pad { len: Some(len) } => (*len, 1),
+            AttrType::Binary {
+                r#struct: Some(r#struct),
+                ..
+            } => gen_struct_len(spec, r#struct),
+            AttrType::Binary {
+                r#struct: None,
+                len: Some(len),
+            } => (*len, 1),
+            r#type => unreachable!("{:?}", r#type),
+        };
+
+        len = align_up(len, member_alignment) + member_len;
+        alignment = alignment.max(member_alignment);
+    }
+
+    if sub_bit_len != 0 {
+        let bytes = (sub_bit_len + 7) / 8;
+        len += bytes;
+    }
+
+    (align_up(len, alignment), alignment)
+}
 
 #[allow(unused)]
 pub fn gen_push_align(spec: &Spec, set: &AttrSet, attr: AttrProp, alignment: usize) -> TokenStream {

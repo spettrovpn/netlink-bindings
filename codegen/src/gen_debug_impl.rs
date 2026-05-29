@@ -4,8 +4,8 @@ use quote::{format_ident, quote};
 use crate::{
     gen_attrs::gen_attr_type_name,
     gen_attrs::GenAttrs,
+    gen_cstruct::struct_type,
     gen_iterable::{array_iterable_name, iterable_name},
-    gen_struct::struct_type,
     gen_utils::{kebab_to_type, lifetime_needed_attrs, sanitize_ident},
     parse_spec::{AttrSet, AttrType, DefType, IndexedArrayType, Spec},
     Context,

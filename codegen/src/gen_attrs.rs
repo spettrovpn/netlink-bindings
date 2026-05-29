@@ -4,10 +4,10 @@ use std::collections::HashSet;
 use syn::Ident;
 
 use crate::{
+    gen_cstruct::struct_type,
     gen_debug_impl::gen_debug_attrs,
     gen_iterable::{array_iterable_name, gen_iterable_attrs, iterable_name},
     gen_ops::OpHeader,
-    gen_struct::struct_type,
     gen_sub_message::sub_message_name,
     gen_utils::{doc_attr, kebab_to_rust, kebab_to_type, sanitize_ident},
     parse_spec::{AttrProp, AttrSet, AttrType, IndexedArrayType, Spec},

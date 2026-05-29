@@ -3,8 +3,8 @@ use quote::{format_ident, quote, ToTokens};
 use syn::Ident;
 
 use crate::{
+    gen_cstruct::struct_type,
     gen_iterable::iterable_name,
-    gen_struct::struct_type,
     gen_utils::{kebab_to_rust, kebab_to_type},
     parse_spec::{AttrProp, AttrSet, Spec, SubMessage, SubMessageFormat},
     Context, WARNING,
