@@ -16,6 +16,7 @@ features="
 "
 examples="
   conntrack
+  wireguard
   wireguard-setup
   nftables
   nftables-api
