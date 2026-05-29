@@ -278,6 +278,31 @@ pub fn finalize_nested_header(buf: &mut Vec<u8>, offset: usize) {
     buf[offset..(offset + 2)].copy_from_slice(&len.to_ne_bytes());
 }
 
+/// A convenience wrapper on top of [`chop_header()`]
+#[derive(Debug, Clone, Copy, Default)]
+pub struct IterableChunks<'buf> {
+    /// A buffer given to [`Self::new()`]
+    pub buf: &'buf [u8],
+    /// Offset of the next attribute in [`Self::buf`]
+    pub pos: usize,
+}
+
+impl<'buf> IterableChunks<'buf> {
+    pub fn new(buf: &'buf [u8]) -> Self {
+        Self { buf, pos: 0 }
+    }
+    pub fn is_empty(&self) -> bool {
+        self.buf.len() == self.pos
+    }
+}
+
+impl<'buf> Iterator for IterableChunks<'buf> {
+    type Item = (Header, &'buf [u8]);
+    fn next(&mut self) -> Option<Self::Item> {
+        chop_header(self.buf, &mut self.pos)
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 pub struct Header {
     pub r#type: u16,
