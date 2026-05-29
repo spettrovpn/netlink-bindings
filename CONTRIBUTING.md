@@ -42,12 +42,18 @@ test, cargo run --example, and then again in the VMs.
 
 Kernel has its yaml specifications in
 [`Documentation/netlink/specs/`](https://elixir.bootlin.com/linux/latest/source/Documentation/netlink/specs)
-grab the one for the subsystem you need from there, let's say it's called
-wireguard. If you dont find the subsystem you want there, check [the mailing
+choose the one for the subsystem you need from there, let's say it's called
+wireguard. If you don't find the subsystem you want there, check [the mailing
 list](https://lore.kernel.org/netdev/). Chances are, someone already had made
 the effort, but the patches are still making their way into upstream.
 
-First, you should copy over the upstream specification:
+First, you should copy over the upstream specifications:
+
+```sh
+$ ./scripts/copy_specs_from.sh .../linux
+```
+
+Which simply runs:
 
 ```sh
 $ mkdir -p ./netlink-bindings/src/wireguard
