@@ -100,7 +100,12 @@ fn read(args: &CliArgs, reader: impl Read) {
 
             let mut remaining = &buf[..];
             while !remaining.is_empty() {
-                let header = Nlmsghdr::new_from_slice(&remaining[..Nlmsghdr::len()]).unwrap();
+                let header = Nlmsghdr::new_from_zeroed(remaining);
+                if Nlmsghdr::len() > header.len as usize || remaining.len() < header.len as usize {
+                    let rem = remaining.len();
+                    println!("Skipping {rem} bytes. Can't make sense of the rest of the buffer");
+                    break;
+                }
                 let buf = &remaining[Nlmsghdr::len()..header.len as usize];
                 remaining = &remaining[header.len as usize..];
 
