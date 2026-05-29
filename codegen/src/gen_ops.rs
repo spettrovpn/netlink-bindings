@@ -7,7 +7,7 @@ use syn::Ident;
 use crate::{
     gen_attrs::{gen_attrset, shorthand_name},
     gen_iterable::iterable_name,
-    gen_request_impl::{self, OpInfo},
+    gen_request_impl::{self, OpInfo, WrapperInfo},
     gen_utils::escape_md,
     gen_writable::{gen_writable_attrset, writable_func, writable_type},
     parse_spec::{AttrProp, AttrSet, AttrType, Operation, OperationSpec, Request, Spec},
@@ -57,10 +57,36 @@ pub fn gen_ops(tokens: &mut TokenStream, spec: &Spec, ctx: &mut Context) {
     gen_request_impl::gen_request(tokens, ctx, spec, &request_names);
 }
 
+pub fn gen_op_header(
+    op_header_value: &OpHeaderValue,
+    header: &Ident,
+    value_expr: Option<&TokenStream>,
+) -> TokenStream {
+    let OpHeaderValue {
+        needs_value,
+        cmd,
+        version,
+    } = &op_header_value;
+    assert_eq!(*needs_value, value_expr.is_some());
+    let default_value = quote!(#cmd);
+    let value = value_expr.unwrap_or(&default_value);
+    quote! {
+        #header.cmd = #value;
+        #header.version = #version;
+    }
+}
+
+#[derive(Clone, Hash, PartialEq)]
 pub struct OpHeader {
     pub name: String,
-    #[allow(clippy::type_complexity)]
-    pub construct_header: Option<Box<dyn Fn(&Ident, Option<&TokenStream>) -> TokenStream>>,
+    pub op_header_value: Option<OpHeaderValue>,
+}
+
+#[derive(Clone, Hash, PartialEq)]
+pub struct OpHeaderValue {
+    needs_value: bool,
+    cmd: u8,
+    version: u8,
 }
 
 // TODO: enum model
@@ -123,29 +149,21 @@ pub fn gen_op(
     ) {
         (Some(h), _) => Some(OpHeader {
             name: h.clone(),
-            construct_header: None,
+            op_header_value: None,
         }),
         (None, Some("genetlink" | "genetlink-legacy")) => {
-            let construct_header = {
-                let cmd = get_value(ops, op) as u8;
-                let cmd = quote!(#cmd);
-                // The expected use for genlmsghdr.version was to allow versioning of the
-                // APIs provided by the subsystems.
-                // From: https://docs.kernel.org/userspace-api/netlink/intro.html#generic-netlink
-                let version: u8 = spec.version.unwrap_or(1);
-                Box::new(move |header: &Ident, value_expr: Option<&TokenStream>| {
-                    assert_eq!(needs_value, value_expr.is_some());
-                    let value = value_expr.unwrap_or(&cmd);
-                    quote! {
-                        #header.cmd = #value;
-                        #header.version = #version;
-                    }
-                }) as Box<dyn Fn(&Ident, Option<&TokenStream>) -> TokenStream>
-            };
-
+            let cmd = get_value(ops, op) as u8;
+            // The expected use for genlmsghdr.version was to allow versioning of the
+            // APIs provided by the subsystems.
+            // From: https://docs.kernel.org/userspace-api/netlink/intro.html#generic-netlink
+            let version: u8 = spec.version.unwrap_or(1);
             Some(OpHeader {
                 name: "builtin-nfgenmsg".into(),
-                construct_header: Some(construct_header),
+                op_header_value: Some(OpHeaderValue {
+                    needs_value,
+                    cmd,
+                    version,
+                }),
             })
         }
         _ => None,
@@ -153,10 +171,11 @@ pub fn gen_op(
 
     let mut doc_str = String::new();
     if let Some(doc) = &ops.doc {
-        writeln!(doc_str, "{}", escape_md(doc)).unwrap();
+        writeln!(doc_str, "{}", escape_md(ctx, doc)).unwrap();
     }
     if !ops.flags.is_empty() {
         writeln!(doc_str, "Flags: {}", ops.flags.join(", ")).unwrap();
+        writeln!(doc_str).unwrap();
     }
 
     let mut generate = |op_name: &str, op: &Operation| {
@@ -192,7 +211,7 @@ pub fn gen_op(
         }
 
         // Document accepted attributes on a transparent operation wrapper
-        let mut op_doc = quote!();
+        let mut op_doc = None;
         if is_transparent {
             let mut doc_str = doc_str.clone();
 
@@ -210,19 +229,20 @@ pub fn gen_op(
                             .insert(format!("let _ = {req}::<&mut Vec<u8>>::{func};"));
                     }
                 }
+                writeln!(doc_str).unwrap();
             }
 
             if reply_attrs.attributes.iter().any(|m| not_mute(&m)) {
-                writeln!(doc_str).unwrap();
                 writeln!(doc_str, "Reply attributes:").unwrap();
                 for attr in reply_attrs.attributes.iter().filter(not_mute) {
                     let func = shorthand_name(&attr.name);
                     writeln!(doc_str, "- [.{func}()]({reply}::{func})").unwrap();
                     ctx.test_exprs.insert(format!("let _ = {reply}::{func};"));
                 }
+                writeln!(doc_str).unwrap();
             }
 
-            op_doc = quote!(#op_doc #[doc = #doc_str]);
+            op_doc = Some(doc_str);
         }
 
         let request_header = || fixed_header(&op.request);
@@ -268,22 +288,20 @@ pub fn gen_op(
             gen_attrset(tokens, spec, ctx, &reply_attrs, reply_header.as_ref());
         }
 
-        gen_request_impl::gen_request_wrapper(
-            tokens,
-            ctx,
-            spec,
-            op_name == "dump",
-            get_value(ops, &op.request),
-            &request_attrs,
-            &reply_attrs,
-            &request_name,
-            &reply_name,
-            request_header.as_ref(),
-            reply_header.as_ref(),
+        let info = WrapperInfo {
+            is_dump: op_name == "dump",
+            request_value: get_value(ops, &op.request),
+            request_name,
+            reply_name,
+            request_header,
+            reply_header,
             needs_value,
-            is_transparent.then_some((request_attrset.as_str(), reply_attrset.as_str())),
-            request_names.last().unwrap(),
-        );
+            transparent_attrs: is_transparent
+                .then_some((request_attrset.as_str(), reply_attrset.as_str())),
+            op_info: request_names.last().unwrap().clone(),
+        };
+
+        gen_request_impl::gen_request_wrapper(tokens, ctx, spec, &info);
     };
 
     if let Some(dump) = &ops.dump {

@@ -426,7 +426,7 @@ pub fn gen_decoder_new_impl(
     if let Some(fixed_header) = fixed_header {
         let header = struct_type(spec, &fixed_header.name);
         // TODO: verify fixed header length and contents
-        if fixed_header.construct_header.is_some() {
+        if fixed_header.op_header_value.is_some() {
             return_type = quote!(#iter<'a>);
             body = quote! {
                 let (_header, attrs) = buf.split_at(buf.len().min(#header::len()));

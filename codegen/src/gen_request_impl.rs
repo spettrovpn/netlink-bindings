@@ -7,16 +7,30 @@ use crate::{
     gen_ops::{gen_op_header, OpHeader},
     gen_utils::{kebab_to_rust, kebab_to_type},
     gen_writable::writable_type,
-    parse_spec::{AttrSet, Spec},
+    parse_spec::Spec,
     Context,
 };
 
+#[derive(Hash, PartialEq)]
+pub struct WrapperInfo<'a> {
+    pub is_dump: bool,
+    pub request_value: u16,
+    pub request_name: String,
+    pub reply_name: String,
+    pub request_header: Option<OpHeader>,
+    pub reply_header: Option<OpHeader>,
+    pub needs_value: bool,
+    pub transparent_attrs: Option<(&'a str, &'a str)>,
+    pub op_info: OpInfo,
+}
+
+#[derive(Clone, Hash, PartialEq)]
 pub struct OpInfo {
     pub name: String,
     pub header: Option<OpHeader>,
     pub needs_value: bool,
     pub no_ack: bool,
-    pub doc: TokenStream,
+    pub doc: Option<String>,
 }
 
 pub fn gen_request(tokens: &mut TokenStream, _ctx: &mut Context, spec: &Spec, requests: &[OpInfo]) {
@@ -60,14 +74,19 @@ pub fn gen_request(tokens: &mut TokenStream, _ctx: &mut Context, spec: &Spec, re
             new_args = quote!(, request_type);
         }
 
-        if let Some(header) = header.as_ref().filter(|h| h.construct_header.is_none()) {
+        if let Some(header) = header.as_ref().filter(|h| h.op_header_value.is_none()) {
             let header = struct_type(spec, &header.name);
             op_args = quote!(#op_args, header: &#header);
             new_args = quote!(#new_args, header);
         };
 
+        if let Some(doc) = doc {
+            op_funcs.extend(quote! {
+                #[doc = #doc]
+            });
+        }
+
         op_funcs.extend(quote! {
-            #doc
             pub fn #op(self #op_args) -> #req<'buf> {
                 let mut res = #req::new(self #new_args);
                 res.request.do_writeback(res.protocol(), #name, #req::lookup);
@@ -213,33 +232,39 @@ pub fn gen_request_wrapper(
     tokens: &mut TokenStream,
     _ctx: &mut Context,
     spec: &Spec,
-    is_dump: bool,
-    request_value: u16,
-    _request_set: &AttrSet,
-    _reply_set: &AttrSet,
-    request_name: &str,
-    reply_name: &str,
-    request_header: Option<&OpHeader>,
-    reply_header: Option<&OpHeader>,
-    needs_value: bool,
-    transparent_attrs: Option<(&str, &str)>,
-    op_info: &OpInfo,
+    info: &WrapperInfo,
 ) {
     if spec.operations.list.is_empty() && spec.operations.fallback_attrs.is_none() {
         return;
     }
 
+    let WrapperInfo {
+        is_dump,
+        request_value,
+        request_name,
+        reply_name,
+        request_header,
+        reply_header,
+        needs_value,
+        transparent_attrs,
+        op_info,
+    } = info;
+
+    let mut op_info_doc = quote!();
+    if let Some(doc) = &op_info.doc {
+        op_info_doc = quote!(#[doc = #doc]);
+    }
     let name = format_ident!("{}", kebab_to_type(request_name));
 
     let (reply_decoder, decoder_new);
     let (request_name, reply_name) = if let Some(transparent_attrs) = transparent_attrs {
         reply_decoder = quote!(Self);
         decoder_new = quote!(decode);
-        transparent_attrs
+        *transparent_attrs
     } else {
         reply_decoder = format_ident!("{}", kebab_to_type(reply_name)).into_token_stream();
         decoder_new = quote!(new);
-        (request_name, reply_name)
+        (request_name.as_str(), reply_name.as_str())
     };
     let encoder = writable_type(request_name);
     let decoder_iter = iterable_name(reply_name);
@@ -251,7 +276,7 @@ pub fn gen_request_wrapper(
     let mut store_request_type = quote!();
     let mut request_type_field = quote!();
     let mut request_value = quote!(#request_value);
-    if needs_value {
+    if *needs_value {
         let request_value_type = if spec.is_genetlink() {
             quote!(u8)
         } else {
@@ -274,7 +299,7 @@ pub fn gen_request_wrapper(
 
     let mut header_encoder = quote!(#encoder);
     let mut request = quote!(request);
-    if is_dump {
+    if *is_dump {
         request = quote!(request.set_dump());
     };
 
@@ -290,8 +315,12 @@ pub fn gen_request_wrapper(
             let request_type_ident = format_ident!("request_type").to_token_stream();
             let header = struct_type(spec, &fixed_header.name);
             let header_var = format_ident!("header");
-            if let Some(fill) = &fixed_header.construct_header {
-                let fill = fill(&header_var, needs_value.then_some(&request_type_ident));
+            if let Some(fill) = &fixed_header.op_header_value {
+                let fill = gen_op_header(
+                    fill,
+                    &header_var,
+                    needs_value.then_some(&request_type_ident),
+                );
                 write_header_impl = quote! {
                     fn write_header<Prev: Rec>(prev: &mut Prev #new_args) {
                         let mut #header_var = #header::new();
@@ -313,17 +342,18 @@ pub fn gen_request_wrapper(
             return_type: reply_return_typen,
             body: reply_body,
             ..
-        } = gen_decoder_new_impl(spec, reply_attrs, reply_header);
+        } = gen_decoder_new_impl(spec, reply_attrs, reply_header.as_ref());
 
         let request_attrs = spec.find_attr(transparent_request_attrs);
         let DecoderNewImpl {
             return_type: request_return_typen,
             body: request_body,
             ..
-        } = gen_decoder_new_impl(spec, request_attrs, request_header);
+        } = gen_decoder_new_impl(spec, request_attrs, request_header.as_ref());
 
         if transparent_reply_attrs == transparent_request_attrs
-            && Option::zip(request_header, reply_header).is_some_and(|(l, r)| l.name == r.name)
+            && Option::zip(request_header.as_ref(), reply_header.as_ref())
+                .is_some_and(|(l, r)| l.name == r.name)
         {
             decode_impl = quote! {
                 pub fn decode_request<'a>(buf: &'a [u8]) -> #request_return_typen {
@@ -350,7 +380,7 @@ pub fn gen_request_wrapper(
 
     let (request_type, reply_type, map_decoder, new);
     if let Some(request_header) = request_header {
-        if request_header.construct_header.is_some() {
+        if request_header.op_header_value.is_some() {
             reply_type = quote!(#decoder_iter<'buf>);
             request_type = quote!(#encoder_iter<'buf>);
             map_decoder = quote!();
@@ -418,7 +448,6 @@ pub fn gen_request_wrapper(
         };
     }
 
-    let op_info_doc = &op_info.doc;
     tokens.extend(quote! {
         #op_info_doc
         #[derive(Debug)]

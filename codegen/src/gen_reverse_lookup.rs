@@ -312,6 +312,7 @@ pub fn gen_reverse_lookup(args: &CliArgs, output: &Path) {
             pub buf: &'a [u8],
         }
 
+        #[allow(unused)]
         fn consider(fmt: &mut std::fmt::Formatter<'_>, proto: &str) -> std::fmt::Result {
             write!(fmt, "Protocol {0:?} not enabled, consider --features={0}", proto)
         }

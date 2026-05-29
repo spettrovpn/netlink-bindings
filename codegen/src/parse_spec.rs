@@ -650,7 +650,6 @@ pub struct Spec {
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "kebab-case")]
 pub struct Experimental {
-    pub struct_type: Option<String>,
     #[serde(default)]
     pub struct_prefix: Option<bool>,
     #[serde(default)]
@@ -662,7 +661,6 @@ pub struct Experimental {
 impl Default for Experimental {
     fn default() -> Self {
         Self {
-            struct_type: Some("cstruct".into()),
             struct_prefix: Some(false),
             struct_explicit_padding: true,
             attr_binary_write: false,

@@ -16,6 +16,7 @@ path = "src/main.rs"
 serde = { version = "1", features = [ "serde_derive" ] }
 serde-aux = "4"
 serde_yaml = "0.9.34-deprecated"
+serde_json = "1"
 quote = "1"
 proc-macro2 = "1"
 syn = "2"

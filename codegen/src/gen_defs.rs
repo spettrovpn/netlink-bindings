@@ -7,6 +7,7 @@ use syn::Ident;
 use crate::{
     gen_utils::{escape_md, kebab_to_type, kebab_to_upper, sanitize_ident},
     parse_spec::{CBitFieldType, ConstValue, DefType, Definition, EnumEntry, Spec},
+    Context,
 };
 
 #[derive(Debug)]
@@ -18,21 +19,26 @@ pub struct GenImplStruct {
     pub derive_debug: bool,
 }
 
-pub fn gen_defs(spec: &Spec) -> TokenStream {
+pub fn gen_defs(spec: &Spec, ctx: &mut Context) -> TokenStream {
     let mut tokens = proc_macro2::TokenStream::new();
 
     for def in &spec.definitions {
-        gen_def(&mut tokens, def);
+        // Structs are generated in gen_writable
+        if matches!(&def.def, DefType::Struct { .. }) {
+            continue;
+        }
+
+        gen_def(&mut tokens, ctx, def);
     }
 
     tokens
 }
 
-fn gen_def(tokens: &mut TokenStream, def: &Definition) {
+fn gen_def(tokens: &mut TokenStream, ctx: &mut Context, def: &Definition) {
     let doc = def
         .doc
         .as_ref()
-        .map(|doc| escape_md(doc))
+        .map(|doc| escape_md(ctx, doc))
         .map(|doc| quote!(#[doc = #doc]))
         .unwrap_or(quote!());
     tokens.extend(doc.clone());
@@ -63,6 +69,7 @@ fn gen_def(tokens: &mut TokenStream, def: &Definition) {
             entries,
         } => gen_def_enum(
             tokens,
+            ctx,
             &def.name,
             *value_start,
             entries,
@@ -78,6 +85,7 @@ fn gen_def(tokens: &mut TokenStream, def: &Definition) {
             entries,
         } => gen_def_enum(
             tokens,
+            ctx,
             &def.name,
             *value_start,
             entries,
@@ -85,13 +93,13 @@ fn gen_def(tokens: &mut TokenStream, def: &Definition) {
             |i| Literal::u64_unsuffixed(i).to_token_stream(),
             "Enum - defines an integer enumeration, with values for each entry incrementing by 1, (e.g. 0, 1, 2, 3)",
         ),
-        // Structs are generated in gen_writable
-        DefType::Struct { .. } => {}
+        ty => unreachable!("{ty:?}"),
     }
 }
 
 fn gen_def_enum(
     tokens: &mut TokenStream,
+    ctx: &mut Context,
     name: &str,
     value_start: Option<u64>,
     entries: &[EnumEntry],
@@ -112,7 +120,7 @@ fn gen_def_enum(
                 }
 
                 if let Some(doc) = &doc {
-                    let doc = escape_md(doc);
+                    let doc = escape_md(ctx, doc);
                     variants.extend(quote!(#[doc = #doc]));
                 };
 

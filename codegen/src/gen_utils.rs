@@ -1,7 +1,17 @@
+use std::{
+    io::{Read, Write},
+    net::{SocketAddr, TcpListener, TcpStream},
+    process::{Child, Command},
+    time::Duration,
+};
+
 use quote::format_ident;
 use syn::Ident;
 
-use crate::parse_spec::{AttrProp, AttrSet, AttrType};
+use crate::{
+    parse_spec::{AttrProp, AttrSet, AttrType},
+    Context, WARNING,
+};
 
 pub fn sanitize_ident(name: &str) -> Ident {
     let keywords = ["self"];
@@ -16,15 +26,129 @@ pub fn sanitize_ident(name: &str) -> Ident {
     }
 }
 
-pub fn escape_md(name: &str) -> String {
-    let mut res = String::new();
-    for c in name.chars() {
-        if "\\`~*_{}[]#+-.".contains(c) {
-            res.push('\\');
-        }
-        res.push(c);
+#[derive(Debug)]
+pub struct Pandoc {
+    addr: SocketAddr,
+    proc: Child,
+}
+
+impl Drop for Pandoc {
+    fn drop(&mut self) {
+        let _ = self.proc.kill();
     }
-    res
+}
+
+pub fn escape_md(ctx: &mut Context, text: &str) -> String {
+    if ctx.args.no_pandoc {
+        let mut res = String::new();
+        for c in text.chars() {
+            if "\\`~*_{}[]#+-.".contains(c) {
+                res.push('\\');
+            }
+            res.push(c);
+        }
+        return res;
+    }
+
+    let req = serde_json::json!({
+        "text": text,
+        "from": "rst",
+        "to": "markdown",
+        // Pandoc server has a bug on platforms disabling baked-in data files
+        "files": {"data/data/abbreviations": ""},
+    });
+    let body = serde_json::to_string(&req).unwrap();
+    let body_len = body.len();
+
+    let req = format!(
+        "\
+POST / HTTP/1.0\r
+Content-Type: application/json\r
+Accept: application/json\r
+Content-Length: {body_len}\r
+\r
+{body}"
+    );
+
+    let mut resp = String::new();
+    let addr = spawn_pandoc_server(ctx);
+    let mut conn = TcpStream::connect(addr).expect("Can't connect to `pandoc` server");
+    conn.write_all(req.as_bytes()).unwrap();
+    conn.read_to_string(&mut resp).unwrap();
+
+    if !resp.starts_with("HTTP/1.0 200") {
+        let err = resp.lines().next().unwrap_or("").strip_prefix("HTTP/1.0 ");
+        panic!("Pandoc server returned error: {err:?}");
+    }
+
+    let Some(delim) = resp.find("\r\n\r\n") else {
+        panic!("Pandoc server returned error: {resp:?}");
+    };
+
+    #[derive(serde::Deserialize)]
+    struct Message {
+        verbosity: String,
+        message: String,
+    }
+    #[derive(serde::Deserialize)]
+    #[serde(untagged)]
+    enum Resp {
+        Ok {
+            output: String,
+            messages: Vec<Message>,
+        },
+        Err {
+            error: String,
+        },
+    }
+    let resp = &resp[delim..];
+    match serde_json::from_str::<Resp>(resp) {
+        Err(err) => panic!("Can't parse pandoc response: {err:?}\nResponse: {resp:?}"),
+        Ok(Resp::Err { error }) => panic!("Pandoc server returned error: {error:?}"),
+        Ok(Resp::Ok { output, messages }) => {
+            for Message { verbosity, message } in messages {
+                // TODO: seems like a problem for the kernel
+                // TODO: Do we really need this?
+                println!("{WARNING} {verbosity} from pandoc server: {message}");
+                println!("{WARNING} While converting ReST -> Markdown:");
+                for line in text.lines() {
+                    println!("{WARNING}   {line}");
+                }
+            }
+            output
+        }
+    }
+}
+
+pub fn spawn_pandoc_server(ctx: &mut Context) -> SocketAddr {
+    if let Some(Pandoc { addr, .. }) = &ctx.pandoc {
+        return *addr;
+    }
+
+    let addr = {
+        let local: SocketAddr = "127.0.0.1:0".parse().unwrap();
+        let sock = TcpListener::bind(local).unwrap();
+        sock.local_addr().unwrap()
+    };
+
+    let res = Command::new("pandoc")
+        .args(["server", "--port", &format!("{}", addr.port())])
+        .spawn();
+    if let Err(err) = res {
+        let err = format!("Error starting `pandoc` server: {err}");
+        println!("{WARNING} {err}");
+        println!("{WARNING} We use pandoc to convert documentation from ReST to Markdown");
+        println!("{WARNING} Pass --no-pandoc to disable special formatting in doc strings");
+        panic!("{err}");
+    };
+    let mut proc = res.unwrap();
+
+    while proc.try_wait().unwrap().is_none() && TcpStream::connect(addr).is_err() {
+        std::thread::sleep(Duration::from_millis(10));
+    }
+
+    ctx.pandoc = Some(Pandoc { addr, proc });
+    addr
 }
 
 pub fn kebab_to_rust(name: &str) -> String {
@@ -70,10 +194,10 @@ pub fn kebab_to_upper(name: &str) -> String {
     res
 }
 
-pub fn doc_attr(attr: &AttrProp, mut write: impl FnMut(&str)) {
+pub fn doc_attr(ctx: &mut Context, attr: &AttrProp, mut write: impl FnMut(&str)) {
     let mut docs = Vec::new();
     if let Some(doc) = &attr.doc {
-        docs.push(escape_md(doc));
+        docs.push(escape_md(ctx, doc));
     }
 
     // if let Some(checks) = &attr.checks {

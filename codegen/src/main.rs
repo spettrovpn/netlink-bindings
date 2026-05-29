@@ -22,7 +22,6 @@ mod gen_notif;
 mod gen_ops;
 mod gen_request_impl;
 mod gen_reverse_lookup;
-mod gen_struct;
 mod gen_sub_message;
 mod gen_utils;
 mod gen_writable;
@@ -40,19 +39,20 @@ use crate::{
 };
 
 /// ANSI escapes to show bold yellow "warning:"
-pub const WARNING: &str = "\x1b[1m\x1b[33mwarning\x1b(B\x1b[m:";
+const WARNING: &str = "\x1b[1m\x1b[33mwarning\x1b(B\x1b[m:";
 
-#[derive(Debug, Clone, Default)]
-pub struct Context {
-    pub test_exprs: HashSet<String>,
-    pub generated_array_introspect: HashSet<String>,
-    pub generated_array_iterable: HashSet<String>,
-    pub generated_arrays: HashSet<String>,
-    pub generated_sub_messages: HashSet<String>,
-    pub generated_writable_sub_messages: HashSet<String>,
+#[derive(Debug, Default)]
+struct Context {
+    args: CliArgs,
+    pandoc: Option<Pandoc>,
+    test_exprs: HashSet<String>,
+    generated_array_introspect: HashSet<String>,
+    generated_array_iterable: HashSet<String>,
+    generated_arrays: HashSet<String>,
+    generated_sub_messages: HashSet<String>,
 }
 
-#[derive(FromArgs, Debug, Clone)]
+#[derive(FromArgs, Clone, Debug, Default)]
 /// Generate Rust bindings for Netlink from YAML specification
 #[argh(help_triggers("-h", "--help"))]
 struct CliArgs {
@@ -83,6 +83,10 @@ struct CliArgs {
     /// don't use formatter
     #[argh(switch)]
     no_fmt: bool,
+
+    /// don't use pandoc
+    #[argh(switch)]
+    no_pandoc: bool,
 
     /// don't generate dump
     #[argh(switch)]
@@ -151,10 +155,13 @@ fn main() {
 
     let spec = Spec::parse_with_override(spec);
 
-    let mut ctx = Context::default();
+    let mut ctx = Context {
+        args: args.clone(),
+        ..Default::default()
+    };
     let mut tokens = TokenStream::new();
 
-    let mod_doc = escape_md(&spec.doc);
+    let mod_doc = escape_md(&mut ctx, &spec.doc);
     tokens.extend(quote! {
         #![doc = #mod_doc]
         #![allow(clippy::all)]
@@ -199,7 +206,7 @@ fn main() {
             pub const PROTONUM: u16 = 0x10;
         });
     }
-    tokens.extend(gen_defs(&spec));
+    tokens.extend(gen_defs(&spec, &mut ctx));
     for def in &spec.definitions {
         let DefType::Struct { members, .. } = &def.def else {
             continue;
@@ -246,14 +253,14 @@ fn main() {
     if !args.no_dump {
         if let Some(dump) = &args.dump {
             let mut buf = Vec::new();
-            dump::dump_ops(&mut buf, &spec, false);
+            dump::dump_ops(&mut buf, &mut ctx, &spec, false);
             println!("Dumping {dump:?}");
             std::fs::write(dump, &buf).unwrap();
         }
 
         if let Some(dump_all) = &args.dump_all {
             let mut buf = Vec::new();
-            dump::dump_ops(&mut buf, &spec, true);
+            dump::dump_ops(&mut buf, &mut ctx, &spec, true);
             println!("Dumping all {dump_all:?}");
             std::fs::write(dump_all, &buf).unwrap();
         }

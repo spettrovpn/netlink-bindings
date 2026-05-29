@@ -150,6 +150,7 @@ pub fn gen_notif_groups(tokens: &mut TokenStream, spec: &Spec, ctx: &mut Context
         }
         if !group.flags.is_empty() {
             writeln!(doc_str, "Flags: {}", group.flags.join(", ")).unwrap();
+            writeln!(doc_str).unwrap();
         }
 
         let mut doc = quote!();

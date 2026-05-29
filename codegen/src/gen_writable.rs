@@ -132,8 +132,8 @@ pub fn gen_writable_attrset(
     let new_impl = if let Some(fixed_header) = fixed_header {
         let header = struct_type(spec, &fixed_header.name);
         let header_var = format_ident!("header");
-        if let Some(fill) = &fixed_header.construct_header {
-            let fill = fill(&header_var, request_type_ident.as_ref());
+        if let Some(fill) = &fixed_header.op_header_value {
+            let fill = gen_op_header(fill, &header_var, request_type_ident.as_ref());
             quote! {
                 pub fn new(mut prev: Prev #new_args) -> Self {
                     Self::write_header(&mut prev #header_args);
@@ -199,7 +199,7 @@ pub fn gen_writable_attrset(
             continue;
         }
 
-        doc_attr(next, |doc| impls.extend(quote!(#[doc = #doc])));
+        doc_attr(ctx, next, |doc| impls.extend(quote!(#[doc = #doc])));
 
         if let AttrType::SubMessage {
             sub_message,
@@ -241,8 +241,10 @@ pub fn gen_writable_attrset(
                 let func = gen_sub_message::sub_message_push_name(&next.name, &sub_attr.value);
                 let push_selector = writable_val_attr(selector);
 
+                let doc_selector =
+                    format!("Selector attribute `{selector}` is inserted automatically.");
                 impls.extend(quote! {
-                    #[doc = "Selector attribute is inserted automatically."]
+                    #[doc = #doc_selector]
                     #[doc = "At most one sub-message attribute is expected per attribute set."]
                 });
 
@@ -373,7 +375,7 @@ pub fn gen_writable_attrset(
             && matches!(&next.r#type, AttrType::Binary { .. } | AttrType::String)
         {
             let write_func = writable_writer_attr(&next.name);
-            doc_attr(next, |doc| impls.extend(quote!(#[doc = #doc])));
+            doc_attr(ctx, next, |doc| impls.extend(quote!(#[doc = #doc])));
             impls.extend(quote! {
                 pub fn #write_func(mut self) -> PushWriter<Self> {
                     #do_align
@@ -386,7 +388,7 @@ pub fn gen_writable_attrset(
         if let AttrType::String = &next.r#type {
             // Convince method to use allow &[u8] instead of &CStr
             let func_bytes = format_ident!("{func}_bytes");
-            doc_attr(next, |doc| impls.extend(quote!(#[doc = #doc])));
+            doc_attr(ctx, next, |doc| impls.extend(quote!(#[doc = #doc])));
             impls.extend(quote! {
                 pub fn #func_bytes(mut self, #value_name: &[u8]) -> Self {
                     push_header(self.as_rec_mut(), #id, (#value_name.len() + 1) as u16);

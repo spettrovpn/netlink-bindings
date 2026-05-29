@@ -66,7 +66,15 @@ pub fn gen_attrset(
         }
         visited.insert(attr.name.clone());
 
-        gen_attr(tokens, &mut variants, &mut shorthands, spec, &mut m, attr);
+        gen_attr(
+            tokens,
+            &mut variants,
+            &mut shorthands,
+            spec,
+            ctx,
+            &mut m,
+            attr,
+        );
     }
 
     let lifetime_mark = if m.lifetime_needed {
@@ -99,6 +107,7 @@ pub fn gen_attr(
     variants: &mut TokenStream,
     shorthands: &mut TokenStream,
     spec: &Spec,
+    ctx: &mut Context,
     m: &mut GenAttrs,
     attr: &AttrProp,
 ) {
@@ -106,7 +115,7 @@ pub fn gen_attr(
         return;
     }
 
-    doc_attr(attr, |doc| variants.extend(quote!(#[doc = #doc])));
+    doc_attr(ctx, attr, |doc| variants.extend(quote!(#[doc = #doc])));
 
     let variant_name = sanitize_ident(&kebab_to_type(&attr.name));
 
@@ -121,7 +130,7 @@ pub fn gen_attr(
     let attr_str = kebab_to_type(&attr.name);
     let get_name = shorthand_name(&attr.name);
 
-    doc_attr(attr, |doc| shorthands.extend(quote!(#[doc = #doc])));
+    doc_attr(ctx, attr, |doc| shorthands.extend(quote!(#[doc = #doc])));
 
     // TODO: consider propagating errors
     match &attr.r#type {

@@ -113,8 +113,14 @@ pub fn dump_string_type(spec: &Spec, attr: &AttrProp) -> String {
     }
 }
 
-pub fn dump_writable_attr(out: &mut Vec<u8>, n: &mut Nest, spec: &Spec, attr: &AttrProp) {
-    doc_attr(attr, |doc| {
+pub fn dump_writable_attr(
+    out: &mut Vec<u8>,
+    ctx: &mut Context,
+    n: &mut Nest,
+    spec: &Spec,
+    attr: &AttrProp,
+) {
+    doc_attr(ctx, attr, |doc| {
         if out.get(out.len() - 2) != Some(&b'\n') {
             writeln!(out).unwrap();
         }
@@ -140,7 +146,7 @@ pub fn dump_writable_attr(out: &mut Vec<u8>, n: &mut Nest, spec: &Spec, attr: &A
                     writeln!(out, ".entry_nested()").unwrap();
                     let attrset = spec.find_attr(nested_attributes);
                     for attr in &attrset.attributes {
-                        dump_writable_attr(out, n, spec, attr);
+                        dump_writable_attr(out, ctx, n, spec, attr);
                     }
                     n.end(out);
                     writeln!(out, ".end_nested()").unwrap();
@@ -156,7 +162,7 @@ pub fn dump_writable_attr(out: &mut Vec<u8>, n: &mut Nest, spec: &Spec, attr: &A
             if !n.visited(nested_attributes) {
                 let attrset = spec.find_attr(nested_attributes);
                 for attr in &attrset.attributes {
-                    dump_writable_attr(out, n, spec, attr);
+                    dump_writable_attr(out, ctx, n, spec, attr);
                 }
             } else {
                 n.indent(out);
@@ -187,7 +193,7 @@ pub fn dump_writable_attr(out: &mut Vec<u8>, n: &mut Nest, spec: &Spec, attr: &A
                 if let Some(attrs) = &sub_attr.attribute_set {
                     let attrset = spec.find_attr(attrs);
                     for attr in &attrset.attributes {
-                        dump_writable_attr(out, n, spec, attr);
+                        dump_writable_attr(out, ctx, n, spec, attr);
                     }
                     n.end(out);
                     writeln!(out, ".end_nested()").unwrap();
@@ -220,6 +226,7 @@ pub fn dump_writable_attr(out: &mut Vec<u8>, n: &mut Nest, spec: &Spec, attr: &A
 
 pub fn dump_writable(
     out: &mut Vec<u8>,
+    ctx: &mut Context,
     spec: &Spec,
     request: &Request,
     attrset: &AttrSet,
@@ -232,7 +239,7 @@ pub fn dump_writable(
         let Some(attr) = find_attr(attrset, attr) else {
             continue;
         };
-        dump_writable_attr(out, &mut n, spec, attr);
+        dump_writable_attr(out, ctx, &mut n, spec, attr);
     }
     n.indent(out);
     writeln!(out, ";").unwrap();
@@ -240,6 +247,7 @@ pub fn dump_writable(
 
 fn dump_shorthand_attr(
     out: &mut Vec<u8>,
+    ctx: &mut Context,
     n: &mut Nest,
     spec: &Spec,
     attr: &AttrProp,
@@ -263,7 +271,7 @@ fn dump_shorthand_attr(
     }
 
     let mut got_docs = false;
-    doc_attr(attr, |doc| {
+    doc_attr(ctx, attr, |doc| {
         got_docs = true;
         if out.get(out.len() - 2) != Some(&b'\n') {
             writeln!(out).unwrap();
@@ -286,7 +294,7 @@ fn dump_shorthand_attr(
                 AttrType::Nest { nested_attributes } => {
                     let attrs = spec.find_attr(nested_attributes);
                     for attr in &attrs.attributes {
-                        dump_shorthand_attr(out, n, spec, attr, Some(entry_var));
+                        dump_shorthand_attr(out, ctx, n, spec, attr, Some(entry_var));
                     }
                 }
                 _ => {
@@ -306,7 +314,7 @@ fn dump_shorthand_attr(
 
             let attrset = spec.find_attr(nested_attributes);
             for attr in &attrset.attributes {
-                dump_shorthand_attr(out, n, spec, attr, Some(iter_var));
+                dump_shorthand_attr(out, ctx, n, spec, attr, Some(iter_var));
             }
 
             n.end(out);
@@ -320,12 +328,12 @@ fn dump_shorthand_attr(
 
             match sub_type {
                 IndexedArrayType::Plain { attr } => {
-                    dump_shorthand_attr(out, n, spec, attr, Some(entry_var));
+                    dump_shorthand_attr(out, ctx, n, spec, attr, Some(entry_var));
                 }
                 IndexedArrayType::Nest { nested_attributes } => {
                     let attrset = spec.find_attr(nested_attributes);
                     for attr in &attrset.attributes {
-                        dump_shorthand_attr(out, n, spec, attr, Some(entry_var));
+                        dump_shorthand_attr(out, ctx, n, spec, attr, Some(entry_var));
                     }
                 }
                 other => unreachable!("{other:?}"),
@@ -342,6 +350,7 @@ fn dump_shorthand_attr(
 
 pub fn dump_shorthand(
     out: &mut Vec<u8>,
+    ctx: &mut Context,
     spec: &Spec,
     request: &Request,
     attrset: &AttrSet,
@@ -361,20 +370,26 @@ pub fn dump_shorthand(
         let Some(attr) = find_attr(attrset, attr) else {
             continue;
         };
-        dump_shorthand_attr(out, &mut n, spec, attr, None);
+        dump_shorthand_attr(out, ctx, &mut n, spec, attr, None);
     }
 
     assert!(n.level.is_empty());
 }
 
-fn dump_readable_attr(out: &mut Vec<u8>, n: &mut Nest, spec: &Spec, attr: &AttrProp) {
+fn dump_readable_attr(
+    out: &mut Vec<u8>,
+    ctx: &mut Context,
+    n: &mut Nest,
+    spec: &Spec,
+    attr: &AttrProp,
+) {
     let iter_var = "iter";
     let attr_var = "attr";
     let entry_var = "entry";
 
     let name = kebab_to_type(&attr.name);
 
-    doc_attr(attr, |doc| {
+    doc_attr(ctx, attr, |doc| {
         if out.get(out.len() - 2) != Some(&b'\n') {
             writeln!(out).unwrap();
         }
@@ -398,7 +413,7 @@ fn dump_readable_attr(out: &mut Vec<u8>, n: &mut Nest, spec: &Spec, attr: &AttrP
 
             let attrset = spec.find_attr(nested_attributes);
             for attr in &attrset.attributes {
-                dump_readable_attr(out, n, spec, attr);
+                dump_readable_attr(out, ctx, n, spec, attr);
             }
 
             n.end(out);
@@ -413,7 +428,7 @@ fn dump_readable_attr(out: &mut Vec<u8>, n: &mut Nest, spec: &Spec, attr: &AttrP
             writeln!(out, "for {entry_var} in {iter_var} {{").unwrap();
             match sub_type {
                 IndexedArrayType::Plain { attr } => {
-                    dump_readable_attr(out, n, spec, attr);
+                    dump_readable_attr(out, ctx, n, spec, attr);
                 }
                 IndexedArrayType::Nest { nested_attributes } => {
                     n.indent_advance(out);
@@ -424,7 +439,7 @@ fn dump_readable_attr(out: &mut Vec<u8>, n: &mut Nest, spec: &Spec, attr: &AttrP
 
                     let attrset = spec.find_attr(nested_attributes);
                     for attr in &attrset.attributes {
-                        dump_readable_attr(out, n, spec, attr);
+                        dump_readable_attr(out, ctx, n, spec, attr);
                     }
 
                     n.end(out);
@@ -447,6 +462,7 @@ fn dump_readable_attr(out: &mut Vec<u8>, n: &mut Nest, spec: &Spec, attr: &AttrP
 
 pub fn dump_readable(
     out: &mut Vec<u8>,
+    ctx: &mut Context,
     spec: &Spec,
     request: &Request,
     attrset: &AttrSet,
@@ -473,7 +489,7 @@ pub fn dump_readable(
         let Some(attr) = find_attr(attrset, attr) else {
             continue;
         };
-        dump_readable_attr(out, &mut n, spec, attr);
+        dump_readable_attr(out, ctx, &mut n, spec, attr);
     }
 
     n.end(out);
@@ -482,7 +498,7 @@ pub fn dump_readable(
     assert!(n.level.is_empty());
 }
 
-pub fn dump_ops(out: &mut Vec<u8>, spec: &Spec, all: bool) {
+pub fn dump_ops(out: &mut Vec<u8>, ctx: &mut Context, spec: &Spec, all: bool) {
     for ops in &spec.operations.list {
         let Some(attrset) = &ops.attribute_set else {
             continue;
@@ -501,13 +517,13 @@ pub fn dump_ops(out: &mut Vec<u8>, spec: &Spec, all: bool) {
             writeln!(out).unwrap();
 
             writeln!(out, "```rust").unwrap();
-            dump_writable(out, spec, &op.request, attrset, &request_name);
+            dump_writable(out, ctx, spec, &op.request, attrset, &request_name);
             writeln!(out, "```").unwrap();
 
             if all {
                 writeln!(out).unwrap();
                 writeln!(out, "```rust").unwrap();
-                dump_shorthand(out, spec, &op.reply, attrset, &reply_name);
+                dump_shorthand(out, ctx, spec, &op.reply, attrset, &reply_name);
                 writeln!(out, "```").unwrap();
             }
 
@@ -517,13 +533,13 @@ pub fn dump_ops(out: &mut Vec<u8>, spec: &Spec, all: bool) {
 
             if all {
                 writeln!(out, "```rust").unwrap();
-                dump_writable(out, spec, &op.reply, attrset, &reply_name);
+                dump_writable(out, ctx, spec, &op.reply, attrset, &reply_name);
                 writeln!(out, "```").unwrap();
                 writeln!(out).unwrap();
             }
 
             writeln!(out, "```rust").unwrap();
-            dump_shorthand(out, spec, &op.reply, attrset, &reply_name);
+            dump_shorthand(out, ctx, spec, &op.reply, attrset, &reply_name);
             writeln!(out, "```").unwrap();
 
             if all {
@@ -535,7 +551,7 @@ pub fn dump_ops(out: &mut Vec<u8>, spec: &Spec, all: bool) {
                 writeln!(out).unwrap();
 
                 writeln!(out, "```rust").unwrap();
-                dump_readable(out, spec, &op.request, attrset, &request_name);
+                dump_readable(out, ctx, spec, &op.request, attrset, &request_name);
                 writeln!(out, "```").unwrap();
 
                 writeln!(out).unwrap();
@@ -543,7 +559,7 @@ pub fn dump_ops(out: &mut Vec<u8>, spec: &Spec, all: bool) {
                 writeln!(out).unwrap();
 
                 writeln!(out, "```rust").unwrap();
-                dump_readable(out, spec, &op.reply, attrset, &reply_name);
+                dump_readable(out, ctx, spec, &op.reply, attrset, &reply_name);
                 writeln!(out, "```").unwrap();
             }
         };

@@ -117,7 +117,14 @@ pub fn gen_push_align(spec: &Spec, set: &AttrSet, attr: AttrProp, alignment: usi
 
 // Binary structures are aligned according to C conventions
 // Link: https://www.gnu.org/software/c-intro-and-ref/manual/html_node/Structure-Layout.html
-pub fn gen_cstruct(tokens: &mut TokenStream, spec: &Spec, name: &str, members: &[AttrProp]) {
+pub fn gen_cstruct(
+    tokens: &mut TokenStream,
+    spec: &Spec,
+    ctx: &mut Context,
+    def: &Definition,
+    members: &[AttrProp],
+) {
+    let name = &def.name;
     let type_name = struct_type(spec, name);
     let name_str = kebab_to_type(name);
 
@@ -133,7 +140,7 @@ pub fn gen_cstruct(tokens: &mut TokenStream, spec: &Spec, name: &str, members: &
     let mut cimpl = TokenStream::new();
     let mut debug = TokenStream::new();
     for attr in members {
-        gen_cstruct_field(spec, &mut cinner, &mut cimpl, &mut debug, &mut m, attr);
+        gen_cstruct_field(spec, ctx, &mut cinner, &mut cimpl, &mut debug, &mut m, attr);
     }
 
     if m.bit_off != 0 {
@@ -150,6 +157,13 @@ pub fn gen_cstruct(tokens: &mut TokenStream, spec: &Spec, name: &str, members: &
     if m.derive_debug {
         tokens.extend(quote! {
             #[derive(Debug)]
+        });
+    }
+
+    if let Some(doc) = &def.doc {
+        let doc = escape_md(ctx, doc);
+        tokens.extend(quote! {
+            #[doc = #doc]
         });
     }
 
@@ -250,6 +264,7 @@ pub fn gen_cstruct(tokens: &mut TokenStream, spec: &Spec, name: &str, members: &
 
 pub fn gen_cstruct_field(
     spec: &Spec,
+    ctx: &mut Context,
     members: &mut TokenStream,
     cimpl: &mut TokenStream,
     debug: &mut TokenStream,
@@ -358,7 +373,7 @@ pub fn gen_cstruct_field(
     }
 
     let mut docs = TokenStream::new();
-    doc_attr(attr, |doc| docs.extend(quote!(#[doc = #doc])));
+    doc_attr(ctx, attr, |doc| docs.extend(quote!(#[doc = #doc])));
 
     if let AttrType::CBitField { bits, sub_type } = &attr.r#type {
         let (rust_type, alignment) = match sub_type {
