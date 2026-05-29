@@ -57,7 +57,11 @@ for cargo_toml in "${cargo_tomls[@]}"; do
     echo_until_marker "$cargo_toml" "# $marker_line"
 
     for i in "${subsystems[@]}"; do
-      printf "%s = []\n" "$i"
+      features=
+      if [[ "$cargo_toml" = "reverse-lookup"* ]]; then
+        features=" \"netlink-bindings/$i\" "
+      fi
+      printf "%s = [%s]\n" "$i" "$features"
     done
 
     echo
