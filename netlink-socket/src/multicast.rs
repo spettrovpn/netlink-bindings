@@ -138,9 +138,6 @@ impl MulticastSocketRaw {
         last_group: &mut Option<u32>,
     ) -> Result<usize, ReplyError> {
         loop {
-            #[cfg(feature = "async")]
-            sock.readable().await?;
-
             let mut addr: libc::sockaddr_nl = unsafe { std::mem::zeroed() };
             let mut iov = libc::iovec {
                 iov_base: buf.as_mut_ptr() as *mut libc::c_void,
@@ -161,15 +158,30 @@ impl MulticastSocketRaw {
             msghdr.msg_controllen = control_buf.len() as _;
             msghdr.msg_flags = 0;
 
-            let read = unsafe { libc::recvmsg(sock.as_raw_fd(), &mut msghdr, 0) };
-            if read < 0 {
-                let err = io::Error::last_os_error();
+            let do_recvmsg = || unsafe {
+                let res = libc::recvmsg(sock.as_raw_fd(), &mut msghdr, 0);
+                if res < 0 {
+                    return Err(io::Error::last_os_error());
+                }
+                Ok(res)
+            };
+
+            // Tokio attempts to be clever and doesn't poll the fd if it hasn't seen EAGAIN first hand
+            #[cfg(feature = "tokio")]
+            let read = sock
+                .async_io(tokio::io::Interest::READABLE, do_recvmsg)
+                .await?;
+
+            #[cfg(not(feature = "tokio"))]
+            let read = match { do_recvmsg }() {
                 #[cfg(feature = "async")]
-                if err.kind() == std::io::ErrorKind::WouldBlock {
+                Err(err) if err.kind() == std::io::ErrorKind::WouldBlock => {
+                    sock.readable().await?;
                     continue;
                 }
-                return Err(err.into());
-            }
+                Err(err) => return Err(err.into()),
+                Ok(read) => read,
+            };
 
             *last_group = None;
             unsafe {
