@@ -381,6 +381,7 @@ pub struct Definition {
     /// For C-compatible languages, header which already defines this attribute set.
     #[allow(unused)]
     pub header: Option<String>,
+    pub scope: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -824,6 +825,10 @@ impl Spec {
     }
 
     fn fixup(&mut self) {
+        // Remove non-uapi definitions
+        self.definitions
+            .retain(|d| d.scope.as_ref().is_none_or(|s| s == "uapi"));
+
         // Add explicit values in attribute sets
         for attrs in &mut self.attribute_sets {
             let mut id: u16 = 0;
