@@ -1,5 +1,6 @@
 #![allow(clippy::doc_lazy_continuation)]
 #![doc = include_str!("../README.md")]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 /// Netlink documentation recommends max(8192, page_size)
 pub const RECV_BUF_SIZE: usize = 8192;
