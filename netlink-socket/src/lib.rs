@@ -48,8 +48,13 @@ pub struct NetlinkSocket {
     seq: u32,
 }
 
+impl Default for NetlinkSocket {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl NetlinkSocket {
-    #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         Self {
             buf: Arc::new([0u8; RECV_BUF_SIZE]),
