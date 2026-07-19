@@ -103,19 +103,19 @@ pub fn gen_writable_attrset(
     let end = format_ident!("end_nested");
 
     tokens.extend(quote! {
-        pub struct #type_name<Prev: Rec> {
+        pub struct #type_name<Prev: Pusher> {
             pub(crate) prev: Option<Prev>,
             pub(crate) header_offset: Option<usize>,
         }
     });
 
     tokens.extend(quote! {
-        impl<Prev: Rec> Rec for #type_name<Prev> {
-            fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-                self.prev.as_mut().unwrap().as_rec_mut()
+        impl<Prev: Pusher> Pusher for #type_name<Prev> {
+            fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+                self.prev.as_mut().unwrap().as_vec_mut()
             }
-            fn as_rec(&self) -> &Vec<u8> {
-                self.prev.as_ref().unwrap().as_rec()
+            fn as_vec(&self) -> &Vec<u8> {
+                self.prev.as_ref().unwrap().as_vec()
             }
         }
     });
@@ -145,7 +145,7 @@ pub fn gen_writable_attrset(
                 fn write_header(prev: &mut Prev #new_args) {
                     let mut #header_var = #header::new();
                     #fill
-                    prev.as_rec_mut().extend(#header_var.as_slice());
+                    prev.as_vec_mut().extend(#header_var.as_slice());
                 }
             }
         } else {
@@ -158,7 +158,7 @@ pub fn gen_writable_attrset(
                     Self { prev: Some(prev), header_offset: None }
                 }
                 fn write_header(prev: &mut Prev, #header_var: &#header) {
-                    prev.as_rec_mut().extend(#header_var.as_slice());
+                    prev.as_vec_mut().extend(#header_var.as_slice());
                 }
             }
         }
@@ -176,7 +176,7 @@ pub fn gen_writable_attrset(
         pub fn #end(mut self) -> Prev {
             let mut prev = self.prev.take().unwrap();
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
             prev
         }
@@ -253,8 +253,8 @@ pub fn gen_writable_attrset(
                         impls.extend(quote! {
                             pub fn #func(mut self, fixed_header: &#h) -> Self {
                                 self = self.#push_selector(#sel_val);
-                                self.header_offset = Some(push_nested_header(self.as_rec_mut(), #id));
-                                self.as_rec_mut().extend(fixed_header.as_slice());
+                                self.header_offset = Some(push_nested_header(self.as_vec_mut(), #id));
+                                self.as_vec_mut().extend(fixed_header.as_slice());
                                 self
                             }
                         });
@@ -263,7 +263,7 @@ pub fn gen_writable_attrset(
                         impls.extend(quote! {
                             pub fn #func(mut self) -> #nested_type<PushDummy<Prev>> {
                                 self = self.#push_selector(#sel_val);
-                                let new_header_offset = push_nested_header(self.as_rec_mut(), #id);
+                                let new_header_offset = push_nested_header(self.as_vec_mut(), #id);
 
                                 // Pushing attributes after the sub message is a common pitfall
                                 let dummy = PushDummy {
@@ -279,8 +279,8 @@ pub fn gen_writable_attrset(
                         impls.extend(quote! {
                             pub fn #func(mut self, fixed_header: &#h) -> #nested_type<PushDummy<Prev>> {
                                 self = self.#push_selector(#sel_val);
-                                let new_header_offset = push_nested_header(self.as_rec_mut(), #id);
-                                self.as_rec_mut().extend(fixed_header.as_slice());
+                                let new_header_offset = push_nested_header(self.as_vec_mut(), #id);
+                                self.as_vec_mut().extend(fixed_header.as_slice());
 
                                 // Pushing attributes after the sub message is a common pitfall
                                 let dummy = PushDummy {
@@ -296,7 +296,7 @@ pub fn gen_writable_attrset(
                         impls.extend(quote! {
                             pub fn #func(mut self) -> Self {
                                 self = self.#push_selector(#sel_val);
-                                self.header_offset = Some(push_nested_header(self.as_rec_mut(), #id));
+                                self.header_offset = Some(push_nested_header(self.as_vec_mut(), #id));
                                 self
                             }
                         });
@@ -314,7 +314,7 @@ pub fn gen_writable_attrset(
 
             impls.extend(quote! {
                 pub fn #func(mut self) -> #array_type<Self> {
-                    let header_offset = push_nested_header(self.as_rec_mut(), #id);
+                    let header_offset = push_nested_header(self.as_vec_mut(), #id);
 
                     #array_type { prev: Some(self), header_offset: Some(header_offset), counter: 0 }
                 }
@@ -329,7 +329,7 @@ pub fn gen_writable_attrset(
 
             impls.extend(quote! {
                 pub fn #func(mut self) -> #nested_type<Self> {
-                    let header_offset = push_nested_header(self.as_rec_mut(), #id);
+                    let header_offset = push_nested_header(self.as_vec_mut(), #id);
 
                     #nested_type { prev: Some(self), header_offset: Some(header_offset) }
                 }
@@ -356,7 +356,7 @@ pub fn gen_writable_attrset(
         // let do_align = crate::gen_cstruct::gen_push_align(spec, set, next, align);
 
         let inner = if !inner.is_empty() && !matches!(next.r#type, AttrType::Flag) {
-            quote!(self.as_rec_mut().extend(#inner);)
+            quote!(self.as_vec_mut().extend(#inner);)
         } else {
             quote!()
         };
@@ -364,7 +364,7 @@ pub fn gen_writable_attrset(
         impls.extend(quote! {
             pub fn #func(mut self, #value_name: #rust_type) -> Self {
                 #do_align
-                push_header(self.as_rec_mut(), #id, #len as u16);
+                push_header(self.as_vec_mut(), #id, #len as u16);
                 #inner
                 #plain
                 self
@@ -379,7 +379,7 @@ pub fn gen_writable_attrset(
             impls.extend(quote! {
                 pub fn #write_func(mut self) -> PushWriter<Self> {
                     #do_align
-                    let header_offset = write_header(self.as_rec_mut(), #id);
+                    let header_offset = write_header(self.as_vec_mut(), #id);
                     PushWriter { prev: Some(self), header_offset: Some(header_offset) }
                 }
             });
@@ -391,9 +391,9 @@ pub fn gen_writable_attrset(
             doc_attr(ctx, next, |doc| impls.extend(quote!(#[doc = #doc])));
             impls.extend(quote! {
                 pub fn #func_bytes(mut self, #value_name: &[u8]) -> Self {
-                    push_header(self.as_rec_mut(), #id, (#value_name.len() + 1) as u16);
-                    self.as_rec_mut().extend(#value_name);
-                    self.as_rec_mut().push(0);
+                    push_header(self.as_vec_mut(), #id, (#value_name.len() + 1) as u16);
+                    self.as_vec_mut().extend(#value_name);
+                    self.as_vec_mut().push(0);
                     self
                 }
             });
@@ -401,14 +401,14 @@ pub fn gen_writable_attrset(
     }
 
     tokens.extend(quote! {
-        impl<Prev: Rec> #type_name<Prev> {
+        impl<Prev: Pusher> #type_name<Prev> {
             #impls
         }
-        impl<Prev: Rec> Drop for #type_name<Prev> {
+        impl<Prev: Pusher> Drop for #type_name<Prev> {
             fn drop(&mut self) {
                 if let Some(prev) = &mut self.prev {
                     if let Some(header_offset) = &self.header_offset {
-                        finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                        finalize_nested_header(prev.as_vec_mut(), *header_offset);
                     }
                 }
             }
@@ -459,7 +459,7 @@ pub fn gen_writable_type(spec: &Spec, next: &AttrProp) -> WritableType {
         AttrType::Binary { .. } if next.is_ip() => WritableType {
             rust_type: quote!(std::net::IpAddr),
             encode_expr: quote!(),
-            encode_block: quote! { encode_ip(self.as_rec_mut(), #value_name); },
+            encode_block: quote! { encode_ip(self.as_vec_mut(), #value_name); },
             size_expr: quote! {{
                 match &#value_name {
                     IpAddr::V4(_) => 4,
@@ -471,7 +471,7 @@ pub fn gen_writable_type(spec: &Spec, next: &AttrProp) -> WritableType {
         AttrType::Binary { .. } if next.is_sockaddr() => WritableType {
             rust_type: quote!(std::net::SocketAddr),
             encode_expr: quote!(),
-            encode_block: quote! { encode_sockaddr(self.as_rec_mut(), #value_name); },
+            encode_block: quote! { encode_sockaddr(self.as_vec_mut(), #value_name); },
             size_expr: quote! {{
                 match &#value_name {
                     SocketAddr::V4(_) => 16,
@@ -550,7 +550,7 @@ pub fn gen_writable_index_array(
             } = gen_writable_type(spec, attr);
 
             let inner = if !inner.is_empty() && !matches!(attr.r#type, AttrType::Flag) {
-                quote!(self.as_rec_mut().extend(#inner);)
+                quote!(self.as_vec_mut().extend(#inner);)
             } else {
                 quote!()
             };
@@ -559,7 +559,7 @@ pub fn gen_writable_index_array(
                 pub fn entry(mut self, value: #rust_type) -> Self {
                     let index = self.counter;
                     self.counter += 1;
-                    push_header(self.as_rec_mut(), index, #len as u16);
+                    push_header(self.as_vec_mut(), index, #len as u16);
                     #inner
                     #plain
                     self
@@ -573,7 +573,7 @@ pub fn gen_writable_index_array(
                 pub fn entry_nested(mut self) -> #next_type<Self> {
                     let index = self.counter;
                     self.counter += 1;
-                    let header_offset = push_nested_header(self.as_rec_mut(), index);
+                    let header_offset = push_nested_header(self.as_vec_mut(), index);
                     #next_type { prev: Some(self), header_offset: Some(header_offset) }
                 }
             });
@@ -587,20 +587,20 @@ pub fn gen_writable_index_array(
     ctx.generated_arrays.insert(array_type.to_string());
 
     tokens.extend(quote! {
-        pub struct #array_type<Prev: Rec> {
+        pub struct #array_type<Prev: Pusher> {
             pub(crate) prev: Option<Prev>,
             pub(crate) header_offset: Option<usize>,
             pub(crate) counter: u16,
         }
-        impl<Prev: Rec> Rec for #array_type<Prev> {
-            fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-                self.prev.as_mut().unwrap().as_rec_mut()
+        impl<Prev: Pusher> Pusher for #array_type<Prev> {
+            fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+                self.prev.as_mut().unwrap().as_vec_mut()
             }
-            fn as_rec(&self) -> &Vec<u8> {
-                self.prev.as_ref().unwrap().as_rec()
+            fn as_vec(&self) -> &Vec<u8> {
+                self.prev.as_ref().unwrap().as_vec()
             }
         }
-        impl<Prev: Rec> #array_type<Prev> {
+        impl<Prev: Pusher> #array_type<Prev> {
             pub fn new(prev: Prev) -> Self {
                 Self { prev: Some(prev), header_offset: None, counter: 0 }
             }
@@ -608,18 +608,18 @@ pub fn gen_writable_index_array(
             pub fn end_array(mut self) -> Prev {
                 let mut prev = self.prev.take().unwrap();
                 if let Some(header_offset) = &self.header_offset {
-                    finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                    finalize_nested_header(prev.as_vec_mut(), *header_offset);
                 }
                 prev
             }
 
             #impls
         }
-        impl<Prev: Rec> Drop for #array_type<Prev> {
+        impl<Prev: Pusher> Drop for #array_type<Prev> {
             fn drop(&mut self) {
                 if let Some(prev) = &mut self.prev {
                     if let Some(header_offset) = &self.header_offset {
-                        finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                        finalize_nested_header(prev.as_vec_mut(), *header_offset);
                     }
                 }
             }

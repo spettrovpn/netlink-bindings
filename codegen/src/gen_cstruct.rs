@@ -111,7 +111,7 @@ pub fn gen_push_align(spec: &Spec, set: &AttrSet, attr: AttrProp, alignment: usi
 
     let pad_id: u16 = pad_id.unwrap_or(0x3ff);
     quote! {
-        push_pad(self.as_rec_mut(), #pad_id, #alignment);
+        push_pad(self.as_vec_mut(), #pad_id, #alignment);
     }
 }
 

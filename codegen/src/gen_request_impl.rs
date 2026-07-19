@@ -322,16 +322,16 @@ pub fn gen_request_wrapper(
                     needs_value.then_some(&request_type_ident),
                 );
                 write_header_impl = quote! {
-                    fn write_header<Prev: Rec>(prev: &mut Prev #new_args) {
+                    fn write_header<Prev: Pusher>(prev: &mut Prev #new_args) {
                         let mut #header_var = #header::new();
                         #fill
-                        prev.as_rec_mut().extend(#header_var.as_slice());
+                        prev.as_vec_mut().extend(#header_var.as_slice());
                     }
                 };
             } else {
                 write_header_impl = quote! {
-                    fn write_header<Prev: Rec>(prev: &mut Prev, #header_var: &#header) {
-                        prev.as_rec_mut().extend(#header_var.as_slice());
+                    fn write_header<Prev: Pusher>(prev: &mut Prev, #header_var: &#header) {
+                        prev.as_vec_mut().extend(#header_var.as_slice());
                     }
                 };
             }
