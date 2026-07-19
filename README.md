@@ -26,7 +26,7 @@ fast and supporting all properties of all sensible Netlink families.
 
 ## Support status
 
-All [upstream specifications][list-of-specs] are supported as of Linux 7.1.
+All [upstream specifications][list-of-specs] are supported as of Linux 7.2.
 
 - ✅ supported, has tests:
 [conntrack](./netlink-socket/examples/conntrack.rs),
@@ -41,7 +41,7 @@ All [upstream specifications][list-of-specs] are supported as of Linux 7.1.
 [wireguard](./netlink-socket/examples/wireguard-setup.rs).
 - ✔️ compiles, testing needed: binder, dev-energymodel, devlink, dpll, drm-ras,
 ethtool, fou, handshake, lockd, mptcp_pm, netdev, net-shaper, nfsd, ovpn,
-ovs_datapath, ovs_flow, ovs_packet, ovs_vport, psp, rt-neigh, rt-rule
+ovs_datapath, ovs_flow, ovs_packet, ovs_vport, psp, rt-neigh, rt-rule, sunrpc,
 tcp_metrics, team, unix-diag.
 
 ## Installation
@@ -57,9 +57,10 @@ netlink-socket2 = { version = "0.3", features = [ ] }
 A typical Netlink family, say wireguard, supports multiple operations:
 "get-device", "set-device", etc. Each operation may be of kind "do" or "dump".
 
-As an example, to gather info about a device you would use a "dump" kind of
-"get-device" request. That's usually what it means, although different
-subsystems may imply different things. A typical request looks like this:
+As an example, to gather info about a device you would use a "dump" kind
+(returning multiple replies) of "get-device" request. That's usually what it
+means, although different subsystems may imply different things. A typical
+request looks like this:
 
 ```rust
 use netlink_bindings::wireguard;
@@ -67,31 +68,19 @@ use netlink_socket2::NetlinkSocket;
 
 let mut sock = NetlinkSocket::new();
 
-let ifname = "wg0";
-
-// All available requests are conveniently accessible using `family::Request`
 let mut request = wireguard::Request::new()
     .op_get_device_dump();
 
-// Add contents to the request
 request.encode()
-    .push_ifname_bytes(ifname.as_bytes());
+    .push_ifname_bytes(b"wg0");
 
 let mut iter = sock.request(&request).unwrap();
-while let Some(res) = iter.recv() {
-    // Each request may return an error (literal error code), in some cases
-    // with some additional info from the kernel, e.g. lacking a permission,
-    // if you missing CAP_NET_ADMIN capability for querying wireguard info.
-    let attrs = res.unwrap();
-
-    // A simple approach to get a specific property from an attribute set is
-    // following. Note that it's not guaranteed that the property was supplied,
-    // nor that it can be parsed correctly. If either occurs, the error will
-    // include error context, i.e. name of the attribute and it's parent set.
+while let Some(attrs) = iter.recv().transpose().unwrap() {
+    // An attribute may be missing or failing to parse
     let listen_port = attrs.get_listen_port().unwrap();
-    println!("Interface {ifname:?} is listening on {listen_port}");
+    println!("Interface is listening on {listen_port}");
 
-    // Print out all the attributes using the debug formatter.
+    // Print out all the attributes using the Debug formatter.
     println!("{:#?}", attrs);
 }
 ```
@@ -107,12 +96,10 @@ inheriting some now-discouraged quirks like a fixed-header - a struct that's
 always present in a message. It's use depends on the request type, with unused
 fields usually zeroed-out.
 
-The relevant operation is "newaddr" with "do" kind. You may also notice
-".set_change()". This specifies an additional request flags. Similar to
-fixed-header, theses flags may invoke some additional behavior in certain
-operations, or do nothing in others.
+The relevant operation is "newaddr" of kind "do" (only returning an
+acknowledgment).
 
-```rust,should_panic
+```rust
 use std::net::IpAddr;
 use netlink_bindings::rt_addr;
 use netlink_socket2::NetlinkSocket;
@@ -120,10 +107,11 @@ use netlink_socket2::NetlinkSocket;
 let mut sock = NetlinkSocket::new();
 
 let addr: IpAddr = "10.0.0.1".parse().unwrap();
+let ifindex = unsafe { libc::if_nametoindex(c"wg0".as_ptr()) };
 
 // Create fixed-header for the request
 let header = rt_addr::Ifaddrmsg {
-    ifa_index: 1234, // Acquired via "get-addr" request
+    ifa_index: ifindex,
     ifa_family: libc::AF_INET as u8, // aka ipv4
     ifa_prefixlen: 32, // stands for "/32" in "10.0.0.1/32"
     ..Default::default()
@@ -140,39 +128,34 @@ sock.request(&request).unwrap()
     .recv_ack().unwrap();
 ```
 
+You may also notice ".set_change()" setting a flag. Similar to the
+fixed-header, these flags may trigger additional behavior in certain
+operations, or do nothing in others.
+
 See full code in the [example](./netlink-socket/examples/wireguard-setup.rs).
 
 ## Async sockets
 
-Async functionality is available using the same interface, you just need to
-enable it, and to add `.await` keyword in all places where async IO is expected.
+Generally, Netlink requests resolve immediately, which is to say it's safe to
+use the "blocking" `NetlinkSocket` in the async context, which is recommended.
+
+The only exceptions are a multicast socket, receiving notification
+asynchronously, or a hypothetical subsystem, choosing to deliberately delay
+replies.
+
+Netlink-socket crate allows the facilities for different runtimes to coexist
+under different paths, i.e. `netlink_socket2::tokio::{NetlinkSocket,
+MulticastSocketRaw}`, with async functionality available with the exactly same
+structure as the "blocking" one.
 
 ```toml
 [dependencies]
-netlink-socket2 = { ... , features = [ "tokio" ] } # or "smol"
-```
-
-An earlier example, but using async, would look like this:
-
-```rust,compile_fail
-use netlink_bindings::wireguard;
-use netlink_socket2::NetlinkSocket;
-
-let mut sock = NetlinkSocket::new();
-
-let mut request = wireguard::Request::new()
-    .op_get_device_dump();
-
-request.encode()
-    .push_ifname_bytes(b"wg0");
-
-let mut iter = sock.request(&request).await.unwrap();
-while let Some(res) = iter.recv().await {
-    println!("{:#?}", res);
-}
+netlink-socket2 = { ... , features = [ "std", "tokio" ] } # or "smol"
 ```
 
 ## Other examples
+
+See [netlink-socket/examples](./netlink-socket/examples):
 
 - [wireguard-setup](./netlink-socket/examples/wireguard-setup.rs) - Create and
 configure wireguard interface.
@@ -200,24 +183,56 @@ for all multicast notifications on a generic netlink subsystem.
 - [multicast-raw](./netlink-socket/examples/multicast-rtnetlink.rs) - Listen
 for multicast notifications on legacy rtnetlink subsystem.
 
-## Attribute encoding
 
-Under the hood, calling `.encode()` is just a convenience to pass the lead to
-the correct encoding struct. The ecoder's job is to actually write the
-attributes directly into provided buffer. All types relevant for encoding are
-prefixed with `Push`. For example, directly encoding a "do" request of
-"set-device" operation looks like the following:
+## Advanced usage
+
+### Working off of existing tools
+
+If there's an existing tool using Netlink, you can use `reverse-lookup` tool to
+decipher it's Netlink communications and work off of that.
+
+Let's say you want to see what `wg` command does:
+
+```sh
+$ cargo install --git https://github.com/one-d-wide/netlink-bindings reverse-lookup --features all-subsystems
+$ ~/.cargo/bin/reverse-lookup -- wg
+Decoding request in family ROUTE flags=[REQUEST,ACK,DUMP,REPLACE,EXCL] Raw { protonum: 0, request_type: 0 }
+...
+Decoding reply in genl family wireguard flags=[MULTI] Generic("wireguard")
+Wgdevice {
+    ListenPort: 0,
+    Fwmark: 0,
+    Ifindex: 10,
+    Ifname: "wg0",
+}
+...
+```
+
+This way you can study the structure of the real messages the kernel expects
+and replies with. In order to translate it into code, you simply need to
+convert attributes from CamelCase to snake_case, adding occasional `.get_*()`,
+`.push_*()`, or `.nested_*()` prefix.
+
+This tool is merely interpreting the output of `strace(1)`, see `reverse-lookup
+--help` for more details.
+
+### Attribute encoding
+
+Under the hood, calling `.encode()` is just a convenience to switch to a
+correct `Push*` wrapper for encoding, which is given an internal buffer. For
+example, directly encoding a "do" request of "set-device" operation looks like
+this:
 
 ```rust
-use netlink_bindings::wireguard::{OpSetDeviceDo, WgdeviceFlags};
+use netlink_bindings::wireguard as wg;
 
 let mut vec = Vec::new();
 
 // Do set-device (request)
-OpSetDeviceDo::encode_request(&mut vec)
+wg::OpSetDeviceDo::encode_request(&mut vec)
     .push_ifname(c"wg0") // &CStr
     // .push_ifname_bytes("wg0".as_bytes()) // &[u8]
-    .push_flags(WgdeviceFlags::ReplacePeers as u32) // Remove existing peers
+    .push_flags(wg::WgdeviceFlags::ReplacePeers as u32) // Remove existing peers
     .array_peers()
         .entry_nested()
         .push_public_key(&[/* ... */]) // &[u8]
@@ -239,21 +254,19 @@ Additionally, check out [all available
 methods](./netlink-bindings/src/wireguard/wireguard.md), along with the in-line
 documentation.
 
-## Attribute decoding
+### Attribute decoding
 
-Similarly, under the hood, receiving a reply yield an attribute decoder. The
-decoder itself is just a slice, therefore it can be cheaply cloned, copying
-it's frame. The low-level interface is based on iterators, with nice-to-use
-wrapper on top.
+Similarly, under the hood, receiving a reply yields an attribute decoder. The
+decoder itself is just a wrapper on a slice, therefore it can be cheaply
+cloned, copying it's frame. The low-level interface is based on iterators, with
+nicer helper functions on top.
 
 ```rust,should_panic
 use netlink_bindings::traits::NetlinkRequest;
 use netlink_bindings::wireguard::OpGetDeviceDump;
 
-let buf = vec![/* ... */];
-
 // Dump get-device (reply)
-let attrs = OpGetDeviceDump::decode_reply(&buf);
+let attrs = OpGetDeviceDump::decode_reply(&[/* ... */]);
 
 println!("Ifname: {:?}", attrs.get_ifname().unwrap()); // &CStr
 for peer in attrs.get_peers().unwrap() {
@@ -272,7 +285,53 @@ as previously, check out [all available
 methods](./netlink-bindings/src/wireguard/wireguard.md), along with the in-line
 documentation.
 
-## Low-level decoding
+### Cloning attrset contents
+
+In some cases, it's infeasible to construct the message in one go, for example
+when you want to be able to freely alternate between encoding two different
+attribute sets.
+
+The kernel only expects a single nested attribute set of a certain kind to
+appear at the same level of nesting, so you have to first encode them in
+separate temporary buffers before cloning them into the final message. This
+trick applies to reusing parts of an already encoded message received from the
+kernel.
+
+Writing raw attributes is possible using `.as_vec_mut()` method method of
+[`Pusher`](https://docs.rs/netlink-bindings/latest/netlink_bindings/traits/trait.Pusher.html)
+trait, implemented for all encoding `Push*` structs, giving access to the
+internal `&mut Vec<u8>` buffer. And a corresponding `.get_buf()` method
+available on all decoding structs returning their `&[u8]` frame.
+
+```rust
+use netlink_bindings::{traits::Pusher, rt_link};
+
+let mut link_attrs = Vec::new();
+let mut bridge_attrs = Vec::new();
+
+rt_link::PushLinkinfoBridgeAttrs::new(&mut bridge_attrs)
+    .push_priority(1000);
+
+rt_link::PushLinkAttrs::new(&mut link_attrs)
+    .push_link(42);
+
+// ... 
+
+let mut req = rt_link::Request::new()
+    .op_getlink_do(&Default::default());
+
+req.encode()
+    .as_vec_mut()
+    .extend_from_slice(&link_attrs);
+
+req.encode()
+    .nested_linkinfo()
+        .nested_data_bridge()
+        .as_vec_mut()
+        .extend_from_slice(&bridge_attrs);
+```
+
+### Low-level decoding
 
 A low-level decoding interface is exposed as an iterator, that yields enum
 variants, containing either a target type, e.g. SockAddr, or another iterator,
@@ -283,9 +342,7 @@ quickly turns very ugly.
 use netlink_bindings::traits::NetlinkRequest;
 use netlink_bindings::wireguard::{OpGetDeviceDump, Wgdevice, Wgpeer};
 
-let buf = vec![/* ... */];
-
-for attr in OpGetDeviceDump::decode_reply(&buf) {
+for attr in OpGetDeviceDump::decode_reply(&[/* ... */]) {
     match attr.unwrap() {
         Wgdevice::Ifname(n) => println!("Ifname: {n:?}"),
         Wgdevice::Peers(iter) => {
@@ -315,39 +372,6 @@ Another difference is that they represent netlink messages as lists of rust
 enums, while this project works with the binary representation directly, with a
 separate interfaces for encoding and decoding: a builder pattern-like interface
 for encoding, and an iterator interface for decoding (internally).
-
-## Working off of existing tools
-
-If there's an existing tool using Netlink, you can use `reverse-lookup` binary
-from this project to decipher it's Netlink communications, and work off of
-that. Let's say you want to inspect what `wg` command does.
-
-```sh
-$ strace -o ./output_file --decode-fd=socket -e %network --{write,read}=$(seq -s, 0 100) -- wg
-$ cargo run --bin reverse-lookup --features=wireguard,nlctrl,rt-link -- ./output_file
-Decoding request in family ROUTE flags=[REQUEST,ACK,DUMP,REPLACE,EXCL] Raw { protonum: 0, request_type: 0 }
-...
-Decoding reply in genl family wireguard flags=[MULTI] Generic("wireguard")
-Wgdevice {
-    ListenPort: 0,
-    Fwmark: 0,
-    Ifindex: 10,
-    Ifname: "wg0",
-}
-...
-```
-
-This way you can study the structure of the messages the kernel expects/replies
-with. In order to translate it into code, you simply need to convert attributes
-from CamelCase to snake_case, and add occasional .get_\*() or .push_\*()
-prefix.
-
-You can quickly build and install the tool using:
-
-```sh
-$ cargo install --git https://github.com/one-d-wide/netlink-bindings reverse-lookup --features all-subsystems
-$ ~/.cargo/bin/reverse-lookup --help
-```
 
 ## Contribute
 
