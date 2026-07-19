@@ -60,8 +60,12 @@ required-features = [ "netlink-bindings/netdev", "netlink-bindings/rt-link" ]
 name = "multicast-rtnetlink"
 required-features = [ "netlink-bindings/rt-link" ]
 
+[package.metadata.docs.rs]
+all-features = true
+
 [features]
 async = []
+std = []
 tokio = [ "async", "dep:tokio"]
 smol = [ "async", "dep:smol", "dep:smol-macros", "dep:macro_rules_attribute" ]
 

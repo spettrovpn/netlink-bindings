@@ -7,7 +7,8 @@ use std::{
 
 use netlink_bindings::traits::NetlinkChained;
 
-use crate::{NetlinkReplyInner, NetlinkSocket, ReplyError, Socket, RECV_BUF_SIZE};
+use super::{sock::NetlinkReplyInner, NetlinkSocket, Socket};
+use crate::{ReplyError, RECV_BUF_SIZE};
 
 impl NetlinkSocket {
     /// Execute a chained request (experimental)
@@ -17,7 +18,7 @@ impl NetlinkSocket {
     /// operation. For example transactions in nftables subsystem.
     ///
     /// Chained requests currently don't support replies carrying data.
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     pub async fn request_chained<'a, Chained>(
         &'a mut self,
         request: &'a Chained,
@@ -61,7 +62,7 @@ pub struct NetlinkReplyChained<'sock> {
 }
 
 impl NetlinkReplyChained<'_> {
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     pub async fn recv_all(&mut self) -> Result<(), ReplyError> {
         while let Some(res) = self.recv().await {
             res?;
@@ -69,7 +70,7 @@ impl NetlinkReplyChained<'_> {
         Ok(())
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     pub async fn recv(&mut self) -> Option<Result<(), ReplyError>> {
         if self.done.is_all() {
             return None;

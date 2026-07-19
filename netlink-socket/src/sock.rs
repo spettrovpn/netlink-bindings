@@ -6,19 +6,9 @@ use std::{
     sync::Arc,
 };
 
-#[cfg(not(feature = "async"))]
-use std::{
-    io::{Read, Write},
-    net::TcpStream as Socket,
-};
-
-#[cfg(feature = "tokio")]
-use tokio::net::TcpStream as Socket;
-
-#[cfg(feature = "smol")]
-use smol::io::{AsyncReadExt, AsyncWriteExt};
-#[cfg(feature = "smol")]
-type Socket = smol::Async<std::net::TcpStream>;
+#[allow(unused_imports)]
+use super::{Read, Socket, Write};
+use crate::{ReplyError, RECV_BUF_SIZE};
 
 use netlink_bindings::{
     builtin::Nlmsghdr,
@@ -28,10 +18,10 @@ use netlink_bindings::{
 };
 
 pub struct NetlinkSocket {
-    buf: Arc<[u8; RECV_BUF_SIZE]>,
-    cache: HashMap<&'static [u8], u16>,
-    sock: HashMap<u16, Socket>,
-    seq: u32,
+    pub(crate) buf: Arc<[u8; RECV_BUF_SIZE]>,
+    pub(crate) cache: HashMap<&'static [u8], u16>,
+    pub(crate) sock: HashMap<u16, Socket>,
+    pub(crate) seq: u32,
 }
 
 impl Default for NetlinkSocket {
@@ -50,7 +40,7 @@ impl NetlinkSocket {
         }
     }
 
-    fn get_socket_cached(
+    pub(crate) fn get_socket_cached(
         cache: &mut HashMap<u16, Socket>,
         protonum: u16,
     ) -> io::Result<&mut Socket> {
@@ -63,7 +53,7 @@ impl NetlinkSocket {
         }
     }
 
-    fn get_socket_new(family: u16) -> io::Result<Socket> {
+    pub(crate) fn get_socket_new(family: u16) -> io::Result<Socket> {
         let fd = unsafe {
             libc::socket(
                 libc::AF_NETLINK,
@@ -90,15 +80,17 @@ impl NetlinkSocket {
             return Err(io::Error::from_raw_os_error(-res));
         }
 
-        let sock: std::net::TcpStream = fd.into();
+        Self::convert_sock(fd.into())
+    }
 
-        #[cfg(feature = "async")]
-        {
-            sock.set_nonblocking(true)?;
-            Socket::try_from(sock)
-        }
+    #[super::only_async]
+    fn convert_sock(sock: std::net::TcpStream) -> io::Result<Socket> {
+        sock.set_nonblocking(true)?;
+        Socket::try_from(sock)
+    }
 
-        #[cfg(not(feature = "async"))]
+    #[super::only_sync]
+    fn convert_sock(sock: std::net::TcpStream) -> io::Result<Socket> {
         Ok(sock)
     }
 
@@ -110,7 +102,7 @@ impl NetlinkSocket {
         seq
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     pub async fn request<'sock, Request>(
         &'sock mut self,
         request: &Request,
@@ -129,7 +121,7 @@ impl NetlinkSocket {
         self.request_raw(request, protonum, request_type).await
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     async fn resolve(&mut self, family_name: &'static [u8]) -> io::Result<u16> {
         if let Some(id) = self.cache.get(family_name) {
             return Ok(*id);
@@ -160,7 +152,7 @@ impl NetlinkSocket {
         Err(ErrorKind::UnexpectedEof.into())
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     async fn request_raw<'sock, Request>(
         &'sock mut self,
         request: &Request,
@@ -203,24 +195,33 @@ impl NetlinkSocket {
         })
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
-    async fn write_buf(sock: &mut Socket, payload: &[IoSlice<'_>]) -> io::Result<()> {
+    #[super::not_tokio]
+    #[super::strip_async]
+    pub(crate) async fn write_buf(sock: &mut Socket, payload: &[IoSlice<'_>]) -> io::Result<()> {
         loop {
-            #[cfg(not(feature = "tokio"))]
-            let res = sock.write_vectored(payload).await;
-
-            #[cfg(feature = "tokio")]
-            let res = loop {
-                // Some subsystems don't correctly implement io notifications, which tokio runtime
-                // expects to receive before doing any actual io, hence we instead always attempt an io
-                // operation first.
-                let res = sock.try_write_vectored(payload);
-                if matches!(&res, Err(err) if err.kind() == ErrorKind::WouldBlock) {
-                    sock.writable().await?;
-                    continue;
+            match sock.write_vectored(payload).await {
+                Ok(sent) if sent != payload.iter().map(|s| s.len()).sum() => {
+                    return Err(io::Error::other("Couldn't send the whole message"));
                 }
-                break res;
-            };
+                Ok(_) => return Ok(()),
+                Err(err) if err.kind() == ErrorKind::Interrupted => continue,
+                Err(err) => return Err(err),
+            }
+        }
+    }
+
+    #[super::only_tokio]
+    #[super::strip_async]
+    pub(crate) async fn write_buf(sock: &mut Socket, payload: &[IoSlice<'_>]) -> io::Result<()> {
+        loop {
+            // Some subsystems don't correctly implement io notifications, which tokio runtime
+            // expects to receive before doing any actual io, hence we instead always attempt an io
+            // operation first.
+            let res = sock.try_write_vectored(payload);
+            if matches!(&res, Err(err) if err.kind() == ErrorKind::WouldBlock) {
+                sock.writable().await?;
+                continue;
+            }
 
             match res {
                 Ok(sent) if sent != payload.iter().map(|s| s.len()).sum() => {
@@ -234,30 +235,36 @@ impl NetlinkSocket {
     }
 }
 
-struct NetlinkReplyInner {
-    buf_offset: usize,
-    buf_read: usize,
+pub(crate) struct NetlinkReplyInner {
+    pub(crate) buf_offset: usize,
+    pub(crate) buf_read: usize,
 }
 
 impl NetlinkReplyInner {
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::not_tokio]
+    #[super::strip_async]
     async fn read_buf(sock: &mut Socket, buf: &mut [u8]) -> io::Result<usize> {
         loop {
-            #[cfg(not(feature = "tokio"))]
-            let res = sock.read(&mut buf[..]).await;
+            match sock.read(&mut buf[..]).await {
+                Ok(read) => return Ok(read),
+                Err(err) if err.kind() == ErrorKind::Interrupted => continue,
+                Err(err) => return Err(err),
+            }
+        }
+    }
 
-            #[cfg(feature = "tokio")]
-            let res = {
-                // Some subsystems don't correctly implement io notifications, which tokio
-                // runtime expects to receive before doing any actual io, hence we instead
-                // always attempt an io operation first.
-                let res = sock.try_read(&mut buf[..]);
-                if matches!(&res, Err(err) if err.kind() == ErrorKind::WouldBlock) {
-                    sock.readable().await?;
-                    continue;
-                }
-                res
-            };
+    #[super::only_tokio]
+    #[super::strip_async]
+    async fn read_buf(sock: &mut Socket, buf: &mut [u8]) -> io::Result<usize> {
+        loop {
+            // Some subsystems don't correctly implement io notifications, which tokio
+            // runtime expects to receive before doing any actual io, hence we instead
+            // always attempt an io operation first.
+            let res = sock.try_read(&mut buf[..]);
+            if matches!(&res, Err(err) if err.kind() == ErrorKind::WouldBlock) {
+                sock.readable().await?;
+                continue;
+            }
 
             match res {
                 Ok(read) => return Ok(read),
@@ -268,7 +275,7 @@ impl NetlinkReplyInner {
     }
 
     #[allow(clippy::type_complexity)]
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     pub async fn recv(
         &mut self,
         sock: &mut Socket,
@@ -282,8 +289,8 @@ impl NetlinkReplyInner {
     }
 
     #[allow(clippy::type_complexity)]
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
-    async fn parse_next(
+    #[super::strip_async]
+    pub(crate) async fn parse_next(
         &mut self,
         buf: &[u8; RECV_BUF_SIZE],
     ) -> io::Result<(u32, u16, Result<(usize, usize), ReplyError>)> {
@@ -328,13 +335,16 @@ impl NetlinkReplyInner {
                         }
                     };
 
+                let ext_ack_start =
+                    utils::align_up(echo_end, utils::NLA_ALIGNTO).min(self.buf_offset);
+
                 Ok((
                     header.seq,
                     header.r#type,
                     Err(ReplyError {
                         code: io::Error::from_raw_os_error(-code),
                         request_bounds: (echo_start as u32, echo_end as u32),
-                        ext_ack_bounds: (echo_end as u32, self.buf_offset as u32),
+                        ext_ack_bounds: (ext_ack_start as u32, self.buf_offset as u32),
                         reply_buf: None,
                         chained_name: None,
                         lookup: |_, _, _| Default::default(),
@@ -370,7 +380,7 @@ pub struct NetlinkReply<'sock, Request: NetlinkRequest> {
 }
 
 impl<Request: NetlinkRequest> NetlinkReply<'_, Request> {
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     pub async fn recv_one(&mut self) -> Result<Request::ReplyType<'_>, ReplyError> {
         if let Some(res) = self.recv().await {
             return res;
@@ -378,7 +388,7 @@ impl<Request: NetlinkRequest> NetlinkReply<'_, Request> {
         Err(io::Error::other("Reply didn't contain data").into())
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     pub async fn recv_ack(&mut self) -> Result<(), ReplyError> {
         if let Some(res) = self.recv().await {
             res?;
@@ -387,7 +397,7 @@ impl<Request: NetlinkRequest> NetlinkReply<'_, Request> {
         Ok(())
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     pub async fn recv(&mut self) -> Option<Result<Request::ReplyType<'_>, ReplyError>> {
         if self.done {
             return None;

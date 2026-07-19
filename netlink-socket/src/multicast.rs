@@ -1,8 +1,11 @@
-use std::{io, os::fd::AsRawFd, sync::Arc};
+use std::{io, mem::MaybeUninit, os::fd::AsRawFd, sync::Arc};
 
 use netlink_bindings::utils;
 
-use crate::{NetlinkReplyInner, NetlinkSocket, ReplyError, Socket, RECV_BUF_SIZE};
+use super::{sock::NetlinkReplyInner, NetlinkSocket, Socket};
+#[allow(unused_imports)]
+use super::{Read, Write};
+use crate::{ReplyError, RECV_BUF_SIZE};
 
 #[derive(Debug, Clone)]
 pub struct MulticastRecv {
@@ -16,6 +19,11 @@ pub struct MulticastSocketRaw {
     reply: NetlinkReplyInner,
     last_group: Option<u32>,
 }
+
+struct WrapSendUnsafe<T>(T);
+unsafe impl<T> Send for WrapSendUnsafe<T> {}
+
+type WrapMsghdr = WrapSendUnsafe<libc::msghdr>;
 
 impl MulticastSocketRaw {
     pub fn new(protonum: u16) -> io::Result<Self> {
@@ -78,7 +86,7 @@ impl MulticastSocketRaw {
         Ok(())
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     pub async fn recv(&mut self) -> Result<(MulticastRecv, &[u8]), ReplyError> {
         let buf = Arc::make_mut(&mut self.buf);
 
@@ -131,86 +139,101 @@ impl MulticastSocketRaw {
         }
     }
 
-    #[cfg_attr(not(feature = "async"), maybe_async::must_be_sync)]
+    #[super::strip_async]
     async fn read_buf(
         sock: &Socket,
         buf: &mut [u8],
         last_group: &mut Option<u32>,
     ) -> Result<usize, ReplyError> {
-        loop {
-            let mut addr: libc::sockaddr_nl = unsafe { std::mem::zeroed() };
-            let mut iov = libc::iovec {
-                iov_base: buf.as_mut_ptr() as *mut libc::c_void,
-                iov_len: buf.len(),
-            };
+        let mut iov = WrapSendUnsafe(libc::iovec {
+            iov_base: buf.as_mut_ptr() as *mut libc::c_void,
+            iov_len: buf.len(),
+        });
 
-            let mut control_buf = [0u8; 128];
+        const CONTROL_BUF_LEN: usize = 128;
+        let mut control_buf = MaybeUninit::<[u8; CONTROL_BUF_LEN]>::uninit();
 
-            // Use zeroed init + field assignment to avoid private-field struct
-            // literal restrictions on musl targets (__pad1, __pad2 in msghdr).
-            let mut msghdr: libc::msghdr = unsafe { std::mem::zeroed() };
-            msghdr.msg_name = &mut addr as *mut libc::sockaddr_nl as *mut libc::c_void;
-            msghdr.msg_namelen = std::mem::size_of_val(&addr) as u32;
-            msghdr.msg_iov = &mut iov as *mut libc::iovec;
-            msghdr.msg_iovlen = 1;
-            msghdr.msg_control = control_buf.as_mut_ptr() as *mut libc::c_void;
-            // msg_controllen is usize on glibc but u32 on musl - let the compiler infer.
-            msghdr.msg_controllen = control_buf.len() as _;
-            msghdr.msg_flags = 0;
+        // Use zeroed init + field assignment to avoid private-field struct
+        // literal restrictions on musl targets (__pad1, __pad2 in msghdr).
+        let mut msghdr: libc::msghdr = unsafe { std::mem::zeroed() };
+        msghdr.msg_name = std::ptr::null_mut();
+        msghdr.msg_namelen = 0;
+        msghdr.msg_iov = &raw mut iov.0;
+        msghdr.msg_iovlen = 1;
+        msghdr.msg_control = control_buf.as_mut_ptr() as *mut libc::c_void;
+        // msg_controllen is usize on glibc but u32 on musl - let the compiler infer.
+        msghdr.msg_controllen = CONTROL_BUF_LEN as _;
+        msghdr.msg_flags = 0;
 
-            let do_recvmsg = || unsafe {
-                let res = libc::recvmsg(sock.as_raw_fd(), &mut msghdr, 0);
-                if res < 0 {
-                    return Err(io::Error::last_os_error());
-                }
-                Ok(res)
-            };
+        let mut msghdr = WrapSendUnsafe(msghdr);
+        let read = Self::recvmsg(&sock, &mut msghdr).await?;
 
-            // Tokio attempts to be clever and doesn't poll the fd if it hasn't seen EAGAIN first hand
-            #[cfg(feature = "tokio")]
-            let read = sock
-                .async_io(tokio::io::Interest::READABLE, do_recvmsg)
-                .await?;
-
-            #[cfg(not(feature = "tokio"))]
-            let read = match { do_recvmsg }() {
-                #[cfg(feature = "async")]
-                Err(err) if err.kind() == std::io::ErrorKind::WouldBlock => {
-                    sock.readable().await?;
-                    continue;
-                }
-                Err(err) => return Err(err.into()),
-                Ok(read) => read,
-            };
-
-            *last_group = None;
-            unsafe {
-                let msghdr_ptr = &msghdr as *const libc::msghdr;
-                let mut cmsg_ptr: *const libc::cmsghdr = libc::CMSG_FIRSTHDR(msghdr_ptr);
-                while !cmsg_ptr.is_null() {
-                    let libc::cmsghdr {
+        *last_group = None;
+        unsafe {
+            let msghdr_ptr = &raw const msghdr.0;
+            let mut cmsg_ptr: *const libc::cmsghdr = libc::CMSG_FIRSTHDR(msghdr_ptr);
+            while !cmsg_ptr.is_null() {
+                let libc::cmsghdr {
                         cmsg_len,
                         cmsg_level,
                         cmsg_type,
                         .. // ignore __pad1 on musl
                     } = *cmsg_ptr;
 
-                    match (cmsg_level, cmsg_type) {
-                        (libc::SOL_NETLINK, libc::NETLINK_PKTINFO) => {
-                            let data = std::slice::from_raw_parts(
-                                libc::CMSG_DATA(cmsg_ptr),
-                                cmsg_len as usize - libc::CMSG_LEN(0) as usize,
-                            );
-                            *last_group = Some(utils::parse_u32(&data[..4]).unwrap());
-                        }
-                        _ => {}
+                match (cmsg_level, cmsg_type) {
+                    (libc::SOL_NETLINK, libc::NETLINK_PKTINFO) => {
+                        let data = std::slice::from_raw_parts(
+                            libc::CMSG_DATA(cmsg_ptr),
+                            cmsg_len as usize - libc::CMSG_LEN(0) as usize,
+                        );
+                        *last_group = Some(utils::parse_u32(&data[..4]).unwrap());
                     }
-
-                    cmsg_ptr = libc::CMSG_NXTHDR(msghdr_ptr, cmsg_ptr);
+                    _ => {}
                 }
-            }
 
-            return Ok(read as usize);
+                cmsg_ptr = libc::CMSG_NXTHDR(msghdr_ptr, cmsg_ptr);
+            }
         }
+
+        Ok(read)
+    }
+
+    fn recvmsg_sync(sock: &Socket, msghdr: &mut WrapMsghdr) -> io::Result<usize> {
+        unsafe {
+            let res = libc::recvmsg(sock.as_raw_fd(), &mut msghdr.0, 0);
+            if res < 0 {
+                return Err(io::Error::last_os_error());
+            }
+            Ok(res as usize)
+        }
+    }
+
+    #[super::only_sync]
+    fn recvmsg(sock: &Socket, msghdr: &mut WrapMsghdr) -> io::Result<usize> {
+        Self::recvmsg_sync(sock, msghdr)
+    }
+
+    #[super::only_async]
+    #[super::not_tokio]
+    async fn recvmsg(sock: &Socket, msghdr: &mut WrapMsghdr) -> io::Result<usize> {
+        loop {
+            match Self::recvmsg_sync(sock, msghdr) {
+                Err(err) if err.kind() == std::io::ErrorKind::WouldBlock => {
+                    sock.readable().await?;
+                    continue;
+                }
+                res => return res,
+            }
+        }
+    }
+
+    #[super::only_async]
+    #[super::only_tokio]
+    async fn recvmsg(sock: &Socket, msghdr: &mut WrapMsghdr) -> io::Result<usize> {
+        // Tokio attempts to be clever and doesn't poll the fd if it hasn't seen EAGAIN first hand
+        sock.async_io(tokio::io::Interest::READABLE, || {
+            Self::recvmsg_sync(sock, msghdr)
+        })
+        .await
     }
 }
