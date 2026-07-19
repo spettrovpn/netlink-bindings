@@ -137,6 +137,10 @@ pub mod rt_route;
 #[path = "rt-rule/mod.rs"]
 pub mod rt_rule;
 
+#[cfg(feature = "sunrpc")]
+#[cfg_attr(docsrs, doc(cfg(feature = "sunrpc")))]
+pub mod sunrpc;
+
 #[cfg(feature = "tc")]
 #[cfg_attr(docsrs, doc(cfg(feature = "tc")))]
 pub mod tc;
