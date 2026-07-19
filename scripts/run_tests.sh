@@ -38,6 +38,24 @@ targets="
   $(uname -m)-unknown-linux-musl
 "
 
+err=
+
+if type -P rustup &>/dev/null; then
+  for target in $targets; do
+    if ! rustup target list | grep -F -- "$target (installed)" &>/dev/null; then
+      err="${err}Target $target not installed.\n"
+      err="${err}Run: rustup target install $target\n"
+    fi
+  done
+else
+  err="${err}Error: 'rustup' command not found\n"
+fi
+
+if test -n "$err"; then
+  echo -ne "\e[0;31m$err\e[0m"
+  exit 1
+fi
+
 run() {
   echo >&2
   echo ">" "$@" >&2
@@ -65,35 +83,40 @@ rm -rf ./target/bin_dir
 mkdir -p ./target/bin_dir
 
 for target in $targets; do
-  cargo check -p netlink-bindings --all-features
+  cargo check --all-features
 
   cargo test
 
-  for runtime in "" tokio smol; do
+  for runtime in std tokio smol; do
     cargo run --example=extack |
       matches 'Attribute failed policy validation: attribute "Ifname" in "LinkAttrs": PolicyTypeAttrs \{ MaxLength: 15, Type: 11 \}'
 
     for example in $examples; do
       cargo run --example="$example" --features="$runtime"
-      cp "./target/debug/examples/$example" "./target/bin_dir/$target-$runtime-$example"
+      bin="$(cargo run --example="$example" --features="$runtime" --config 'target."cfg(true)".runner="echo"')"
+      cp -- "$bin" "./target/bin_dir/$target-$runtime-$example"
     done
   done
 done
 
 # Run the same examples in a VM against a bunch of different kernel versions
-if ! type -P nix &>/dev/null; then
-  echo "Skipping vm tests: 'nix' command not found"
-  exit 0
+if type -P nix &>/dev/null; then
+  vm_out="$(
+    run nix build \
+      --print-out-paths --no-link \
+      -f ./scripts/vm_tests.nix \
+      --argstr bin_dir "target/bin_dir" \
+      driver
+  )"
+
+  # To debug inside the vm run `$vm_runner --interactive`, type
+  # `machine.start()`, wait until it boots, and ssh root@vsock/7502{0,1,2,...}
+  run "$vm_out/bin/nixos-test-driver" # [--interactive]
+else
+  err="${err}Skipping vm tests: 'nix' command not found\n"
 fi
 
-vm_out="$(
-  run nix build \
-    --print-out-paths --no-link \
-    -f ./scripts/vm_tests.nix \
-    --argstr bin_dir "target/bin_dir" \
-    driver
-)"
-
-# To debug inside the vm run `$vm_runner --interactive`, type
-# `machine.start()`, wait until it boots, and ssh root@vsock/7502{0,1,2,...}
-run "$vm_out/bin/nixos-test-driver" # [--interactive]
+if test -n "$err"; then
+  echo -ne "\e[0;31m$err\e[0m"
+  exit 1
+fi
