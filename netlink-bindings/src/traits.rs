@@ -1,13 +1,15 @@
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Protocol {
-    /// Netlink-raw protocol
+    /// Legacy Netlink protocol, aka netlink-raw
     Raw {
         /// Value supplied to socket(2)
         protonum: u16,
         /// Value of `type` field in the message header
         request_type: u16,
     },
-    /// Generic netlink protocol
+    /// Generic Netlink protocol, aka genetlink or genl
+    ///
+    /// Note that the message also carries a command type in the required Nfgenmsg header.
     Generic(&'static [u8]),
 }
 
@@ -73,5 +75,44 @@ pub trait NetlinkChained {
     fn supports_ack(&self, index: usize) -> Option<bool> {
         let _ = index;
         None
+    }
+}
+
+/// A trait for `Push*` structs to access the internal buffer.
+///
+/// You can use it to inspect, modify, or append attributes,
+/// e.g. by copying from another attribute set.
+///
+/// Use this trait with caution as there's no further type checks!
+pub trait Pusher {
+    fn as_vec(&self) -> &Vec<u8>;
+    fn as_vec_mut(&mut self) -> &mut Vec<u8>;
+
+    // TODO: drop in v0.4
+    #[deprecated = "Use .as_vec() instead (rec -> vec)"]
+    fn as_rec(&self) -> &Vec<u8> {
+        self.as_vec()
+    }
+    #[deprecated = "Use .as_vec_mut() instead (rec -> vec)"]
+    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
+        self.as_vec_mut()
+    }
+}
+
+impl Pusher for Vec<u8> {
+    fn as_vec(&self) -> &Vec<u8> {
+        self
+    }
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self
+    }
+}
+
+impl Pusher for &mut Vec<u8> {
+    fn as_vec(&self) -> &Vec<u8> {
+        self
+    }
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self
     }
 }

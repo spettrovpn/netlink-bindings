@@ -1,6 +1,7 @@
 use std::fmt;
 
 pub use crate::primitives::*;
+pub use crate::traits::Pusher;
 pub use std::{ffi::CStr, fmt::Debug, iter::Iterator};
 
 pub fn dump_hex(buf: &[u8]) {
@@ -248,8 +249,6 @@ fn push_header_type(buf: &mut Vec<u8>, mut r#type: u16, len: u16, is_nested: boo
     buf.extend((len + 4).to_ne_bytes());
     buf.extend(r#type.to_ne_bytes());
 
-    align(buf);
-
     header_offset
 }
 
@@ -337,28 +336,9 @@ pub fn chop_header<'a>(buf: &'a [u8], pos: &mut usize) -> Option<(Header, &'a [u
     ))
 }
 
-pub trait Rec {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8>;
-    fn as_rec(&self) -> &Vec<u8>;
-}
-
-impl Rec for Vec<u8> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self
-    }
-    fn as_rec(&self) -> &Vec<u8> {
-        self
-    }
-}
-
-impl Rec for &mut Vec<u8> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self
-    }
-    fn as_rec(&self) -> &Vec<u8> {
-        self
-    }
-}
+// TODO: drop in v0.4
+#[deprecated = "Use netlink_bindings::traits::Pusher instead"]
+pub use crate::traits::Pusher as Rec;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ErrorReason {
@@ -560,52 +540,52 @@ impl RequestBuf<'_> {
     }
 }
 
-impl Rec for RequestBuf<'_> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
+impl Pusher for RequestBuf<'_> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
         self.buf_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
+    fn as_vec(&self) -> &Vec<u8> {
         self.buf()
     }
 }
 
-pub struct PushWriter<Prev: Rec> {
+pub struct PushWriter<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
 
-impl<Prev: Rec> std::ops::Deref for PushWriter<Prev> {
+impl<Prev: Pusher> std::ops::Deref for PushWriter<Prev> {
     type Target = Vec<u8>;
     fn deref(&self) -> &Self::Target {
-        self.as_rec()
+        self.as_vec()
     }
 }
 
-impl<Prev: Rec> std::ops::DerefMut for PushWriter<Prev> {
+impl<Prev: Pusher> std::ops::DerefMut for PushWriter<Prev> {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        self.as_rec_mut()
+        self.as_vec_mut()
     }
 }
 
-impl<Prev: Rec> std::io::Write for PushWriter<Prev> {
+impl<Prev: Pusher> std::io::Write for PushWriter<Prev> {
     fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
-        self.as_rec_mut().write(buf)
+        self.as_vec_mut().write(buf)
     }
     fn flush(&mut self) -> std::io::Result<()> {
-        self.as_rec_mut().flush()
+        self.as_vec_mut().flush()
     }
 }
 
-impl<Prev: Rec> Rec for PushWriter<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushWriter<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
 
-impl<Prev: Rec> PushWriter<Prev> {
+impl<Prev: Pusher> PushWriter<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -615,17 +595,17 @@ impl<Prev: Rec> PushWriter<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
 }
 
-impl<Prev: Rec> Drop for PushWriter<Prev> {
+impl<Prev: Pusher> Drop for PushWriter<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
