@@ -16,7 +16,7 @@ pub struct ReplyError {
     pub(crate) reply_buf: Option<Arc<[u8; RECV_BUF_SIZE]>>,
     pub(crate) ext_ack_bounds: (u32, u32),
     pub(crate) request_bounds: (u32, u32),
-    pub(crate) lookup: LookupFn,
+    pub(crate) lookup: Option<LookupFn>,
     pub(crate) chained_name: Option<&'static str>,
 }
 
@@ -27,7 +27,7 @@ impl From<ErrorContext> for ReplyError {
             reply_buf: None,
             request_bounds: (0, 0),
             ext_ack_bounds: (0, 0),
-            lookup: |_, _, _| Default::default(),
+            lookup: None,
             chained_name: None,
         }
     }
@@ -40,7 +40,7 @@ impl From<io::Error> for ReplyError {
             reply_buf: None,
             request_bounds: (0, 0),
             ext_ack_bounds: (0, 0),
-            lookup: |_, _, _| Default::default(),
+            lookup: None,
             chained_name: None,
         }
     }
@@ -116,7 +116,8 @@ impl fmt::Display for ReplyError {
         if let Ok(missing_offset) = ext_ack.get_missing_nest() {
             let missing_attr = ext_ack.get_missing_type().ok();
 
-            let (trace, attr) = (self.lookup)(
+            let lookup = self.lookup.unwrap_or(|_, _, _| Default::default());
+            let (trace, attr) = lookup(
                 self.request().unwrap(),
                 missing_offset as usize - Nlmsghdr::len(),
                 missing_attr,
@@ -131,7 +132,8 @@ impl fmt::Display for ReplyError {
         }
 
         if let Ok(invalid_offset) = ext_ack.get_offset() {
-            let (trace, _) = (self.lookup)(
+            let lookup = self.lookup.unwrap_or(|_, _, _| Default::default());
+            let (trace, _) = lookup(
                 self.request().unwrap(),
                 invalid_offset as usize - Nlmsghdr::len(),
                 None,

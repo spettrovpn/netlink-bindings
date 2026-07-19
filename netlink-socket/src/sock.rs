@@ -347,7 +347,7 @@ impl NetlinkReplyInner {
                         ext_ack_bounds: (ext_ack_start as u32, self.buf_offset as u32),
                         reply_buf: None,
                         chained_name: None,
-                        lookup: |_, _, _| Default::default(),
+                        lookup: None,
                     }),
                 ))
             }
@@ -423,7 +423,7 @@ impl<Request: NetlinkRequest> NetlinkReply<'_, Request> {
                                 None
                             } else {
                                 if err.has_context() {
-                                    err.lookup = Request::lookup;
+                                    err.lookup = Some(Request::lookup);
                                     err.reply_buf = Some(self.buf.clone());
                                 }
                                 Some(Err(err))

@@ -98,7 +98,7 @@ impl NetlinkReplyChained<'_> {
                                 self.done.set_all();
                                 err.chained_name = Some(self.request.name(index));
                                 if err.has_context() {
-                                    err.lookup = self.request.lookup(index);
+                                    err.lookup = Some(self.request.lookup(index));
                                     err.reply_buf = Some(self.buf.clone());
                                 }
                                 return Some(Err(err));
