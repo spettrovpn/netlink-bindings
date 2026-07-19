@@ -655,6 +655,7 @@ pub struct Experimental {
     pub struct_prefix: Option<bool>,
     #[serde(default)]
     pub struct_explicit_padding: bool,
+    /// TODO: deprecate. `Pusher` trait can be used instead.
     #[serde(default)]
     pub attr_binary_write: bool,
 }
