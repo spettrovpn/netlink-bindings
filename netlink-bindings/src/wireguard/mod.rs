@@ -1279,32 +1279,32 @@ impl IterableWgallowedip<'_> {
         (stack, None)
     }
 }
-pub struct PushWgdevice<Prev: Rec> {
+pub struct PushWgdevice<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushWgdevice<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushWgdevice<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-pub struct PushArrayWgpeer<Prev: Rec> {
+pub struct PushArrayWgpeer<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
     pub(crate) counter: u16,
 }
-impl<Prev: Rec> Rec for PushArrayWgpeer<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushArrayWgpeer<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushArrayWgpeer<Prev> {
+impl<Prev: Pusher> PushArrayWgpeer<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1315,30 +1315,30 @@ impl<Prev: Rec> PushArrayWgpeer<Prev> {
     pub fn end_array(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn entry_nested(mut self) -> PushWgpeer<Self> {
         let index = self.counter;
         self.counter += 1;
-        let header_offset = push_nested_header(self.as_rec_mut(), index);
+        let header_offset = push_nested_header(self.as_vec_mut(), index);
         PushWgpeer {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushArrayWgpeer<Prev> {
+impl<Prev: Pusher> Drop for PushArrayWgpeer<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-impl<Prev: Rec> PushWgdevice<Prev> {
+impl<Prev: Pusher> PushWgdevice<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1348,62 +1348,62 @@ impl<Prev: Rec> PushWgdevice<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ifname(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             2u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_ifname_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 2u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Set to all zeros to remove.\n"]
     pub fn push_private_key(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_public_key(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 4u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 4u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "`0` or `WGDEVICE_F_REPLACE_PEERS` if all current peers should be removed\nprior to adding the list below.\n\nAssociated type: [`WgdeviceFlags`] (enum)"]
     pub fn push_flags(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Set as `0` to choose randomly.\n"]
     pub fn push_listen_port(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Set as `0` to disable.\n"]
     pub fn push_fwmark(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The index/type parameter is unused on `SET_DEVICE` operations and is\nzero on `GET_DEVICE` operations.\n"]
     pub fn array_peers(mut self) -> PushArrayWgpeer<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 8u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 8u16);
         PushArrayWgpeer {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -1411,41 +1411,41 @@ impl<Prev: Rec> PushWgdevice<Prev> {
         }
     }
 }
-impl<Prev: Rec> Drop for PushWgdevice<Prev> {
+impl<Prev: Pusher> Drop for PushWgdevice<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushWgpeer<Prev: Rec> {
+pub struct PushWgpeer<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushWgpeer<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushWgpeer<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-pub struct PushArrayWgallowedip<Prev: Rec> {
+pub struct PushArrayWgallowedip<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
     pub(crate) counter: u16,
 }
-impl<Prev: Rec> Rec for PushArrayWgallowedip<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushArrayWgallowedip<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushArrayWgallowedip<Prev> {
+impl<Prev: Pusher> PushArrayWgallowedip<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1456,30 +1456,30 @@ impl<Prev: Rec> PushArrayWgallowedip<Prev> {
     pub fn end_array(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn entry_nested(mut self) -> PushWgallowedip<Self> {
         let index = self.counter;
         self.counter += 1;
-        let header_offset = push_nested_header(self.as_rec_mut(), index);
+        let header_offset = push_nested_header(self.as_vec_mut(), index);
         PushWgallowedip {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushArrayWgallowedip<Prev> {
+impl<Prev: Pusher> Drop for PushArrayWgallowedip<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-impl<Prev: Rec> PushWgpeer<Prev> {
+impl<Prev: Pusher> PushWgpeer<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1489,62 +1489,62 @@ impl<Prev: Rec> PushWgpeer<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_public_key(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 1u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Set as all zeros to remove.\n"]
     pub fn push_preshared_key(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 2u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "`0` and/or `WGPEER_F_REMOVE_ME` if the specified peer should not exist\nat the end of the operation, rather than added/updated and/or\n`WGPEER_F_REPLACE_ALLOWEDIPS` if all current allowed IPs of this peer\nshould be removed prior to adding the list below and/or\n`WGPEER_F_UPDATE_ONLY` if the peer should only be set if it already\nexists.\n\nAssociated type: [`WgpeerFlags`] (enum)"]
     pub fn push_flags(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "struct sockaddr_in or struct sockaddr_in6\n"]
     pub fn push_endpoint(mut self, value: std::net::SocketAddr) -> Self {
-        push_header(self.as_rec_mut(), 4u16, {
+        push_header(self.as_vec_mut(), 4u16, {
             match &value {
                 SocketAddr::V4(_) => 16,
                 SocketAddr::V6(_) => 28,
             }
         } as u16);
-        encode_sockaddr(self.as_rec_mut(), value);
+        encode_sockaddr(self.as_vec_mut(), value);
         self
     }
     #[doc = "Set as `0` to disable.\n"]
     pub fn push_persistent_keepalive_interval(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_last_handshake_time(mut self, value: KernelTimespec) -> Self {
-        push_header(self.as_rec_mut(), 6u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 6u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_rx_bytes(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tx_bytes(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The index/type parameter is unused on `SET_DEVICE` operations and is\nzero on `GET_DEVICE` operations.\n"]
     pub fn array_allowedips(mut self) -> PushArrayWgallowedip<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 9u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 9u16);
         PushArrayWgallowedip {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -1553,33 +1553,33 @@ impl<Prev: Rec> PushWgpeer<Prev> {
     }
     #[doc = "Should not be set or used at all by most users of this API, as the most\nrecent protocol will be used when this is unset. Otherwise, must be set\nto `1`.\n"]
     pub fn push_protocol_version(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushWgpeer<Prev> {
+impl<Prev: Pusher> Drop for PushWgpeer<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushWgallowedip<Prev: Rec> {
+pub struct PushWgallowedip<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushWgallowedip<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushWgallowedip<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushWgallowedip<Prev> {
+impl<Prev: Pusher> PushWgallowedip<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1589,44 +1589,44 @@ impl<Prev: Rec> PushWgallowedip<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "IP family, either `AF_INET` or `AF_INET6`.\n"]
     pub fn push_family(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Either `struct in_addr` or `struct in6_addr`.\n"]
     pub fn push_ipaddr(mut self, value: std::net::IpAddr) -> Self {
-        push_header(self.as_rec_mut(), 2u16, {
+        push_header(self.as_vec_mut(), 2u16, {
             match &value {
                 IpAddr::V4(_) => 4,
                 IpAddr::V6(_) => 16,
             }
         } as u16);
-        encode_ip(self.as_rec_mut(), value);
+        encode_ip(self.as_vec_mut(), value);
         self
     }
     pub fn push_cidr_mask(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "`WGALLOWEDIP_F_REMOVE_ME` if the specified IP should be removed;\notherwise, this IP will be added if it is not already present.\n\nAssociated type: [`WgallowedipFlags`] (enum)"]
     pub fn push_flags(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushWgallowedip<Prev> {
+impl<Prev: Pusher> Drop for PushWgallowedip<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -1657,11 +1657,11 @@ impl<'r> OpGetDeviceDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableWgdevice::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 0u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetDeviceDump<'_> {
@@ -1710,11 +1710,11 @@ impl<'r> OpSetDeviceDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableWgdevice::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSetDeviceDo<'_> {

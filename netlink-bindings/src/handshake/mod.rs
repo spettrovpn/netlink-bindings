@@ -815,19 +815,19 @@ impl IterableDone<'_> {
         (stack, None)
     }
 }
-pub struct PushX509<Prev: Rec> {
+pub struct PushX509<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushX509<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushX509<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushX509<Prev> {
+impl<Prev: Pusher> PushX509<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -837,43 +837,43 @@ impl<Prev: Rec> PushX509<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_cert(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_privkey(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushX509<Prev> {
+impl<Prev: Pusher> Drop for PushX509<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushAccept<Prev: Rec> {
+pub struct PushAccept<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushAccept<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushAccept<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushAccept<Prev> {
+impl<Prev: Pusher> PushAccept<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -883,47 +883,47 @@ impl<Prev: Rec> PushAccept<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_sockfd(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`HandlerClass`] (enum)"]
     pub fn push_handler_class(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`MsgType`] (enum)"]
     pub fn push_message_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_timeout(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`Auth`] (enum)"]
     pub fn push_auth_mode(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn push_peer_identity(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_certificate(mut self) -> PushX509<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 7u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 7u16);
         PushX509 {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -931,47 +931,47 @@ impl<Prev: Rec> PushAccept<Prev> {
     }
     pub fn push_peername(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             8u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_peername_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 8u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 8u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_keyring(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushAccept<Prev> {
+impl<Prev: Pusher> Drop for PushAccept<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDone<Prev: Rec> {
+pub struct PushDone<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDone<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDone<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDone<Prev> {
+impl<Prev: Pusher> PushDone<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -981,32 +981,32 @@ impl<Prev: Rec> PushDone<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_status(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sockfd(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn push_remote_auth(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDone<Prev> {
+impl<Prev: Pusher> Drop for PushDone<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -1042,11 +1042,11 @@ impl<'r> OpAcceptDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableAccept::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 2u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpAcceptDo<'_> {
@@ -1071,7 +1071,7 @@ impl NetlinkRequest for OpAcceptDo<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Handler reports handshake completion\n\nRequest attributes:\n- [.push_status()](PushDone::push_status)\n- [.push_sockfd()](PushDone::push_sockfd)\n- [.push_remote_auth()](PushDone::push_remote_auth)\n\n"]
+#[doc = "Handler reports handshake completion\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_status()](PushDone::push_status)\n- [.push_sockfd()](PushDone::push_sockfd)\n- [.push_remote_auth()](PushDone::push_remote_auth)\n\n"]
 #[derive(Debug)]
 pub struct OpDoneDo<'r> {
     request: Request<'r>,
@@ -1095,11 +1095,11 @@ impl<'r> OpDoneDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDone::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 3u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDoneDo<'_> {
@@ -1228,7 +1228,7 @@ impl<'buf> Request<'buf> {
             .do_writeback(res.protocol(), "op-accept-do", OpAcceptDo::lookup);
         res
     }
-    #[doc = "Handler reports handshake completion\n\nRequest attributes:\n- [.push_status()](PushDone::push_status)\n- [.push_sockfd()](PushDone::push_sockfd)\n- [.push_remote_auth()](PushDone::push_remote_auth)\n\n"]
+    #[doc = "Handler reports handshake completion\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_status()](PushDone::push_status)\n- [.push_sockfd()](PushDone::push_sockfd)\n- [.push_remote_auth()](PushDone::push_remote_auth)\n\n"]
     pub fn op_done_do(self) -> OpDoneDo<'buf> {
         let mut res = OpDoneDo::new(self);
         res.request

@@ -3220,6 +3220,22 @@ impl Debug for ReverseLookup<'_> {
                                 fmt,
                             );
                         }
+                        if let (3u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::drm_ras::OpClearErrorCounterDo::decode_reply(
+                                    buf,
+                                ),
+                                fmt,
+                            );
+                        }
+                        if let (3u8, Some(3u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::drm_ras::OpClearErrorCounterDo::decode_reply(
+                                    buf,
+                                ),
+                                fmt,
+                            );
+                        }
                         write!(
                             fmt,
                             "(Unknown genl operation) value={value}, request_value={request_value:?}, is_dump={is_dump}"
@@ -4892,6 +4908,102 @@ impl Debug for ReverseLookup<'_> {
                                 fmt,
                             );
                         }
+                        if let (11u8, None, true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpSvcExportGetReqsDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (11u8, Some(11u8), true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpSvcExportGetReqsDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (12u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpSvcExportSetReqsDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (12u8, Some(12u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpSvcExportSetReqsDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (13u8, None, true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpExpkeyGetReqsDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (13u8, Some(13u8), true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpExpkeyGetReqsDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (14u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpExpkeySetReqsDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (14u8, Some(14u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpExpkeySetReqsDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (15u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpCacheFlushDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (15u8, Some(15u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpCacheFlushDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (16u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpUnlockIpDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (16u8, Some(16u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpUnlockIpDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (17u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpUnlockFilesystemDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (17u8, Some(17u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpUnlockFilesystemDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (18u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpUnlockExportDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (18u8, Some(18u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::nfsd::OpUnlockExportDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
                         write!(
                             fmt,
                             "(Unknown genl operation) value={value}, request_value={request_value:?}, is_dump={is_dump}"
@@ -5446,6 +5558,30 @@ impl Debug for ReverseLookup<'_> {
                                 fmt,
                             );
                         }
+                        if let (11u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::psp::OpDevAssocDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (11u8, Some(11u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::psp::OpDevAssocDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (12u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::psp::OpDevDisassocDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (12u8, Some(12u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::psp::OpDevDisassocDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
                         write!(
                             fmt,
                             "(Unknown genl operation) value={value}, request_value={request_value:?}, is_dump={is_dump}"
@@ -5454,6 +5590,79 @@ impl Debug for ReverseLookup<'_> {
                     }
                     #[cfg(not(feature = "psp"))]
                     return consider(fmt, "psp");
+                }
+                if name == b"sunrpc" {
+                    let pat = (value, request_value, is_dump);
+                    #[cfg(feature = "sunrpc")]
+                    {
+                        if let (2u8, None, true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::sunrpc::OpIpMapGetReqsDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (2u8, Some(2u8), true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::sunrpc::OpIpMapGetReqsDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (3u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::sunrpc::OpIpMapSetReqsDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (3u8, Some(3u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::sunrpc::OpIpMapSetReqsDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (4u8, None, true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::sunrpc::OpUnixGidGetReqsDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (4u8, Some(4u8), true) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::sunrpc::OpUnixGidGetReqsDump::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (5u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::sunrpc::OpUnixGidSetReqsDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (5u8, Some(5u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::sunrpc::OpUnixGidSetReqsDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (6u8, None, false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::sunrpc::OpCacheFlushDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        if let (6u8, Some(6u8), false) = pat {
+                            return Debug::fmt(
+                                &netlink_bindings::sunrpc::OpCacheFlushDo::decode_reply(buf),
+                                fmt,
+                            );
+                        }
+                        write!(
+                            fmt,
+                            "(Unknown genl operation) value={value}, request_value={request_value:?}, is_dump={is_dump}"
+                        )?;
+                        return Ok(());
+                    }
+                    #[cfg(not(feature = "sunrpc"))]
+                    return consider(fmt, "sunrpc");
                 }
                 if name == b"tcp_metrics" {
                     let pat = (value, request_value, is_dump);

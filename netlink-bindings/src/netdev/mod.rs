@@ -438,14 +438,38 @@ impl IterableDev<'_> {
     }
 }
 #[derive(Clone)]
-pub enum IoUringProviderInfo {}
-impl<'a> IterableIoUringProviderInfo<'a> {}
+pub enum IoUringProviderInfo {
+    #[doc = "RX buffer length in bytes for this io_uring memory provider. Reflects\nthe rx_buf_len passed at io_uring zerocopy rx registration time.\n"]
+    RxBufLen(u32),
+}
+impl<'a> IterableIoUringProviderInfo<'a> {
+    #[doc = "RX buffer length in bytes for this io_uring memory provider. Reflects\nthe rx_buf_len passed at io_uring zerocopy rx registration time.\n"]
+    pub fn get_rx_buf_len(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(IoUringProviderInfo::RxBufLen(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "IoUringProviderInfo",
+            "RxBufLen",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+}
 impl IoUringProviderInfo {
     pub fn new<'a>(buf: &'a [u8]) -> IterableIoUringProviderInfo<'a> {
         IterableIoUringProviderInfo::with_loc(buf, buf.as_ptr() as usize)
     }
     fn attr_from_type(r#type: u16) -> Option<&'static str> {
-        None
+        let res = match r#type {
+            1u16 => "RxBufLen",
+            _ => return None,
+        };
+        Some(res)
     }
 }
 #[derive(Clone, Copy, Default)]
@@ -483,6 +507,11 @@ impl<'a> Iterator for IterableIoUringProviderInfo<'a> {
             };
             r#type = Some(header.r#type);
             let res = match header.r#type {
+                1u16 => IoUringProviderInfo::RxBufLen({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -509,7 +538,9 @@ impl std::fmt::Debug for IterableIoUringProviderInfo<'_> {
                     return f.write_str(")");
                 }
             };
-            match attr {};
+            match attr {
+                IoUringProviderInfo::RxBufLen(val) => fmt.field("RxBufLen", &val),
+            };
         }
         fmt.finish()
     }
@@ -528,6 +559,27 @@ impl IterableIoUringProviderInfo<'_> {
                 stack,
                 missing_type.and_then(|t| IoUringProviderInfo::attr_from_type(t)),
             );
+        }
+        if cur > offset || cur + self.buf.len() < offset {
+            return (stack, None);
+        }
+        let mut attrs = self.clone();
+        let mut last_off = cur + attrs.pos;
+        while let Some(attr) = attrs.next() {
+            let Ok(attr) = attr else { break };
+            match attr {
+                IoUringProviderInfo::RxBufLen(val) => {
+                    if last_off == offset {
+                        stack.push(("RxBufLen", last_off));
+                        break;
+                    }
+                }
+                _ => {}
+            };
+            last_off = cur + attrs.pos;
+        }
+        if !stack.is_empty() {
+            stack.push(("IoUringProviderInfo", cur));
         }
         (stack, None)
     }
@@ -4048,19 +4100,19 @@ impl IterableDmabuf<'_> {
         (stack, missing)
     }
 }
-pub struct PushDev<Prev: Rec> {
+pub struct PushDev<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDev<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDev<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDev<Prev> {
+impl<Prev: Pusher> PushDev<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4070,68 +4122,68 @@ impl<Prev: Rec> PushDev<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "netdev ifindex\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_pad(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 2u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Bitmask of enabled xdp-features.\n\nAssociated type: [`XdpAct`] (enum)"]
     pub fn push_xdp_features(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "max fragment count supported by ZC driver\n"]
     pub fn push_xdp_zc_max_segs(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Bitmask of supported XDP receive metadata features. See\nDocumentation/networking/xdp-rx-metadata.rst for more details.\n\nAssociated type: [`XdpRxMetadata`] (enum)"]
     pub fn push_xdp_rx_metadata_features(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Bitmask of enabled AF_XDP features.\n\nAssociated type: [`XskFlags`] (enum)"]
     pub fn push_xsk_features(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDev<Prev> {
+impl<Prev: Pusher> Drop for PushDev<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushIoUringProviderInfo<Prev: Rec> {
+pub struct PushIoUringProviderInfo<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushIoUringProviderInfo<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushIoUringProviderInfo<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushIoUringProviderInfo<Prev> {
+impl<Prev: Pusher> PushIoUringProviderInfo<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4141,33 +4193,39 @@ impl<Prev: Rec> PushIoUringProviderInfo<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
+    #[doc = "RX buffer length in bytes for this io_uring memory provider. Reflects\nthe rx_buf_len passed at io_uring zerocopy rx registration time.\n"]
+    pub fn push_rx_buf_len(mut self, value: u32) -> Self {
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
+        self
+    }
 }
-impl<Prev: Rec> Drop for PushIoUringProviderInfo<Prev> {
+impl<Prev: Pusher> Drop for PushIoUringProviderInfo<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushPagePool<Prev: Rec> {
+pub struct PushPagePool<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushPagePool<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushPagePool<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushPagePool<Prev> {
+impl<Prev: Pusher> PushPagePool<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4177,83 +4235,83 @@ impl<Prev: Rec> PushPagePool<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Unique ID of a Page Pool instance.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "ifindex of the netdev to which the pool belongs. May not be reported if\nthe page pool was allocated for a netdev which got destroyed already\n(page pools may outlast their netdevs because they wait for all memory\nto be returned).\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Id of NAPI using this Page Pool instance.\n"]
     pub fn push_napi_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of outstanding references to this page pool (allocated but yet to\nbe freed pages). Allocated pages may be held in socket receive queues,\ndriver receive ring, page pool recycling ring, the page pool cache, etc.\n"]
     pub fn push_inflight(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Amount of memory held by inflight pages.\n"]
     pub fn push_inflight_mem(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Seconds in CLOCK_BOOTTIME of when Page Pool was detached by the driver.\nOnce detached Page Pool can no longer be used to allocate memory. Page\nPools wait for all the memory allocated from them to be freed before\ntruly disappearing. \\\"Detached\\\" Page Pools cannot be \\\"re-attached\\\",\nthey are just waiting to disappear. Attribute is absent if Page Pool has\nnot been detached, and can still be used to allocate new memory.\n"]
     pub fn push_detach_time(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "ID of the dmabuf this page-pool is attached to.\n"]
     pub fn push_dmabuf(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "io-uring memory provider information.\n"]
     pub fn nested_io_uring(mut self) -> PushIoUringProviderInfo<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 8u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 8u16);
         PushIoUringProviderInfo {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushPagePool<Prev> {
+impl<Prev: Pusher> Drop for PushPagePool<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushPagePoolInfo<Prev: Rec> {
+pub struct PushPagePoolInfo<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushPagePoolInfo<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushPagePoolInfo<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushPagePoolInfo<Prev> {
+impl<Prev: Pusher> PushPagePoolInfo<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4263,45 +4321,45 @@ impl<Prev: Rec> PushPagePoolInfo<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Unique ID of a Page Pool instance.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "ifindex of the netdev to which the pool belongs. May not be reported if\nthe page pool was allocated for a netdev which got destroyed already\n(page pools may outlast their netdevs because they wait for all memory\nto be returned).\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushPagePoolInfo<Prev> {
+impl<Prev: Pusher> Drop for PushPagePoolInfo<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushPagePoolStats<Prev: Rec> {
+pub struct PushPagePoolStats<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushPagePoolStats<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushPagePoolStats<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushPagePoolStats<Prev> {
+impl<Prev: Pusher> PushPagePoolStats<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4311,96 +4369,96 @@ impl<Prev: Rec> PushPagePoolStats<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Page pool identifying information.\n"]
     pub fn nested_info(mut self) -> PushPagePoolInfo<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 1u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 1u16);
         PushPagePoolInfo {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_alloc_fast(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_alloc_slow(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_alloc_slow_high_order(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_alloc_empty(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 11u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_alloc_refill(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 12u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_alloc_waive(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_recycle_cached(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_recycle_cache_full(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_recycle_ring(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 16u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_recycle_ring_full(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 17u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_recycle_released_refcnt(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 18u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushPagePoolStats<Prev> {
+impl<Prev: Pusher> Drop for PushPagePoolStats<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushNapi<Prev: Rec> {
+pub struct PushNapi<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushNapi<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushNapi<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushNapi<Prev> {
+impl<Prev: Pusher> PushNapi<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4410,81 +4468,81 @@ impl<Prev: Rec> PushNapi<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "ifindex of the netdevice to which NAPI instance belongs.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "ID of the NAPI instance.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The associated interrupt vector number for the napi\n"]
     pub fn push_irq(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "PID of the napi thread, if NAPI is configured to operate in threaded\nmode. If NAPI is not in threaded mode (i.e. uses normal softirq\ncontext), the attribute will be absent.\n"]
     pub fn push_pid(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The number of consecutive empty polls before IRQ deferral ends and\nhardware IRQs are re-enabled.\n"]
     pub fn push_defer_hard_irqs(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The timeout, in nanoseconds, of when to trigger the NAPI watchdog timer\nwhich schedules NAPI processing. Additionally, a non-zero value will\nalso prevent GRO from flushing recent super-frames at the end of a NAPI\ncycle. This may add receive latency in exchange for reducing the number\nof frames processed by the network stack.\n"]
     pub fn push_gro_flush_timeout(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The timeout, in nanoseconds, of how long to suspend irq processing, if\nevent polling finds events\n"]
     pub fn push_irq_suspend_timeout(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Whether the NAPI is configured to operate in threaded polling mode. If\nthis is set to enabled then the NAPI context operates in threaded\npolling mode. If this is set to busy-poll, then the threaded polling\nmode also busy polls.\n\nAssociated type: [`NapiThreaded`] (enum)"]
     pub fn push_threaded(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushNapi<Prev> {
+impl<Prev: Pusher> Drop for PushNapi<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushXskInfo<Prev: Rec> {
+pub struct PushXskInfo<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushXskInfo<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushXskInfo<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushXskInfo<Prev> {
+impl<Prev: Pusher> PushXskInfo<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4494,33 +4552,33 @@ impl<Prev: Rec> PushXskInfo<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
 }
-impl<Prev: Rec> Drop for PushXskInfo<Prev> {
+impl<Prev: Pusher> Drop for PushXskInfo<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushQueue<Prev: Rec> {
+pub struct PushQueue<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushQueue<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushQueue<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushQueue<Prev> {
+impl<Prev: Pusher> PushQueue<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4530,43 +4588,43 @@ impl<Prev: Rec> PushQueue<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Queue index; most queue types are indexed like a C array, with indexes\nstarting at 0 and ending at queue count - 1. Queue indexes are scoped to\nan interface and queue type.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "ifindex of the netdevice to which the queue belongs.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Queue type as rx, tx. Each queue type defines a separate ID space. XDP\nTX queues allocated in the kernel are not linked to NAPIs and thus not\nlisted. AF_XDP queues will have more information set in the xsk\nattribute.\n\nAssociated type: [`QueueType`] (enum)"]
     pub fn push_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "ID of the NAPI instance which services this queue.\n"]
     pub fn push_napi_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "ID of the dmabuf attached to this queue, if any.\n"]
     pub fn push_dmabuf(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "io_uring memory provider information.\n"]
     pub fn nested_io_uring(mut self) -> PushIoUringProviderInfo<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 6u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 6u16);
         PushIoUringProviderInfo {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -4574,7 +4632,7 @@ impl<Prev: Rec> PushQueue<Prev> {
     }
     #[doc = "XSK information for this queue, if any.\n"]
     pub fn nested_xsk(mut self) -> PushXskInfo<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 7u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 7u16);
         PushXskInfo {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -4582,35 +4640,35 @@ impl<Prev: Rec> PushQueue<Prev> {
     }
     #[doc = "A queue from a virtual device can have a lease which refers to another\nqueue from a physical device. This is useful for memory providers and\nAF_XDP operations which take an ifindex and queue id to allow\napplications to bind against virtual devices in containers.\n"]
     pub fn nested_lease(mut self) -> PushLease<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 8u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 8u16);
         PushLease {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushQueue<Prev> {
+impl<Prev: Pusher> Drop for PushQueue<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushQstats<Prev: Rec> {
+pub struct PushQstats<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushQstats<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushQstats<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushQstats<Prev> {
+impl<Prev: Pusher> PushQstats<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4620,219 +4678,219 @@ impl<Prev: Rec> PushQstats<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "ifindex of the netdevice to which stats belong.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Queue type as rx, tx, for queue-id.\n\nAssociated type: [`QueueType`] (enum)"]
     pub fn push_queue_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Queue ID, if stats are scoped to a single queue instance.\n"]
     pub fn push_queue_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "What object type should be used to iterate over the stats.\n\nAssociated type: [`QstatsScope`] (enum)"]
     pub fn push_scope(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of wire packets successfully received and passed to the stack.\nFor drivers supporting XDP, XDP is considered the first layer of the\nstack, so packets consumed by XDP are still counted here.\n"]
     pub fn push_rx_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Successfully received bytes, see [rx-packets]{.title-ref}.\n"]
     pub fn push_rx_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of wire packets successfully sent. Packet is considered to be\nsuccessfully sent once it is in device memory (usually this means the\ndevice has issued a DMA completion for the packet).\n"]
     pub fn push_tx_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Successfully sent bytes, see [tx-packets]{.title-ref}.\n"]
     pub fn push_tx_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 11u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of times skb or buffer allocation failed on the Rx datapath.\nAllocation failure may, or may not result in a packet drop, depending on\ndriver implementation and whether system recovers quickly.\n"]
     pub fn push_rx_alloc_fail(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 12u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of all packets which entered the device, but never left it,\nincluding but not limited to: packets dropped due to lack of buffer\nspace, processing errors, explicit or implicit policies and packet\nfilters.\n"]
     pub fn push_rx_hw_drops(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets dropped due to transient lack of resources, such as\nbuffer space, host descriptors etc.\n"]
     pub fn push_rx_hw_drop_overruns(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets that were marked as CHECKSUM_COMPLETE.\n"]
     pub fn push_rx_csum_complete(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets that were marked as CHECKSUM_UNNECESSARY.\n"]
     pub fn push_rx_csum_unnecessary(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 16u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets that were not checksummed by device.\n"]
     pub fn push_rx_csum_none(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 17u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets with bad checksum. The packets are not discarded, but\nstill delivered to the stack.\n"]
     pub fn push_rx_csum_bad(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 18u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets that were coalesced from smaller packets by the\ndevice. Counts only packets coalesced with the HW-GRO netdevice feature,\nLRO-coalesced packets are not counted.\n"]
     pub fn push_rx_hw_gro_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 19u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 19u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "See [rx-hw-gro-packets]{.title-ref}.\n"]
     pub fn push_rx_hw_gro_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 20u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 20u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets that were coalesced to bigger packetss with the HW-GRO\nnetdevice feature. LRO-coalesced packets are not counted.\n"]
     pub fn push_rx_hw_gro_wire_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 21u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 21u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "See [rx-hw-gro-wire-packets]{.title-ref}.\n"]
     pub fn push_rx_hw_gro_wire_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 22u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 22u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of the packets dropped by the device due to the received packets\nbitrate exceeding the device rate limit.\n"]
     pub fn push_rx_hw_drop_ratelimits(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 23u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 23u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets that arrived at the device but never left it,\nencompassing packets dropped for reasons such as processing errors, as\nwell as those affected by explicitly defined policies and packet\nfiltering criteria.\n"]
     pub fn push_tx_hw_drops(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 24u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 24u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets dropped because they were invalid or malformed.\n"]
     pub fn push_tx_hw_drop_errors(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 25u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 25u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets that did not require the device to calculate the\nchecksum.\n"]
     pub fn push_tx_csum_none(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 26u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 26u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets that required the device to calculate the checksum.\nThis counter includes the number of GSO wire packets for which device\ncalculated the L4 checksum.\n"]
     pub fn push_tx_needs_csum(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 27u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 27u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets that necessitated segmentation into smaller packets by\nthe device.\n"]
     pub fn push_tx_hw_gso_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 28u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 28u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "See [tx-hw-gso-packets]{.title-ref}.\n"]
     pub fn push_tx_hw_gso_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 29u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 29u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of wire-sized packets generated by processing\n[tx-hw-gso-packets]{.title-ref}\n"]
     pub fn push_tx_hw_gso_wire_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 30u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 30u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "See [tx-hw-gso-wire-packets]{.title-ref}.\n"]
     pub fn push_tx_hw_gso_wire_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 31u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 31u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of the packets dropped by the device due to the transmit packets\nbitrate exceeding the device rate limit.\n"]
     pub fn push_tx_hw_drop_ratelimits(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 32u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 32u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of times driver paused accepting new tx packets from the stack to\nthis queue, because the queue was full. Note that if BQL is supported\nand enabled on the device the networking stack will avoid queuing a lot\nof data at once.\n"]
     pub fn push_tx_stop(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 33u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 33u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of times driver re-started accepting send requests to this queue\nfrom the stack.\n"]
     pub fn push_tx_wake(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 34u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 34u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushQstats<Prev> {
+impl<Prev: Pusher> Drop for PushQstats<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushQueueId<Prev: Rec> {
+pub struct PushQueueId<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushQueueId<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushQueueId<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushQueueId<Prev> {
+impl<Prev: Pusher> PushQueueId<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4842,45 +4900,45 @@ impl<Prev: Rec> PushQueueId<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Queue index; most queue types are indexed like a C array, with indexes\nstarting at 0 and ending at queue count - 1. Queue indexes are scoped to\nan interface and queue type.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Queue type as rx, tx. Each queue type defines a separate ID space. XDP\nTX queues allocated in the kernel are not linked to NAPIs and thus not\nlisted. AF_XDP queues will have more information set in the xsk\nattribute.\n\nAssociated type: [`QueueType`] (enum)"]
     pub fn push_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushQueueId<Prev> {
+impl<Prev: Pusher> Drop for PushQueueId<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLease<Prev: Rec> {
+pub struct PushLease<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLease<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLease<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLease<Prev> {
+impl<Prev: Pusher> PushLease<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4890,19 +4948,19 @@ impl<Prev: Rec> PushLease<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "The netdev ifindex to lease the queue from.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The netdev queue to lease from.\n"]
     pub fn nested_queue(mut self) -> PushQueueId<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         PushQueueId {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -4910,33 +4968,33 @@ impl<Prev: Rec> PushLease<Prev> {
     }
     #[doc = "The network namespace id of the netdev.\n"]
     pub fn push_netns_id(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLease<Prev> {
+impl<Prev: Pusher> Drop for PushLease<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDmabuf<Prev: Rec> {
+pub struct PushDmabuf<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDmabuf<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDmabuf<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDmabuf<Prev> {
+impl<Prev: Pusher> PushDmabuf<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4946,19 +5004,19 @@ impl<Prev: Rec> PushDmabuf<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "netdev ifindex to bind the dmabuf to.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "receive queues to bind the dmabuf to.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn nested_queues(mut self) -> PushQueueId<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         PushQueueId {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -4966,22 +5024,22 @@ impl<Prev: Rec> PushDmabuf<Prev> {
     }
     #[doc = "dmabuf file descriptor to bind.\n"]
     pub fn push_fd(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "id of the dmabuf binding\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDmabuf<Prev> {
+impl<Prev: Pusher> Drop for PushDmabuf<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -5083,11 +5141,11 @@ impl<'r> OpDevGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDev::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDevGetDump<'_> {
@@ -5136,11 +5194,11 @@ impl<'r> OpDevGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDev::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDevGetDo<'_> {
@@ -5191,11 +5249,11 @@ impl<'r> OpPagePoolGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterablePagePool::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 5u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPagePoolGetDump<'_> {
@@ -5244,11 +5302,11 @@ impl<'r> OpPagePoolGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterablePagePool::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 5u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPagePoolGetDo<'_> {
@@ -5299,11 +5357,11 @@ impl<'r> OpPagePoolStatsGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterablePagePoolStats::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 9u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPagePoolStatsGetDump<'_> {
@@ -5352,11 +5410,11 @@ impl<'r> OpPagePoolStatsGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterablePagePoolStats::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 9u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPagePoolStatsGetDo<'_> {
@@ -5407,11 +5465,11 @@ impl<'r> OpQueueGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableQueue::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 10u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpQueueGetDump<'_> {
@@ -5460,11 +5518,11 @@ impl<'r> OpQueueGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableQueue::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 10u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpQueueGetDo<'_> {
@@ -5515,11 +5573,11 @@ impl<'r> OpNapiGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableNapi::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 11u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpNapiGetDump<'_> {
@@ -5568,11 +5626,11 @@ impl<'r> OpNapiGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableNapi::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 11u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpNapiGetDo<'_> {
@@ -5623,11 +5681,11 @@ impl<'r> OpQstatsGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableQstats::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 12u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpQstatsGetDump<'_> {
@@ -5652,7 +5710,7 @@ impl NetlinkRequest for OpQstatsGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Bind dmabuf to netdev\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.nested_queues()](PushDmabuf::nested_queues)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n\n"]
+#[doc = "Bind dmabuf to netdev\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.nested_queues()](PushDmabuf::nested_queues)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n\n"]
 #[derive(Debug)]
 pub struct OpBindRxDo<'r> {
     request: Request<'r>,
@@ -5676,11 +5734,11 @@ impl<'r> OpBindRxDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDmabuf::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 13u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpBindRxDo<'_> {
@@ -5729,11 +5787,11 @@ impl<'r> OpNapiSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableNapi::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 14u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpNapiSetDo<'_> {
@@ -5782,11 +5840,11 @@ impl<'r> OpBindTxDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDmabuf::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 15u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpBindTxDo<'_> {
@@ -5835,11 +5893,11 @@ impl<'r> OpQueueCreateDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableQueue::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 16u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpQueueCreateDo<'_> {
@@ -6058,7 +6116,7 @@ impl<'buf> Request<'buf> {
         );
         res
     }
-    #[doc = "Bind dmabuf to netdev\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.nested_queues()](PushDmabuf::nested_queues)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n\n"]
+    #[doc = "Bind dmabuf to netdev\n\nFlags: uns-admin-perm\n\nRequest attributes:\n- [.push_ifindex()](PushDmabuf::push_ifindex)\n- [.nested_queues()](PushDmabuf::nested_queues)\n- [.push_fd()](PushDmabuf::push_fd)\n\nReply attributes:\n- [.get_id()](IterableDmabuf::get_id)\n\n"]
     pub fn op_bind_rx_do(self) -> OpBindRxDo<'buf> {
         let mut res = OpBindRxDo::new(self);
         res.request

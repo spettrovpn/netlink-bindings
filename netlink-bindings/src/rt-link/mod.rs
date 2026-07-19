@@ -6371,6 +6371,8 @@ pub enum LinkinfoBondAttrs<'a> {
     MissedMax(u8),
     NsIp6Target(IterableArrayBinary<'a>),
     CoupledControl(u8),
+    BroadcastNeigh(u8),
+    LacpStrict(u8),
 }
 impl<'a> IterableLinkinfoBondAttrs<'a> {
     pub fn get_mode(&self) -> Result<u8, ErrorContext> {
@@ -6853,6 +6855,36 @@ impl<'a> IterableLinkinfoBondAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
+    pub fn get_broadcast_neigh(&self) -> Result<u8, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(LinkinfoBondAttrs::BroadcastNeigh(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "LinkinfoBondAttrs",
+            "BroadcastNeigh",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    pub fn get_lacp_strict(&self) -> Result<u8, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(LinkinfoBondAttrs::LacpStrict(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "LinkinfoBondAttrs",
+            "LacpStrict",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
 }
 #[derive(Clone, Copy, Default)]
 pub struct IterableArrayIpv4Addr<'a> {
@@ -6974,6 +7006,8 @@ impl LinkinfoBondAttrs<'_> {
             30u16 => "MissedMax",
             31u16 => "NsIp6Target",
             32u16 => "CoupledControl",
+            33u16 => "BroadcastNeigh",
+            34u16 => "LacpStrict",
             _ => return None,
         };
         Some(res)
@@ -7174,6 +7208,16 @@ impl<'a> Iterator for IterableLinkinfoBondAttrs<'a> {
                     let Some(val) = res else { break };
                     val
                 }),
+                33u16 => LinkinfoBondAttrs::BroadcastNeigh({
+                    let res = parse_u8(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                34u16 => LinkinfoBondAttrs::LacpStrict({
+                    let res = parse_u8(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -7249,6 +7293,8 @@ impl<'a> std::fmt::Debug for IterableLinkinfoBondAttrs<'_> {
                 LinkinfoBondAttrs::MissedMax(val) => fmt.field("MissedMax", &val),
                 LinkinfoBondAttrs::NsIp6Target(val) => fmt.field("NsIp6Target", &val),
                 LinkinfoBondAttrs::CoupledControl(val) => fmt.field("CoupledControl", &val),
+                LinkinfoBondAttrs::BroadcastNeigh(val) => fmt.field("BroadcastNeigh", &val),
+                LinkinfoBondAttrs::LacpStrict(val) => fmt.field("LacpStrict", &val),
             };
         }
         fmt.finish()
@@ -7467,6 +7513,18 @@ impl IterableLinkinfoBondAttrs<'_> {
                 LinkinfoBondAttrs::CoupledControl(val) => {
                     if last_off == offset {
                         stack.push(("CoupledControl", last_off));
+                        break;
+                    }
+                }
+                LinkinfoBondAttrs::BroadcastNeigh(val) => {
+                    if last_off == offset {
+                        stack.push(("BroadcastNeigh", last_off));
+                        break;
+                    }
+                }
+                LinkinfoBondAttrs::LacpStrict(val) => {
+                    if last_off == offset {
+                        stack.push(("LacpStrict", last_off));
                         break;
                     }
                 }
@@ -13145,6 +13203,8 @@ pub enum LinkinfoGeneveAttrs<'a> {
     InnerProtoInherit(()),
     PortRange(IflaGenevePortRange),
     GroHint(()),
+    Local(std::net::Ipv4Addr),
+    Local6(&'a [u8]),
 }
 impl<'a> IterableLinkinfoGeneveAttrs<'a> {
     pub fn get_id(&self) -> Result<u32, ErrorContext> {
@@ -13387,6 +13447,36 @@ impl<'a> IterableLinkinfoGeneveAttrs<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
+    pub fn get_local(&self) -> Result<std::net::Ipv4Addr, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(LinkinfoGeneveAttrs::Local(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "LinkinfoGeneveAttrs",
+            "Local",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    pub fn get_local6(&self) -> Result<&'a [u8], ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(LinkinfoGeneveAttrs::Local6(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "LinkinfoGeneveAttrs",
+            "Local6",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
 }
 impl LinkinfoGeneveAttrs<'_> {
     pub fn new<'a>(buf: &'a [u8]) -> IterableLinkinfoGeneveAttrs<'a> {
@@ -13410,6 +13500,8 @@ impl LinkinfoGeneveAttrs<'_> {
             14u16 => "InnerProtoInherit",
             15u16 => "PortRange",
             16u16 => "GroHint",
+            17u16 => "Local",
+            18u16 => "Local6",
             _ => return None,
         };
         Some(res)
@@ -13518,6 +13610,16 @@ impl<'a> Iterator for IterableLinkinfoGeneveAttrs<'a> {
                     val
                 }),
                 16u16 => LinkinfoGeneveAttrs::GroHint(()),
+                17u16 => LinkinfoGeneveAttrs::Local({
+                    let res = parse_be_u32(next).map(Ipv4Addr::from_bits);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                18u16 => LinkinfoGeneveAttrs::Local6({
+                    let res = Some(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -13561,6 +13663,8 @@ impl<'a> std::fmt::Debug for IterableLinkinfoGeneveAttrs<'_> {
                 LinkinfoGeneveAttrs::InnerProtoInherit(val) => fmt.field("InnerProtoInherit", &val),
                 LinkinfoGeneveAttrs::PortRange(val) => fmt.field("PortRange", &val),
                 LinkinfoGeneveAttrs::GroHint(val) => fmt.field("GroHint", &val),
+                LinkinfoGeneveAttrs::Local(val) => fmt.field("Local", &val),
+                LinkinfoGeneveAttrs::Local6(val) => fmt.field("Local6", &val),
             };
         }
         fmt.finish()
@@ -13682,6 +13786,18 @@ impl IterableLinkinfoGeneveAttrs<'_> {
                 LinkinfoGeneveAttrs::GroHint(val) => {
                     if last_off == offset {
                         stack.push(("GroHint", last_off));
+                        break;
+                    }
+                }
+                LinkinfoGeneveAttrs::Local(val) => {
+                    if last_off == offset {
+                        stack.push(("Local", last_off));
+                        break;
+                    }
+                }
+                LinkinfoGeneveAttrs::Local6(val) => {
+                    if last_off == offset {
+                        stack.push(("Local6", last_off));
                         break;
                     }
                 }
@@ -18644,19 +18760,19 @@ impl IterableLinkinfoOvpnAttrs<'_> {
         (stack, None)
     }
 }
-pub struct PushLinkAttrs<Prev: Rec> {
+pub struct PushLinkAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkAttrs<Prev> {
+impl<Prev: Pusher> PushLinkAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -18666,312 +18782,312 @@ impl<Prev: Rec> PushLinkAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_address(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 1u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_broadcast(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 2u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_ifname(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             3u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_ifname_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 3u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_mtu(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_link(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_qdisc(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             6u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_qdisc_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 6u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 6u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_stats(mut self, value: RtnlLinkStats) -> Self {
-        push_header(self.as_rec_mut(), 7u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 7u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_master(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "struct iw_event\n"]
     pub fn push_wireless(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 11u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 11u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "A nest of ifla6-attrs or linkinfo-brport-attrs\n"]
     pub fn push_protinfo(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 12u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 12u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_txqlen(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_map(mut self, value: RtnlLinkIfmap) -> Self {
-        push_header(self.as_rec_mut(), 14u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 14u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_weight(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_operstate(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 16u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_linkmode(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 17u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_linkinfo(mut self) -> PushLinkinfoAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 18u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 18u16);
         PushLinkinfoAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_net_ns_pid(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 19u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 19u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ifalias(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             20u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_ifalias_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 20u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 20u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_num_vf(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 21u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 21u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_vfinfo_list(mut self) -> PushVfinfoListAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 22u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 22u16);
         PushVfinfoListAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_stats64(mut self, value: RtnlLinkStats64) -> Self {
-        push_header(self.as_rec_mut(), 23u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 23u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn nested_vf_ports(mut self) -> PushVfPortsAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 24u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 24u16);
         PushVfPortsAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_port_self(mut self) -> PushPortSelfAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 25u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 25u16);
         PushPortSelfAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_af_spec(mut self) -> PushAfSpecAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 26u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 26u16);
         PushAfSpecAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_group(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 27u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 27u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_net_ns_fd(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 28u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 28u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`RtextFilter`] (1 bit per enumeration)"]
     pub fn push_ext_mask(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 29u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 29u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_promiscuity(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 30u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 30u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_num_tx_queues(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 31u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 31u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_num_rx_queues(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 32u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 32u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_carrier(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 33u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 33u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_phys_port_id(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 34u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 34u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_carrier_changes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 35u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 35u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_phys_switch_id(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 36u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 36u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_link_netnsid(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 37u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 37u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_phys_port_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             38u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_phys_port_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 38u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 38u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_proto_down(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 39u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 39u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_gso_max_segs(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 40u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 40u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_gso_max_size(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 41u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 41u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_pad(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 42u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 42u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn nested_xdp(mut self) -> PushXdpAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 43u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 43u16);
         PushXdpAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_event(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 44u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 44u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_new_netnsid(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 45u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 45u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_target_netnsid(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 46u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 46u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_carrier_up_count(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 47u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 47u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_carrier_down_count(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 48u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 48u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_new_ifindex(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 49u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 49u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_min_mtu(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 50u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 50u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_max_mtu(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 51u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 51u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_prop_list(mut self) -> PushPropListLinkAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 52u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 52u16);
         PushPropListLinkAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -18979,106 +19095,106 @@ impl<Prev: Rec> PushLinkAttrs<Prev> {
     }
     pub fn push_alt_ifname(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             53u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_alt_ifname_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 53u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 53u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_perm_address(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 54u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 54u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_proto_down_reason(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             55u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_proto_down_reason_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 55u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 55u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_parent_dev_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             56u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_parent_dev_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 56u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 56u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_parent_dev_bus_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             57u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_parent_dev_bus_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 57u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 57u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_gro_max_size(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 58u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 58u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tso_max_size(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 59u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 59u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tso_max_segs(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 60u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 60u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_allmulti(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 61u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 61u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_devlink_port(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 62u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 62u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_gso_ipv4_max_size(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 63u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 63u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_gro_ipv4_max_size(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 64u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 64u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_dpll_pin(mut self) -> PushLinkDpllPinAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 65u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 65u16);
         PushLinkDpllPinAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -19086,48 +19202,48 @@ impl<Prev: Rec> PushLinkAttrs<Prev> {
     }
     #[doc = "EDT offload horizon supported by the device (in nsec).\n"]
     pub fn push_max_pacing_offload_horizon(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 66u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 66u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_netns_immutable(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 67u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 67u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_headroom(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 68u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 68u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tailroom(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 69u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 69u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushPropListLinkAttrs<Prev: Rec> {
+pub struct PushPropListLinkAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushPropListLinkAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushPropListLinkAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushPropListLinkAttrs<Prev> {
+impl<Prev: Pusher> PushPropListLinkAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -19137,50 +19253,50 @@ impl<Prev: Rec> PushPropListLinkAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn push_alt_ifname(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             53u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn push_alt_ifname_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 53u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 53u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
 }
-impl<Prev: Rec> Drop for PushPropListLinkAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushPropListLinkAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushAfSpecAttrs<Prev: Rec> {
+pub struct PushAfSpecAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushAfSpecAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushAfSpecAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushAfSpecAttrs<Prev> {
+impl<Prev: Pusher> PushAfSpecAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -19190,54 +19306,54 @@ impl<Prev: Rec> PushAfSpecAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn nested_inet(mut self) -> PushIflaAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         PushIflaAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_inet6(mut self) -> PushIfla6Attrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 10u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 10u16);
         PushIfla6Attrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_mctp(mut self) -> PushMctpAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 45u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 45u16);
         PushMctpAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushAfSpecAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushAfSpecAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushVfinfoListAttrs<Prev: Rec> {
+pub struct PushVfinfoListAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushVfinfoListAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushVfinfoListAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushVfinfoListAttrs<Prev> {
+impl<Prev: Pusher> PushVfinfoListAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -19247,41 +19363,41 @@ impl<Prev: Rec> PushVfinfoListAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_info(mut self) -> PushVfinfoAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 1u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 1u16);
         PushVfinfoAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushVfinfoListAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushVfinfoListAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushVfinfoAttrs<Prev: Rec> {
+pub struct PushVfinfoAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushVfinfoAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushVfinfoAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushVfinfoAttrs<Prev> {
+impl<Prev: Pusher> PushVfinfoAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -19291,102 +19407,102 @@ impl<Prev: Rec> PushVfinfoAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_mac(mut self, value: IflaVfMac) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 1u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_vlan(mut self, value: IflaVfVlan) -> Self {
-        push_header(self.as_rec_mut(), 2u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 2u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_tx_rate(mut self, value: IflaVfTxRate) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 3u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_spoofchk(mut self, value: IflaVfSpoofchk) -> Self {
-        push_header(self.as_rec_mut(), 4u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 4u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_link_state(mut self, value: IflaVfLinkState) -> Self {
-        push_header(self.as_rec_mut(), 5u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 5u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_rate(mut self, value: IflaVfRate) -> Self {
-        push_header(self.as_rec_mut(), 6u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 6u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_rss_query_en(mut self, value: IflaVfRssQueryEn) -> Self {
-        push_header(self.as_rec_mut(), 7u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 7u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn nested_stats(mut self) -> PushVfStatsAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 8u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 8u16);
         PushVfStatsAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_trust(mut self, value: IflaVfTrust) -> Self {
-        push_header(self.as_rec_mut(), 9u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 9u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_ib_node_guid(mut self, value: IflaVfGuid) -> Self {
-        push_header(self.as_rec_mut(), 10u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 10u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_ib_port_guid(mut self, value: IflaVfGuid) -> Self {
-        push_header(self.as_rec_mut(), 11u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 11u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn nested_vlan_list(mut self) -> PushVfVlanAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 12u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 12u16);
         PushVfVlanAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_broadcast(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 13u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 13u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
 }
-impl<Prev: Rec> Drop for PushVfinfoAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushVfinfoAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushVfStatsAttrs<Prev: Rec> {
+pub struct PushVfStatsAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushVfStatsAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushVfStatsAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushVfStatsAttrs<Prev> {
+impl<Prev: Pusher> PushVfStatsAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -19396,78 +19512,78 @@ impl<Prev: Rec> PushVfStatsAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_rx_packets(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 0u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 0u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tx_packets(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_rx_bytes(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tx_bytes(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_broadcast(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_multicast(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_pad(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 6u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 6u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_rx_dropped(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tx_dropped(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushVfStatsAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushVfStatsAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushVfVlanAttrs<Prev: Rec> {
+pub struct PushVfVlanAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushVfVlanAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushVfVlanAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushVfVlanAttrs<Prev> {
+impl<Prev: Pusher> PushVfVlanAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -19477,39 +19593,39 @@ impl<Prev: Rec> PushVfVlanAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn push_info(mut self, value: IflaVfVlanInfo) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 1u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
 }
-impl<Prev: Rec> Drop for PushVfVlanAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushVfVlanAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushVfPortsAttrs<Prev: Rec> {
+pub struct PushVfPortsAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushVfPortsAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushVfPortsAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushVfPortsAttrs<Prev> {
+impl<Prev: Pusher> PushVfPortsAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -19519,33 +19635,33 @@ impl<Prev: Rec> PushVfPortsAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
 }
-impl<Prev: Rec> Drop for PushVfPortsAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushVfPortsAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushPortSelfAttrs<Prev: Rec> {
+pub struct PushPortSelfAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushPortSelfAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushPortSelfAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushPortSelfAttrs<Prev> {
+impl<Prev: Pusher> PushPortSelfAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -19555,33 +19671,33 @@ impl<Prev: Rec> PushPortSelfAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
 }
-impl<Prev: Rec> Drop for PushPortSelfAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushPortSelfAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoAttrs<Prev: Rec> {
+pub struct PushLinkinfoAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -19591,30 +19707,30 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_kind(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             1u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_kind_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 1u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Selector attribute `kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_bond(mut self) -> PushLinkinfoBondAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"bond");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19628,7 +19744,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_bridge(mut self) -> PushLinkinfoBridgeAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"bridge");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19642,7 +19758,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_erspan(mut self) -> PushLinkinfoGreAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"erspan");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19656,7 +19772,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_gre(mut self) -> PushLinkinfoGreAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"gre");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19670,7 +19786,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_gretap(mut self) -> PushLinkinfoGreAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"gretap");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19684,7 +19800,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_ip6gre(mut self) -> PushLinkinfoGre6Attrs<PushDummy<Prev>> {
         self = self.push_kind(c"ip6gre");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19698,7 +19814,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_geneve(mut self) -> PushLinkinfoGeneveAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"geneve");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19712,7 +19828,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_hsr(mut self) -> PushLinkinfoHsrAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"hsr");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19726,7 +19842,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_ipip(mut self) -> PushLinkinfoIptunAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"ipip");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19740,7 +19856,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_ip6tnl(mut self) -> PushLinkinfoIp6tnlAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"ip6tnl");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19754,7 +19870,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_sit(mut self) -> PushLinkinfoIptunAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"sit");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19768,7 +19884,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_tun(mut self) -> PushLinkinfoTunAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"tun");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19782,7 +19898,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_vlan(mut self) -> PushLinkinfoVlanAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"vlan");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19796,7 +19912,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_vrf(mut self) -> PushLinkinfoVrfAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"vrf");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19810,7 +19926,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_vti(mut self) -> PushLinkinfoVtiAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"vti");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19824,7 +19940,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_vti6(mut self) -> PushLinkinfoVti6Attrs<PushDummy<Prev>> {
         self = self.push_kind(c"vti6");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19838,7 +19954,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_netkit(mut self) -> PushLinkinfoNetkitAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"netkit");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19852,7 +19968,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_data_ovpn(mut self) -> PushLinkinfoOvpnAttrs<PushDummy<Prev>> {
         self = self.push_kind(c"ovpn");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19863,30 +19979,30 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
         }
     }
     pub fn push_xstats(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_slave_kind(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             4u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_slave_kind_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 4u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 4u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Selector attribute `slave-kind` is inserted automatically."]
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_slave_data_bridge(mut self) -> PushLinkinfoBrportAttrs<PushDummy<Prev>> {
         self = self.push_slave_kind(c"bridge");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 5u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 5u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19900,7 +20016,7 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
     #[doc = "At most one sub-message attribute is expected per attribute set."]
     pub fn nested_slave_data_bond(mut self) -> PushBondSlaveAttrs<PushDummy<Prev>> {
         self = self.push_slave_kind(c"bond");
-        let new_header_offset = push_nested_header(self.as_rec_mut(), 5u16);
+        let new_header_offset = push_nested_header(self.as_vec_mut(), 5u16);
         let dummy = PushDummy {
             prev: self.prev.take(),
             header_offset: self.header_offset.take(),
@@ -19911,41 +20027,41 @@ impl<Prev: Rec> PushLinkinfoAttrs<Prev> {
         }
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoBondAttrs<Prev: Rec> {
+pub struct PushLinkinfoBondAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoBondAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoBondAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-pub struct PushArrayU32<Prev: Rec> {
+pub struct PushArrayU32<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
     pub(crate) counter: u16,
 }
-impl<Prev: Rec> Rec for PushArrayU32<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushArrayU32<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushArrayU32<Prev> {
+impl<Prev: Pusher> PushArrayU32<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -19956,41 +20072,41 @@ impl<Prev: Rec> PushArrayU32<Prev> {
     pub fn end_array(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn entry(mut self, value: std::net::Ipv4Addr) -> Self {
         let index = self.counter;
         self.counter += 1;
-        push_header(self.as_rec_mut(), index, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), index, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushArrayU32<Prev> {
+impl<Prev: Pusher> Drop for PushArrayU32<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushArrayBinary<Prev: Rec> {
+pub struct PushArrayBinary<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
     pub(crate) counter: u16,
 }
-impl<Prev: Rec> Rec for PushArrayBinary<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushArrayBinary<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushArrayBinary<Prev> {
+impl<Prev: Pusher> PushArrayBinary<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -20001,28 +20117,28 @@ impl<Prev: Rec> PushArrayBinary<Prev> {
     pub fn end_array(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn entry(mut self, value: &[u8]) -> Self {
         let index = self.counter;
         self.counter += 1;
-        push_header(self.as_rec_mut(), index, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), index, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
 }
-impl<Prev: Rec> Drop for PushArrayBinary<Prev> {
+impl<Prev: Pusher> Drop for PushArrayBinary<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-impl<Prev: Rec> PushLinkinfoBondAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoBondAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -20032,47 +20148,47 @@ impl<Prev: Rec> PushLinkinfoBondAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_mode(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_active_slave(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_miimon(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_updelay(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_downdelay(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_use_carrier(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_arp_interval(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn array_arp_ip_target(mut self) -> PushArrayU32<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 8u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 8u16);
         PushArrayU32 {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -20080,119 +20196,119 @@ impl<Prev: Rec> PushLinkinfoBondAttrs<Prev> {
         }
     }
     pub fn push_arp_validate(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_arp_all_targets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_primary(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 11u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_primary_reselect(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 12u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_fail_over_mac(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_xmit_hash_policy(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resend_igmp(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_num_peer_notif(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 16u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_all_slaves_active(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 17u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_min_links(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 18u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_lp_interval(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 19u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 19u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_packets_per_slave(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 20u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 20u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ad_lacp_rate(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 21u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 21u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ad_select(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 22u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 22u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_ad_info(mut self) -> PushBondAdInfoAttrs<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 23u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 23u16);
         PushBondAdInfoAttrs {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_ad_actor_sys_prio(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 24u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 24u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ad_user_port_key(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 25u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 25u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ad_actor_system(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 26u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 26u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_tlb_dynamic_lb(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 27u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 27u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_peer_notif_delay(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 28u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 28u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ad_lacp_active(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 29u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 29u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_missed_max(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 30u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 30u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn array_ns_ip6_target(mut self) -> PushArrayBinary<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 31u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 31u16);
         PushArrayBinary {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -20200,33 +20316,43 @@ impl<Prev: Rec> PushLinkinfoBondAttrs<Prev> {
         }
     }
     pub fn push_coupled_control(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 32u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 32u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    pub fn push_broadcast_neigh(mut self, value: u8) -> Self {
+        push_header(self.as_vec_mut(), 33u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    pub fn push_lacp_strict(mut self, value: u8) -> Self {
+        push_header(self.as_vec_mut(), 34u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoBondAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoBondAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushBondAdInfoAttrs<Prev: Rec> {
+pub struct PushBondAdInfoAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushBondAdInfoAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushBondAdInfoAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushBondAdInfoAttrs<Prev> {
+impl<Prev: Pusher> PushBondAdInfoAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -20236,58 +20362,58 @@ impl<Prev: Rec> PushBondAdInfoAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_aggregator(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_num_ports(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_actor_key(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_partner_key(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_partner_mac(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 5u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 5u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
 }
-impl<Prev: Rec> Drop for PushBondAdInfoAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushBondAdInfoAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushBondSlaveAttrs<Prev: Rec> {
+pub struct PushBondSlaveAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushBondSlaveAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushBondSlaveAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushBondSlaveAttrs<Prev> {
+impl<Prev: Pusher> PushBondSlaveAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -20297,78 +20423,78 @@ impl<Prev: Rec> PushBondSlaveAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_state(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mii_status(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_link_failure_count(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_perm_hwaddr(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 4u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 4u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_queue_id(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ad_aggregator_id(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ad_actor_oper_port_state(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ad_partner_oper_port_state(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_prio(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushBondSlaveAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushBondSlaveAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoBridgeAttrs<Prev: Rec> {
+pub struct PushLinkinfoBridgeAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoBridgeAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoBridgeAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoBridgeAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoBridgeAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -20378,284 +20504,284 @@ impl<Prev: Rec> PushLinkinfoBridgeAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_forward_delay(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_hello_time(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_max_age(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ageing_time(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_stp_state(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_priority(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_vlan_filtering(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_vlan_protocol(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_group_fwd_mask(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_root_id(mut self, value: IflaBridgeId) -> Self {
-        push_header(self.as_rec_mut(), 10u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 10u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_bridge_id(mut self, value: IflaBridgeId) -> Self {
-        push_header(self.as_rec_mut(), 11u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 11u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_root_port(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 12u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_root_path_cost(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_topology_change(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_topology_change_detected(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_hello_timer(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 16u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tcn_timer(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 17u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_topology_change_timer(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 18u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_gc_timer(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 19u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 19u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_group_addr(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 20u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 20u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_fdb_flush(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 21u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 21u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_mcast_router(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 22u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 22u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_snooping(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 23u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 23u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_query_use_ifaddr(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 24u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 24u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_querier(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 25u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 25u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_hash_elasticity(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 26u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 26u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_hash_max(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 27u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 27u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_last_member_cnt(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 28u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 28u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_startup_query_cnt(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 29u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 29u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_last_member_intvl(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 30u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 30u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_membership_intvl(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 31u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 31u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_querier_intvl(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 32u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 32u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_query_intvl(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 33u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 33u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_query_response_intvl(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 34u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 34u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_startup_query_intvl(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 35u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 35u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_nf_call_iptables(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 36u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 36u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_nf_call_ip6tables(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 37u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 37u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_nf_call_arptables(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 38u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 38u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_vlan_default_pvid(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 39u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 39u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_pad(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 40u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 40u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_vlan_stats_enabled(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 41u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 41u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_stats_enabled(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 42u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 42u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_igmp_version(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 43u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 43u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_mld_version(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 44u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 44u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_vlan_stats_per_port(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 45u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 45u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_multi_boolopt(mut self, value: BrBooloptMulti) -> Self {
-        push_header(self.as_rec_mut(), 46u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 46u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_mcast_querier_state(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 47u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 47u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_fdb_n_learned(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 48u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 48u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_fdb_max_learned(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 49u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 49u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`BrStpMode`] (enum)"]
     pub fn push_stp_mode(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 50u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 50u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoBridgeAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoBridgeAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoBrportAttrs<Prev: Rec> {
+pub struct PushLinkinfoBrportAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoBrportAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoBrportAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoBrportAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoBrportAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -20665,237 +20791,237 @@ impl<Prev: Rec> PushLinkinfoBrportAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_state(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_priority(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_cost(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mode(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 0 as u16);
+        push_header(self.as_vec_mut(), 4u16, 0 as u16);
         self
     }
     pub fn push_guard(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 0 as u16);
+        push_header(self.as_vec_mut(), 5u16, 0 as u16);
         self
     }
     pub fn push_protect(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 0 as u16);
+        push_header(self.as_vec_mut(), 6u16, 0 as u16);
         self
     }
     pub fn push_fast_leave(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 0 as u16);
+        push_header(self.as_vec_mut(), 7u16, 0 as u16);
         self
     }
     pub fn push_learning(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 0 as u16);
+        push_header(self.as_vec_mut(), 8u16, 0 as u16);
         self
     }
     pub fn push_unicast_flood(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 0 as u16);
+        push_header(self.as_vec_mut(), 9u16, 0 as u16);
         self
     }
     pub fn push_proxyarp(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 0 as u16);
+        push_header(self.as_vec_mut(), 10u16, 0 as u16);
         self
     }
     pub fn push_learning_sync(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 0 as u16);
+        push_header(self.as_vec_mut(), 11u16, 0 as u16);
         self
     }
     pub fn push_proxyarp_wifi(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 0 as u16);
+        push_header(self.as_vec_mut(), 12u16, 0 as u16);
         self
     }
     pub fn push_root_id(mut self, value: IflaBridgeId) -> Self {
-        push_header(self.as_rec_mut(), 13u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 13u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_bridge_id(mut self, value: IflaBridgeId) -> Self {
-        push_header(self.as_rec_mut(), 14u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 14u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_designated_port(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_designated_cost(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 16u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_id(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 17u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_no(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 18u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_topology_change_ack(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 19u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 19u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_config_pending(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 20u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 20u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_message_age_timer(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 21u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 21u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_forward_delay_timer(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 22u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 22u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_hold_timer(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 23u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 23u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_flush(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 24u16, 0 as u16);
+        push_header(self.as_vec_mut(), 24u16, 0 as u16);
         self
     }
     pub fn push_multicast_router(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 25u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 25u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_pad(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 26u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 26u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_mcast_flood(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 27u16, 0 as u16);
+        push_header(self.as_vec_mut(), 27u16, 0 as u16);
         self
     }
     pub fn push_mcast_to_ucast(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 28u16, 0 as u16);
+        push_header(self.as_vec_mut(), 28u16, 0 as u16);
         self
     }
     pub fn push_vlan_tunnel(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 29u16, 0 as u16);
+        push_header(self.as_vec_mut(), 29u16, 0 as u16);
         self
     }
     pub fn push_bcast_flood(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 30u16, 0 as u16);
+        push_header(self.as_vec_mut(), 30u16, 0 as u16);
         self
     }
     pub fn push_group_fwd_mask(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 31u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 31u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_neigh_suppress(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 32u16, 0 as u16);
+        push_header(self.as_vec_mut(), 32u16, 0 as u16);
         self
     }
     pub fn push_isolated(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 33u16, 0 as u16);
+        push_header(self.as_vec_mut(), 33u16, 0 as u16);
         self
     }
     pub fn push_backup_port(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 34u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 34u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mrp_ring_open(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 35u16, 0 as u16);
+        push_header(self.as_vec_mut(), 35u16, 0 as u16);
         self
     }
     pub fn push_mrp_in_open(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 36u16, 0 as u16);
+        push_header(self.as_vec_mut(), 36u16, 0 as u16);
         self
     }
     pub fn push_mcast_eht_hosts_limit(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 37u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 37u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_eht_hosts_cnt(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 38u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 38u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_locked(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 39u16, 0 as u16);
+        push_header(self.as_vec_mut(), 39u16, 0 as u16);
         self
     }
     pub fn push_mab(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 40u16, 0 as u16);
+        push_header(self.as_vec_mut(), 40u16, 0 as u16);
         self
     }
     pub fn push_mcast_n_groups(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 41u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 41u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_mcast_max_groups(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 42u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 42u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_neigh_vlan_suppress(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 43u16, 0 as u16);
+        push_header(self.as_vec_mut(), 43u16, 0 as u16);
         self
     }
     pub fn push_backup_nhid(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 44u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 44u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_neigh_forward_grat(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 45u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 45u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoBrportAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoBrportAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoGreAttrs<Prev: Rec> {
+pub struct PushLinkinfoGreAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoGreAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoGreAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoGreAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoGreAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -20905,162 +21031,162 @@ impl<Prev: Rec> PushLinkinfoGreAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_link(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_iflags(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 2u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_oflags(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 3u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_ikey(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_okey(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_local(mut self, value: std::net::IpAddr) -> Self {
-        push_header(self.as_rec_mut(), 6u16, {
+        push_header(self.as_vec_mut(), 6u16, {
             match &value {
                 IpAddr::V4(_) => 4,
                 IpAddr::V6(_) => 16,
             }
         } as u16);
-        encode_ip(self.as_rec_mut(), value);
+        encode_ip(self.as_vec_mut(), value);
         self
     }
     pub fn push_remote(mut self, value: std::net::IpAddr) -> Self {
-        push_header(self.as_rec_mut(), 7u16, {
+        push_header(self.as_vec_mut(), 7u16, {
             match &value {
                 IpAddr::V4(_) => 4,
                 IpAddr::V6(_) => 16,
             }
         } as u16);
-        encode_ip(self.as_rec_mut(), value);
+        encode_ip(self.as_vec_mut(), value);
         self
     }
     pub fn push_ttl(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tos(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_pmtudisc(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_limit(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 11u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_flowinfo(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 12u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_flags(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_type(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_flags(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_sport(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 16u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_encap_dport(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 17u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_collect_metadata(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 0 as u16);
+        push_header(self.as_vec_mut(), 18u16, 0 as u16);
         self
     }
     pub fn push_ignore_df(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 19u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 19u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_fwmark(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 20u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 20u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_erspan_index(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 21u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 21u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_erspan_ver(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 22u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 22u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_erspan_dir(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 23u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 23u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_erspan_hwid(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 24u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 24u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoGreAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoGreAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoGre6Attrs<Prev: Rec> {
+pub struct PushLinkinfoGre6Attrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoGre6Attrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoGre6Attrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoGre6Attrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoGre6Attrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21070,137 +21196,137 @@ impl<Prev: Rec> PushLinkinfoGre6Attrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_link(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_iflags(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 2u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_oflags(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 3u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_ikey(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_okey(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_local(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 6u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 6u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_remote(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 7u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 7u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_ttl(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_limit(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 11u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_flowinfo(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 12u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_flags(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_type(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_flags(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_sport(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 16u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_encap_dport(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 17u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_collect_metadata(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 0 as u16);
+        push_header(self.as_vec_mut(), 18u16, 0 as u16);
         self
     }
     pub fn push_fwmark(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 20u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 20u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_erspan_index(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 21u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 21u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_erspan_ver(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 22u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 22u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_erspan_dir(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 23u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 23u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_erspan_hwid(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 24u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 24u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoGre6Attrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoGre6Attrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoVtiAttrs<Prev: Rec> {
+pub struct PushLinkinfoVtiAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoVtiAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoVtiAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoVtiAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoVtiAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21210,73 +21336,73 @@ impl<Prev: Rec> PushLinkinfoVtiAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_link(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ikey(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_okey(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_local(mut self, value: std::net::IpAddr) -> Self {
-        push_header(self.as_rec_mut(), 4u16, {
+        push_header(self.as_vec_mut(), 4u16, {
             match &value {
                 IpAddr::V4(_) => 4,
                 IpAddr::V6(_) => 16,
             }
         } as u16);
-        encode_ip(self.as_rec_mut(), value);
+        encode_ip(self.as_vec_mut(), value);
         self
     }
     pub fn push_remote(mut self, value: std::net::IpAddr) -> Self {
-        push_header(self.as_rec_mut(), 5u16, {
+        push_header(self.as_vec_mut(), 5u16, {
             match &value {
                 IpAddr::V4(_) => 4,
                 IpAddr::V6(_) => 16,
             }
         } as u16);
-        encode_ip(self.as_rec_mut(), value);
+        encode_ip(self.as_vec_mut(), value);
         self
     }
     pub fn push_fwmark(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoVtiAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoVtiAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoVti6Attrs<Prev: Rec> {
+pub struct PushLinkinfoVti6Attrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoVti6Attrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoVti6Attrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoVti6Attrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoVti6Attrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21286,63 +21412,63 @@ impl<Prev: Rec> PushLinkinfoVti6Attrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_link(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ikey(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_okey(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_local(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 4u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 4u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_remote(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 5u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 5u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_fwmark(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoVti6Attrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoVti6Attrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoGeneveAttrs<Prev: Rec> {
+pub struct PushLinkinfoGeneveAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoGeneveAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoGeneveAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoGeneveAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoGeneveAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21352,110 +21478,120 @@ impl<Prev: Rec> PushLinkinfoGeneveAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_remote(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     pub fn push_ttl(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tos(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 5u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_collect_metadata(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 0 as u16);
+        push_header(self.as_vec_mut(), 6u16, 0 as u16);
         self
     }
     pub fn push_remote6(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 7u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 7u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_udp_csum(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_udp_zero_csum6_tx(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_udp_zero_csum6_rx(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_label(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 11u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_ttl_inherit(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 12u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_df(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_inner_proto_inherit(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 0 as u16);
+        push_header(self.as_vec_mut(), 14u16, 0 as u16);
         self
     }
     pub fn push_port_range(mut self, value: IflaGenevePortRange) -> Self {
-        push_header(self.as_rec_mut(), 15u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 15u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_gro_hint(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 0 as u16);
+        push_header(self.as_vec_mut(), 16u16, 0 as u16);
+        self
+    }
+    pub fn push_local(mut self, value: std::net::Ipv4Addr) -> Self {
+        push_header(self.as_vec_mut(), 17u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
+        self
+    }
+    pub fn push_local6(mut self, value: &[u8]) -> Self {
+        push_header(self.as_vec_mut(), 18u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoGeneveAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoGeneveAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoHsrAttrs<Prev: Rec> {
+pub struct PushLinkinfoHsrAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoHsrAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoHsrAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoHsrAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoHsrAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21465,73 +21601,73 @@ impl<Prev: Rec> PushLinkinfoHsrAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_slave1(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_slave2(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_multicast_spec(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_supervision_addr(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 4u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 4u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_seq_nr(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_version(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_protocol(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_interlink(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoHsrAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoHsrAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoIptunAttrs<Prev: Rec> {
+pub struct PushLinkinfoIptunAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoIptunAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoIptunAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoIptunAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoIptunAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21541,142 +21677,142 @@ impl<Prev: Rec> PushLinkinfoIptunAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_link(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_local(mut self, value: std::net::IpAddr) -> Self {
-        push_header(self.as_rec_mut(), 2u16, {
+        push_header(self.as_vec_mut(), 2u16, {
             match &value {
                 IpAddr::V4(_) => 4,
                 IpAddr::V6(_) => 16,
             }
         } as u16);
-        encode_ip(self.as_rec_mut(), value);
+        encode_ip(self.as_vec_mut(), value);
         self
     }
     pub fn push_remote(mut self, value: std::net::IpAddr) -> Self {
-        push_header(self.as_rec_mut(), 3u16, {
+        push_header(self.as_vec_mut(), 3u16, {
             match &value {
                 IpAddr::V4(_) => 4,
                 IpAddr::V6(_) => 16,
             }
         } as u16);
-        encode_ip(self.as_rec_mut(), value);
+        encode_ip(self.as_vec_mut(), value);
         self
     }
     pub fn push_ttl(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tos(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_limit(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_flowinfo(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_flags(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 8u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_proto(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_pmtudisc(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_6rd_prefix(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 11u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 11u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_6rd_relay_prefix(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 12u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     pub fn push_6rd_prefixlen(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_6rd_relay_prefixlen(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_type(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_flags(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 16u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_sport(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 17u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_encap_dport(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 18u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_collect_metadata(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 19u16, 0 as u16);
+        push_header(self.as_vec_mut(), 19u16, 0 as u16);
         self
     }
     pub fn push_fwmark(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 20u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 20u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoIptunAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoIptunAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoIp6tnlAttrs<Prev: Rec> {
+pub struct PushLinkinfoIp6tnlAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoIp6tnlAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoIp6tnlAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoIp6tnlAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoIp6tnlAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21686,102 +21822,102 @@ impl<Prev: Rec> PushLinkinfoIp6tnlAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_link(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_local(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 2u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_remote(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_ttl(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_limit(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_flowinfo(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_flags(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_proto(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_type(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_flags(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 16u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_encap_sport(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 17u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_encap_dport(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 18u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     pub fn push_collect_metadata(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 19u16, 0 as u16);
+        push_header(self.as_vec_mut(), 19u16, 0 as u16);
         self
     }
     pub fn push_fwmark(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 20u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 20u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoIp6tnlAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoIp6tnlAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoTunAttrs<Prev: Rec> {
+pub struct PushLinkinfoTunAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoTunAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoTunAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoTunAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoTunAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21791,78 +21927,78 @@ impl<Prev: Rec> PushLinkinfoTunAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_owner(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_group(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_type(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_pi(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_vnet_hdr(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_persist(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_multi_queue(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_num_queues(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_num_disabled_queues(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoTunAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoTunAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoVlanAttrs<Prev: Rec> {
+pub struct PushLinkinfoVlanAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoVlanAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoVlanAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoVlanAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoVlanAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21872,29 +22008,29 @@ impl<Prev: Rec> PushLinkinfoVlanAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_id(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_flags(mut self, value: IflaVlanFlags) -> Self {
-        push_header(self.as_rec_mut(), 2u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 2u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn nested_egress_qos(mut self) -> PushIflaVlanQos<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 3u16);
         PushIflaVlanQos {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_ingress_qos(mut self) -> PushIflaVlanQos<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 4u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 4u16);
         PushIflaVlanQos {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -21902,33 +22038,33 @@ impl<Prev: Rec> PushLinkinfoVlanAttrs<Prev> {
     }
     #[doc = "Associated type: [`VlanProtocols`] (enum)"]
     pub fn push_protocol(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 5u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoVlanAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoVlanAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushIflaVlanQos<Prev: Rec> {
+pub struct PushIflaVlanQos<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushIflaVlanQos<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushIflaVlanQos<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushIflaVlanQos<Prev> {
+impl<Prev: Pusher> PushIflaVlanQos<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21938,39 +22074,39 @@ impl<Prev: Rec> PushIflaVlanQos<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn push_mapping(mut self, value: IflaVlanQosMapping) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 1u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
 }
-impl<Prev: Rec> Drop for PushIflaVlanQos<Prev> {
+impl<Prev: Pusher> Drop for PushIflaVlanQos<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoVrfAttrs<Prev: Rec> {
+pub struct PushLinkinfoVrfAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoVrfAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoVrfAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoVrfAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoVrfAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -21980,38 +22116,38 @@ impl<Prev: Rec> PushLinkinfoVrfAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_table(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoVrfAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoVrfAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushXdpAttrs<Prev: Rec> {
+pub struct PushXdpAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushXdpAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushXdpAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushXdpAttrs<Prev> {
+impl<Prev: Pusher> PushXdpAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22021,73 +22157,73 @@ impl<Prev: Rec> PushXdpAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_fd(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_attached(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_flags(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_prog_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_drv_prog_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_skb_prog_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_hw_prog_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_expected_fd(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushXdpAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushXdpAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushIflaAttrs<Prev: Rec> {
+pub struct PushIflaAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushIflaAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushIflaAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushIflaAttrs<Prev> {
+impl<Prev: Pusher> PushIflaAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22097,39 +22233,39 @@ impl<Prev: Rec> PushIflaAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "u32 indexed by ipv4-devconf - 1 on output, on input it\\'s a nest\n"]
     pub fn push_conf(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 1u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
 }
-impl<Prev: Rec> Drop for PushIflaAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushIflaAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushIfla6Attrs<Prev: Rec> {
+pub struct PushIfla6Attrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushIfla6Attrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushIfla6Attrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushIfla6Attrs<Prev> {
+impl<Prev: Pusher> PushIfla6Attrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22139,79 +22275,79 @@ impl<Prev: Rec> PushIfla6Attrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_flags(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "u32 indexed by ipv6-devconf - 1 on output, on input it\\'s a nest\n"]
     pub fn push_conf(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 2u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_stats(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_mcast(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 4u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 4u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_cacheinfo(mut self, value: IflaCacheinfo) -> Self {
-        push_header(self.as_rec_mut(), 5u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 5u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_icmp6stats(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 6u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 6u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_token(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 7u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 7u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_addr_gen_mode(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_ra_mtu(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushIfla6Attrs<Prev> {
+impl<Prev: Pusher> Drop for PushIfla6Attrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushMctpAttrs<Prev: Rec> {
+pub struct PushMctpAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushMctpAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushMctpAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushMctpAttrs<Prev> {
+impl<Prev: Pusher> PushMctpAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22221,43 +22357,43 @@ impl<Prev: Rec> PushMctpAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_net(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_phys_binding(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushMctpAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushMctpAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushStatsAttrs<Prev: Rec> {
+pub struct PushStatsAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushStatsAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushStatsAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushStatsAttrs<Prev> {
+impl<Prev: Pusher> PushStatsAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22267,73 +22403,73 @@ impl<Prev: Rec> PushStatsAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_link_64(mut self, value: RtnlLinkStats64) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 1u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_link_xstats(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 2u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_link_xstats_slave(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn nested_link_offload_xstats(mut self) -> PushLinkOffloadXstats<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 4u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 4u16);
         PushLinkOffloadXstats {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_af_spec(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 5u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 5u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
 }
-impl<Prev: Rec> Drop for PushStatsAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushStatsAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkOffloadXstats<Prev: Rec> {
+pub struct PushLinkOffloadXstats<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkOffloadXstats<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkOffloadXstats<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-pub struct PushArrayHwSInfoOne<Prev: Rec> {
+pub struct PushArrayHwSInfoOne<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
     pub(crate) counter: u16,
 }
-impl<Prev: Rec> Rec for PushArrayHwSInfoOne<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushArrayHwSInfoOne<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushArrayHwSInfoOne<Prev> {
+impl<Prev: Pusher> PushArrayHwSInfoOne<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22344,30 +22480,30 @@ impl<Prev: Rec> PushArrayHwSInfoOne<Prev> {
     pub fn end_array(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn entry_nested(mut self) -> PushHwSInfoOne<Self> {
         let index = self.counter;
         self.counter += 1;
-        let header_offset = push_nested_header(self.as_rec_mut(), index);
+        let header_offset = push_nested_header(self.as_vec_mut(), index);
         PushHwSInfoOne {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushArrayHwSInfoOne<Prev> {
+impl<Prev: Pusher> Drop for PushArrayHwSInfoOne<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-impl<Prev: Rec> PushLinkOffloadXstats<Prev> {
+impl<Prev: Pusher> PushLinkOffloadXstats<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22377,17 +22513,17 @@ impl<Prev: Rec> PushLinkOffloadXstats<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_cpu_hit(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 1u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn array_hw_s_info(mut self) -> PushArrayHwSInfoOne<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         PushArrayHwSInfoOne {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -22395,33 +22531,33 @@ impl<Prev: Rec> PushLinkOffloadXstats<Prev> {
         }
     }
     pub fn push_l3_stats(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkOffloadXstats<Prev> {
+impl<Prev: Pusher> Drop for PushLinkOffloadXstats<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushHwSInfoOne<Prev: Rec> {
+pub struct PushHwSInfoOne<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushHwSInfoOne<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushHwSInfoOne<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushHwSInfoOne<Prev> {
+impl<Prev: Pusher> PushHwSInfoOne<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22431,43 +22567,43 @@ impl<Prev: Rec> PushHwSInfoOne<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_request(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_used(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushHwSInfoOne<Prev> {
+impl<Prev: Pusher> Drop for PushHwSInfoOne<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkDpllPinAttrs<Prev: Rec> {
+pub struct PushLinkDpllPinAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkDpllPinAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkDpllPinAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkDpllPinAttrs<Prev> {
+impl<Prev: Pusher> PushLinkDpllPinAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22477,38 +22613,38 @@ impl<Prev: Rec> PushLinkDpllPinAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkDpllPinAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkDpllPinAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoNetkitAttrs<Prev: Rec> {
+pub struct PushLinkinfoNetkitAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoNetkitAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoNetkitAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoNetkitAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoNetkitAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22518,89 +22654,89 @@ impl<Prev: Rec> PushLinkinfoNetkitAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_peer_info(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 1u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_primary(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`NetkitPolicy`] (enum)"]
     pub fn push_policy(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`NetkitPolicy`] (enum)"]
     pub fn push_peer_policy(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`NetkitMode`] (enum)"]
     pub fn push_mode(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`NetkitScrub`] (enum)"]
     pub fn push_scrub(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`NetkitScrub`] (enum)"]
     pub fn push_peer_scrub(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_headroom(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_tailroom(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`NetkitPairing`] (enum)"]
     pub fn push_pairing(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoNetkitAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoNetkitAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLinkinfoOvpnAttrs<Prev: Rec> {
+pub struct PushLinkinfoOvpnAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLinkinfoOvpnAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLinkinfoOvpnAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLinkinfoOvpnAttrs<Prev> {
+impl<Prev: Pusher> PushLinkinfoOvpnAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -22610,22 +22746,22 @@ impl<Prev: Rec> PushLinkinfoOvpnAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Associated type: [`OvpnMode`] (enum)"]
     pub fn push_mode(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLinkinfoOvpnAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushLinkinfoOvpnAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -22660,8 +22796,8 @@ impl<'r> OpNewlinkDo<'r> {
             IterableLinkAttrs::with_loc(attrs, buf.as_ptr() as usize),
         )
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev, header: &Ifinfomsg) {
-        prev.as_rec_mut().extend(header.as_slice());
+    fn write_header<Prev: Pusher>(prev: &mut Prev, header: &Ifinfomsg) {
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpNewlinkDo<'_> {
@@ -22721,8 +22857,8 @@ impl<'r> OpDellinkDo<'r> {
             IterableLinkAttrs::with_loc(attrs, buf.as_ptr() as usize),
         )
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev, header: &Ifinfomsg) {
-        prev.as_rec_mut().extend(header.as_slice());
+    fn write_header<Prev: Pusher>(prev: &mut Prev, header: &Ifinfomsg) {
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDellinkDo<'_> {
@@ -22784,8 +22920,8 @@ impl<'r> OpGetlinkDump<'r> {
             IterableLinkAttrs::with_loc(attrs, buf.as_ptr() as usize),
         )
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev, header: &Ifinfomsg) {
-        prev.as_rec_mut().extend(header.as_slice());
+    fn write_header<Prev: Pusher>(prev: &mut Prev, header: &Ifinfomsg) {
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetlinkDump<'_> {
@@ -22845,8 +22981,8 @@ impl<'r> OpGetlinkDo<'r> {
             IterableLinkAttrs::with_loc(attrs, buf.as_ptr() as usize),
         )
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev, header: &Ifinfomsg) {
-        prev.as_rec_mut().extend(header.as_slice());
+    fn write_header<Prev: Pusher>(prev: &mut Prev, header: &Ifinfomsg) {
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetlinkDo<'_> {
@@ -22906,8 +23042,8 @@ impl<'r> OpSetlinkDo<'r> {
             IterableLinkAttrs::with_loc(attrs, buf.as_ptr() as usize),
         )
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev, header: &Ifinfomsg) {
-        prev.as_rec_mut().extend(header.as_slice());
+    fn write_header<Prev: Pusher>(prev: &mut Prev, header: &Ifinfomsg) {
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSetlinkDo<'_> {
@@ -22969,8 +23105,8 @@ impl<'r> OpGetstatsDump<'r> {
             IterableStatsAttrs::with_loc(attrs, buf.as_ptr() as usize),
         )
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev, header: &IfStatsMsg) {
-        prev.as_rec_mut().extend(header.as_slice());
+    fn write_header<Prev: Pusher>(prev: &mut Prev, header: &IfStatsMsg) {
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetstatsDump<'_> {
@@ -23030,8 +23166,8 @@ impl<'r> OpGetstatsDo<'r> {
             IterableStatsAttrs::with_loc(attrs, buf.as_ptr() as usize),
         )
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev, header: &IfStatsMsg) {
-        prev.as_rec_mut().extend(header.as_slice());
+    fn write_header<Prev: Pusher>(prev: &mut Prev, header: &IfStatsMsg) {
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetstatsDo<'_> {

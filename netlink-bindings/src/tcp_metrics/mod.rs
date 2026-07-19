@@ -844,19 +844,19 @@ impl IterableMetrics<'_> {
         (stack, None)
     }
 }
-pub struct PushTcpMetrics<Prev: Rec> {
+pub struct PushTcpMetrics<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushTcpMetrics<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushTcpMetrics<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushTcpMetrics<Prev> {
+impl<Prev: Pusher> PushTcpMetrics<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -866,102 +866,102 @@ impl<Prev: Rec> PushTcpMetrics<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_addr_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     pub fn push_addr_ipv6(mut self, value: std::net::Ipv6Addr) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 16 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 2u16, 16 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     pub fn push_age(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "unused\n"]
     pub fn push_tw_tsval(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "unused\n"]
     pub fn push_tw_ts_stamp(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_vals(mut self) -> PushMetrics<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 6u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 6u16);
         PushMetrics {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_fopen_mss(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_fopen_syn_drops(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_fopen_syn_drop_ts(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_fopen_cookie(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 10u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 10u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_saddr_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 11u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     pub fn push_saddr_ipv6(mut self, value: std::net::Ipv6Addr) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 16 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 12u16, 16 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     pub fn push_pad(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 13u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 13u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
 }
-impl<Prev: Rec> Drop for PushTcpMetrics<Prev> {
+impl<Prev: Pusher> Drop for PushTcpMetrics<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushMetrics<Prev: Rec> {
+pub struct PushMetrics<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushMetrics<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushMetrics<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushMetrics<Prev> {
+impl<Prev: Pusher> PushMetrics<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -971,58 +971,58 @@ impl<Prev: Rec> PushMetrics<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Round Trip Time (RTT), in msecs with 3 bits fractional (left-shift by 3\nto get the msec value).\n"]
     pub fn push_rtt(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Round Trip Time VARiance (RTT), in msecs with 2 bits fractional\n(left-shift by 2 to get the msec value).\n"]
     pub fn push_rttvar(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Slow Start THRESHold.\n"]
     pub fn push_ssthresh(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Congestion Window.\n"]
     pub fn push_cwnd(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Reodering metric.\n"]
     pub fn push_reodering(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Round Trip Time (RTT), in usecs, with 3 bits fractional (left-shift by 3\nto get the msec value).\n"]
     pub fn push_rtt_us(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Round Trip Time (RTT), in usecs, with 2 bits fractional (left-shift by 3\nto get the msec value).\n"]
     pub fn push_rttvar_us(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushMetrics<Prev> {
+impl<Prev: Pusher> Drop for PushMetrics<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -1053,11 +1053,11 @@ impl<'r> OpGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableTcpMetrics::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetDump<'_> {
@@ -1106,11 +1106,11 @@ impl<'r> OpGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableTcpMetrics::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetDo<'_> {
@@ -1159,11 +1159,11 @@ impl<'r> OpDelDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableTcpMetrics::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 2u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDelDo<'_> {

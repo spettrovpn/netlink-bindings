@@ -4333,19 +4333,19 @@ impl IterableOvpnKeyconfDelInput<'_> {
         (stack, missing)
     }
 }
-pub struct PushPeer<Prev: Rec> {
+pub struct PushPeer<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushPeer<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushPeer<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushPeer<Prev> {
+impl<Prev: Pusher> PushPeer<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4355,177 +4355,177 @@ impl<Prev: Rec> PushPeer<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The remote IPv4 address of the peer\n"]
     pub fn push_remote_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     #[doc = "The remote IPv6 address of the peer\n"]
     pub fn push_remote_ipv6(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     pub fn push_remote_ipv6_scope_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The remote port of the peer\n"]
     pub fn push_remote_port(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 5u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     #[doc = "The socket to be used to communicate with the peer\n"]
     pub fn push_socket(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The ID of the netns the socket assigned to this peer lives in\n"]
     pub fn push_socket_netnsid(mut self, value: i32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The IPv4 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     #[doc = "The IPv6 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv6(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 9u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 9u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv6(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 11u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 11u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "The local port to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_port(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 12u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     pub fn push_keepalive_interval(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     pub fn push_keepalive_timeout(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The reason why a peer was deleted\n\nAssociated type: [`DelPeerReason`] (enum)"]
     pub fn push_del_reason(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of bytes received over the tunnel\n"]
     pub fn push_vpn_rx_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 16u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of bytes transmitted over the tunnel\n"]
     pub fn push_vpn_tx_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 17u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets received over the tunnel\n"]
     pub fn push_vpn_rx_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 18u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets transmitted over the tunnel\n"]
     pub fn push_vpn_tx_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 19u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 19u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of bytes received at the transport level\n"]
     pub fn push_link_rx_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 20u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 20u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of bytes transmitted at the transport level\n"]
     pub fn push_link_tx_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 21u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 21u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets received at the transport level\n"]
     pub fn push_link_rx_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 22u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 22u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of packets transmitted at the transport level\n"]
     pub fn push_link_tx_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 23u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 23u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
     pub fn push_tx_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 24u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 24u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushPeer<Prev> {
+impl<Prev: Pusher> Drop for PushPeer<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushPeerNewInput<Prev: Rec> {
+pub struct PushPeerNewInput<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushPeerNewInput<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushPeerNewInput<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushPeerNewInput<Prev> {
+impl<Prev: Pusher> PushPeerNewInput<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4535,111 +4535,111 @@ impl<Prev: Rec> PushPeerNewInput<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The remote IPv4 address of the peer\n"]
     pub fn push_remote_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     #[doc = "The remote IPv6 address of the peer\n"]
     pub fn push_remote_ipv6(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     pub fn push_remote_ipv6_scope_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The remote port of the peer\n"]
     pub fn push_remote_port(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 5u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     #[doc = "The socket to be used to communicate with the peer\n"]
     pub fn push_socket(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The IPv4 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     #[doc = "The IPv6 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv6(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 9u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 9u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv6(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 11u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 11u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     pub fn push_keepalive_interval(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     pub fn push_keepalive_timeout(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
     pub fn push_tx_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 24u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 24u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushPeerNewInput<Prev> {
+impl<Prev: Pusher> Drop for PushPeerNewInput<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushPeerSetInput<Prev: Rec> {
+pub struct PushPeerSetInput<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushPeerSetInput<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushPeerSetInput<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushPeerSetInput<Prev> {
+impl<Prev: Pusher> PushPeerSetInput<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4649,105 +4649,105 @@ impl<Prev: Rec> PushPeerSetInput<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The remote IPv4 address of the peer\n"]
     pub fn push_remote_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     #[doc = "The remote IPv6 address of the peer\n"]
     pub fn push_remote_ipv6(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "The scope id of the remote IPv6 address of the peer (RFC2553)\n"]
     pub fn push_remote_ipv6_scope_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The remote port of the peer\n"]
     pub fn push_remote_port(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_be_bytes());
+        push_header(self.as_vec_mut(), 5u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_be_bytes());
         self
     }
     #[doc = "The IPv4 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     #[doc = "The IPv6 address assigned to the peer by the server\n"]
     pub fn push_vpn_ipv6(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 9u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 9u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "The local IPv4 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv4(mut self, value: std::net::Ipv4Addr) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(&value.to_bits().to_be_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(&value.to_bits().to_be_bytes());
         self
     }
     #[doc = "The local IPv6 to be used to send packets to the peer (UDP only)\n"]
     pub fn push_local_ipv6(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 11u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 11u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "The number of seconds after which a keep alive message is sent to the\npeer\n"]
     pub fn push_keepalive_interval(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The number of seconds from the last activity after which the peer is\nassumed dead\n"]
     pub fn push_keepalive_timeout(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The ID value used when transmitting packets to this peer. This way\noutgoing packets can have a different ID than incoming ones. Useful in\nmultipeer-to-multipeer connections, where each peer will advertise the\ntx-id to be used on the link.\n"]
     pub fn push_tx_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 24u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 24u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushPeerSetInput<Prev> {
+impl<Prev: Pusher> Drop for PushPeerSetInput<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushPeerDelInput<Prev: Rec> {
+pub struct PushPeerDelInput<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushPeerDelInput<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushPeerDelInput<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushPeerDelInput<Prev> {
+impl<Prev: Pusher> PushPeerDelInput<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4757,39 +4757,39 @@ impl<Prev: Rec> PushPeerDelInput<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during operations for a specific device. Also used to match\npackets received from this peer.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushPeerDelInput<Prev> {
+impl<Prev: Pusher> Drop for PushPeerDelInput<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushKeyconf<Prev: Rec> {
+pub struct PushKeyconf<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushKeyconf<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushKeyconf<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushKeyconf<Prev> {
+impl<Prev: Pusher> PushKeyconf<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4799,37 +4799,37 @@ impl<Prev: Rec> PushKeyconf<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn push_peer_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     pub fn push_slot(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The unique ID of the key in the peer context. Used to fetch the correct\nkey upon decryption\n"]
     pub fn push_key_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The cipher to be used when communicating with the peer\n\nAssociated type: [`CipherAlg`] (enum)"]
     pub fn push_cipher_alg(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Key material for encrypt direction\n"]
     pub fn nested_encrypt_dir(mut self) -> PushKeydir<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 5u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 5u16);
         PushKeydir {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -4837,35 +4837,35 @@ impl<Prev: Rec> PushKeyconf<Prev> {
     }
     #[doc = "Key material for decrypt direction\n"]
     pub fn nested_decrypt_dir(mut self) -> PushKeydir<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 6u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 6u16);
         PushKeydir {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushKeyconf<Prev> {
+impl<Prev: Pusher> Drop for PushKeyconf<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushKeydir<Prev: Rec> {
+pub struct PushKeydir<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushKeydir<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushKeydir<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushKeydir<Prev> {
+impl<Prev: Pusher> PushKeydir<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4875,45 +4875,45 @@ impl<Prev: Rec> PushKeydir<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "The actual key to be used by the cipher\n"]
     pub fn push_cipher_key(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 1u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Random nonce to be concatenated to the packet ID, in order to obtain the\nactual cipher IV\n"]
     pub fn push_nonce_tail(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 2u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
 }
-impl<Prev: Rec> Drop for PushKeydir<Prev> {
+impl<Prev: Pusher> Drop for PushKeydir<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushKeyconfGet<Prev: Rec> {
+pub struct PushKeyconfGet<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushKeyconfGet<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushKeyconfGet<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushKeyconfGet<Prev> {
+impl<Prev: Pusher> PushKeyconfGet<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4923,57 +4923,57 @@ impl<Prev: Rec> PushKeyconfGet<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn push_peer_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     pub fn push_slot(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The unique ID of the key in the peer context. Used to fetch the correct\nkey upon decryption\n"]
     pub fn push_key_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The cipher to be used when communicating with the peer\n\nAssociated type: [`CipherAlg`] (enum)"]
     pub fn push_cipher_alg(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushKeyconfGet<Prev> {
+impl<Prev: Pusher> Drop for PushKeyconfGet<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushKeyconfSwapInput<Prev: Rec> {
+pub struct PushKeyconfSwapInput<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushKeyconfSwapInput<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushKeyconfSwapInput<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushKeyconfSwapInput<Prev> {
+impl<Prev: Pusher> PushKeyconfSwapInput<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -4983,39 +4983,39 @@ impl<Prev: Rec> PushKeyconfSwapInput<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn push_peer_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushKeyconfSwapInput<Prev> {
+impl<Prev: Pusher> Drop for PushKeyconfSwapInput<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushKeyconfDelInput<Prev: Rec> {
+pub struct PushKeyconfDelInput<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushKeyconfDelInput<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushKeyconfDelInput<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushKeyconfDelInput<Prev> {
+impl<Prev: Pusher> PushKeyconfDelInput<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -5025,45 +5025,45 @@ impl<Prev: Rec> PushKeyconfDelInput<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "The unique ID of the peer in the device context. To be used to identify\npeers during key operations\n"]
     pub fn push_peer_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The slot where the key should be stored\n\nAssociated type: [`KeySlot`] (enum)"]
     pub fn push_slot(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushKeyconfDelInput<Prev> {
+impl<Prev: Pusher> Drop for PushKeyconfDelInput<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushOvpn<Prev: Rec> {
+pub struct PushOvpn<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushOvpn<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushOvpn<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushOvpn<Prev> {
+impl<Prev: Pusher> PushOvpn<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -5073,19 +5073,19 @@ impl<Prev: Rec> PushOvpn<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn nested_peer(mut self) -> PushPeer<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         PushPeer {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -5093,35 +5093,35 @@ impl<Prev: Rec> PushOvpn<Prev> {
     }
     #[doc = "Peer specific cipher configuration\n"]
     pub fn nested_keyconf(mut self) -> PushKeyconf<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 3u16);
         PushKeyconf {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushOvpn<Prev> {
+impl<Prev: Pusher> Drop for PushOvpn<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushOvpnPeerNewInput<Prev: Rec> {
+pub struct PushOvpnPeerNewInput<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushOvpnPeerNewInput<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushOvpnPeerNewInput<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushOvpnPeerNewInput<Prev> {
+impl<Prev: Pusher> PushOvpnPeerNewInput<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -5131,47 +5131,47 @@ impl<Prev: Rec> PushOvpnPeerNewInput<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn nested_peer(mut self) -> PushPeerNewInput<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         PushPeerNewInput {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushOvpnPeerNewInput<Prev> {
+impl<Prev: Pusher> Drop for PushOvpnPeerNewInput<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushOvpnPeerSetInput<Prev: Rec> {
+pub struct PushOvpnPeerSetInput<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushOvpnPeerSetInput<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushOvpnPeerSetInput<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushOvpnPeerSetInput<Prev> {
+impl<Prev: Pusher> PushOvpnPeerSetInput<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -5181,47 +5181,47 @@ impl<Prev: Rec> PushOvpnPeerSetInput<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn nested_peer(mut self) -> PushPeerSetInput<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         PushPeerSetInput {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushOvpnPeerSetInput<Prev> {
+impl<Prev: Pusher> Drop for PushOvpnPeerSetInput<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushOvpnPeerDelInput<Prev: Rec> {
+pub struct PushOvpnPeerDelInput<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushOvpnPeerDelInput<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushOvpnPeerDelInput<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushOvpnPeerDelInput<Prev> {
+impl<Prev: Pusher> PushOvpnPeerDelInput<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -5231,47 +5231,47 @@ impl<Prev: Rec> PushOvpnPeerDelInput<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The peer object containing the attributed of interest for the specific\noperation\n"]
     pub fn nested_peer(mut self) -> PushPeerDelInput<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 2u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 2u16);
         PushPeerDelInput {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushOvpnPeerDelInput<Prev> {
+impl<Prev: Pusher> Drop for PushOvpnPeerDelInput<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushOvpnKeyconfGet<Prev: Rec> {
+pub struct PushOvpnKeyconfGet<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushOvpnKeyconfGet<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushOvpnKeyconfGet<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushOvpnKeyconfGet<Prev> {
+impl<Prev: Pusher> PushOvpnKeyconfGet<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -5281,47 +5281,47 @@ impl<Prev: Rec> PushOvpnKeyconfGet<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Peer specific cipher configuration\n"]
     pub fn nested_keyconf(mut self) -> PushKeyconfGet<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 3u16);
         PushKeyconfGet {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushOvpnKeyconfGet<Prev> {
+impl<Prev: Pusher> Drop for PushOvpnKeyconfGet<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushOvpnKeyconfSwapInput<Prev: Rec> {
+pub struct PushOvpnKeyconfSwapInput<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushOvpnKeyconfSwapInput<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushOvpnKeyconfSwapInput<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushOvpnKeyconfSwapInput<Prev> {
+impl<Prev: Pusher> PushOvpnKeyconfSwapInput<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -5331,47 +5331,47 @@ impl<Prev: Rec> PushOvpnKeyconfSwapInput<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Peer specific cipher configuration\n"]
     pub fn nested_keyconf(mut self) -> PushKeyconfSwapInput<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 3u16);
         PushKeyconfSwapInput {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushOvpnKeyconfSwapInput<Prev> {
+impl<Prev: Pusher> Drop for PushOvpnKeyconfSwapInput<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushOvpnKeyconfDelInput<Prev: Rec> {
+pub struct PushOvpnKeyconfDelInput<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushOvpnKeyconfDelInput<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushOvpnKeyconfDelInput<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushOvpnKeyconfDelInput<Prev> {
+impl<Prev: Pusher> PushOvpnKeyconfDelInput<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -5381,30 +5381,30 @@ impl<Prev: Rec> PushOvpnKeyconfDelInput<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Index of the ovpn interface to operate on\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Peer specific cipher configuration\n"]
     pub fn nested_keyconf(mut self) -> PushKeyconfDelInput<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 3u16);
         PushKeyconfDelInput {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushOvpnKeyconfDelInput<Prev> {
+impl<Prev: Pusher> Drop for PushOvpnKeyconfDelInput<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -5470,11 +5470,11 @@ impl<'r> OpPeerNewDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableOvpnPeerNewInput::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPeerNewDo<'_> {
@@ -5523,11 +5523,11 @@ impl<'r> OpPeerSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableOvpnPeerSetInput::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 2u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPeerSetDo<'_> {
@@ -5578,11 +5578,11 @@ impl<'r> OpPeerGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableOvpn::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 3u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPeerGetDump<'_> {
@@ -5631,11 +5631,11 @@ impl<'r> OpPeerGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableOvpn::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 3u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPeerGetDo<'_> {
@@ -5684,11 +5684,11 @@ impl<'r> OpPeerDelDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableOvpnPeerDelInput::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 4u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPeerDelDo<'_> {
@@ -5737,11 +5737,11 @@ impl<'r> OpKeyNewDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableOvpn::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 6u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpKeyNewDo<'_> {
@@ -5790,11 +5790,11 @@ impl<'r> OpKeyGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableOvpnKeyconfGet::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 7u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpKeyGetDo<'_> {
@@ -5845,11 +5845,11 @@ impl<'r> OpKeySwapDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableOvpnKeyconfSwapInput::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 8u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpKeySwapDo<'_> {
@@ -5900,11 +5900,11 @@ impl<'r> OpKeyDelDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableOvpnKeyconfDelInput::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 10u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpKeyDelDo<'_> {

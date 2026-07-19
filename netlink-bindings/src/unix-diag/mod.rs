@@ -702,19 +702,19 @@ impl IterableUnixDiagAttrs<'_> {
         (stack, None)
     }
 }
-pub struct PushUnixDiagAttrs<Prev: Rec> {
+pub struct PushUnixDiagAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushUnixDiagAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushUnixDiagAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushUnixDiagAttrs<Prev> {
+impl<Prev: Pusher> PushUnixDiagAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -724,57 +724,57 @@ impl<Prev: Rec> PushUnixDiagAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Unix socket sun_path. May or may not contain \\'0\\'.\n"]
     pub fn push_name(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 0u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 0u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_vfs(mut self, value: Vfs) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 1u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_peer(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_icons(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_rqlen(mut self, value: Rqlen) -> Self {
-        push_header(self.as_rec_mut(), 4u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 4u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn push_meminfo(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 5u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 5u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_shutdown(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_uid(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushUnixDiagAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushUnixDiagAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -818,8 +818,8 @@ impl<'r> OpUnixDiagDump<'r> {
             IterableUnixDiagAttrs::with_loc(attrs, buf.as_ptr() as usize),
         )
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev, header: &Req) {
-        prev.as_rec_mut().extend(header.as_slice());
+    fn write_header<Prev: Pusher>(prev: &mut Prev, header: &Req) {
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpUnixDiagDump<'_> {

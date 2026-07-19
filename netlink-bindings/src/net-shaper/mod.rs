@@ -1252,19 +1252,19 @@ impl IterableCaps<'_> {
         (stack, None)
     }
 }
-pub struct PushNetShaper<Prev: Rec> {
+pub struct PushNetShaper<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushNetShaper<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushNetShaper<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushNetShaper<Prev> {
+impl<Prev: Pusher> PushNetShaper<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1274,13 +1274,13 @@ impl<Prev: Rec> PushNetShaper<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Unique identifier for the given shaper inside the owning device.\n"]
     pub fn nested_handle(mut self) -> PushHandle<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 1u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 1u16);
         PushHandle {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -1288,49 +1288,49 @@ impl<Prev: Rec> PushNetShaper<Prev> {
     }
     #[doc = "Metric used by the given shaper for bw-min, bw-max and burst.\n\nAssociated type: [`Metric`] (enum)"]
     pub fn push_metric(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Guaranteed bandwidth for the given shaper.\n"]
     pub fn push_bw_min(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Maximum bandwidth for the given shaper or 0 when unlimited.\n"]
     pub fn push_bw_max(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Maximum burst-size for shaping. Should not be interpreted as a quantum.\n"]
     pub fn push_burst(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Scheduling priority for the given shaper. The priority scheduling is\napplied to sibling shapers.\n"]
     pub fn push_priority(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Relative weight for round robin scheduling of the given shaper. The\nscheduling is applied to all sibling shapers with the same priority.\n"]
     pub fn push_weight(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Interface index owning the specified shaper.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Identifier for the parent of the affected shaper. Only needed for\n\\@group operation.\n"]
     pub fn nested_parent(mut self) -> PushHandle<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 9u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 9u16);
         PushHandle {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -1338,35 +1338,35 @@ impl<Prev: Rec> PushNetShaper<Prev> {
     }
     #[doc = "Describes a set of leaves shapers for a \\@group operation.\n\nAttribute may repeat multiple times (treat it as array)"]
     pub fn nested_leaves(mut self) -> PushLeafInfo<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 10u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 10u16);
         PushLeafInfo {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushNetShaper<Prev> {
+impl<Prev: Pusher> Drop for PushNetShaper<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushHandle<Prev: Rec> {
+pub struct PushHandle<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushHandle<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushHandle<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushHandle<Prev> {
+impl<Prev: Pusher> PushHandle<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1376,45 +1376,45 @@ impl<Prev: Rec> PushHandle<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Defines the shaper \\@id interpretation.\n\nAssociated type: [`Scope`] (enum)"]
     pub fn push_scope(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Numeric identifier of a shaper. The id semantic depends on the scope.\nFor \\@queue scope it\\'s the queue id and for \\@node scope it\\'s the node\nidentifier.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushHandle<Prev> {
+impl<Prev: Pusher> Drop for PushHandle<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushLeafInfo<Prev: Rec> {
+pub struct PushLeafInfo<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushLeafInfo<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushLeafInfo<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushLeafInfo<Prev> {
+impl<Prev: Pusher> PushLeafInfo<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1424,13 +1424,13 @@ impl<Prev: Rec> PushLeafInfo<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Unique identifier for the given shaper inside the owning device.\n"]
     pub fn nested_handle(mut self) -> PushHandle<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 1u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 1u16);
         PushHandle {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -1438,39 +1438,39 @@ impl<Prev: Rec> PushLeafInfo<Prev> {
     }
     #[doc = "Scheduling priority for the given shaper. The priority scheduling is\napplied to sibling shapers.\n"]
     pub fn push_priority(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Relative weight for round robin scheduling of the given shaper. The\nscheduling is applied to all sibling shapers with the same priority.\n"]
     pub fn push_weight(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushLeafInfo<Prev> {
+impl<Prev: Pusher> Drop for PushLeafInfo<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushCaps<Prev: Rec> {
+pub struct PushCaps<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushCaps<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushCaps<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushCaps<Prev> {
+impl<Prev: Pusher> PushCaps<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1480,68 +1480,68 @@ impl<Prev: Rec> PushCaps<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Interface index queried for shapers capabilities.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The scope to which the queried capabilities apply.\n\nAssociated type: [`Scope`] (enum)"]
     pub fn push_scope(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "The device accepts \\'bps\\' metric for bw-min, bw-max and burst.\n"]
     pub fn push_support_metric_bps(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 0 as u16);
+        push_header(self.as_vec_mut(), 3u16, 0 as u16);
         self
     }
     #[doc = "The device accepts \\'pps\\' metric for bw-min, bw-max and burst.\n"]
     pub fn push_support_metric_pps(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 0 as u16);
+        push_header(self.as_vec_mut(), 4u16, 0 as u16);
         self
     }
     #[doc = "The device supports nesting shaper belonging to this scope below\n\\'node\\' scoped shapers. Only \\'queue\\' and \\'node\\' scope can have flag\n\\'support-nesting\\'.\n"]
     pub fn push_support_nesting(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 0 as u16);
+        push_header(self.as_vec_mut(), 5u16, 0 as u16);
         self
     }
     #[doc = "The device supports a minimum guaranteed B/W.\n"]
     pub fn push_support_bw_min(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 0 as u16);
+        push_header(self.as_vec_mut(), 6u16, 0 as u16);
         self
     }
     #[doc = "The device supports maximum B/W shaping.\n"]
     pub fn push_support_bw_max(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 0 as u16);
+        push_header(self.as_vec_mut(), 7u16, 0 as u16);
         self
     }
     #[doc = "The device supports a maximum burst size.\n"]
     pub fn push_support_burst(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 0 as u16);
+        push_header(self.as_vec_mut(), 8u16, 0 as u16);
         self
     }
     #[doc = "The device supports priority scheduling.\n"]
     pub fn push_support_priority(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 0 as u16);
+        push_header(self.as_vec_mut(), 9u16, 0 as u16);
         self
     }
     #[doc = "The device supports weighted round robin scheduling.\n"]
     pub fn push_support_weight(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 0 as u16);
+        push_header(self.as_vec_mut(), 10u16, 0 as u16);
         self
     }
 }
-impl<Prev: Rec> Drop for PushCaps<Prev> {
+impl<Prev: Pusher> Drop for PushCaps<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -1572,11 +1572,11 @@ impl<'r> OpGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableNetShaper::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetDump<'_> {
@@ -1625,11 +1625,11 @@ impl<'r> OpGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableNetShaper::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetDo<'_> {
@@ -1678,11 +1678,11 @@ impl<'r> OpSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableNetShaper::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 2u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSetDo<'_> {
@@ -1731,11 +1731,11 @@ impl<'r> OpDeleteDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableNetShaper::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 3u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDeleteDo<'_> {
@@ -1784,11 +1784,11 @@ impl<'r> OpGroupDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableNetShaper::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 4u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGroupDo<'_> {
@@ -1839,11 +1839,11 @@ impl<'r> OpCapGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableCaps::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 5u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpCapGetDump<'_> {
@@ -1892,11 +1892,11 @@ impl<'r> OpCapGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableCaps::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 5u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpCapGetDo<'_> {

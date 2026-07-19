@@ -502,19 +502,19 @@ impl IterablePacket<'_> {
         (stack, None)
     }
 }
-pub struct PushPacket<Prev: Rec> {
+pub struct PushPacket<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushPacket<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushPacket<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushPacket<Prev> {
+impl<Prev: Pusher> PushPacket<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -524,75 +524,75 @@ impl<Prev: Rec> PushPacket<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Packet data, from the start of the Ethernet header.\n"]
     pub fn push_packet(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 1u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Nested [OVS_KEY_ATTR]()\\* attributes, extracted flow key. Defined as\nbinary because the key attribute-set belongs to the ovs_flow family\nspec; cross-spec references are not supported.\n"]
     pub fn push_key(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 2u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Nested [OVS_ACTION_ATTR]()\\* attributes. Defined as binary for the same\nreason as key.\n"]
     pub fn push_actions(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 3u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Opaque userspace cookie from OVS_USERSPACE_ATTR_USERDATA.\n"]
     pub fn push_userdata(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 4u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 4u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Nested [OVS_TUNNEL_KEY_ATTR]()\\* for output tunnel metadata.\n"]
     pub fn push_egress_tun_key(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 5u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 5u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Packet operation is a feature probe, error logging suppressed.\n"]
     pub fn push_probe(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 0 as u16);
+        push_header(self.as_vec_mut(), 8u16, 0 as u16);
         self
     }
     #[doc = "Maximum received IP fragment size.\n"]
     pub fn push_mru(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Packet size before truncation.\n"]
     pub fn push_len(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Packet hash, low 32 bits are skb hash, upper bits are flags.\n"]
     pub fn push_hash(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 11u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Netlink PID to use for upcalls during EXECUTE processing.\n"]
     pub fn push_upcall_pid(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 12u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushPacket<Prev> {
+impl<Prev: Pusher> Drop for PushPacket<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -627,8 +627,8 @@ impl<'r> OpExecuteDo<'r> {
             IterablePacket::with_loc(attrs, buf.as_ptr() as usize),
         )
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev, header: &OvsHeader) {
-        prev.as_rec_mut().extend(header.as_slice());
+    fn write_header<Prev: Pusher>(prev: &mut Prev, header: &OvsHeader) {
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpExecuteDo<'_> {

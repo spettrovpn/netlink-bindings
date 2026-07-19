@@ -51,6 +51,7 @@ rt-link = []
 rt-neigh = []
 rt-route = []
 rt-rule = []
+sunrpc = []
 tc = []
 tcp_metrics = []
 team = []
@@ -87,6 +88,7 @@ all-subsystems = [
   "rt-neigh",
   "rt-route",
   "rt-rule",
+  "sunrpc",
   "tc",
   "tcp_metrics",
   "team",

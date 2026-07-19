@@ -384,6 +384,7 @@ pub enum VarAttrType {
     Flag = 6,
     NulString = 10,
     Binary = 11,
+    U64Array = 129,
 }
 impl VarAttrType {
     pub fn from_value(value: u64) -> Option<Self> {
@@ -396,6 +397,7 @@ impl VarAttrType {
             6 => Self::Flag,
             10 => Self::NulString,
             11 => Self::Binary,
+            129 => Self::U64Array,
             _ => return None,
         })
     }
@@ -12916,19 +12918,19 @@ impl IterableDlRateTcBws<'_> {
         (stack, None)
     }
 }
-pub struct PushDevlink<Prev: Rec> {
+pub struct PushDevlink<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDevlink<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDevlink<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDevlink<Prev> {
+impl<Prev: Pusher> PushDevlink<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -12938,187 +12940,187 @@ impl<Prev: Rec> PushDevlink<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_bus_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             1u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_bus_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 1u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_dev_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             2u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_dev_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 2u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_port_index(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`PortType`] (enum)"]
     pub fn push_port_type(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_desired_type(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_netdev_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_netdev_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             7u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_port_netdev_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 7u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 7u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_port_ibdev_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             8u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_port_ibdev_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 8u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 8u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_port_split_count(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_split_group(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_index(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 11u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_size(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 12u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 12u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_ingress_pool_count(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 13u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 13u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_egress_pool_count(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 14u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 14u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_ingress_tc_count(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 15u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 15u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_egress_tc_count(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 16u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 16u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_pool_index(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 17u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 17u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`SbPoolType`] (enum)"]
     pub fn push_sb_pool_type(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 18u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 18u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_pool_size(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 19u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 19u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`SbThresholdType`] (enum)"]
     pub fn push_sb_pool_threshold_type(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 20u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 20u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_threshold(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 21u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 21u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_tc_index(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 22u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 22u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_occ_cur(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 23u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 23u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_sb_occ_max(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 24u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 24u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`EswitchMode`] (enum)"]
     pub fn push_eswitch_mode(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 25u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 25u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`EswitchInlineMode`] (enum)"]
     pub fn push_eswitch_inline_mode(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 26u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 26u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_dpipe_tables(mut self) -> PushDlDpipeTables<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 27u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 27u16);
         PushDlDpipeTables {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13126,7 +13128,7 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_table(mut self) -> PushDlDpipeTable<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 28u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 28u16);
         PushDlDpipeTable {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13134,45 +13136,45 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     pub fn push_dpipe_table_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             29u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_dpipe_table_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 29u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 29u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_dpipe_table_size(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 30u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 30u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_dpipe_table_matches(mut self) -> PushDlDpipeTableMatches<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 31u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 31u16);
         PushDlDpipeTableMatches {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_dpipe_table_actions(mut self) -> PushDlDpipeTableActions<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 32u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 32u16);
         PushDlDpipeTableActions {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_dpipe_table_counters_enabled(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 33u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 33u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_dpipe_entries(mut self) -> PushDlDpipeEntries<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 34u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 34u16);
         PushDlDpipeEntries {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13180,39 +13182,39 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_entry(mut self) -> PushDlDpipeEntry<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 35u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 35u16);
         PushDlDpipeEntry {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_dpipe_entry_index(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 36u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 36u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_dpipe_entry_match_values(mut self) -> PushDlDpipeEntryMatchValues<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 37u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 37u16);
         PushDlDpipeEntryMatchValues {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_dpipe_entry_action_values(mut self) -> PushDlDpipeEntryActionValues<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 38u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 38u16);
         PushDlDpipeEntryActionValues {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_dpipe_entry_counter(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 39u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 39u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_match(mut self) -> PushDlDpipeMatch<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 40u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 40u16);
         PushDlDpipeMatch {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13220,7 +13222,7 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_match_value(mut self) -> PushDlDpipeMatchValue<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 41u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 41u16);
         PushDlDpipeMatchValue {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13228,13 +13230,13 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Associated type: [`DpipeMatchType`] (enum)"]
     pub fn push_dpipe_match_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 42u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 42u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_action(mut self) -> PushDlDpipeAction<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 43u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 43u16);
         PushDlDpipeAction {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13242,7 +13244,7 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_action_value(mut self) -> PushDlDpipeActionValue<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 44u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 44u16);
         PushDlDpipeActionValue {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13250,27 +13252,27 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Associated type: [`DpipeActionType`] (enum)"]
     pub fn push_dpipe_action_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 45u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 45u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_value(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 46u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 46u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_dpipe_value_mask(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 47u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 47u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_dpipe_value_mapping(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 48u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 48u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_dpipe_headers(mut self) -> PushDlDpipeHeaders<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 49u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 49u16);
         PushDlDpipeHeaders {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13278,7 +13280,7 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_header(mut self) -> PushDlDpipeHeader<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 50u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 50u16);
         PushDlDpipeHeader {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13286,45 +13288,45 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     pub fn push_dpipe_header_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             51u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_dpipe_header_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 51u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 51u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Associated type: [`DpipeHeaderId`] (enum)"]
     pub fn push_dpipe_header_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 52u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 52u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_dpipe_header_fields(mut self) -> PushDlDpipeHeaderFields<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 53u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 53u16);
         PushDlDpipeHeaderFields {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_dpipe_header_global(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 54u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 54u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_header_index(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 55u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 55u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_field(mut self) -> PushDlDpipeField<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 56u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 56u16);
         PushDlDpipeField {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13332,48 +13334,48 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     pub fn push_dpipe_field_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             57u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_dpipe_field_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 57u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 57u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_dpipe_field_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 58u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 58u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_field_bitwidth(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 59u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 59u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`DpipeFieldMappingType`] (enum)"]
     pub fn push_dpipe_field_mapping_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 60u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 60u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_pad(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 61u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 61u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Associated type: [`EswitchEncapMode`] (enum)"]
     pub fn push_eswitch_encap_mode(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 62u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 62u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_resource_list(mut self) -> PushDlResourceList<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 63u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 63u16);
         PushDlResourceList {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13381,7 +13383,7 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_resource(mut self) -> PushDlResource<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 64u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 64u16);
         PushDlResource {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13389,93 +13391,93 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     pub fn push_resource_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             65u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_resource_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 65u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 65u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_resource_id(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 66u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 66u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 67u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 67u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size_new(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 68u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 68u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size_valid(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 69u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 69u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size_min(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 70u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 70u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size_max(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 71u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 71u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size_gran(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 72u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 72u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`ResourceUnit`] (enum)"]
     pub fn push_resource_unit(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 73u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 73u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_occ(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 74u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 74u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_table_resource_id(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 75u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 75u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_table_resource_units(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 76u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 76u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`PortFlavour`] (enum)"]
     pub fn push_port_flavour(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 77u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 77u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_number(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 78u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 78u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_split_subport_number(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 79u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 79u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_param(mut self) -> PushDlParam<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 80u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 80u16);
         PushDlParam {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13483,136 +13485,136 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     pub fn push_param_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             81u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_param_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 81u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 81u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_param_generic(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 82u16, 0 as u16);
+        push_header(self.as_vec_mut(), 82u16, 0 as u16);
         self
     }
     #[doc = "Associated type: [`VarAttrType`] (enum)"]
     pub fn push_param_type(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 83u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 83u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`ParamCmode`] (enum)"]
     pub fn push_param_value_cmode(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 87u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 87u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_region_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             88u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_region_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 88u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 88u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_region_size(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 89u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 89u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_region_snapshots(mut self) -> PushDlRegionSnapshots<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 90u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 90u16);
         PushDlRegionSnapshots {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_region_snapshot(mut self) -> PushDlRegionSnapshot<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 91u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 91u16);
         PushDlRegionSnapshot {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_region_snapshot_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 92u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 92u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_region_chunks(mut self) -> PushDlRegionChunks<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 93u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 93u16);
         PushDlRegionChunks {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_region_chunk(mut self) -> PushDlRegionChunk<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 94u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 94u16);
         PushDlRegionChunk {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_region_chunk_data(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 95u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 95u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_region_chunk_addr(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 96u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 96u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_region_chunk_len(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 97u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 97u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_info_driver_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             98u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_info_driver_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 98u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 98u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_info_serial_number(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             99u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_info_serial_number_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 99u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 99u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_info_version_fixed(mut self) -> PushDlInfoVersion<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 100u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 100u16);
         PushDlInfoVersion {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13620,7 +13622,7 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_info_version_running(mut self) -> PushDlInfoVersion<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 101u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 101u16);
         PushDlInfoVersion {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13628,7 +13630,7 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_info_version_stored(mut self) -> PushDlInfoVersion<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 102u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 102u16);
         PushDlInfoVersion {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13636,85 +13638,85 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     pub fn push_info_version_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             103u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_info_version_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 103u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 103u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_info_version_value(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             104u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_info_version_value_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 104u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 104u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_sb_pool_cell_size(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 105u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 105u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_fmsg(mut self) -> PushDlFmsg<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 106u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 106u16);
         PushDlFmsg {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_fmsg_obj_nest_start(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 107u16, 0 as u16);
+        push_header(self.as_vec_mut(), 107u16, 0 as u16);
         self
     }
     pub fn push_fmsg_pair_nest_start(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 108u16, 0 as u16);
+        push_header(self.as_vec_mut(), 108u16, 0 as u16);
         self
     }
     pub fn push_fmsg_arr_nest_start(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 109u16, 0 as u16);
+        push_header(self.as_vec_mut(), 109u16, 0 as u16);
         self
     }
     pub fn push_fmsg_nest_end(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 110u16, 0 as u16);
+        push_header(self.as_vec_mut(), 110u16, 0 as u16);
         self
     }
     pub fn push_fmsg_obj_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             111u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_fmsg_obj_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 111u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 111u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Associated type: [`VarAttrType`] (enum)"]
     pub fn push_fmsg_obj_value_type(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 112u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 112u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_health_reporter(mut self) -> PushDlHealthReporter<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 114u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 114u16);
         PushDlHealthReporter {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13722,116 +13724,116 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     pub fn push_health_reporter_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             115u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_health_reporter_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 115u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 115u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_health_reporter_state(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 116u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 116u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_err_count(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 117u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 117u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_recover_count(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 118u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 118u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_dump_ts(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 119u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 119u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_graceful_period(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 120u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 120u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_auto_recover(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 121u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 121u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_flash_update_file_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             122u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_flash_update_file_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 122u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 122u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_flash_update_component(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             123u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_flash_update_component_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 123u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 123u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_flash_update_status_msg(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             124u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_flash_update_status_msg_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 124u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 124u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_flash_update_status_done(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 125u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 125u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_flash_update_status_total(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 126u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 126u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_pci_pf_number(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 127u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 127u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_pci_vf_number(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 128u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 128u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_stats(mut self) -> PushDlAttrStats<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 129u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 129u16);
         PushDlAttrStats {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13839,37 +13841,37 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     pub fn push_trap_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             130u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_trap_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 130u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 130u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Associated type: [`TrapAction`] (enum)"]
     pub fn push_trap_action(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 131u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 131u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`TrapType`] (enum)"]
     pub fn push_trap_type(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 132u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 132u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_trap_generic(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 133u16, 0 as u16);
+        push_header(self.as_vec_mut(), 133u16, 0 as u16);
         self
     }
     pub fn nested_trap_metadata(mut self) -> PushDlTrapMetadata<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 134u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 134u16);
         PushDlTrapMetadata {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13877,66 +13879,66 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     pub fn push_trap_group_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             135u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_trap_group_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 135u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 135u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_reload_failed(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 136u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 136u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_dump_ts_ns(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 137u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 137u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_netns_fd(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 138u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 138u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_netns_pid(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 139u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 139u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_netns_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 140u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 140u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_auto_dump(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 141u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 141u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_trap_policer_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 142u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 142u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_trap_policer_rate(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 143u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 143u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_trap_policer_burst(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 144u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 144u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_port_function(mut self) -> PushDlPortFunction<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 145u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 145u16);
         PushDlPortFunction {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -13944,77 +13946,77 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     pub fn push_info_board_serial_number(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             146u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_info_board_serial_number_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 146u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 146u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_port_lanes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 147u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 147u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_splittable(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 148u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 148u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_external(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 149u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 149u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_port_controller_number(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 150u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 150u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_flash_update_status_timeout(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 151u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 151u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`FlashOverwrite`] (1 bit per enumeration)"]
     pub fn push_flash_update_overwrite_mask(mut self, value: BuiltinBitfield32) -> Self {
-        push_header(self.as_rec_mut(), 152u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 152u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     #[doc = "Associated type: [`ReloadAction`] (enum)"]
     pub fn push_reload_action(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 153u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 153u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`ReloadAction`] (1 bit per enumeration)"]
     pub fn push_reload_actions_performed(mut self, value: BuiltinBitfield32) -> Self {
-        push_header(self.as_rec_mut(), 154u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 154u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     #[doc = "Associated type: [`ReloadAction`] (1 bit per enumeration)"]
     pub fn push_reload_limits(mut self, value: BuiltinBitfield32) -> Self {
-        push_header(self.as_rec_mut(), 155u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 155u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
     pub fn nested_dev_stats(mut self) -> PushDlDevStats<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 156u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 156u16);
         PushDlDevStats {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_reload_stats(mut self) -> PushDlReloadStats<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 157u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 157u16);
         PushDlReloadStats {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -14022,24 +14024,24 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_reload_stats_entry(mut self) -> PushDlReloadStatsEntry<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 158u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 158u16);
         PushDlReloadStatsEntry {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_reload_stats_limit(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 159u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 159u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_reload_stats_value(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 160u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 160u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_remote_reload_stats(mut self) -> PushDlReloadStats<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 161u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 161u16);
         PushDlReloadStats {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -14047,7 +14049,7 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_reload_action_info(mut self) -> PushDlReloadActInfo<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 162u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 162u16);
         PushDlReloadActInfo {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -14055,124 +14057,124 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_reload_action_stats(mut self) -> PushDlReloadActStats<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 163u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 163u16);
         PushDlReloadActStats {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_port_pci_sf_number(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 164u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 164u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`RateType`] (enum)"]
     pub fn push_rate_type(mut self, value: u16) -> Self {
-        push_header(self.as_rec_mut(), 165u16, 2 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 165u16, 2 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_rate_tx_share(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 166u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 166u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_rate_tx_max(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 167u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 167u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_rate_node_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             168u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_rate_node_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 168u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 168u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_rate_parent_node_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             169u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_rate_parent_node_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 169u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 169u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_region_max_snapshots(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 170u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 170u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_linecard_index(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 171u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 171u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_linecard_state(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 172u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 172u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_linecard_type(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             173u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_linecard_type_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 173u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 173u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn nested_linecard_supported_types(mut self) -> PushDlLinecardSupportedTypes<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 174u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 174u16);
         PushDlLinecardSupportedTypes {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_selftests(mut self) -> PushDlSelftestId<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 176u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 176u16);
         PushDlSelftestId {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_rate_tx_priority(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 177u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 177u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_rate_tx_weight(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 178u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 178u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_region_direct(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 179u16, 0 as u16);
+        push_header(self.as_vec_mut(), 179u16, 0 as u16);
         self
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_rate_tc_bws(mut self) -> PushDlRateTcBws<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 180u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 180u16);
         PushDlRateTcBws {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -14180,50 +14182,50 @@ impl<Prev: Rec> PushDevlink<Prev> {
     }
     #[doc = "Time (in msec) for recoveries before starting the grace period.\n"]
     pub fn push_health_reporter_burst_period(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 181u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 181u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Request restoring parameter to its default value.\n"]
     pub fn push_param_reset_default(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 183u16, 0 as u16);
+        push_header(self.as_vec_mut(), 183u16, 0 as u16);
         self
     }
     #[doc = "Unique devlink instance index.\n"]
     pub fn push_index(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 184u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 184u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Bitmask selecting which resource classes to include in a resource-dump\nresponse. Bit 0 (dev) selects device-level resources; bit 1 (port)\nselects port-level resources. When absent all classes are returned.\n\nAssociated type: [`ResourceScope`] (1 bit per enumeration)"]
     pub fn push_resource_scope_mask(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 185u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 185u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDevlink<Prev> {
+impl<Prev: Pusher> Drop for PushDevlink<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDevStats<Prev: Rec> {
+pub struct PushDlDevStats<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDevStats<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDevStats<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDevStats<Prev> {
+impl<Prev: Pusher> PushDlDevStats<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14233,47 +14235,47 @@ impl<Prev: Rec> PushDlDevStats<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn nested_reload_stats(mut self) -> PushDlReloadStats<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 157u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 157u16);
         PushDlReloadStats {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_remote_reload_stats(mut self) -> PushDlReloadStats<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 161u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 161u16);
         PushDlReloadStats {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlDevStats<Prev> {
+impl<Prev: Pusher> Drop for PushDlDevStats<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlReloadStats<Prev: Rec> {
+pub struct PushDlReloadStats<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlReloadStats<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlReloadStats<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlReloadStats<Prev> {
+impl<Prev: Pusher> PushDlReloadStats<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14283,41 +14285,41 @@ impl<Prev: Rec> PushDlReloadStats<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_reload_action_info(mut self) -> PushDlReloadActInfo<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 162u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 162u16);
         PushDlReloadActInfo {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlReloadStats<Prev> {
+impl<Prev: Pusher> Drop for PushDlReloadStats<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlReloadActInfo<Prev: Rec> {
+pub struct PushDlReloadActInfo<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlReloadActInfo<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlReloadActInfo<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlReloadActInfo<Prev> {
+impl<Prev: Pusher> PushDlReloadActInfo<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14327,47 +14329,47 @@ impl<Prev: Rec> PushDlReloadActInfo<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Associated type: [`ReloadAction`] (enum)"]
     pub fn push_reload_action(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 153u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 153u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_reload_action_stats(mut self) -> PushDlReloadActStats<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 163u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 163u16);
         PushDlReloadActStats {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlReloadActInfo<Prev> {
+impl<Prev: Pusher> Drop for PushDlReloadActInfo<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlReloadActStats<Prev: Rec> {
+pub struct PushDlReloadActStats<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlReloadActStats<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlReloadActStats<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlReloadActStats<Prev> {
+impl<Prev: Pusher> PushDlReloadActStats<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14377,41 +14379,41 @@ impl<Prev: Rec> PushDlReloadActStats<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_reload_stats_entry(mut self) -> PushDlReloadStatsEntry<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 158u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 158u16);
         PushDlReloadStatsEntry {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlReloadActStats<Prev> {
+impl<Prev: Pusher> Drop for PushDlReloadActStats<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlReloadStatsEntry<Prev: Rec> {
+pub struct PushDlReloadStatsEntry<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlReloadStatsEntry<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlReloadStatsEntry<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlReloadStatsEntry<Prev> {
+impl<Prev: Pusher> PushDlReloadStatsEntry<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14421,43 +14423,43 @@ impl<Prev: Rec> PushDlReloadStatsEntry<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_reload_stats_limit(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 159u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 159u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_reload_stats_value(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 160u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 160u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlReloadStatsEntry<Prev> {
+impl<Prev: Pusher> Drop for PushDlReloadStatsEntry<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlInfoVersion<Prev: Rec> {
+pub struct PushDlInfoVersion<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlInfoVersion<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlInfoVersion<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlInfoVersion<Prev> {
+impl<Prev: Pusher> PushDlInfoVersion<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14467,63 +14469,63 @@ impl<Prev: Rec> PushDlInfoVersion<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_info_version_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             103u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_info_version_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 103u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 103u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_info_version_value(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             104u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_info_version_value_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 104u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 104u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlInfoVersion<Prev> {
+impl<Prev: Pusher> Drop for PushDlInfoVersion<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlPortFunction<Prev: Rec> {
+pub struct PushDlPortFunction<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlPortFunction<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlPortFunction<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlPortFunction<Prev> {
+impl<Prev: Pusher> PushDlPortFunction<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14533,56 +14535,56 @@ impl<Prev: Rec> PushDlPortFunction<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_hw_addr(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 1u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Associated type: [`PortFnState`] (enum)"]
     pub fn push_state(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`PortFnOpstate`] (enum)"]
     pub fn push_opstate(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`PortFnAttrCap`] (1 bit per enumeration)"]
     pub fn push_caps(mut self, value: BuiltinBitfield32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, value.as_slice().len() as u16);
-        self.as_rec_mut().extend(value.as_slice());
+        push_header(self.as_vec_mut(), 4u16, value.as_slice().len() as u16);
+        self.as_vec_mut().extend(value.as_slice());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlPortFunction<Prev> {
+impl<Prev: Pusher> Drop for PushDlPortFunction<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeTables<Prev: Rec> {
+pub struct PushDlDpipeTables<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeTables<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeTables<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeTables<Prev> {
+impl<Prev: Pusher> PushDlDpipeTables<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14592,41 +14594,41 @@ impl<Prev: Rec> PushDlDpipeTables<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_table(mut self) -> PushDlDpipeTable<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 28u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 28u16);
         PushDlDpipeTable {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeTables<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeTables<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeTable<Prev: Rec> {
+pub struct PushDlDpipeTable<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeTable<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeTable<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeTable<Prev> {
+impl<Prev: Pusher> PushDlDpipeTable<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14636,82 +14638,82 @@ impl<Prev: Rec> PushDlDpipeTable<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_dpipe_table_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             29u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_dpipe_table_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 29u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 29u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_dpipe_table_size(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 30u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 30u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_dpipe_table_matches(mut self) -> PushDlDpipeTableMatches<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 31u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 31u16);
         PushDlDpipeTableMatches {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_dpipe_table_actions(mut self) -> PushDlDpipeTableActions<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 32u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 32u16);
         PushDlDpipeTableActions {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_dpipe_table_counters_enabled(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 33u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 33u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_table_resource_id(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 75u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 75u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_table_resource_units(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 76u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 76u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeTable<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeTable<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeTableMatches<Prev: Rec> {
+pub struct PushDlDpipeTableMatches<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeTableMatches<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeTableMatches<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeTableMatches<Prev> {
+impl<Prev: Pusher> PushDlDpipeTableMatches<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14721,41 +14723,41 @@ impl<Prev: Rec> PushDlDpipeTableMatches<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_match(mut self) -> PushDlDpipeMatch<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 40u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 40u16);
         PushDlDpipeMatch {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeTableMatches<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeTableMatches<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeTableActions<Prev: Rec> {
+pub struct PushDlDpipeTableActions<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeTableActions<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeTableActions<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeTableActions<Prev> {
+impl<Prev: Pusher> PushDlDpipeTableActions<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14765,41 +14767,41 @@ impl<Prev: Rec> PushDlDpipeTableActions<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_action(mut self) -> PushDlDpipeAction<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 43u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 43u16);
         PushDlDpipeAction {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeTableActions<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeTableActions<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeEntries<Prev: Rec> {
+pub struct PushDlDpipeEntries<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeEntries<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeEntries<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeEntries<Prev> {
+impl<Prev: Pusher> PushDlDpipeEntries<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14809,41 +14811,41 @@ impl<Prev: Rec> PushDlDpipeEntries<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_entry(mut self) -> PushDlDpipeEntry<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 35u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 35u16);
         PushDlDpipeEntry {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeEntries<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeEntries<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeEntry<Prev: Rec> {
+pub struct PushDlDpipeEntry<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeEntry<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeEntry<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeEntry<Prev> {
+impl<Prev: Pusher> PushDlDpipeEntry<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14853,57 +14855,57 @@ impl<Prev: Rec> PushDlDpipeEntry<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_dpipe_entry_index(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 36u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 36u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_dpipe_entry_match_values(mut self) -> PushDlDpipeEntryMatchValues<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 37u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 37u16);
         PushDlDpipeEntryMatchValues {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_dpipe_entry_action_values(mut self) -> PushDlDpipeEntryActionValues<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 38u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 38u16);
         PushDlDpipeEntryActionValues {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_dpipe_entry_counter(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 39u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 39u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeEntry<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeEntry<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeEntryMatchValues<Prev: Rec> {
+pub struct PushDlDpipeEntryMatchValues<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeEntryMatchValues<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeEntryMatchValues<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeEntryMatchValues<Prev> {
+impl<Prev: Pusher> PushDlDpipeEntryMatchValues<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14913,41 +14915,41 @@ impl<Prev: Rec> PushDlDpipeEntryMatchValues<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_match_value(mut self) -> PushDlDpipeMatchValue<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 41u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 41u16);
         PushDlDpipeMatchValue {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeEntryMatchValues<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeEntryMatchValues<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeEntryActionValues<Prev: Rec> {
+pub struct PushDlDpipeEntryActionValues<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeEntryActionValues<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeEntryActionValues<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeEntryActionValues<Prev> {
+impl<Prev: Pusher> PushDlDpipeEntryActionValues<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -14957,41 +14959,41 @@ impl<Prev: Rec> PushDlDpipeEntryActionValues<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_action_value(mut self) -> PushDlDpipeActionValue<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 44u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 44u16);
         PushDlDpipeActionValue {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeEntryActionValues<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeEntryActionValues<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeMatch<Prev: Rec> {
+pub struct PushDlDpipeMatch<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeMatch<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeMatch<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeMatch<Prev> {
+impl<Prev: Pusher> PushDlDpipeMatch<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15001,60 +15003,60 @@ impl<Prev: Rec> PushDlDpipeMatch<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Associated type: [`DpipeMatchType`] (enum)"]
     pub fn push_dpipe_match_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 42u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 42u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`DpipeHeaderId`] (enum)"]
     pub fn push_dpipe_header_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 52u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 52u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_header_global(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 54u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 54u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_header_index(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 55u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 55u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_field_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 58u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 58u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeMatch<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeMatch<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeMatchValue<Prev: Rec> {
+pub struct PushDlDpipeMatchValue<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeMatchValue<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeMatchValue<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeMatchValue<Prev> {
+impl<Prev: Pusher> PushDlDpipeMatchValue<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15064,56 +15066,56 @@ impl<Prev: Rec> PushDlDpipeMatchValue<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_match(mut self) -> PushDlDpipeMatch<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 40u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 40u16);
         PushDlDpipeMatch {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_dpipe_value(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 46u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 46u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_dpipe_value_mask(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 47u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 47u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_dpipe_value_mapping(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 48u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 48u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeMatchValue<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeMatchValue<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeAction<Prev: Rec> {
+pub struct PushDlDpipeAction<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeAction<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeAction<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeAction<Prev> {
+impl<Prev: Pusher> PushDlDpipeAction<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15123,60 +15125,60 @@ impl<Prev: Rec> PushDlDpipeAction<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Associated type: [`DpipeActionType`] (enum)"]
     pub fn push_dpipe_action_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 45u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 45u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`DpipeHeaderId`] (enum)"]
     pub fn push_dpipe_header_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 52u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 52u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_header_global(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 54u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 54u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_header_index(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 55u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 55u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_field_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 58u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 58u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeAction<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeAction<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeActionValue<Prev: Rec> {
+pub struct PushDlDpipeActionValue<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeActionValue<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeActionValue<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeActionValue<Prev> {
+impl<Prev: Pusher> PushDlDpipeActionValue<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15186,56 +15188,56 @@ impl<Prev: Rec> PushDlDpipeActionValue<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_action(mut self) -> PushDlDpipeAction<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 43u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 43u16);
         PushDlDpipeAction {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_dpipe_value(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 46u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 46u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_dpipe_value_mask(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 47u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 47u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_dpipe_value_mapping(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 48u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 48u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeActionValue<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeActionValue<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeHeaders<Prev: Rec> {
+pub struct PushDlDpipeHeaders<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeHeaders<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeHeaders<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeHeaders<Prev> {
+impl<Prev: Pusher> PushDlDpipeHeaders<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15245,41 +15247,41 @@ impl<Prev: Rec> PushDlDpipeHeaders<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_header(mut self) -> PushDlDpipeHeader<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 50u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 50u16);
         PushDlDpipeHeader {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeHeaders<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeHeaders<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeHeader<Prev: Rec> {
+pub struct PushDlDpipeHeader<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeHeader<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeHeader<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeHeader<Prev> {
+impl<Prev: Pusher> PushDlDpipeHeader<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15289,66 +15291,66 @@ impl<Prev: Rec> PushDlDpipeHeader<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_dpipe_header_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             51u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_dpipe_header_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 51u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 51u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Associated type: [`DpipeHeaderId`] (enum)"]
     pub fn push_dpipe_header_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 52u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 52u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_dpipe_header_fields(mut self) -> PushDlDpipeHeaderFields<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 53u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 53u16);
         PushDlDpipeHeaderFields {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn push_dpipe_header_global(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 54u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 54u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeHeader<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeHeader<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeHeaderFields<Prev: Rec> {
+pub struct PushDlDpipeHeaderFields<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeHeaderFields<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeHeaderFields<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeHeaderFields<Prev> {
+impl<Prev: Pusher> PushDlDpipeHeaderFields<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15358,41 +15360,41 @@ impl<Prev: Rec> PushDlDpipeHeaderFields<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_dpipe_field(mut self) -> PushDlDpipeField<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 56u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 56u16);
         PushDlDpipeField {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeHeaderFields<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeHeaderFields<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlDpipeField<Prev: Rec> {
+pub struct PushDlDpipeField<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlDpipeField<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlDpipeField<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlDpipeField<Prev> {
+impl<Prev: Pusher> PushDlDpipeField<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15402,64 +15404,64 @@ impl<Prev: Rec> PushDlDpipeField<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_dpipe_field_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             57u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_dpipe_field_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 57u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 57u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_dpipe_field_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 58u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 58u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_dpipe_field_bitwidth(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 59u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 59u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`DpipeFieldMappingType`] (enum)"]
     pub fn push_dpipe_field_mapping_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 60u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 60u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlDpipeField<Prev> {
+impl<Prev: Pusher> Drop for PushDlDpipeField<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlResource<Prev: Rec> {
+pub struct PushDlResource<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlResource<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlResource<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlResource<Prev> {
+impl<Prev: Pusher> PushDlResource<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15469,94 +15471,94 @@ impl<Prev: Rec> PushDlResource<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_resource_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             65u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_resource_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 65u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 65u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_resource_id(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 66u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 66u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 67u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 67u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size_new(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 68u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 68u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size_valid(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 69u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 69u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size_min(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 70u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 70u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size_max(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 71u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 71u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_size_gran(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 72u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 72u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Associated type: [`ResourceUnit`] (enum)"]
     pub fn push_resource_unit(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 73u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 73u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_resource_occ(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 74u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 74u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlResource<Prev> {
+impl<Prev: Pusher> Drop for PushDlResource<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlResourceList<Prev: Rec> {
+pub struct PushDlResourceList<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlResourceList<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlResourceList<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlResourceList<Prev> {
+impl<Prev: Pusher> PushDlResourceList<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15566,41 +15568,41 @@ impl<Prev: Rec> PushDlResourceList<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Attribute may repeat multiple times (treat it as array)"]
     pub fn nested_resource(mut self) -> PushDlResource<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 64u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 64u16);
         PushDlResource {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlResourceList<Prev> {
+impl<Prev: Pusher> Drop for PushDlResourceList<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlParam<Prev: Rec> {
+pub struct PushDlParam<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlParam<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlParam<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlParam<Prev> {
+impl<Prev: Pusher> PushDlParam<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15610,58 +15612,58 @@ impl<Prev: Rec> PushDlParam<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_param_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             81u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_param_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 81u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 81u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_param_generic(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 82u16, 0 as u16);
+        push_header(self.as_vec_mut(), 82u16, 0 as u16);
         self
     }
     #[doc = "Associated type: [`VarAttrType`] (enum)"]
     pub fn push_param_type(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 83u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 83u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlParam<Prev> {
+impl<Prev: Pusher> Drop for PushDlParam<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlRegionSnapshots<Prev: Rec> {
+pub struct PushDlRegionSnapshots<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlRegionSnapshots<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlRegionSnapshots<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlRegionSnapshots<Prev> {
+impl<Prev: Pusher> PushDlRegionSnapshots<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15671,40 +15673,40 @@ impl<Prev: Rec> PushDlRegionSnapshots<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn nested_region_snapshot(mut self) -> PushDlRegionSnapshot<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 91u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 91u16);
         PushDlRegionSnapshot {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlRegionSnapshots<Prev> {
+impl<Prev: Pusher> Drop for PushDlRegionSnapshots<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlRegionSnapshot<Prev: Rec> {
+pub struct PushDlRegionSnapshot<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlRegionSnapshot<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlRegionSnapshot<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlRegionSnapshot<Prev> {
+impl<Prev: Pusher> PushDlRegionSnapshot<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15714,38 +15716,38 @@ impl<Prev: Rec> PushDlRegionSnapshot<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_region_snapshot_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 92u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 92u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlRegionSnapshot<Prev> {
+impl<Prev: Pusher> Drop for PushDlRegionSnapshot<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlRegionChunks<Prev: Rec> {
+pub struct PushDlRegionChunks<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlRegionChunks<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlRegionChunks<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlRegionChunks<Prev> {
+impl<Prev: Pusher> PushDlRegionChunks<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15755,40 +15757,40 @@ impl<Prev: Rec> PushDlRegionChunks<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn nested_region_chunk(mut self) -> PushDlRegionChunk<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 94u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 94u16);
         PushDlRegionChunk {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
 }
-impl<Prev: Rec> Drop for PushDlRegionChunks<Prev> {
+impl<Prev: Pusher> Drop for PushDlRegionChunks<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlRegionChunk<Prev: Rec> {
+pub struct PushDlRegionChunk<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlRegionChunk<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlRegionChunk<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlRegionChunk<Prev> {
+impl<Prev: Pusher> PushDlRegionChunk<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15798,43 +15800,43 @@ impl<Prev: Rec> PushDlRegionChunk<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_region_chunk_data(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 95u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 95u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     pub fn push_region_chunk_addr(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 96u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 96u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlRegionChunk<Prev> {
+impl<Prev: Pusher> Drop for PushDlRegionChunk<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlFmsg<Prev: Rec> {
+pub struct PushDlFmsg<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlFmsg<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlFmsg<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlFmsg<Prev> {
+impl<Prev: Pusher> PushDlFmsg<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15844,64 +15846,64 @@ impl<Prev: Rec> PushDlFmsg<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_fmsg_obj_nest_start(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 107u16, 0 as u16);
+        push_header(self.as_vec_mut(), 107u16, 0 as u16);
         self
     }
     pub fn push_fmsg_pair_nest_start(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 108u16, 0 as u16);
+        push_header(self.as_vec_mut(), 108u16, 0 as u16);
         self
     }
     pub fn push_fmsg_arr_nest_start(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 109u16, 0 as u16);
+        push_header(self.as_vec_mut(), 109u16, 0 as u16);
         self
     }
     pub fn push_fmsg_nest_end(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 110u16, 0 as u16);
+        push_header(self.as_vec_mut(), 110u16, 0 as u16);
         self
     }
     pub fn push_fmsg_obj_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             111u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_fmsg_obj_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 111u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 111u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlFmsg<Prev> {
+impl<Prev: Pusher> Drop for PushDlFmsg<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlHealthReporter<Prev: Rec> {
+pub struct PushDlHealthReporter<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlHealthReporter<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlHealthReporter<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlHealthReporter<Prev> {
+impl<Prev: Pusher> PushDlHealthReporter<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -15911,94 +15913,94 @@ impl<Prev: Rec> PushDlHealthReporter<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_health_reporter_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             115u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_health_reporter_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 115u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 115u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     pub fn push_health_reporter_state(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 116u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 116u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_err_count(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 117u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 117u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_recover_count(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 118u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 118u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_dump_ts(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 119u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 119u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_graceful_period(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 120u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 120u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_auto_recover(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 121u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 121u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_dump_ts_ns(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 137u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 137u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_health_reporter_auto_dump(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 141u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 141u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Time (in msec) for recoveries before starting the grace period.\n"]
     pub fn push_health_reporter_burst_period(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 181u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 181u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlHealthReporter<Prev> {
+impl<Prev: Pusher> Drop for PushDlHealthReporter<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlAttrStats<Prev: Rec> {
+pub struct PushDlAttrStats<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlAttrStats<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlAttrStats<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlAttrStats<Prev> {
+impl<Prev: Pusher> PushDlAttrStats<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -16008,48 +16010,48 @@ impl<Prev: Rec> PushDlAttrStats<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_stats_rx_packets(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 0u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 0u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_stats_rx_bytes(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn push_stats_rx_dropped(mut self, value: u64) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 8 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 8 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlAttrStats<Prev> {
+impl<Prev: Pusher> Drop for PushDlAttrStats<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlTrapMetadata<Prev: Rec> {
+pub struct PushDlTrapMetadata<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlTrapMetadata<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlTrapMetadata<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlTrapMetadata<Prev> {
+impl<Prev: Pusher> PushDlTrapMetadata<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -16059,41 +16061,41 @@ impl<Prev: Rec> PushDlTrapMetadata<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_trap_metadata_type_in_port(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 0u16, 0 as u16);
+        push_header(self.as_vec_mut(), 0u16, 0 as u16);
         self
     }
     pub fn push_trap_metadata_type_fa_cookie(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 0 as u16);
+        push_header(self.as_vec_mut(), 1u16, 0 as u16);
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlTrapMetadata<Prev> {
+impl<Prev: Pusher> Drop for PushDlTrapMetadata<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlLinecardSupportedTypes<Prev: Rec> {
+pub struct PushDlLinecardSupportedTypes<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlLinecardSupportedTypes<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlLinecardSupportedTypes<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlLinecardSupportedTypes<Prev> {
+impl<Prev: Pusher> PushDlLinecardSupportedTypes<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -16103,48 +16105,48 @@ impl<Prev: Rec> PushDlLinecardSupportedTypes<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_linecard_type(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             173u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     pub fn push_linecard_type_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 173u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 173u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlLinecardSupportedTypes<Prev> {
+impl<Prev: Pusher> Drop for PushDlLinecardSupportedTypes<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlSelftestId<Prev: Rec> {
+pub struct PushDlSelftestId<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlSelftestId<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlSelftestId<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlSelftestId<Prev> {
+impl<Prev: Pusher> PushDlSelftestId<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -16154,37 +16156,37 @@ impl<Prev: Rec> PushDlSelftestId<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_flash(mut self, value: ()) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 0 as u16);
+        push_header(self.as_vec_mut(), 1u16, 0 as u16);
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlSelftestId<Prev> {
+impl<Prev: Pusher> Drop for PushDlSelftestId<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushDlRateTcBws<Prev: Rec> {
+pub struct PushDlRateTcBws<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDlRateTcBws<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushDlRateTcBws<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDlRateTcBws<Prev> {
+impl<Prev: Pusher> PushDlRateTcBws<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -16194,27 +16196,27 @@ impl<Prev: Rec> PushDlRateTcBws<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_index(mut self, value: u8) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 1 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 1 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Specifies the bandwidth share assigned to the Traffic Class. The\nbandwidth for the traffic class is determined in proportion to the sum\nof the shares of all configured classes.\n"]
     pub fn push_bw(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushDlRateTcBws<Prev> {
+impl<Prev: Pusher> Drop for PushDlRateTcBws<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -16245,11 +16247,11 @@ impl<'r> OpGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetDump<'_> {
@@ -16298,11 +16300,11 @@ impl<'r> OpGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetDo<'_> {
@@ -16353,11 +16355,11 @@ impl<'r> OpPortGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 5u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPortGetDump<'_> {
@@ -16406,11 +16408,11 @@ impl<'r> OpPortGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 5u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPortGetDo<'_> {
@@ -16459,11 +16461,11 @@ impl<'r> OpPortSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 6u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPortSetDo<'_> {
@@ -16512,11 +16514,11 @@ impl<'r> OpPortNewDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 7u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPortNewDo<'_> {
@@ -16565,11 +16567,11 @@ impl<'r> OpPortDelDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 8u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPortDelDo<'_> {
@@ -16618,11 +16620,11 @@ impl<'r> OpPortSplitDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 9u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPortSplitDo<'_> {
@@ -16671,11 +16673,11 @@ impl<'r> OpPortUnsplitDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 10u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPortUnsplitDo<'_> {
@@ -16726,11 +16728,11 @@ impl<'r> OpSbGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 11u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbGetDump<'_> {
@@ -16779,11 +16781,11 @@ impl<'r> OpSbGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 11u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbGetDo<'_> {
@@ -16834,11 +16836,11 @@ impl<'r> OpSbPoolGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 15u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbPoolGetDump<'_> {
@@ -16887,11 +16889,11 @@ impl<'r> OpSbPoolGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 15u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbPoolGetDo<'_> {
@@ -16940,11 +16942,11 @@ impl<'r> OpSbPoolSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 16u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbPoolSetDo<'_> {
@@ -16995,11 +16997,11 @@ impl<'r> OpSbPortPoolGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 19u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbPortPoolGetDump<'_> {
@@ -17048,11 +17050,11 @@ impl<'r> OpSbPortPoolGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 19u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbPortPoolGetDo<'_> {
@@ -17101,11 +17103,11 @@ impl<'r> OpSbPortPoolSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 20u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbPortPoolSetDo<'_> {
@@ -17156,11 +17158,11 @@ impl<'r> OpSbTcPoolBindGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 23u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbTcPoolBindGetDump<'_> {
@@ -17209,11 +17211,11 @@ impl<'r> OpSbTcPoolBindGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 23u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbTcPoolBindGetDo<'_> {
@@ -17262,11 +17264,11 @@ impl<'r> OpSbTcPoolBindSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 24u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbTcPoolBindSetDo<'_> {
@@ -17315,11 +17317,11 @@ impl<'r> OpSbOccSnapshotDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 27u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbOccSnapshotDo<'_> {
@@ -17368,11 +17370,11 @@ impl<'r> OpSbOccMaxClearDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 28u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSbOccMaxClearDo<'_> {
@@ -17421,11 +17423,11 @@ impl<'r> OpEswitchGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 29u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpEswitchGetDo<'_> {
@@ -17474,11 +17476,11 @@ impl<'r> OpEswitchSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 30u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpEswitchSetDo<'_> {
@@ -17527,11 +17529,11 @@ impl<'r> OpDpipeTableGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 31u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDpipeTableGetDo<'_> {
@@ -17580,11 +17582,11 @@ impl<'r> OpDpipeEntriesGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 32u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDpipeEntriesGetDo<'_> {
@@ -17633,11 +17635,11 @@ impl<'r> OpDpipeHeadersGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 33u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDpipeHeadersGetDo<'_> {
@@ -17686,11 +17688,11 @@ impl<'r> OpDpipeTableCountersSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 34u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDpipeTableCountersSetDo<'_> {
@@ -17739,11 +17741,11 @@ impl<'r> OpResourceSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 35u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpResourceSetDo<'_> {
@@ -17794,11 +17796,11 @@ impl<'r> OpResourceDumpDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 36u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpResourceDumpDump<'_> {
@@ -17847,11 +17849,11 @@ impl<'r> OpResourceDumpDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 36u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpResourceDumpDo<'_> {
@@ -17900,11 +17902,11 @@ impl<'r> OpReloadDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 37u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpReloadDo<'_> {
@@ -17955,11 +17957,11 @@ impl<'r> OpParamGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 38u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpParamGetDump<'_> {
@@ -18008,11 +18010,11 @@ impl<'r> OpParamGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 38u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpParamGetDo<'_> {
@@ -18061,11 +18063,11 @@ impl<'r> OpParamSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 39u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpParamSetDo<'_> {
@@ -18116,11 +18118,11 @@ impl<'r> OpRegionGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 42u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRegionGetDump<'_> {
@@ -18169,11 +18171,11 @@ impl<'r> OpRegionGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 42u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRegionGetDo<'_> {
@@ -18222,11 +18224,11 @@ impl<'r> OpRegionNewDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 44u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRegionNewDo<'_> {
@@ -18275,11 +18277,11 @@ impl<'r> OpRegionDelDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 45u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRegionDelDo<'_> {
@@ -18330,11 +18332,11 @@ impl<'r> OpRegionReadDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 46u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRegionReadDump<'_> {
@@ -18385,11 +18387,11 @@ impl<'r> OpPortParamGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 47u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPortParamGetDump<'_> {
@@ -18438,11 +18440,11 @@ impl<'r> OpPortParamGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 47u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPortParamGetDo<'_> {
@@ -18491,11 +18493,11 @@ impl<'r> OpPortParamSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 48u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpPortParamSetDo<'_> {
@@ -18546,11 +18548,11 @@ impl<'r> OpInfoGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 51u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpInfoGetDump<'_> {
@@ -18599,11 +18601,11 @@ impl<'r> OpInfoGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 51u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpInfoGetDo<'_> {
@@ -18654,11 +18656,11 @@ impl<'r> OpHealthReporterGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 52u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpHealthReporterGetDump<'_> {
@@ -18707,11 +18709,11 @@ impl<'r> OpHealthReporterGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 52u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpHealthReporterGetDo<'_> {
@@ -18760,11 +18762,11 @@ impl<'r> OpHealthReporterSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 53u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpHealthReporterSetDo<'_> {
@@ -18813,11 +18815,11 @@ impl<'r> OpHealthReporterRecoverDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 54u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpHealthReporterRecoverDo<'_> {
@@ -18866,11 +18868,11 @@ impl<'r> OpHealthReporterDiagnoseDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 55u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpHealthReporterDiagnoseDo<'_> {
@@ -18921,11 +18923,11 @@ impl<'r> OpHealthReporterDumpGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 56u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpHealthReporterDumpGetDump<'_> {
@@ -18974,11 +18976,11 @@ impl<'r> OpHealthReporterDumpClearDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 57u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpHealthReporterDumpClearDo<'_> {
@@ -19027,11 +19029,11 @@ impl<'r> OpFlashUpdateDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 58u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpFlashUpdateDo<'_> {
@@ -19082,11 +19084,11 @@ impl<'r> OpTrapGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 61u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpTrapGetDump<'_> {
@@ -19135,11 +19137,11 @@ impl<'r> OpTrapGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 61u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpTrapGetDo<'_> {
@@ -19188,11 +19190,11 @@ impl<'r> OpTrapSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 62u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpTrapSetDo<'_> {
@@ -19243,11 +19245,11 @@ impl<'r> OpTrapGroupGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 65u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpTrapGroupGetDump<'_> {
@@ -19296,11 +19298,11 @@ impl<'r> OpTrapGroupGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 65u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpTrapGroupGetDo<'_> {
@@ -19349,11 +19351,11 @@ impl<'r> OpTrapGroupSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 66u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpTrapGroupSetDo<'_> {
@@ -19404,11 +19406,11 @@ impl<'r> OpTrapPolicerGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 69u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpTrapPolicerGetDump<'_> {
@@ -19457,11 +19459,11 @@ impl<'r> OpTrapPolicerGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 69u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpTrapPolicerGetDo<'_> {
@@ -19510,11 +19512,11 @@ impl<'r> OpTrapPolicerSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 70u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpTrapPolicerSetDo<'_> {
@@ -19563,11 +19565,11 @@ impl<'r> OpHealthReporterTestDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 73u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpHealthReporterTestDo<'_> {
@@ -19618,11 +19620,11 @@ impl<'r> OpRateGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 74u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRateGetDump<'_> {
@@ -19671,11 +19673,11 @@ impl<'r> OpRateGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 74u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRateGetDo<'_> {
@@ -19724,11 +19726,11 @@ impl<'r> OpRateSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 75u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRateSetDo<'_> {
@@ -19777,11 +19779,11 @@ impl<'r> OpRateNewDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 76u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRateNewDo<'_> {
@@ -19830,11 +19832,11 @@ impl<'r> OpRateDelDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 77u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRateDelDo<'_> {
@@ -19885,11 +19887,11 @@ impl<'r> OpLinecardGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 78u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpLinecardGetDump<'_> {
@@ -19938,11 +19940,11 @@ impl<'r> OpLinecardGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 78u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpLinecardGetDo<'_> {
@@ -19991,11 +19993,11 @@ impl<'r> OpLinecardSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 79u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpLinecardSetDo<'_> {
@@ -20046,11 +20048,11 @@ impl<'r> OpSelftestsGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 82u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSelftestsGetDump<'_> {
@@ -20099,11 +20101,11 @@ impl<'r> OpSelftestsGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 82u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSelftestsGetDo<'_> {
@@ -20152,11 +20154,11 @@ impl<'r> OpSelftestsRunDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 83u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpSelftestsRunDo<'_> {
@@ -20205,11 +20207,11 @@ impl<'r> OpNotifyFilterSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDevlink::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 84u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpNotifyFilterSetDo<'_> {

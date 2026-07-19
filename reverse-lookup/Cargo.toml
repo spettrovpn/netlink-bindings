@@ -48,6 +48,7 @@ rt-link = [ "netlink-bindings/rt-link" ]
 rt-neigh = [ "netlink-bindings/rt-neigh" ]
 rt-route = [ "netlink-bindings/rt-route" ]
 rt-rule = [ "netlink-bindings/rt-rule" ]
+sunrpc = [ "netlink-bindings/sunrpc" ]
 tc = [ "netlink-bindings/tc" ]
 tcp_metrics = [ "netlink-bindings/tcp_metrics" ]
 team = [ "netlink-bindings/team" ]
@@ -84,6 +85,7 @@ all-subsystems = [
   "rt-neigh",
   "rt-route",
   "rt-rule",
+  "sunrpc",
   "tc",
   "tcp_metrics",
   "team",

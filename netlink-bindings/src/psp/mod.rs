@@ -35,15 +35,199 @@ impl Version {
     }
 }
 #[derive(Clone)]
-pub enum Dev {
+pub enum AssocDevInfo {
+    #[doc = "ifindex of an associated network device.\n"]
+    Ifindex(u32),
+    #[doc = "Network namespace ID of the associated device.\n"]
+    Nsid(i32),
+}
+impl<'a> IterableAssocDevInfo<'a> {
+    #[doc = "ifindex of an associated network device.\n"]
+    pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(AssocDevInfo::Ifindex(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "AssocDevInfo",
+            "Ifindex",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "Network namespace ID of the associated device.\n"]
+    pub fn get_nsid(&self) -> Result<i32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(AssocDevInfo::Nsid(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "AssocDevInfo",
+            "Nsid",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+}
+impl AssocDevInfo {
+    pub fn new<'a>(buf: &'a [u8]) -> IterableAssocDevInfo<'a> {
+        IterableAssocDevInfo::with_loc(buf, buf.as_ptr() as usize)
+    }
+    fn attr_from_type(r#type: u16) -> Option<&'static str> {
+        let res = match r#type {
+            1u16 => "Ifindex",
+            2u16 => "Nsid",
+            _ => return None,
+        };
+        Some(res)
+    }
+}
+#[derive(Clone, Copy, Default)]
+pub struct IterableAssocDevInfo<'a> {
+    buf: &'a [u8],
+    pos: usize,
+    orig_loc: usize,
+}
+impl<'a> IterableAssocDevInfo<'a> {
+    fn with_loc(buf: &'a [u8], orig_loc: usize) -> Self {
+        Self {
+            buf,
+            pos: 0,
+            orig_loc,
+        }
+    }
+    pub fn get_buf(&self) -> &'a [u8] {
+        self.buf
+    }
+}
+impl<'a> Iterator for IterableAssocDevInfo<'a> {
+    type Item = Result<AssocDevInfo, ErrorContext>;
+    fn next(&mut self) -> Option<Self::Item> {
+        let mut pos;
+        let mut r#type;
+        loop {
+            pos = self.pos;
+            r#type = None;
+            if self.buf.len() == self.pos {
+                return None;
+            }
+            let Some((header, next)) = chop_header(self.buf, &mut self.pos) else {
+                self.pos = self.buf.len();
+                break;
+            };
+            r#type = Some(header.r#type);
+            let res = match header.r#type {
+                1u16 => AssocDevInfo::Ifindex({
+                    let res = parse_u32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                2u16 => AssocDevInfo::Nsid({
+                    let res = parse_i32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
+                n => continue,
+            };
+            return Some(Ok(res));
+        }
+        Some(Err(ErrorContext::new(
+            "AssocDevInfo",
+            r#type.and_then(|t| AssocDevInfo::attr_from_type(t)),
+            self.orig_loc,
+            self.buf.as_ptr().wrapping_add(pos) as usize,
+        )))
+    }
+}
+impl std::fmt::Debug for IterableAssocDevInfo<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut fmt = f.debug_struct("AssocDevInfo");
+        for attr in self.clone() {
+            let attr = match attr {
+                Ok(a) => a,
+                Err(err) => {
+                    fmt.finish()?;
+                    f.write_str("Err(")?;
+                    err.fmt(f)?;
+                    return f.write_str(")");
+                }
+            };
+            match attr {
+                AssocDevInfo::Ifindex(val) => fmt.field("Ifindex", &val),
+                AssocDevInfo::Nsid(val) => fmt.field("Nsid", &val),
+            };
+        }
+        fmt.finish()
+    }
+}
+impl IterableAssocDevInfo<'_> {
+    pub fn lookup_attr(
+        &self,
+        offset: usize,
+        missing_type: Option<u16>,
+    ) -> (Vec<(&'static str, usize)>, Option<&'static str>) {
+        let mut stack = Vec::new();
+        let cur = ErrorContext::calc_offset(self.orig_loc, self.buf.as_ptr() as usize);
+        if missing_type.is_some() && cur == offset {
+            stack.push(("AssocDevInfo", offset));
+            return (
+                stack,
+                missing_type.and_then(|t| AssocDevInfo::attr_from_type(t)),
+            );
+        }
+        if cur > offset || cur + self.buf.len() < offset {
+            return (stack, None);
+        }
+        let mut attrs = self.clone();
+        let mut last_off = cur + attrs.pos;
+        while let Some(attr) = attrs.next() {
+            let Ok(attr) = attr else { break };
+            match attr {
+                AssocDevInfo::Ifindex(val) => {
+                    if last_off == offset {
+                        stack.push(("Ifindex", last_off));
+                        break;
+                    }
+                }
+                AssocDevInfo::Nsid(val) => {
+                    if last_off == offset {
+                        stack.push(("Nsid", last_off));
+                        break;
+                    }
+                }
+                _ => {}
+            };
+            last_off = cur + attrs.pos;
+        }
+        if !stack.is_empty() {
+            stack.push(("AssocDevInfo", cur));
+        }
+        (stack, None)
+    }
+}
+#[derive(Clone)]
+pub enum Dev<'a> {
     #[doc = "PSP device ID.\n"]
     Id(u32),
-    #[doc = "ifindex of the main netdevice linked to the PSP device.\n"]
+    #[doc = "ifindex of the main netdevice linked to the PSP device, or the ifindex\nto associate with the PSP device.\n"]
     Ifindex(u32),
     #[doc = "Bitmask of PSP versions supported by the device.\n\nAssociated type: [`Version`] (1 bit per enumeration)"]
     PspVersionsCap(u32),
     #[doc = "Bitmask of currently enabled (accepted on Rx) PSP versions.\n\nAssociated type: [`Version`] (1 bit per enumeration)"]
     PspVersionsEna(u32),
+    #[doc = "List of associated virtual devices.\n\nAttribute may repeat multiple times (treat it as array)"]
+    AssocList(IterableAssocDevInfo<'a>),
+    #[doc = "Network namespace ID for the device to associate/disassociate. Optional\nfor dev-assoc and dev-disassoc; if not present, the device is looked up\nin the caller\\'s network namespace.\n"]
+    Nsid(i32),
+    #[doc = "Flag indicating the PSP device is an associated device from a different\nnetwork namespace. Present when in associated namespace, absent when in\nprimary/host namespace.\n"]
+    ByAssociation(()),
 }
 impl<'a> IterableDev<'a> {
     #[doc = "PSP device ID.\n"]
@@ -62,7 +246,7 @@ impl<'a> IterableDev<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
-    #[doc = "ifindex of the main netdevice linked to the PSP device.\n"]
+    #[doc = "ifindex of the main netdevice linked to the PSP device, or the ifindex\nto associate with the PSP device.\n"]
     pub fn get_ifindex(&self) -> Result<u32, ErrorContext> {
         let mut iter = self.clone();
         iter.pos = 0;
@@ -110,8 +294,50 @@ impl<'a> IterableDev<'a> {
             self.buf.as_ptr() as usize,
         ))
     }
+    #[doc = "List of associated virtual devices.\n\nAttribute may repeat multiple times (treat it as array)"]
+    pub fn get_assoc_list(&self) -> MultiAttrIterable<Self, Dev<'a>, IterableAssocDevInfo<'a>> {
+        MultiAttrIterable::new(self.clone(), |variant| {
+            if let Dev::AssocList(val) = variant {
+                Some(val)
+            } else {
+                None
+            }
+        })
+    }
+    #[doc = "Network namespace ID for the device to associate/disassociate. Optional\nfor dev-assoc and dev-disassoc; if not present, the device is looked up\nin the caller\\'s network namespace.\n"]
+    pub fn get_nsid(&self) -> Result<i32, ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Dev::Nsid(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Dev",
+            "Nsid",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
+    #[doc = "Flag indicating the PSP device is an associated device from a different\nnetwork namespace. Present when in associated namespace, absent when in\nprimary/host namespace.\n"]
+    pub fn get_by_association(&self) -> Result<(), ErrorContext> {
+        let mut iter = self.clone();
+        iter.pos = 0;
+        for attr in iter {
+            if let Ok(Dev::ByAssociation(val)) = attr {
+                return Ok(val);
+            }
+        }
+        Err(ErrorContext::new_missing(
+            "Dev",
+            "ByAssociation",
+            self.orig_loc,
+            self.buf.as_ptr() as usize,
+        ))
+    }
 }
-impl Dev {
+impl Dev<'_> {
     pub fn new<'a>(buf: &'a [u8]) -> IterableDev<'a> {
         IterableDev::with_loc(buf, buf.as_ptr() as usize)
     }
@@ -121,6 +347,9 @@ impl Dev {
             2u16 => "Ifindex",
             3u16 => "PspVersionsCap",
             4u16 => "PspVersionsEna",
+            5u16 => "AssocList",
+            6u16 => "Nsid",
+            7u16 => "ByAssociation",
             _ => return None,
         };
         Some(res)
@@ -145,7 +374,7 @@ impl<'a> IterableDev<'a> {
     }
 }
 impl<'a> Iterator for IterableDev<'a> {
-    type Item = Result<Dev, ErrorContext>;
+    type Item = Result<Dev<'a>, ErrorContext>;
     fn next(&mut self) -> Option<Self::Item> {
         let mut pos;
         let mut r#type;
@@ -181,6 +410,17 @@ impl<'a> Iterator for IterableDev<'a> {
                     let Some(val) = res else { break };
                     val
                 }),
+                5u16 => Dev::AssocList({
+                    let res = Some(IterableAssocDevInfo::with_loc(next, self.orig_loc));
+                    let Some(val) = res else { break };
+                    val
+                }),
+                6u16 => Dev::Nsid({
+                    let res = parse_i32(next);
+                    let Some(val) = res else { break };
+                    val
+                }),
+                7u16 => Dev::ByAssociation(()),
                 n if cfg!(any(test, feature = "deny-unknown-attrs")) => break,
                 n => continue,
             };
@@ -194,7 +434,7 @@ impl<'a> Iterator for IterableDev<'a> {
         )))
     }
 }
-impl std::fmt::Debug for IterableDev<'_> {
+impl<'a> std::fmt::Debug for IterableDev<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut fmt = f.debug_struct("Dev");
         for attr in self.clone() {
@@ -222,6 +462,9 @@ impl std::fmt::Debug for IterableDev<'_> {
                         Version::from_value(val.trailing_zeros().into())
                     }),
                 ),
+                Dev::AssocList(val) => fmt.field("AssocList", &val),
+                Dev::Nsid(val) => fmt.field("Nsid", &val),
+                Dev::ByAssociation(val) => fmt.field("ByAssociation", &val),
             };
         }
         fmt.finish()
@@ -244,6 +487,7 @@ impl IterableDev<'_> {
         }
         let mut attrs = self.clone();
         let mut last_off = cur + attrs.pos;
+        let mut missing = None;
         while let Some(attr) = attrs.next() {
             let Ok(attr) = attr else { break };
             match attr {
@@ -271,6 +515,24 @@ impl IterableDev<'_> {
                         break;
                     }
                 }
+                Dev::AssocList(val) => {
+                    (stack, missing) = val.lookup_attr(offset, missing_type);
+                    if !stack.is_empty() {
+                        break;
+                    }
+                }
+                Dev::Nsid(val) => {
+                    if last_off == offset {
+                        stack.push(("Nsid", last_off));
+                        break;
+                    }
+                }
+                Dev::ByAssociation(val) => {
+                    if last_off == offset {
+                        stack.push(("ByAssociation", last_off));
+                        break;
+                    }
+                }
                 _ => {}
             };
             last_off = cur + attrs.pos;
@@ -278,7 +540,7 @@ impl IterableDev<'_> {
         if !stack.is_empty() {
             stack.push(("Dev", cur));
         }
-        (stack, None)
+        (stack, missing)
     }
 }
 #[derive(Clone)]
@@ -1175,19 +1437,19 @@ impl IterableStats<'_> {
         (stack, None)
     }
 }
-pub struct PushDev<Prev: Rec> {
+pub struct PushAssocDevInfo<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushDev<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushAssocDevInfo<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushDev<Prev> {
+impl<Prev: Pusher> PushAssocDevInfo<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1197,57 +1459,124 @@ impl<Prev: Rec> PushDev<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
+        }
+        prev
+    }
+    #[doc = "ifindex of an associated network device.\n"]
+    pub fn push_ifindex(mut self, value: u32) -> Self {
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "Network namespace ID of the associated device.\n"]
+    pub fn push_nsid(mut self, value: i32) -> Self {
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
+        self
+    }
+}
+impl<Prev: Pusher> Drop for PushAssocDevInfo<Prev> {
+    fn drop(&mut self) {
+        if let Some(prev) = &mut self.prev {
+            if let Some(header_offset) = &self.header_offset {
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
+            }
+        }
+    }
+}
+pub struct PushDev<Prev: Pusher> {
+    pub(crate) prev: Option<Prev>,
+    pub(crate) header_offset: Option<usize>,
+}
+impl<Prev: Pusher> Pusher for PushDev<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
+    }
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
+    }
+}
+impl<Prev: Pusher> PushDev<Prev> {
+    pub fn new(prev: Prev) -> Self {
+        Self {
+            prev: Some(prev),
+            header_offset: None,
+        }
+    }
+    pub fn end_nested(mut self) -> Prev {
+        let mut prev = self.prev.take().unwrap();
+        if let Some(header_offset) = &self.header_offset {
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "PSP device ID.\n"]
     pub fn push_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
-    #[doc = "ifindex of the main netdevice linked to the PSP device.\n"]
+    #[doc = "ifindex of the main netdevice linked to the PSP device, or the ifindex\nto associate with the PSP device.\n"]
     pub fn push_ifindex(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Bitmask of PSP versions supported by the device.\n\nAssociated type: [`Version`] (1 bit per enumeration)"]
     pub fn push_psp_versions_cap(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Bitmask of currently enabled (accepted on Rx) PSP versions.\n\nAssociated type: [`Version`] (1 bit per enumeration)"]
     pub fn push_psp_versions_ena(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "List of associated virtual devices.\n\nAttribute may repeat multiple times (treat it as array)"]
+    pub fn nested_assoc_list(mut self) -> PushAssocDevInfo<Self> {
+        let header_offset = push_nested_header(self.as_vec_mut(), 5u16);
+        PushAssocDevInfo {
+            prev: Some(self),
+            header_offset: Some(header_offset),
+        }
+    }
+    #[doc = "Network namespace ID for the device to associate/disassociate. Optional\nfor dev-assoc and dev-disassoc; if not present, the device is looked up\nin the caller\\'s network namespace.\n"]
+    pub fn push_nsid(mut self, value: i32) -> Self {
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
+        self
+    }
+    #[doc = "Flag indicating the PSP device is an associated device from a different\nnetwork namespace. Present when in associated namespace, absent when in\nprimary/host namespace.\n"]
+    pub fn push_by_association(mut self, value: ()) -> Self {
+        push_header(self.as_vec_mut(), 7u16, 0 as u16);
         self
     }
 }
-impl<Prev: Rec> Drop for PushDev<Prev> {
+impl<Prev: Pusher> Drop for PushDev<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushAssoc<Prev: Rec> {
+pub struct PushAssoc<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushAssoc<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushAssoc<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushAssoc<Prev> {
+impl<Prev: Pusher> PushAssoc<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1257,31 +1586,31 @@ impl<Prev: Rec> PushAssoc<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "PSP device ID.\n"]
     pub fn push_dev_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "PSP versions (AEAD and protocol version) used by this association,\ndictates the size of the key.\n\nAssociated type: [`Version`] (enum)"]
     pub fn push_version(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     pub fn nested_rx_key(mut self) -> PushKeys<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 3u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 3u16);
         PushKeys {
             prev: Some(self),
             header_offset: Some(header_offset),
         }
     }
     pub fn nested_tx_key(mut self) -> PushKeys<Self> {
-        let header_offset = push_nested_header(self.as_rec_mut(), 4u16);
+        let header_offset = push_nested_header(self.as_vec_mut(), 4u16);
         PushKeys {
             prev: Some(self),
             header_offset: Some(header_offset),
@@ -1289,33 +1618,33 @@ impl<Prev: Rec> PushAssoc<Prev> {
     }
     #[doc = "Sockets which should be bound to the association immediately.\n"]
     pub fn push_sock_fd(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushAssoc<Prev> {
+impl<Prev: Pusher> Drop for PushAssoc<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushKeys<Prev: Rec> {
+pub struct PushKeys<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushKeys<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushKeys<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushKeys<Prev> {
+impl<Prev: Pusher> PushKeys<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1325,44 +1654,44 @@ impl<Prev: Rec> PushKeys<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     pub fn push_key(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 1u16, value.len() as u16);
-        self.as_rec_mut().extend(value);
+        push_header(self.as_vec_mut(), 1u16, value.len() as u16);
+        self.as_vec_mut().extend(value);
         self
     }
     #[doc = "Security Parameters Index (SPI) of the association.\n"]
     pub fn push_spi(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushKeys<Prev> {
+impl<Prev: Pusher> Drop for PushKeys<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushStats<Prev: Rec> {
+pub struct PushStats<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushStats<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushStats<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushStats<Prev> {
+impl<Prev: Pusher> PushStats<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -1372,87 +1701,87 @@ impl<Prev: Rec> PushStats<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "PSP device ID.\n"]
     pub fn push_dev_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of key rotations during the lifetime of the device. Kernel\nstatistic.\n"]
     pub fn push_key_rotations(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of times a socket\\'s Rx got shut down due to using a key which\nwent stale (fully rotated out). Kernel statistic.\n"]
     pub fn push_stale_events(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 3u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 3u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of successfully processed and authenticated PSP packets. Device\nstatistic (from the PSP spec).\n"]
     pub fn push_rx_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of successfully authenticated PSP bytes received, counting from\nthe first byte after the IV through the last byte of payload. The fixed\ninitial portion of the PSP header (16 bytes) and the PSP trailer/ICV (16\nbytes) are not included in this count. Device statistic (from the PSP\nspec).\n"]
     pub fn push_rx_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 5u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 5u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of received PSP packets with unsuccessful authentication. Device\nstatistic (from the PSP spec).\n"]
     pub fn push_rx_auth_fail(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 6u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 6u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of received PSP packets with length/framing errors. Device\nstatistic (from the PSP spec).\n"]
     pub fn push_rx_error(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 7u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 7u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of received PSP packets with miscellaneous errors (invalid master\nkey indicated by SPI, unsupported version, etc.) Device statistic (from\nthe PSP spec).\n"]
     pub fn push_rx_bad(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 8u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 8u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of successfully processed PSP packets for transmission. Device\nstatistic (from the PSP spec).\n"]
     pub fn push_tx_packets(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 9u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 9u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of successfully processed PSP bytes for transmit, counting from\nthe first byte after the IV through the last byte of payload. The fixed\ninitial portion of the PSP header (16 bytes) and the PSP trailer/ICV (16\nbytes) are not included in this count. Device statistic (from the PSP\nspec).\n"]
     pub fn push_tx_bytes(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 10u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 10u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Number of PSP packets for transmission with errors. Device statistic\n(from the PSP spec).\n"]
     pub fn push_tx_error(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 11u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 11u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushStats<Prev> {
+impl<Prev: Pusher> Drop for PushStats<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-#[doc = "Notify attributes:\n- [`.get_id()`](IterableDev::get_id)\n- [`.get_ifindex()`](IterableDev::get_ifindex)\n- [`.get_psp_versions_cap()`](IterableDev::get_psp_versions_cap)\n- [`.get_psp_versions_ena()`](IterableDev::get_psp_versions_ena)\n"]
+#[doc = "Notify attributes:\n- [`.get_id()`](IterableDev::get_id)\n- [`.get_ifindex()`](IterableDev::get_ifindex)\n- [`.get_psp_versions_cap()`](IterableDev::get_psp_versions_cap)\n- [`.get_psp_versions_ena()`](IterableDev::get_psp_versions_ena)\n- [`.get_assoc_list()`](IterableDev::get_assoc_list)\n- [`.get_by_association()`](IterableDev::get_by_association)\n"]
 #[derive(Debug)]
 pub struct OpDevAddNotif;
 impl OpDevAddNotif {
@@ -1462,7 +1791,7 @@ impl OpDevAddNotif {
         IterableDev::with_loc(attrs, buf.as_ptr() as usize)
     }
 }
-#[doc = "Notify attributes:\n- [`.get_id()`](IterableDev::get_id)\n- [`.get_ifindex()`](IterableDev::get_ifindex)\n- [`.get_psp_versions_cap()`](IterableDev::get_psp_versions_cap)\n- [`.get_psp_versions_ena()`](IterableDev::get_psp_versions_ena)\n"]
+#[doc = "Notify attributes:\n- [`.get_id()`](IterableDev::get_id)\n- [`.get_ifindex()`](IterableDev::get_ifindex)\n- [`.get_psp_versions_cap()`](IterableDev::get_psp_versions_cap)\n- [`.get_psp_versions_ena()`](IterableDev::get_psp_versions_ena)\n- [`.get_assoc_list()`](IterableDev::get_assoc_list)\n- [`.get_by_association()`](IterableDev::get_by_association)\n"]
 #[derive(Debug)]
 pub struct OpDevDelNotif;
 impl OpDevDelNotif {
@@ -1472,7 +1801,7 @@ impl OpDevDelNotif {
         IterableDev::with_loc(attrs, buf.as_ptr() as usize)
     }
 }
-#[doc = "Notify attributes:\n- [`.get_id()`](IterableDev::get_id)\n- [`.get_ifindex()`](IterableDev::get_ifindex)\n- [`.get_psp_versions_cap()`](IterableDev::get_psp_versions_cap)\n- [`.get_psp_versions_ena()`](IterableDev::get_psp_versions_ena)\n"]
+#[doc = "Notify attributes:\n- [`.get_id()`](IterableDev::get_id)\n- [`.get_ifindex()`](IterableDev::get_ifindex)\n- [`.get_psp_versions_cap()`](IterableDev::get_psp_versions_cap)\n- [`.get_psp_versions_ena()`](IterableDev::get_psp_versions_ena)\n- [`.get_assoc_list()`](IterableDev::get_assoc_list)\n- [`.get_by_association()`](IterableDev::get_by_association)\n"]
 #[derive(Debug)]
 pub struct OpDevChangeNotif;
 impl OpDevChangeNotif {
@@ -1503,7 +1832,7 @@ impl NotifGroup {
     #[doc = "Notifications:\n- [`OpKeyRotateNotif`]\n"]
     pub const USE_CSTR: &CStr = c"use";
 }
-#[doc = "Get / dump information about PSP capable devices on the system.\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n\n"]
+#[doc = "Get / dump information about PSP capable devices on the system.\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n- [.get_assoc_list()](IterableDev::get_assoc_list)\n- [.get_by_association()](IterableDev::get_by_association)\n\n"]
 #[derive(Debug)]
 pub struct OpDevGetDump<'r> {
     request: Request<'r>,
@@ -1529,11 +1858,11 @@ impl<'r> OpDevGetDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDev::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDevGetDump<'_> {
@@ -1558,7 +1887,7 @@ impl NetlinkRequest for OpDevGetDump<'_> {
         Self::decode_request(buf).lookup_attr(offset, missing_type)
     }
 }
-#[doc = "Get / dump information about PSP capable devices on the system.\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n\n"]
+#[doc = "Get / dump information about PSP capable devices on the system.\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n- [.get_assoc_list()](IterableDev::get_assoc_list)\n- [.get_by_association()](IterableDev::get_by_association)\n\n"]
 #[derive(Debug)]
 pub struct OpDevGetDo<'r> {
     request: Request<'r>,
@@ -1582,11 +1911,11 @@ impl<'r> OpDevGetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDev::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDevGetDo<'_> {
@@ -1635,11 +1964,11 @@ impl<'r> OpDevSetDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDev::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 4u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpDevSetDo<'_> {
@@ -1688,11 +2017,11 @@ impl<'r> OpKeyRotateDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableDev::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 6u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpKeyRotateDo<'_> {
@@ -1741,11 +2070,11 @@ impl<'r> OpRxAssocDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableAssoc::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 8u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpRxAssocDo<'_> {
@@ -1794,11 +2123,11 @@ impl<'r> OpTxAssocDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableAssoc::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 9u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpTxAssocDo<'_> {
@@ -1849,11 +2178,11 @@ impl<'r> OpGetStatsDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableStats::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 10u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetStatsDump<'_> {
@@ -1902,11 +2231,11 @@ impl<'r> OpGetStatsDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableStats::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 10u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetStatsDo<'_> {
@@ -1920,6 +2249,112 @@ impl NetlinkRequest for OpGetStatsDo<'_> {
         self.request.buf()
     }
     type ReplyType<'buf> = IterableStats<'buf>;
+    fn decode_reply<'buf>(buf: &'buf [u8]) -> Self::ReplyType<'buf> {
+        Self::decode_request(buf)
+    }
+    fn lookup(
+        buf: &[u8],
+        offset: usize,
+        missing_type: Option<u16>,
+    ) -> (Vec<(&'static str, usize)>, Option<&'static str>) {
+        Self::decode_request(buf).lookup_attr(offset, missing_type)
+    }
+}
+#[doc = "Associate a network device with a PSP device.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n- [.push_ifindex()](PushDev::push_ifindex)\n- [.push_nsid()](PushDev::push_nsid)\n\n"]
+#[derive(Debug)]
+pub struct OpDevAssocDo<'r> {
+    request: Request<'r>,
+}
+impl<'r> OpDevAssocDo<'r> {
+    pub fn new(mut request: Request<'r>) -> Self {
+        Self::write_header(request.buf_mut());
+        Self { request: request }
+    }
+    pub fn encode_request<'buf>(buf: &'buf mut Vec<u8>) -> PushDev<&'buf mut Vec<u8>> {
+        Self::write_header(buf);
+        PushDev::new(buf)
+    }
+    pub fn encode(&mut self) -> PushDev<&mut Vec<u8>> {
+        PushDev::new(self.request.buf_mut())
+    }
+    pub fn into_encoder(self) -> PushDev<RequestBuf<'r>> {
+        PushDev::new(self.request.buf)
+    }
+    pub fn decode_request<'a>(buf: &'a [u8]) -> IterableDev<'a> {
+        let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
+        IterableDev::with_loc(attrs, buf.as_ptr() as usize)
+    }
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
+        let mut header = BuiltinNfgenmsg::new();
+        header.cmd = 11u8;
+        header.version = 1u8;
+        prev.as_vec_mut().extend(header.as_slice());
+    }
+}
+impl NetlinkRequest for OpDevAssocDo<'_> {
+    fn protocol(&self) -> Protocol {
+        Protocol::Generic("psp".as_bytes())
+    }
+    fn flags(&self) -> u16 {
+        self.request.flags
+    }
+    fn payload(&self) -> &[u8] {
+        self.request.buf()
+    }
+    type ReplyType<'buf> = IterableDev<'buf>;
+    fn decode_reply<'buf>(buf: &'buf [u8]) -> Self::ReplyType<'buf> {
+        Self::decode_request(buf)
+    }
+    fn lookup(
+        buf: &[u8],
+        offset: usize,
+        missing_type: Option<u16>,
+    ) -> (Vec<(&'static str, usize)>, Option<&'static str>) {
+        Self::decode_request(buf).lookup_attr(offset, missing_type)
+    }
+}
+#[doc = "Disassociate a network device from a PSP device.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n- [.push_ifindex()](PushDev::push_ifindex)\n- [.push_nsid()](PushDev::push_nsid)\n\n"]
+#[derive(Debug)]
+pub struct OpDevDisassocDo<'r> {
+    request: Request<'r>,
+}
+impl<'r> OpDevDisassocDo<'r> {
+    pub fn new(mut request: Request<'r>) -> Self {
+        Self::write_header(request.buf_mut());
+        Self { request: request }
+    }
+    pub fn encode_request<'buf>(buf: &'buf mut Vec<u8>) -> PushDev<&'buf mut Vec<u8>> {
+        Self::write_header(buf);
+        PushDev::new(buf)
+    }
+    pub fn encode(&mut self) -> PushDev<&mut Vec<u8>> {
+        PushDev::new(self.request.buf_mut())
+    }
+    pub fn into_encoder(self) -> PushDev<RequestBuf<'r>> {
+        PushDev::new(self.request.buf)
+    }
+    pub fn decode_request<'a>(buf: &'a [u8]) -> IterableDev<'a> {
+        let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
+        IterableDev::with_loc(attrs, buf.as_ptr() as usize)
+    }
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
+        let mut header = BuiltinNfgenmsg::new();
+        header.cmd = 12u8;
+        header.version = 1u8;
+        prev.as_vec_mut().extend(header.as_slice());
+    }
+}
+impl NetlinkRequest for OpDevDisassocDo<'_> {
+    fn protocol(&self) -> Protocol {
+        Protocol::Generic("psp".as_bytes())
+    }
+    fn flags(&self) -> u16 {
+        self.request.flags
+    }
+    fn payload(&self) -> &[u8] {
+        self.request.buf()
+    }
+    type ReplyType<'buf> = IterableDev<'buf>;
     fn decode_reply<'buf>(buf: &'buf [u8]) -> Self::ReplyType<'buf> {
         Self::decode_request(buf)
     }
@@ -2033,14 +2468,14 @@ impl<'buf> Request<'buf> {
         self.flags |= consts::NLM_F_DUMP as u16;
         self
     }
-    #[doc = "Get / dump information about PSP capable devices on the system.\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n\n"]
+    #[doc = "Get / dump information about PSP capable devices on the system.\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n- [.get_assoc_list()](IterableDev::get_assoc_list)\n- [.get_by_association()](IterableDev::get_by_association)\n\n"]
     pub fn op_dev_get_dump(self) -> OpDevGetDump<'buf> {
         let mut res = OpDevGetDump::new(self);
         res.request
             .do_writeback(res.protocol(), "op-dev-get-dump", OpDevGetDump::lookup);
         res
     }
-    #[doc = "Get / dump information about PSP capable devices on the system.\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n\n"]
+    #[doc = "Get / dump information about PSP capable devices on the system.\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n\nReply attributes:\n- [.get_id()](IterableDev::get_id)\n- [.get_ifindex()](IterableDev::get_ifindex)\n- [.get_psp_versions_cap()](IterableDev::get_psp_versions_cap)\n- [.get_psp_versions_ena()](IterableDev::get_psp_versions_ena)\n- [.get_assoc_list()](IterableDev::get_assoc_list)\n- [.get_by_association()](IterableDev::get_by_association)\n\n"]
     pub fn op_dev_get_do(self) -> OpDevGetDo<'buf> {
         let mut res = OpDevGetDo::new(self);
         res.request
@@ -2089,6 +2524,23 @@ impl<'buf> Request<'buf> {
             .do_writeback(res.protocol(), "op-get-stats-do", OpGetStatsDo::lookup);
         res
     }
+    #[doc = "Associate a network device with a PSP device.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n- [.push_ifindex()](PushDev::push_ifindex)\n- [.push_nsid()](PushDev::push_nsid)\n\n"]
+    pub fn op_dev_assoc_do(self) -> OpDevAssocDo<'buf> {
+        let mut res = OpDevAssocDo::new(self);
+        res.request
+            .do_writeback(res.protocol(), "op-dev-assoc-do", OpDevAssocDo::lookup);
+        res
+    }
+    #[doc = "Disassociate a network device from a PSP device.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_id()](PushDev::push_id)\n- [.push_ifindex()](PushDev::push_ifindex)\n- [.push_nsid()](PushDev::push_nsid)\n\n"]
+    pub fn op_dev_disassoc_do(self) -> OpDevDisassocDo<'buf> {
+        let mut res = OpDevDisassocDo::new(self);
+        res.request.do_writeback(
+            res.protocol(),
+            "op-dev-disassoc-do",
+            OpDevDisassocDo::lookup,
+        );
+        res
+    }
 }
 #[cfg(test)]
 mod generated_tests {
@@ -2097,6 +2549,8 @@ mod generated_tests {
     fn tests() {
         let _ = IterableAssoc::get_dev_id;
         let _ = IterableAssoc::get_rx_key;
+        let _ = IterableDev::get_assoc_list;
+        let _ = IterableDev::get_by_association;
         let _ = IterableDev::get_id;
         let _ = IterableDev::get_ifindex;
         let _ = IterableDev::get_psp_versions_cap;
@@ -2121,6 +2575,8 @@ mod generated_tests {
         let _ = PushAssoc::<&mut Vec<u8>>::push_sock_fd;
         let _ = PushAssoc::<&mut Vec<u8>>::push_version;
         let _ = PushDev::<&mut Vec<u8>>::push_id;
+        let _ = PushDev::<&mut Vec<u8>>::push_ifindex;
+        let _ = PushDev::<&mut Vec<u8>>::push_nsid;
         let _ = PushDev::<&mut Vec<u8>>::push_psp_versions_ena;
         let _ = PushStats::<&mut Vec<u8>>::push_dev_id;
     }

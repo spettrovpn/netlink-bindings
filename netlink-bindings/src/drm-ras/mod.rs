@@ -511,19 +511,19 @@ impl IterableErrorCounterAttrs<'_> {
         (stack, None)
     }
 }
-pub struct PushNodeAttrs<Prev: Rec> {
+pub struct PushNodeAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushNodeAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushNodeAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushNodeAttrs<Prev> {
+impl<Prev: Pusher> PushNodeAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -533,79 +533,79 @@ impl<Prev: Rec> PushNodeAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Unique identifier for the node. Assigned dynamically by the DRM RAS core\nupon registration.\n"]
     pub fn push_node_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Device name chosen by the driver at registration. Can be a PCI BDF,\nUUID, or module name if unique.\n"]
     pub fn push_device_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             2u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     #[doc = "Device name chosen by the driver at registration. Can be a PCI BDF,\nUUID, or module name if unique.\n"]
     pub fn push_device_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 2u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 2u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Node name chosen by the driver at registration. Can be an IP block name,\nor any name that identifies the RAS node inside the device.\n"]
     pub fn push_node_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             3u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     #[doc = "Node name chosen by the driver at registration. Can be an IP block name,\nor any name that identifies the RAS node inside the device.\n"]
     pub fn push_node_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 3u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Type of this node, identifying its function.\n\nAssociated type: [`NodeType`] (enum)"]
     pub fn push_node_type(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushNodeAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushNodeAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
 }
-pub struct PushErrorCounterAttrs<Prev: Rec> {
+pub struct PushErrorCounterAttrs<Prev: Pusher> {
     pub(crate) prev: Option<Prev>,
     pub(crate) header_offset: Option<usize>,
 }
-impl<Prev: Rec> Rec for PushErrorCounterAttrs<Prev> {
-    fn as_rec_mut(&mut self) -> &mut Vec<u8> {
-        self.prev.as_mut().unwrap().as_rec_mut()
+impl<Prev: Pusher> Pusher for PushErrorCounterAttrs<Prev> {
+    fn as_vec_mut(&mut self) -> &mut Vec<u8> {
+        self.prev.as_mut().unwrap().as_vec_mut()
     }
-    fn as_rec(&self) -> &Vec<u8> {
-        self.prev.as_ref().unwrap().as_rec()
+    fn as_vec(&self) -> &Vec<u8> {
+        self.prev.as_ref().unwrap().as_vec()
     }
 }
-impl<Prev: Rec> PushErrorCounterAttrs<Prev> {
+impl<Prev: Pusher> PushErrorCounterAttrs<Prev> {
     pub fn new(prev: Prev) -> Self {
         Self {
             prev: Some(prev),
@@ -615,51 +615,51 @@ impl<Prev: Rec> PushErrorCounterAttrs<Prev> {
     pub fn end_nested(mut self) -> Prev {
         let mut prev = self.prev.take().unwrap();
         if let Some(header_offset) = &self.header_offset {
-            finalize_nested_header(prev.as_rec_mut(), *header_offset);
+            finalize_nested_header(prev.as_vec_mut(), *header_offset);
         }
         prev
     }
     #[doc = "Node ID targeted by this error counter operation.\n"]
     pub fn push_node_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 1u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 1u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Unique identifier for a specific error counter within an node.\n"]
     pub fn push_error_id(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 2u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 2u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
     #[doc = "Name of the error.\n"]
     pub fn push_error_name(mut self, value: &CStr) -> Self {
         push_header(
-            self.as_rec_mut(),
+            self.as_vec_mut(),
             3u16,
             value.to_bytes_with_nul().len() as u16,
         );
-        self.as_rec_mut().extend(value.to_bytes_with_nul());
+        self.as_vec_mut().extend(value.to_bytes_with_nul());
         self
     }
     #[doc = "Name of the error.\n"]
     pub fn push_error_name_bytes(mut self, value: &[u8]) -> Self {
-        push_header(self.as_rec_mut(), 3u16, (value.len() + 1) as u16);
-        self.as_rec_mut().extend(value);
-        self.as_rec_mut().push(0);
+        push_header(self.as_vec_mut(), 3u16, (value.len() + 1) as u16);
+        self.as_vec_mut().extend(value);
+        self.as_vec_mut().push(0);
         self
     }
     #[doc = "Current value of the requested error counter.\n"]
     pub fn push_error_value(mut self, value: u32) -> Self {
-        push_header(self.as_rec_mut(), 4u16, 4 as u16);
-        self.as_rec_mut().extend(value.to_ne_bytes());
+        push_header(self.as_vec_mut(), 4u16, 4 as u16);
+        self.as_vec_mut().extend(value.to_ne_bytes());
         self
     }
 }
-impl<Prev: Rec> Drop for PushErrorCounterAttrs<Prev> {
+impl<Prev: Pusher> Drop for PushErrorCounterAttrs<Prev> {
     fn drop(&mut self) {
         if let Some(prev) = &mut self.prev {
             if let Some(header_offset) = &self.header_offset {
-                finalize_nested_header(prev.as_rec_mut(), *header_offset);
+                finalize_nested_header(prev.as_vec_mut(), *header_offset);
             }
         }
     }
@@ -690,11 +690,11 @@ impl<'r> OpListNodesDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableNodeAttrs::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 1u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpListNodesDump<'_> {
@@ -747,11 +747,11 @@ impl<'r> OpGetErrorCounterDump<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableErrorCounterAttrs::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 2u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetErrorCounterDump<'_> {
@@ -802,14 +802,69 @@ impl<'r> OpGetErrorCounterDo<'r> {
         let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
         IterableErrorCounterAttrs::with_loc(attrs, buf.as_ptr() as usize)
     }
-    fn write_header<Prev: Rec>(prev: &mut Prev) {
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
         let mut header = BuiltinNfgenmsg::new();
         header.cmd = 2u8;
         header.version = 1u8;
-        prev.as_rec_mut().extend(header.as_slice());
+        prev.as_vec_mut().extend(header.as_slice());
     }
 }
 impl NetlinkRequest for OpGetErrorCounterDo<'_> {
+    fn protocol(&self) -> Protocol {
+        Protocol::Generic("drm-ras".as_bytes())
+    }
+    fn flags(&self) -> u16 {
+        self.request.flags
+    }
+    fn payload(&self) -> &[u8] {
+        self.request.buf()
+    }
+    type ReplyType<'buf> = IterableErrorCounterAttrs<'buf>;
+    fn decode_reply<'buf>(buf: &'buf [u8]) -> Self::ReplyType<'buf> {
+        Self::decode_request(buf)
+    }
+    fn lookup(
+        buf: &[u8],
+        offset: usize,
+        missing_type: Option<u16>,
+    ) -> (Vec<(&'static str, usize)>, Option<&'static str>) {
+        Self::decode_request(buf).lookup_attr(offset, missing_type)
+    }
+}
+#[doc = "Clear error counter for a given node. The request includes the error-id\nand node-id of the counter to be cleared.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_node_id()](PushErrorCounterAttrs::push_node_id)\n- [.push_error_id()](PushErrorCounterAttrs::push_error_id)\n\n"]
+#[derive(Debug)]
+pub struct OpClearErrorCounterDo<'r> {
+    request: Request<'r>,
+}
+impl<'r> OpClearErrorCounterDo<'r> {
+    pub fn new(mut request: Request<'r>) -> Self {
+        Self::write_header(request.buf_mut());
+        Self { request: request }
+    }
+    pub fn encode_request<'buf>(
+        buf: &'buf mut Vec<u8>,
+    ) -> PushErrorCounterAttrs<&'buf mut Vec<u8>> {
+        Self::write_header(buf);
+        PushErrorCounterAttrs::new(buf)
+    }
+    pub fn encode(&mut self) -> PushErrorCounterAttrs<&mut Vec<u8>> {
+        PushErrorCounterAttrs::new(self.request.buf_mut())
+    }
+    pub fn into_encoder(self) -> PushErrorCounterAttrs<RequestBuf<'r>> {
+        PushErrorCounterAttrs::new(self.request.buf)
+    }
+    pub fn decode_request<'a>(buf: &'a [u8]) -> IterableErrorCounterAttrs<'a> {
+        let (_header, attrs) = buf.split_at(buf.len().min(BuiltinNfgenmsg::len()));
+        IterableErrorCounterAttrs::with_loc(attrs, buf.as_ptr() as usize)
+    }
+    fn write_header<Prev: Pusher>(prev: &mut Prev) {
+        let mut header = BuiltinNfgenmsg::new();
+        header.cmd = 3u8;
+        header.version = 1u8;
+        prev.as_vec_mut().extend(header.as_slice());
+    }
+}
+impl NetlinkRequest for OpClearErrorCounterDo<'_> {
     fn protocol(&self) -> Protocol {
         Protocol::Generic("drm-ras".as_bytes())
     }
@@ -960,6 +1015,16 @@ impl<'buf> Request<'buf> {
             res.protocol(),
             "op-get-error-counter-do",
             OpGetErrorCounterDo::lookup,
+        );
+        res
+    }
+    #[doc = "Clear error counter for a given node. The request includes the error-id\nand node-id of the counter to be cleared.\n\nFlags: admin-perm\n\nRequest attributes:\n- [.push_node_id()](PushErrorCounterAttrs::push_node_id)\n- [.push_error_id()](PushErrorCounterAttrs::push_error_id)\n\n"]
+    pub fn op_clear_error_counter_do(self) -> OpClearErrorCounterDo<'buf> {
+        let mut res = OpClearErrorCounterDo::new(self);
+        res.request.do_writeback(
+            res.protocol(),
+            "op-clear-error-counter-do",
+            OpClearErrorCounterDo::lookup,
         );
         res
     }
